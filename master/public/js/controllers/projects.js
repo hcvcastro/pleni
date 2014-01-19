@@ -6,7 +6,7 @@ pleni.controller('ProjectsController',
         $scope.storage=$sessionStorage;
 
         if($scope.storage.workspace){
-            $location.path('/projects/'+$scope.storage.workspace.project);
+            $location.path('/projects/'+$scope.storage.workspace.name);
         }
 
         $('header>nav>ul:nth-child(2)>li').removeClass('active')
