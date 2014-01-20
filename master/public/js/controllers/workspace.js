@@ -14,6 +14,15 @@ pleni.controller('WorkspaceController',
             $scope.workspace.close();
         }
 
+        Projects.get({project:$scope.storage.workspace.name},
+        function(data){
+            $scope.storage.workspace.repositories=data._repositories;
+        },function(error){});
+
+        if(!$scope.storage.workspace.planners){
+            $scope.storage.workspace.panel='settings';
+        }
+
         $scope.workspace={
             close:function(){
                 delete $scope.storage.workspace;
