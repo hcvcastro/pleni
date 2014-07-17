@@ -1,0 +1,22 @@
+{
+  "name": "pleni",
+  "version": "0.0.1",
+  "description": "",
+  "dependencies": {
+    "grunt": "^0.4.5"
+  },
+  "devDependencies": {
+    "grunt-latex": "^0.2.2",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ccaballero/pleni.git"
+  },
+  "author": "Hiperborea",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/ccaballero/pleni/issues"
+  },
+  "homepage": "https://github.com/ccaballero/pleni"
+}
