@@ -1,8 +1,6 @@
 'use strict';
 
 var express=require('express')
-  , routes=require('./routes')
-  , user=require('./routes/user')
   , http=require('http')
   , path=require('path');
 
@@ -25,8 +23,8 @@ if ('development'==app.get('env')){
     //app.use(express.errorHandler());
 }
 
-app.get('/',routes.index);
-app.get('/users',user.list);
+app.get('/',function(req,res){res.render('index');});
+app.get('/fetch',function(req,res){res.render('fetch');});
 
 app.use(function(req,res){
     res.status(404).render('404.jade',{title:'404',message:'File not found!!'});
