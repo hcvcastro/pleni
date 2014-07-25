@@ -1,0 +1,75 @@
+body, header, section, footer, div, h1, h2, h3, h4, h5, p, ul, li
+    margin: 0
+    padding: 0
+
+body
+    font-family: Baskerville, Times New Roman, Times, serif
+    font-size: 13pt
+
+.clear
+    clear: both
+
+header>nav
+    position: fixed
+    background-color: #000000
+    width: 100%
+    float: left
+    top: 0
+    ul
+        list-style: none
+        float: left
+        li
+            float: left
+            a
+                float: left
+                padding: 0.3rem 0.5rem
+                cursor: pointer
+                text-decoration: none
+                color: #ffffff
+                &:hover
+                    color: #ff5500
+
+footer
+    background-color: #000000
+    color: #ffffff
+    position: fixed
+    left: 10vw
+    right: 10vw
+    bottom: 0
+    border-top-left-radius: 0.5rem
+    border-top-right-radius: 0.5rem
+    padding: 0.25rem 0.75rem
+
+#wrapper
+    max-width: 960px
+    width: 100%
+    margin: 2.0rem auto
+    border-top: 1px solid #000000
+    >div.left
+        float: left
+        width: 100%
+        @media screen and (min-width: 700px)
+            width: 25vw
+        background-color: #000000
+        ul
+            width: 100%
+            float: left
+            list-style: none
+            li
+                float: left
+                width: 100%
+                display: inline-block
+                a
+                    float: left
+                    width: 100%
+                    padding: 0.5rem 0.8rem
+                    box-sizing: border-box
+                    text-decoration: none
+                    color: #ffffff
+                    &:hover
+                        color: #ff5500
+    #content
+        float: left
+        border-sizing: border-box
+        padding: 1.0rem
+

@@ -16,6 +16,12 @@ app.set('view engine','jade');
 //app.use(express.methodOverride());
 //app.use(app.router);
 
+app.use(require('stylus').middleware({
+    src:path.join(__dirname,'stylus'),
+    dest:path.join(__dirname,'public/css'),
+    compress:true
+}));
+
 app.use(express.static(path.join(__dirname,'public')));
 app.locals.pretty=true;
 
@@ -23,8 +29,9 @@ if ('development'==app.get('env')){
     //app.use(express.errorHandler());
 }
 
-app.get('/',function(req,res){res.render('index');});
-app.get('/fetch',function(req,res){res.render('fetch');});
+app.get('/',function(req,res){res.render('index')});
+app.get('/settings',function(req,res){res.render('settings')});
+app.get('/fetch',function(req,res){res.render('fetch')});
 
 app.use(function(req,res){
     res.status(404).render('404.jade',{title:'404',message:'File not found!!'});
