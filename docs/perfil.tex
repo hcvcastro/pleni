@@ -93,11 +93,13 @@ mostrar atención en cumplir con el objetivo funcional básico de la aplicación
 sino una concepción general de los riesgos que puede correr la información
 contenida, solicitada y recibida por el sistema.
 
-\section{Definición del problema}
+\section{Planteamiento del problema}
 Existen muchos problemas que pueden ser identificados rapidamente desde el punto
 de vista de un usuario normal (cliente) en el sitio web, y asi brindar una
 solución rapida y efectiva para asi evitar dañar la imagen de su organización o
-afectar adversamente a sus clientes, socios y empleados tales como:
+afectar adversamente a sus clientes, socios y empleados.
+
+En el área de la seguridad se podrían detallar varios tipos de ataque como:
 
 \begin{description}
     \item [Defacement de sitios web] Usuarios maliciosos deambulan en Internet
@@ -123,31 +125,53 @@ afectar adversamente a sus clientes, socios y empleados tales como:
         \end{itemize}
 \end{description}
 
-\section{Objetivo general}
-Identificar problemas de seguridad de sitios web de manera similar a un motor de
-búsqueda. Analizar el contenido descubierto mediante el uso de un motor de
-análisis que es capaz de detectar amenazas tanto conocidas como desconocidas,
-cambios inusuales y contenido anómalo.
+Por lo mencionado se define el problema como:
 
-Una vez que se detecta un problema, se invoca el sistema de respuesta a
-incidentes. La respuesta a incidentes realiza acciones de manera rapida y
-temprana informando mediante el envío de mensajes (mensajería instantánea,
-correo electrónico, SMS) al personal encargado de la aplicacion web.
+\emph{“El elevado numero de sitios web que no poseen las caracteristicas minimas
+de seguridad conduce a la obtención de información privilegiada.”}
 
-\section{Objetivos específicos}
+\section{Objetivos}
+
+\subsection{Objetivo general}
+
+Desarrollar una herramienta de seguridad para la detección temprana de
+actividades sospechosas de modo que pueda garantizarse un minimo de seguridad
+aceptable.
+
+\subsection{Objetivos específicos}
 \begin{itemize}
-\item Crear una aplicacion web que permita realizar una copia del sitio web a
-    analizar y almacenarlo en una base de datos.
-\item Crear un conjunto básico de rutinas que permitan analizar el contenido en
-    busca de codificación sospechosa.
+\item Registrar toda la información disponible del sitio web para el analisis
+    posterior.
 \item Crear un conjunto básico de rutinas que permitan verificar de manera
-    periodica la integridad del sitio web, mediante la comparacion de algoritmos
-    de hash (md5 y sha).
-\item Diseñar los modulos que permitan realizar alertas y/o avisos de los
-    eventos.
+    periodica la integridad del sitio web.
+\item Analizar la información registrada para encontrar algún tipo de código
+    malicioso.
+\item Diseñar las rutinas que permitan realizar avisos y/o alertas de los
+    eventos para el correcto mantenimiento del siti para el correcto
+    mantenimiento del sitioo.
 \end{itemize}
 
-\section{Herramientas}
+\section{Justificación}
+De manera social la SCESI brindará un servicio a la comunidad universitaria, y
+entidades externas a la universidad, ayudando a mejorar la seguridad de la
+sociedad y concientizando sobre lo que esto conlleva.
+
+\section{Hipóteses o idea a defender}
+Se pretende concientizar a la sociedad acerca de los peligros de la mala
+administración de los sistemas y su información, para asi no tener perdidas
+importantes para la compañia.
+De esta manera se quiere brindar soluciones a problemas de seguridad mas
+comunes.
+
+\section{Aporte científico}
+A partir de la información registrada podrian proyectarse errores frecuentes
+referentes al proceso de desarrollo, y administración de forma que estos puedan
+ser previstos en etapas mas tempranas.
+
+\section{Diseño metodológico y teórico}
+
+
+\section{Desarrollo del proyecto}
 Las herramientas necesarias para realizar este proyecto es basicamente las
 siguientes:
 
@@ -155,21 +179,22 @@ siguientes:
 \item Hosting: Se necesita un espacio donde almacenar el código que soporte las
     siguientes tecnologias:
     \begin{itemize}
-    \item Base de Datos NoSQL: MongoDB.
+    \item Base de Datos NoSQL: CouchDB.
     \item Node.js
     \item Servidor Web: nginx.
     \end{itemize}
 \end{itemize}
 
-\section{Justificación}
-Este proyecto tiene connotaciones de manera academica brindando el aprendizaje
-de programacion de aplicaciones web a todos los participantes del grupo asi
-tambien asimilar las medidas para detectar fallos y politicas de seguridad
-respecto a aplicaciones web.
+\section{Conclusiones y recomendaciones}
+Pudo observarse con la herramienta desarrollada, que la gran mayoria de sitios
+desarrollados a nivel local carecen de politicas apropiadas de seguridad de su
+información, todo esto a causa de la dejadez de los encargados de
+administración. Los cuales velan mas por el despliegue rapido que por el
+mantenimiento continuo del sistema.
 
-De manera social la SCESI brindará un servicio a la comunidad universitaria, y
-entidades externas a la universidad, ayudando a mejorar la seguridad de la
-sociedad y concientizando sobre lo que esto conlleva.
+Creemos que la solución debe pasar por la especializacion de las funcionalidades
+de un sistema, en lugar de desear una solución que tenga muchas funcionalidades
+y no cumpla con las especificaciones desedas.
 
 \begin{thebibliography}{99}
 
