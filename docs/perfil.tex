@@ -37,7 +37,7 @@ Sociedad Científica de Estudiantes de Sistemas e Informática}
 \author{
     Carlos Eduardo Caballero Burgoa \\
     Gonzalo Nina Mamani \\
-    Christian Lima Saravia \\
+    Cristhian Lima Saravia \\
 }
 
 \begin{document}
@@ -50,7 +50,7 @@ Sociedad Científica de Estudiantes de Sistemas e Informática}
 \section{Introducción}
 Cualquier organización que expone sus servicios informáticos a redes de acceso
 tendrán que realizar un esfuerzo significativo para asegurar que la información
-y recursos esten protegidos. Internet es un factor primordial en la
+y recursos estén protegidos. Internet es un factor primordial en la
 comunicación, pero también un evidente riesgo potencial de acceso y mal uso de
 los servicios e información disponibles.
 
@@ -93,10 +93,15 @@ mostrar atención en cumplir con el objetivo funcional básico de la aplicación
 sino una concepción general de los riesgos que puede correr la información
 contenida, solicitada y recibida por el sistema.
 
+\section{Justificación}
+De manera social la SCESI brinda un servicio a la comunidad universitaria, y
+entidades externas a la universidad, ayudando a mejorar la seguridad de la
+sociedad y divulgando sobre lo que esto conlleva.
+
 \section{Planteamiento del problema}
-Existen muchos problemas que pueden ser identificados rapidamente desde el punto
-de vista de un usuario normal (cliente) en el sitio web, y asi brindar una
-solución rapida y efectiva para asi evitar dañar la imagen de su organización o
+Existen muchos problemas que pueden ser identificados rápidamente desde el punto
+de vista de un usuario normal (cliente) en el sitio web, y así brindar una
+solución rápida y efectiva para así evitar dañar la imagen de su organización o
 afectar adversamente a sus clientes, socios y empleados.
 
 En el área de la seguridad se podrían detallar varios tipos de ataque como:
@@ -127,7 +132,7 @@ En el área de la seguridad se podrían detallar varios tipos de ataque como:
 
 Por lo mencionado se define el problema como:
 
-\emph{“El elevado numero de sitios web que no poseen las caracteristicas minimas
+\emph{“El elevado numero de sitios web que no poseen las características mínimas
 de seguridad conduce a la obtención de información privilegiada.”}
 
 \section{Objetivos}
@@ -135,66 +140,81 @@ de seguridad conduce a la obtención de información privilegiada.”}
 \subsection{Objetivo general}
 
 Desarrollar una herramienta de seguridad para la detección temprana de
-actividades sospechosas de modo que pueda garantizarse un minimo de seguridad
+actividades sospechosas de modo que pueda garantizarse un mínimo de seguridad
 aceptable.
 
 \subsection{Objetivos específicos}
 \begin{itemize}
-\item Registrar toda la información disponible del sitio web para el analisis
+\item Registrar toda la información disponible del sitio web para el análisis
     posterior.
 \item Crear un conjunto básico de rutinas que permitan verificar de manera
-    periodica la integridad del sitio web.
+    periódica la integridad del sitio web.
 \item Analizar la información registrada para encontrar algún tipo de código
     malicioso.
 \item Diseñar las rutinas que permitan realizar avisos y/o alertas de los
-    eventos para el correcto mantenimiento del siti para el correcto
-    mantenimiento del sitioo.
+    eventos para el correcto mantenimiento del sitio.
 \end{itemize}
 
-\section{Justificación}
-De manera social la SCESI brindará un servicio a la comunidad universitaria, y
-entidades externas a la universidad, ayudando a mejorar la seguridad de la
-sociedad y concientizando sobre lo que esto conlleva.
-
-\section{Hipóteses o idea a defender}
+\section{Hipótesis o idea a defender}
 Se pretende concientizar a la sociedad acerca de los peligros de la mala
-administración de los sistemas y su información, para asi no tener perdidas
-importantes para la compañia.
-De esta manera se quiere brindar soluciones a problemas de seguridad mas
+administración de los sistemas y su información, para así no tener perdidas
+importantes para cualquier organización.
+De esta manera se quiere brindar soluciones a los problemas de seguridad mas
 comunes.
 
 \section{Aporte científico}
-A partir de la información registrada podrian proyectarse errores frecuentes
+A partir de la información registrada podrían proyectarse errores frecuentes
 referentes al proceso de desarrollo, y administración de forma que estos puedan
 ser previstos en etapas mas tempranas.
 
 \section{Diseño metodológico y teórico}
-
+Para el proceso de creación de esta herramienta, se han seguido algunos
+lineamientos fundamentales del desarrollo ágil, a pesar de eso, se fundamentan
+muchos de los procedimientos creados basados en la experiencia en seguridad
+informática de los componentes del equipo.
 
 \section{Desarrollo del proyecto}
-Las herramientas necesarias para realizar este proyecto es basicamente las
+El desarrollo del proyecto se realizó en las siguientes etapas:
+
+\subsection{Captación de la información}
+Se procedieron a crear los métodos necesarios para absorber la mayor cantidad de
+información disponible de forma publica del sitio a analizar.
+
+También se crearon algunos otros métodos para el aprovechamiento del buscador
+google en lo referente a la obtención de información.
+
+\subsection{Visualización de la información captada}
+Se aprovecharon algunas librerías Javascript para crear una visualización
+apropiada de la información captada.
+
+\subsection{Análisis de la información}
+Con toda la información captada en las anteriores etapas, se crearon
+herramientas para probar las distintas técnicas de vulneración del sitio web, de
+forma que estas pudiesen ser mas automatizadas.
+
+\subsection{Herramientas utilizadas}
+Las herramientas necesarias para realizar este proyecto fueron básicamente las
 siguientes:
 
 \begin{itemize}
-\item Hosting: Se necesita un espacio donde almacenar el código que soporte las
-    siguientes tecnologias:
-    \begin{itemize}
     \item Base de Datos NoSQL: CouchDB.
-    \item Node.js
-    \item Servidor Web: nginx.
-    \end{itemize}
+    \item Node.js.
+    \item Express.js (framework para el desarrollo web).
+    \item Servidor web para el despliegue: nginx.
+    \item Base de datos para almacenamiento de sesiones: Redis.
+    \item Librería D3 para visualización de grandes volúmenes de datos.
 \end{itemize}
 
 \section{Conclusiones y recomendaciones}
-Pudo observarse con la herramienta desarrollada, que la gran mayoria de sitios
-desarrollados a nivel local carecen de politicas apropiadas de seguridad de su
+Pudo observarse con la herramienta desarrollada, que la gran mayoría de sitios
+desarrollados a nivel local carecen de políticas apropiadas de seguridad de su
 información, todo esto a causa de la dejadez de los encargados de
-administración. Los cuales velan mas por el despliegue rapido que por el
+administración. Los cuales velan mas por el despliegue rápido que por el
 mantenimiento continuo del sistema.
 
-Creemos que la solución debe pasar por la especializacion de las funcionalidades
+Creemos que la solución debe pasar por la especialización de las funcionalidades
 de un sistema, en lugar de desear una solución que tenga muchas funcionalidades
-y no cumpla con las especificaciones desedas.
+y no cumpla con las especificaciones deseadas.
 
 \begin{thebibliography}{99}
 
