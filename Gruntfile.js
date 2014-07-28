@@ -12,7 +12,7 @@ module.exports=function (grunt){
         pkg: grunt.file.readJSON('package.json'),
         develop:{
             server:{
-                file:'app.js'
+                file:'server/app.js'
             }
         },
         watch:{
@@ -22,8 +22,9 @@ module.exports=function (grunt){
             },
             server:{
                 files:[
-                    'app.js',
-                    'routes/*.js'
+                    'server/app.js',
+                    'server/routes.js',
+                    'server/routes/*.js'
                 ],
                 tasks:['develop','delayed-livereload']
             },
@@ -34,13 +35,13 @@ module.exports=function (grunt){
                 }
             },
             styl:{
-                files:['stylus/*.styl'],
+                files:['server/stylus/*.styl'],
                 options:{
                     livereload:reloadPort
                 }
             },
             jade:{
-                files:['views/{,*/}*.jade'],
+                files:['server/views/{,*/}*.jade'],
                 options:{
                     livereload:reloadPort
                 }

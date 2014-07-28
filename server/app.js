@@ -1,14 +1,21 @@
 'use strict';
 
-var express=require('express')
-  , http=require('http')
-  , path=require('path');
+global.app={};
 
-var app=express();
+var express=require('express')
+  , fs=require('fs')
+  , http=require('http')
+  , path=require('path')
+  , app=express();
 
 app.set('port',process.env.PORT||3000);
 app.set('views',__dirname+'/views');
 app.set('view engine','jade');
+
+fs.readFile(__dirname+'/database.json','utf8',function(err,data){
+    if(err){throw err;}
+    global.app.db=JSON.parse(data);
+});
 
 //app.use(express.favicon());
 //app.use(express.logger('dev'));
@@ -18,34 +25,15 @@ app.set('view engine','jade');
 
 app.use(require('stylus').middleware({
     src:path.join(__dirname,'stylus'),
-    dest:path.join(__dirname,'public/css'),
+    dest:path.join(__dirname,'/../public/css'),
     compress:true
 }));
 
-app.use(express.static(path.join(__dirname,'public')));
-app.use(express.static(path.join(__dirname,'bower_components')));
+app.use(express.static(path.join(__dirname,'/../public')));
+app.use(express.static(path.join(__dirname,'/../bower_components')));
 app.locals.pretty=true;
 
-if ('development'==app.get('env')){
-    //app.use(express.errorHandler());
-}
-
-app.get('/',function(req,res){
-    res.render('index')
-});
-app.get('/:page',function(req,res,next){
-    var page=req.params.page;
-    var contains = ['home','settings','fetch']
-        .some(function(element,index,array){
-            return element==page;
-        });
-
-    if(contains){
-        res.render('pages/'+page);
-    }else{
-        next();
-    }
-});
+require('./routes')(app);
 app.use(function(req,res){
     res.status(404).render('404.jade',{
         title:'404',

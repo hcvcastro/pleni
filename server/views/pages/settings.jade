@@ -1,0 +1,27 @@
+div.container
+    div.row
+        div.col-md-8(role='main')
+            section
+                h1 Settings
+                h2 CouchDB Settings
+                form.form-horizontal(role='form')
+                    div.form-group
+                        label.col-sm-2.control-label Host
+                        div.col-sm-10
+                            input.form-control(type='text',value='#{host}')
+                    div.form-group
+                        label.col-sm-2.control-label Port
+                        div.col-sm-10
+                            input.form-control(type='text',value='#{port}')
+                    div.form-group
+                        label.col-sm-2.control-label Suffix
+                        div.col-sm-10
+                            input.form-control(type='text',value='#{suffix}')
+                    div.form-group
+                        div.col-sm-offset-2.col-sm-10
+                            button.btn.btn-default(type='submit') Save
+                            button.btn.btn-default(type='submit') Test
+        div.col-md-4
+            ul.nav
+                li: a(href='/') CouchDB Settings
+
