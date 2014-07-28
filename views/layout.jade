@@ -1,23 +1,33 @@
 doctype 5
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/css/style.css')
-    script(src='http://localhost:35729/livereload.js')
-  body
-    header
-        block menu
-            nav
-                ul
-                    li: a(href='/') /
-                    li: a(href='/settings') /settings
-                    li: a(href='/fetch') /fetch
-    #wrapper
-        .left
-            block left
-                div.clear
-        #content
-            block content
-    footer
-        p happy hacking!!
+html(lang='en')
+    head
+        title= title
+        link(rel='stylesheet',href='/bootstrap/dist/css/bootstrap.min.css')
+        link(rel='stylesheet',href='/bootstrap/dist/css/bootstrap-theme.min.css')
+        link(rel='stylesheet',href='css/style.css')
+        script(src='/angular/angular.js')
+        script(src='/angular-route/angular-route.js')
+        script(src='/js/app.js')
+        script(src='/js/controllers.js')
+        script(src='http://localhost:35729/livereload.js')
+    body(ng-app='PleniApp')
+        header.navbar.navbar-default.navbar-fixed-top(role='banner')
+            div.container
+                div.navbar-header
+                    button.navbar-toggle.collapsed(type='button',data-toggle='collapse',data-target='.bs-navbar-collapse')
+                        span Menu
+                    a.navbar-brand(href='/#/home') Pleni
+                nav.collapse.navbar-collapse.bs-navbar-collapse(role='navigation')
+                    ul.nav.navbar-nav
+                        li: a(href='/#/fetch') Fetch
+                    ul.nav.navbar-nav.navbar-right
+                        li: a(href='/#/settings') Settings
+        block content
+            #wrapper(ng-view)
+                block main
+        footer.panel
+            ul.list-inline
+                li: span.glyphicon.glyphicon-star
+        script(src='/jquery/dist/jquery.min.js')
+        script(src='/bootstrap/dist/js/bootstrap.min.js')
 
