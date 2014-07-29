@@ -3,34 +3,35 @@
 global.app={};
 
 var express=require('express')
+  , favicon=require('serve-favicon')
+  , bodyparser=require('body-parser')
   , fs=require('fs')
   , http=require('http')
   , path=require('path')
   , app=express();
 
 app.set('port',process.env.PORT||3000);
-app.set('views',__dirname+'/views');
+app.set('views',path.join(__dirname,'views'));
 app.set('view engine','jade');
 
-fs.readFile(__dirname+'/database.json','utf8',function(err,data){
+fs.readFile(path.join(__dirname,'database.json'),'utf8',function(err,data){
     if(err){throw err;}
     global.app.db=JSON.parse(data);
 });
 
-//app.use(express.favicon());
-//app.use(express.logger('dev'));
-//app.use(express.bodyParser());
+app.disable('x-powered-by');
+app.use(favicon(path.join(__dirname,'..','public','img','favicon.ico')));
 //app.use(express.methodOverride());
-//app.use(app.router);
 
+app.use(bodyparser.urlencoded({extended:false}));
 app.use(require('stylus').middleware({
     src:path.join(__dirname,'stylus'),
-    dest:path.join(__dirname,'/../public/css'),
+    dest:path.join(__dirname,'..','public','css'),
     compress:true
 }));
 
-app.use(express.static(path.join(__dirname,'/../public')));
-app.use(express.static(path.join(__dirname,'/../bower_components')));
+app.use(express.static(path.join(__dirname,'..','public')));
+app.use(express.static(path.join(__dirname,'..','bower_components')));
 app.locals.pretty=true;
 
 require('./routes')(app);

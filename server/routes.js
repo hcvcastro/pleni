@@ -7,6 +7,7 @@ var home=require('./routes/home')
 module.exports=function(app){
     app.get('/',home.index);
     app.get('/home',home.home);
+    app.post('/settings/testdb',settings.testdb);
     app.get('/settings',settings.index);
     app.get('/fetch',fetch.index);
 };

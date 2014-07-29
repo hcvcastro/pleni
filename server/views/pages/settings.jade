@@ -8,20 +8,22 @@ div.container
                     div.form-group
                         label.col-sm-2.control-label Host
                         div.col-sm-10
-                            input.form-control(type='text',value='#{host}')
+                            input.form-control(type='text',ng-init='host="#{host}"',ng-model='host')
                     div.form-group
                         label.col-sm-2.control-label Port
                         div.col-sm-10
-                            input.form-control(type='text',value='#{port}')
+                            input.form-control(type='text',ng-init='port="#{port}"',ng-model='port')
                     div.form-group
                         label.col-sm-2.control-label Suffix
                         div.col-sm-10
-                            input.form-control(type='text',value='#{suffix}')
+                            input.form-control(type='text',ng-init='suffix="#{suffix}"',ng-model='suffix')
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
-                            button.btn.btn-default(type='submit') Save
-                            button.btn.btn-default(type='submit') Test
-        div.col-md-4
+                            button.btn.btn-primary(type='submit') Save
+                            button.btn.btn-default(type='submit',ng-click='testdb()') Test Connection
+                div#test.alert.alert-info.hide
+                    p Testing on {{host}}:{{port}}
+        div.col-md-4.hidden-xs
             ul.nav
                 li: a(href='/') CouchDB Settings
 
