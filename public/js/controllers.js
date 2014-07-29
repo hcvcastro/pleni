@@ -7,7 +7,8 @@ controllers.controller('HomeController',['$scope',function($scope){}]);
 controllers.controller('SettingsController',['$scope',function($scope){
     $scope.testdb=function(){
         console.log('testing the couchdb settings');
-        $('#test').removeClass('hide');
+        $('#test>span.loader').removeClass('hide');
+        $('#test>span.result').addClass('ok').html('OK');
     };
 }]);
 

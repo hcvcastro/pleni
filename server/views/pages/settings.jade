@@ -21,8 +21,9 @@ div.container
                         div.col-sm-offset-2.col-sm-10
                             button.btn.btn-primary(type='submit') Save
                             button.btn.btn-default(type='submit',ng-click='testdb()') Test Connection
-                div#test.alert.alert-info.hide
-                    p Testing on {{host}}:{{port}}
+                            div#test
+                                span.loader.hide
+                                span.result
         div.col-md-4.hidden-xs
             ul.nav
                 li: a(href='/') CouchDB Settings

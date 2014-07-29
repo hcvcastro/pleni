@@ -24,3 +24,37 @@ footer.panel
 .hide
     display: none
 
+div#test
+    display: inline;
+    .loader
+        position: absolute
+        width: 2.7rem
+        height: 2.7rem
+        margin-top: 0.5rem
+        margin-left: 1.5rem
+        border: 0.75rem solid #000
+        border-radius: 50%
+        border-right-color: transparent
+        animation: spin 2s linear infinite;
+    .result
+        margin-left: 1.5rem
+    .ok
+        color: green
+    .fail
+        color: red
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg)
+        opacity: 0.8
+    }
+    50% {
+        transform: rotate(180deg)
+        opacity: 1.0
+    }
+    to {
+        transform: rotate(360deg)
+        opacity: 0.8
+    }
+}
+

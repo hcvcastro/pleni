@@ -23,7 +23,8 @@
     "grunt": "^0.4.5",
     "request": "^2.37.0",
     "serve-favicon": "^2.0.1",
-    "stylus": "^0.47.3"
+    "stylus": "^0.47.3",
+    "validator": "^3.16.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
