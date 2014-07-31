@@ -4,27 +4,32 @@ div.container
             section
                 h1 Settings
                 h2 CouchDB Settings
-                form.form-horizontal(role='form')
+                div.alert.alert-dismissible.hide(role='alert')
+                    button.close(type='button',data-dismiss='alert')
+                        span(aria-hidden='true')&times;
+                        span.sr-only Close
+                    p.message
+                form.form-horizontal(role='form',ng-init='host=\'#{host}\';port=#{port};suffix=\'#{suffix}\'',ng-submit='savedb()')
                     div.form-group
                         label.col-sm-2.control-label Host
                         div.col-sm-10
-                            input.form-control(type='text',ng-init='host="#{host}"',ng-model='host')
+                            input.form-control(type='text',placeholder='The host without scheme or a IP',required,ng-model='host')
                     div.form-group
                         label.col-sm-2.control-label Port
                         div.col-sm-10
-                            input.form-control(type='text',ng-init='port="#{port}"',ng-model='port')
+                            input.form-control(type='number',placeholder='The port',min=1,max=65535,required,ng-model='port')
                     div.form-group
                         label.col-sm-2.control-label Suffix
                         div.col-sm-10
-                            input.form-control(type='text',ng-init='suffix="#{suffix}"',ng-model='suffix')
+                            input.form-control(type='text',placeholder='The suffix used in the database server',ng-model='suffix')
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
                             button.btn.btn-primary(type='submit') Save
-                            button.btn.btn-default(type='submit',ng-click='testdb()') Test Connection
+                            button.btn.btn-default(type='button',ng-click='testdb()') Test Connection
                             div#test
                                 span.loader.hide
-                                span.result
+                                span.result.hide
         div.col-md-4.hidden-xs
-            ul.nav
-                li: a(href='/') CouchDB Settings
+            ul.list-group
+                li.list-group-item: a(href='/') CouchDB Settings
 

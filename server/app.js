@@ -14,6 +14,7 @@ app.set('port',process.env.PORT||3000);
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','jade');
 
+// read a database configuration
 fs.readFile(path.join(__dirname,'database.json'),'utf8',function(err,data){
     if(err){throw err;}
     global.app.db=JSON.parse(data);
@@ -21,8 +22,12 @@ fs.readFile(path.join(__dirname,'database.json'),'utf8',function(err,data){
 
 app.disable('x-powered-by');
 app.use(favicon(path.join(__dirname,'..','public','img','favicon.ico')));
+
 //app.use(express.methodOverride());
+
 app.use(bodyparser.urlencoded({extended:false}));
+app.use(bodyparser.json())
+
 app.use(require('stylus').middleware({
     src:path.join(__dirname,'stylus'),
     dest:path.join(__dirname,'..','public','css'),
