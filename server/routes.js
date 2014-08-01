@@ -13,5 +13,6 @@ module.exports=function(app){
     app.get('/settings',settings.index);
 
     app.get('/fetch',fetch.index);
+    app.get('/fetch/create',fetch.create);
 };
 

@@ -1,8 +1,11 @@
 div.container
     div.row
         div.col-md-8(role='main')
-            section
-                h1 Fetching
+            h1 Fetching
+            section.index(ng-show='panel==\'index\'')
+                p You can create a repository or view the state of fetching in
+                everywhere repository.
+            section.create(ng-show='panel==\'create\'')
                 h2 New repository
                 form.form-horizontal(role='form',action='')
                     div.form-group
@@ -12,9 +15,11 @@ div.container
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
                             button.btn.btn-default(type='submit') Create
+            section.read(ng-show='panel==\'read\'')
+                h2 Repository: %s
         div.col-md-4
             ul.list-group
-                li.list-group-item: a(href='/') New repository
+                li.list-group-item: a(ng-click='createRepo()') New repository
             ul.list-group
                 li.list-group-item: a(href='/') asdflajsd l
                 li.list-group-item: a(href='/') asdflajsd l

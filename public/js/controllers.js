@@ -45,7 +45,7 @@ controllers.controller('SettingsController',
             .success(function(data,status,headers,config){
                 hideWaiting('ok','');
                 if(data.result){
-                    showAlert('sucess',data.message);
+                    showAlert('success',data.message);
                 }else{
                     showAlert('danger',data.message);
                 }
@@ -58,5 +58,13 @@ controllers.controller('SettingsController',
     };
 }]);
 
-controllers.controller('FetchController',['$scope',function($scope){}]);
+controllers.controller('FetchController',
+    ['$scope',function($scope){
+
+    $scope.panel='index';
+
+    $scope.createRepo=function(){
+        $scope.panel='create';
+    };
+}]);
 

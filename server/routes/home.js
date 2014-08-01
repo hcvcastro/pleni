@@ -1,10 +1,10 @@
 'use strict';
 
-exports.index=function(req,res){
-    res.render('index');
+exports.index=function(request,response){
+    response.render('index');
 };
 
-exports.home=function(req,res){
-    res.render('pages/home');
+exports.home=function(request,response){
+    response.render('pages/home');
 };
 
