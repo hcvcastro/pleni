@@ -12,7 +12,7 @@ module.exports=function(app){
     app.post('/settings/savedb',settings.savedb);
     app.get('/settings',settings.index);
 
-    app.put('/repositories',repositories.create);
+    app.post('/repositories',repositories.create);
     app.get('/repositories',repositories.index);
 };
 

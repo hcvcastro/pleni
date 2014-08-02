@@ -9,7 +9,7 @@ div.container
                         span(aria-hidden='true') &times;
                         span.sr-only Close
                     p.message
-                form.form-horizontal(role='form',ng-init='host=\'#{host}\';port=#{port};suffix=\'#{suffix}\'',ng-submit='savedb()')
+                form.form-horizontal(role='form',ng-init='host=\'#{host}\';port=#{port};prefix=\'#{prefix}\'',ng-submit='savedb()')
                     div.form-group
                         label.col-sm-2.control-label Host
                         div.col-sm-10
@@ -19,9 +19,9 @@ div.container
                         div.col-sm-10
                             input.form-control(type='number',placeholder='The port',min=1,max=65535,required,ng-model='port')
                     div.form-group
-                        label.col-sm-2.control-label Suffix
+                        label.col-sm-2.control-label Prefix
                         div.col-sm-10
-                            input.form-control(type='text',placeholder='The suffix used in the database server',ng-model='suffix')
+                            input.form-control(type='text',placeholder='The prefix used in the database server',ng-model='prefix')
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
                             button.btn.btn-primary(type='submit') Save

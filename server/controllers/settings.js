@@ -8,8 +8,8 @@ var validator=require('validator')
   , validatePort=function(port){
     return (validator.isInt(port));
     }
-  , validateSuffix=function(suffix){
-    return suffix.match(/^[a-z][a-z0-9_]*$/i);
+  , validatePrefix=function(prefix){
+    return prefix.match(/^[a-z][a-z0-9_]*$/i);
     };
 
 exports.index=function(request,response){
@@ -74,6 +74,7 @@ exports.savedb=function(request,response){
     // validation
     if(!validateHost(host)||!validatePort(port)||!validateSuffix(suffix)){
         response.json({result:false,message:'Validation error'});
+        return;
     }
 
     // write a database config

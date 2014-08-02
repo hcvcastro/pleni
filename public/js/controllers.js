@@ -68,8 +68,7 @@ controllers.controller('RepositoriesController',
         'uno','dos','tres','cuatro'
     ];
 
-    $scope.showcreate=function(){
-        $scope.panel='create';
-    };
+    $scope.showindex=function(){$scope.panel='index';};
+    $scope.showcreate=function(){$scope.panel='create';};
 }]);
 
