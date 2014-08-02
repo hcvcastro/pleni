@@ -5,15 +5,15 @@ pleniApp.config(['$routeProvider',function($routeProvider){
     $routeProvider
         .when('/home',{
             templateUrl:'/home',
-            controller:'SettingsController'
+            controller:'HomeController'
         })
         .when('/settings',{
             templateUrl:'/settings',
             controller:'SettingsController'
         })
-        .when('/fetch',{
-            templateUrl:'/fetch',
-            controller:'FetchController'
+        .when('/repositories',{
+            templateUrl:'/repositories',
+            controller:'RepositoriesController'
         })
         .otherwise({
             redirectTo: '/home'

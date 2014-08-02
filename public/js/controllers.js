@@ -58,12 +58,17 @@ controllers.controller('SettingsController',
     };
 }]);
 
-controllers.controller('FetchController',
-    ['$scope',function($scope){
+controllers.controller('RepositoriesController',
+    ['$scope','$http',function($scope,$http){
 
     $scope.panel='index';
 
-    $scope.createRepo=function(){
+    //$http.get();
+    $scope.repositories=[
+        'uno','dos','tres','cuatro'
+    ];
+
+    $scope.showcreate=function(){
         $scope.panel='create';
     };
 }]);

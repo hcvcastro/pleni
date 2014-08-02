@@ -1,0 +1,37 @@
+div.container
+    div.row
+        div.col-md-8(role='main')
+            h1 Fetching
+            section.index(ng-show='panel==\'index\'')
+                p You can create repositories or view the state of fetching in
+                everywhere repository created.
+                br
+                br
+                div.row
+                    div.col-md-6.col-md-offset-3
+                        button.btn.btn-primary.btn-lg.btn-block(type='button',ng-click='showcreate()') Create Repository
+            section.create(ng-show='panel==\'create\'')
+                h2 New repository
+                div.alert.alert-dismissible.hide(role='alert')
+                    button.close(type='button',data-dismiss='alert')
+                        span(aria-hidden='true') &times;
+                        span.sr-only Close
+                    p.message
+                form.form-horizontal(role='form',ng-submit='createrepo()')
+                    div.form-group
+                        label.col-sm-2.control-label Name
+                        div.col-sm-10
+                            input.form-control(type='text',placeholder='Name of repository',required,ng-model='repository')
+                    div.form-group
+                        div.col-sm-offset-2.col-sm-10
+                            button.btn.btn-primary(type='submit') Create
+            section.read(ng-show='panel==\'read\'')
+                h2 Repository: %s
+        div.col-md-4
+            div.list-group
+                a.list-group-item(ng-click='showcreate()') New repository
+            h2 Repositories
+            div.list-group
+                a.list-group-item(ng-repeat='repository in repositories') {{repository}}
+                span.list-group-item(ng-hide='repositories.length') No repositories founded
+

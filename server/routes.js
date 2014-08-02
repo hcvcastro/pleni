@@ -1,8 +1,8 @@
 'use strict';
 
-var home=require('./routes/home')
-  , settings=require('./routes/settings')
-  , fetch=require('./routes/fetch');
+var home=require('./controllers/home')
+  , settings=require('./controllers/settings')
+  , repositories=require('./controllers/repositories');
 
 module.exports=function(app){
     app.get('/',home.index);
@@ -12,7 +12,7 @@ module.exports=function(app){
     app.post('/settings/savedb',settings.savedb);
     app.get('/settings',settings.index);
 
-    app.get('/fetch',fetch.index);
-    app.get('/fetch/create',fetch.create);
+    app.put('/repositories',repositories.create);
+    app.get('/repositories',repositories.index);
 };
 
