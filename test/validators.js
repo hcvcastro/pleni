@@ -23,12 +23,12 @@ describe('validators',function(){
         });
 
         it('port validation',function(done){
-            assert.equal(validate.validPort(),false);
-            assert.equal(validate.validPort(-80),false);
-            assert.equal(validate.validPort(0),false);
-            assert.equal(validate.validPort(1),true);
-            assert.equal(validate.validPort(1024),true);
-            assert.equal(validate.validPort(65536),false);
+            assert.equal(validate.validPort(''),false);
+            assert.equal(validate.validPort('-80'),false);
+            assert.equal(validate.validPort('0'),false);
+            assert.equal(validate.validPort('1'),true);
+            assert.equal(validate.validPort('1024'),true);
+            assert.equal(validate.validPort('65536'),false);
             done();
         });
 

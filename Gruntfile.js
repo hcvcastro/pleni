@@ -2,19 +2,21 @@
 
 var request=require('request');
 
-module.exports=function (grunt){
-    require('time-grunt')(grunt);
+module.exports=function(grunt){
     require('load-grunt-tasks')(grunt);
+    require('time-grunt')(grunt);
 
     var reloadPort=35729,files;
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+
         develop:{
             server:{
                 file:'server/app.js'
             }
         },
+
         watch:{
             options:{
                 nospawn:true,
@@ -49,8 +51,13 @@ module.exports=function (grunt){
             tex:{
                 files:['docs/*.tex'],
                 tasks:['latex']
+            },
+            test:{
+                files:['test/*.js'],
+                tasks:['mochacli']
             }
         },
+
         latex:{
             options:{
                 haltOnError:true
@@ -61,8 +68,17 @@ module.exports=function (grunt){
                 },
                 src:['docs/perfil.tex']
             }
+        },
+
+        mochacli: {
+            options: {
+                reporter: 'nyan',
+                bail: true
+            },
+            all: ['test/*.js']
         }
     });
+
 
     grunt.config.requires('watch.server.files');
     files=grunt.config('watch.server.files');
@@ -85,6 +101,7 @@ module.exports=function (grunt){
         },500);
     });
 
-    grunt.registerTask('default',['develop','watch']);
+    grunt.registerTask('serve',['develop','watch']);
+    grunt.registerTask('test',['mochacli']);
 };
 

@@ -6,14 +6,12 @@ module.exports=function(app){
     });
 
     app.post('/settings/testdb',function(request,response){
-        var host=request.body.host
+        var validate=require('../validators')
+          , host=request.body.host
           , port=request.body.port;
 
-        response.json({id:1});
-    });
-/*
         // validation
-        if(!validateHost(host)||!validatePort(port)){
+        if(!validate.validHost(host)||!validate.validPort(port)){
             response.json({result:false,message:'Validation error'});
             return;
         }
@@ -29,7 +27,7 @@ module.exports=function(app){
         http.get(options,function(res){
             res.setEncoding('utf8');
             res.on('data',function(body){
-                if(validator.isJSON(body)){
+                try {
                     var obj=JSON.parse(body);
                     if('couchdb' in obj){
                         response.json({
@@ -43,7 +41,7 @@ module.exports=function(app){
                             message:'JSON error'
                         });
                     }
-                }else{
+                } catch (e) {
                     response.json({
                         result:false,
                         message:'Connection error'
@@ -56,15 +54,18 @@ module.exports=function(app){
                 message:'Network error'
             });
         });
-    });*/
+    });
 
     app.post('/settings/savedb',function(request,response){
-        var host=request.body.host
+        var validate=require('../validators')
+          , host=request.body.host
           , port=request.body.port
-          , suffix=request.body.suffix;
+          , prefix=request.body.prefix;
 
         // validation
-        if(!validateHost(host)||!validatePort(port)||!validateSuffix(suffix)){
+        if(!validate.validHost(host)
+            ||!validate.validPort(port)
+            ||!validate.validSlug(prefix)){
             response.json({result:false,message:'Validation error'});
             return;
         }

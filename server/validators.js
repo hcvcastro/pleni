@@ -1,6 +1,6 @@
 'use strict';
 
-const validator=require('validator');
+var validator=require('validator');
 
 var notEmpty=function(element){
     if(typeof element==='undefined'){
