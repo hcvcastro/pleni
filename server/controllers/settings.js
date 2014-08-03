@@ -1,27 +1,30 @@
 'use strict';
 
 module.exports=function(app){
+    var validate=require('../validators')
+      , paqSuccess=require('../json-response').success
+      , paqError=require('../json-response').error;
+
     app.get('/settings',function(request,response){
         response.render('pages/settings',global.app.db);
     });
 
     app.post('/settings/testdb',function(request,response){
-        var validate=require('../validators')
-          , host=request.body.host
+        var host=request.body.host
           , port=request.body.port;
 
         // validation
         if(!validate.validHost(host)||!validate.validPort(port)){
-            response.json({result:false,message:'Validation error'});
+            response.json(paqError.validation);
             return;
         }
 
         // testing couchdb
         var http=require('http')
           , options={
-                host:host.replace(/.*?:\/\//g, ''),
-                port:parseInt(port),
-                path:'/',
+                host:host.replace(/.*?:\/\//g, '')
+              , port:parseInt(port)
+              , path:'/'
             };
 
         http.get(options,function(res){
@@ -30,35 +33,21 @@ module.exports=function(app){
                 try {
                     var obj=JSON.parse(body);
                     if('couchdb' in obj){
-                        response.json({
-                            result:true,
-                            message:'Success connection',
-                            version:obj.version
-                        });
+                        response.json(paqSuccess.connectionv(obj));
                     }else{
-                        response.json({
-                            result:false,
-                            message:'JSON error'
-                        });
+                        response.json(paqError.json);
                     }
                 } catch (e) {
-                    response.json({
-                        result:false,
-                        message:'Connection error'
-                    });
+                    response.json(paqError.connection);
                 }
             });
         }).on('error',function(error){
-            response.json({
-                result:false,
-                message:'Network error'
-            });
+            response.json(paqError.network);
         });
     });
 
     app.post('/settings/savedb',function(request,response){
-        var validate=require('../validators')
-          , host=request.body.host
+        var host=request.body.host
           , port=request.body.port
           , prefix=request.body.prefix;
 
@@ -66,7 +55,7 @@ module.exports=function(app){
         if(!validate.validHost(host)
             ||!validate.validPort(port)
             ||!validate.validSlug(prefix)){
-            response.json({result:false,message:'Validation error'});
+            response.json(paqError.validation);
             return;
         }
 
@@ -82,7 +71,7 @@ module.exports=function(app){
                 global.app.db=json;
         });
 
-        response.json({result:true,message:'CouchDB settings changed'});
+        response.json(paqSuccess.dbsave);
     });
 };
 

@@ -2,7 +2,9 @@
 
 var request=require('supertest')
   , assert=require('assert')
-  , app=require('../server/app');
+  , app=require('../server/app')
+  , paqSuccess=require('../server/json-response').success
+  , paqError=require('../server/json-response').error;
 
 describe('settings',function(){
     describe('settings controller functions',function(){
@@ -12,74 +14,61 @@ describe('settings',function(){
                 .expect(200,done);
         });
 
-        var messages1=[
-            {result:false,message:'Validation error'},
-            {result:false,message:'Network error'},
-            {result:false,message:'Connection error'},
-            {result:false,message:'JSON error'},
-            {result:true,message:'Success connection',version:'1.6.0'}
-        ];
-        var cases1=[
-            {test:'',expected:messages1[0]},
-            {test:{},expected:messages1[0]},
-            {test:{id:1},expected:messages1[0]},
-            {test:{host:'',port:''},expected:messages1[0]},
-            {test:{host:'localhost',port:'79'},expected:messages1[1]},
-            {test:{host:'localhost',port:'80'},expected:messages1[2]},
-            {test:{host:'localhost',port:'5984'},expected:messages1[4]}
-        ];
-
-        for(var item1 in cases1){
+        [
+            {test:'',expected:paqError.validation},
+            {test:{},expected:paqError.validation},
+            {test:{id:1},expected:paqError.validation},
+            {test:{host:'',port:''},expected:paqError.validation},
+            {test:{host:'localhost',port:'79'},expected:paqError.network},
+            {test:{host:'localhost',port:'80'},expected:paqError.connection},
+            {test:{host:'localhost',port:'5984'},expected:paqSuccess.connection}
+        ]
+        .forEach(function(element){
             it('POST /settings/testdb',function(done){
                 request(app)
                     .post('/settings/testdb')
-                    .send(cases1[item1].test)
+                    .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(200)
                     .end(function(err,res){
                         assert.equal(
                             JSON.stringify(JSON.parse(res.text)),
-                            JSON.stringify(cases1[item1].expected)
+                            JSON.stringify(element.expected)
                         );
                         done();
                     });
             });
-        }
+        });
 
-        var messages2=[
-            {result:false,message:'Validation error'},
-            {result:true,message:'CouchDB settings changed'}
-        ];
-        var cases2=[
-            {test:'',expected:messages2[0]},
-            {test:{},expected:messages2[0]},
-            {test:{id:1},expected:messages2[0]},
-            {test:{host:'',port:''},expected:messages2[0]},
-            {test:{host:'localhost',port:'79'},expected:messages2[0]},
-            {test:{host:'localhost',port:'80'},expected:messages2[0]},
-            {test:{host:'localhost',port:'5984'},expected:messages2[0]},
+        [
+            {test:'',expected:paqError.validation},
+            {test:{},expected:paqError.validation},
+            {test:{id:1},expected:paqError.validation},
+            {test:{host:'',port:''},expected:paqError.validation},
+            {test:{host:'localhost',port:'79'},expected:paqError.validation},
+            {test:{host:'localhost',port:'80'},expected:paqError.validation},
+            {test:{host:'localhost',port:'5984'},expected:paqError.validation},
             {test:{host:'localhost',port:'5984',prefix:''},
-             expected:messages2[0]},
+                expected:paqError.validation},
             {test:{host:'localhost',port:'5984',prefix:'112'},
-             expected:messages2[0]},
-        ];
-
-        for(var item2 in cases2){
+                expected:paqError.validation},
+        ]
+        .forEach(function(element){
             it('POST /settings/savedb',function(done){
                 request(app)
                     .post('/settings/savedb')
-                    .send(cases2[item2].test)
+                    .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(200)
                     .end(function(err,res){
                         assert.equal(
                             JSON.stringify(JSON.parse(res.text)),
-                            JSON.stringify(cases2[item2].expected)
+                            JSON.stringify(element.expected)
                         );
                         done();
                     });
             });
-        }
+        });
     });
 });
 
