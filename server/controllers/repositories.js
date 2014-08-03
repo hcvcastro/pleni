@@ -6,19 +6,21 @@ var validator=require('validator')
         return repository.match(/^[a-z][a-z0-9_]*$/i);
     };
 
-exports.index=function(request,response){
-    response.render('pages/repositories');
-};
+module.exports=function(app){
+    app.get('/repositories',function(request,response){
+        response.render('pages/repositories');
+    });
 
-exports.create=function(request,response){
-    var repository=request.body.repository;
+    app.post('/repositories',function(request,response){
+        var repository=request.body.repository;
 
-    // validation
-    if(!validateRepository(repository)){
-        response.json({result:false,message:'Validation error'});
-        return;
-    }
+        // validation
+        if(!validateRepository(repository)){
+            response.json({result:false,message:'Validation error'});
+            return;
+        }
 
-    response.json({result:true,message:'Repository created'});
+        response.json({result:true,message:'Repository created'});
+    });
 };
 

@@ -1,10 +1,12 @@
 'use strict';
 
-exports.index=function(request,response){
-    response.render('index');
-};
+module.exports=function(app){
+    app.get('/',function(request,response){
+        response.render('index');
+    });
 
-exports.home=function(request,response){
-    response.render('pages/home');
+    app.get('/home',function(request,response){
+        response.render('pages/home');
+    });
 };
 

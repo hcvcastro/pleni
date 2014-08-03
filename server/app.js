@@ -38,15 +38,20 @@ app.use(express.static(path.join(__dirname,'..','public')));
 app.use(express.static(path.join(__dirname,'..','bower_components')));
 app.locals.pretty=true;
 
-require('./routes')(app);
+require('./controllers/home')(app);
+require('./controllers/settings')(app);
+require('./controllers/repositories')(app);
+
 app.use(function(req,res){
     res.status(404).render('404.jade',{
         title:'404',
-        message:'Sorry XD, but file not found!!'
+        message:'I\'m so sorry, but file not found!!'
     });
 });
 
 http.createServer(app).listen(app.get('port'),function(){
     console.log('Express server listening on port '+app.get('port'));
 });
+
+module.exports=app;
 
