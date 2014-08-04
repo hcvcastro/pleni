@@ -64,7 +64,7 @@ module.exports=function(app){
           , path=require('path');
 
         var dbfile=path.join(__dirname,'..','database.json');
-        var json={host:host,port:port,suffix:suffix};
+        var json={host:host,port:port,prefix:prefix};
         fs.writeFile(dbfile,JSON.stringify(json),
             function(err){
                 if(err){throw err;}

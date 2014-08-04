@@ -40,9 +40,9 @@ controllers.controller('SettingsController',
 
     $scope.savedb=function(){
         showWaiting();
-        $http.post('/settings/savedb',{
-            host:$scope.host,port:$scope.port,suffix:$scope.suffix})
-            .success(function(data,status,headers,config){
+        $http.post('/settings/savedb',
+            {host:$scope.host,port:$scope.port,prefix:$scope.prefix})
+            .success(function(data){
                 hideWaiting('ok','');
                 if(data.result){
                     showAlert('success',data.message);
@@ -58,17 +58,27 @@ controllers.controller('SettingsController',
     };
 }]);
 
-controllers.controller('RepositoriesController',
+controllers.controller('FetchController',
     ['$scope','$http',function($scope,$http){
 
     $scope.panel='index';
+    $scope.repositories=new Array();
 
-    //$http.get();
-    $scope.repositories=[
-        'uno','dos','tres','cuatro'
-    ];
+    $http.get('/repositories')
+        .success(function(data){
+            console.log(data);
+            //$scope.repositories=data;
+        });
 
     $scope.showindex=function(){$scope.panel='index';};
     $scope.showcreate=function(){$scope.panel='create';};
+
+    $scope.createrepo=function(){
+        $http.post('/repositories',
+            {repository:$scope.repository})
+            .success(function(data){
+                console.log('created');
+            });
+    };
 }]);
 

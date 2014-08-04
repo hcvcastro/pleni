@@ -36,16 +36,32 @@ module.exports=function(app){
         }
 
         nano.db.create(db.port+repository,function(err,body){
-            if(!err){
-                response.json(paqSuccess.dbcreate);
+            if(err){
+                throw err;
             }
+
+            response.json(paqSuccess.dbcreate);
         });
+
+        response.json(paqError.connection);
     });
 
     app.delete('/repositories',function(request,response){
         response.json(paqError.notimplemented);
     });
 
-    //app.get('/repositories/:repository');
+    app.get('/repositories/:repository',function(request,response){
+        var db=global.app.db
+          , nano=require('nano')('http://'+db.host+':'+db.port)
+          , repository=request.params.repository;
+
+        // validation
+        if(!validate.validSlug(repository)){
+            response.json(paqError.validation);
+            return;
+        }
+
+        data=nano.db.use(repository);
+    });
 };
 
