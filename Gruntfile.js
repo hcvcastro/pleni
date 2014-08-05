@@ -6,14 +6,17 @@ module.exports=function(grunt){
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
 
-    var reloadPort=35729,files;
+    var reloadPort=35729,filescontrol;
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
         develop:{
-            server:{
+            control:{
                 file:'server/app.js'
+            },
+            planner:{
+                file:'planner/app.js'
             }
         },
 
@@ -22,12 +25,18 @@ module.exports=function(grunt){
                 nospawn:true,
                 livereload:reloadPort
             },
-            server:{
+            control:{
                 files:[
                     'server/app.js',
                     'server/controllers/*.js'
                 ],
-                tasks:['develop','delayed-livereload']
+                tasks:['develop:control','delayed-livereload-control']
+            },
+            planner:{
+                files:[
+                    'planner/app.js'
+                ],
+                tasks:['develop:planner']
             },
             js:{
                 files:['public/js/*.js'],
@@ -51,9 +60,13 @@ module.exports=function(grunt){
                 files:['docs/*.tex'],
                 tasks:['latex']
             },
-            test:{
+            testcontrol:{
                 files:['test/*.js'],
                 tasks:['mochacli']
+            },
+            testplanner:{
+                files:['test/planner.js'],
+                tasks:['mochacli:planner']
             }
         },
 
@@ -74,21 +87,21 @@ module.exports=function(grunt){
                 reporter: 'spec',
                 bail: true
             },
-            all: ['test/*.js']
+            all: ['test/*.js'],
+            planner: ['test/planner.js']
         }
     });
 
+    grunt.config.requires('watch.control.files');
+    filescontrol=grunt.config('watch.control.files');
+    filescontrol=grunt.file.expand(filescontrol);
 
-    grunt.config.requires('watch.server.files');
-    files=grunt.config('watch.server.files');
-    files=grunt.file.expand(files);
-
-    grunt.registerTask('delayed-livereload',
+    grunt.registerTask('delayed-livereload-control',
         'Live reload after the node server has restarted.',function(){
         var done=this.async();
         setTimeout(function(){
             request.get('http://localhost:'+reloadPort+'/changed?files='
-            +files.join(','),function(err,res){
+            +filescontrol.join(','),function(err,res){
                 var reloaded=!err&&res.statusCode===200;
                 if(reloaded){
                     grunt.log.ok('Delayed live reload successful.');
@@ -100,7 +113,8 @@ module.exports=function(grunt){
         },500);
     });
 
-    grunt.registerTask('serve',['develop','watch']);
+    grunt.registerTask('serve:control',['develop:control','watch:control']);
+    grunt.registerTask('serve:planner',['develop:planner','watch:planner']);
     grunt.registerTask('test',['mochacli']);
 };
 
