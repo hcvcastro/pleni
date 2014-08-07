@@ -24,6 +24,7 @@ var planner={
         }
     }
   , task:function(){
+        var self=this;
         functions.get({
             host:'http://localhost:5984'
           , dbname:'/pleni_site_one'
@@ -39,7 +40,7 @@ var planner={
             if(error){
                 console.log('ERROR');
                 console.log(error);
-                this.stop();
+                self.stop();
             }
         })
     }
@@ -249,7 +250,8 @@ var functions={
 
                 request.put({url:url+doc,json:body},function(error,response,body){
                     if(!error){
-                        console.log('        -> '+element+' -> '+response.statusCode);
+                        console.log('        -> '
+                            +response.statusCode+' '+element);
                     }
                 });
             });
