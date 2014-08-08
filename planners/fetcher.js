@@ -27,7 +27,7 @@ var planner={
         var self=this;
         functions.get({
             host:'http://localhost:5984'
-          , dbname:'/pleni_site_one'
+          , dbname:'/pleni_site_two'
           , view:'/_design/default/_view/wait'
         })
         .then(functions.look)
@@ -58,6 +58,8 @@ var functions={
                     var row=json.rows[0];
                     deferred.resolve([settings, row]);
                     return;
+                }else{
+                    deferred.reject({task:'finish'});
                 }
             }
             deferred.reject(error);

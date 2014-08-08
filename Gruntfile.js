@@ -14,35 +14,35 @@ module.exports=function(grunt){
         develop:{
             control:{
                 file:'server/app.js'
-            },
-            planner:{
-                file:'planner/app.js'
+            }
+          , fetcher:{
+                file:'planners/fetcher.js'
+            }
+          , creator:{
+                file:'planners/creator.js'
             }
         },
 
         watch:{
             options:{
-                nospawn:true,
-                livereload:reloadPort
+                nospawn:true
+              , livereload:reloadPort
             },
             control:{
-                files:[
-                    'server/app.js',
-                    'server/controllers/*.js'
-                ],
-                tasks:['develop:control','delayed-livereload-control']
+                files:['server/app.js', 'server/controllers/*.js']
+              , tasks:['develop:control','delayed-livereload-control']
             },
-            planner:{
-                files:[
-                    'planner/app.js'
-                ],
-                tasks:['develop:planner']
+            fetcher:{
+                files:['planners/fetcher.js']
+              , tasks:['develop:fetcher']
+            },
+            creator:{
+                files:['planners/creator.js']
+              , tasks:['develop:creator']
             },
             js:{
-                files:['public/js/*.js'],
-                options:{
-                    livereload:reloadPort
-                }
+                files:['public/js/*.js']
+              , options:{livereload:reloadPort}
             },
             styl:{
                 files:['server/stylus/*.styl'],
@@ -64,9 +64,9 @@ module.exports=function(grunt){
                 files:['test/*.js'],
                 tasks:['mochacli']
             },
-            testplanner:{
-                files:['test/planner.js'],
-                tasks:['mochacli:planner']
+            testfetcher:{
+                files:['test/fetcher.js'],
+                tasks:['mochacli:fetcher']
             }
         },
 
@@ -88,7 +88,7 @@ module.exports=function(grunt){
                 bail: true
             },
             all: ['test/*.js'],
-            planner: ['test/planner.js']
+            fetcher: ['test/fetcher.js']
         }
     });
 
@@ -114,7 +114,8 @@ module.exports=function(grunt){
     });
 
     grunt.registerTask('serve:control',['develop:control','watch:control']);
-    grunt.registerTask('serve:planner',['develop:planner','watch:planner']);
+    grunt.registerTask('serve:fetcher',['develop:fetcher','watch:fetcher']);
+    grunt.registerTask('serve:creator',['develop:creator','watch:creator']);
     grunt.registerTask('test',['mochacli']);
 };
 
