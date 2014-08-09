@@ -36,6 +36,7 @@
     "grunt-mocha-cli": "^1.9.0",
     "load-grunt-tasks": "~0.2.0",
     "mocha": "^1.21.3",
+    "should": "^4.0.4",
     "supertest": "^0.13.0",
     "time-grunt": "~0.1.1"
   }
