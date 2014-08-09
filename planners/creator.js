@@ -30,10 +30,15 @@ var planner={
           , dbname:'/pleni_site_two'
           , dbuser: 'jacobian'
           , dbpass: 'asdf'
+          , type: 'site'
+          , site:'http://galao.main'
           , view:'/_design/default/_view/wait'
         })
         .then(functions.auth)
-        .then(functions.createdb)
+//        .then(functions.createdb)
+//        .then(functions.createsummary)
+//        .then(functions.createrootsite)
+        .then(functions.createdesignview)
         .fail(function(error){
             if(error){
                 console.log('ERROR');
@@ -68,37 +73,108 @@ var functions={
         var deferred=Q.defer()
           , url=args[0].host+'/_session'
           , body={
-              name:args[0].dbuser
-            , password:args[0].dbpass
+                name:args[0].dbuser
+              , password:args[0].dbpass
           };
 
         request.post({url:url,json:body},function(error,response,body){
             if(!error&&response.statusCode==200){
-                console.log(response.headers['set-cookie']);
-                //deferred.resolve(args.concat(response.headers['set-cookie']));
+                var regex=/^(.*); Version=1;.*$/i
+                  , exec=regex.exec(response.headers['set-cookie']);
+                
+                deferred.resolve(args.concat(exec[1]));
             }
         });
 
         return deferred.promise;
-  }
+    }
   , createdb:function(args){
         var deferred=Q.defer()
           , url=args[0].host+args[0].dbname
-          , jar=request.jar()
-          , cookie=request.cookie(args[1])
+          , cookie=args[1]
+          , headers={
+                'Cookie':cookie
+              , 'X-CouchDB-WWW-Authenticate':'Cookie'
+            };
 
-        jar.setCookie(cookie);
-        request.put({url:url,jar:jar},function(error,response,body){
+        request.put({url:url,headers:headers},function(error,response,body){
             if(!error){
-                if(response.statusCode==401){
-                    
+                if(response.statusCode==201){
+                    deferred.resolve(args);
                 }
-                console.log(response.statusCode);
             }
             deferred.reject(error);
         });
 
         return deferred.promise;
+    }
+  , createsummary:function(args){
+        var deferred=Q.defer()
+          , url=args[0].host+args[0].dbname+'/summary'
+          , cookie=args[1]
+          , headers={
+                'Cookie':cookie
+              , 'X-CouchDB-WWW-Authenticate':'Cookie'
+            }
+          , body={
+                type:args[0].type
+              , site:args[0].site
+          };
+
+        request.put({url:url,headers:headers,json:body},
+            function(error,response,body){
+            if(!error){
+                deferred.resolve(args);
+            }
+            deferred.reject(error);
+        });
+    }
+  , createrootsite:function(args){
+        var deferred=Q.defer()
+          , url=args[0].host+args[0].dbname+'/'+encodeURIComponent('page_/')
+          , cookie=args[1]
+          , headers={
+                'Cookie':cookie
+              , 'X-CouchDB-WWW-Authenticate':'Cookie'
+            }
+          , body={
+                status:'wait'
+              , site:args[0].site
+          };
+
+        request.put({url:url,headers:headers,json:body},
+            function(error,response,body){
+            if(!error){
+                deferred.resolve(args);
+            }
+            deferred.reject(error);
+        });
+    }
+  , createdesignview:function(args){
+        var deferred=Q.defer()
+          , url=args[0].host+args[0].dbname+'/_design/default'
+          , cookie=args[1]
+          , headers={
+                'Cookie':cookie
+              , 'X-CouchDB-WWW-Authenticate':'Cookie'
+            }
+          , body={
+                'language':'javascript'
+              , 'views':{
+                    'wait':{
+                        'map':'function(doc){if(doc.status&&doc.status'
+                             +'==\'wait\'){emit(doc.site,doc._rev)}}',
+                    },
+                }
+            };
+
+        request.put({url:url,headers:headers,json:body},
+            function(error,response,body){
+            if(!error){
+                deferred.resolve(args);
+            }
+            deferred.reject(error);
+        });
     }
 };
 

@@ -27,7 +27,7 @@ var planner={
         var self=this;
         functions.get({
             host:'http://localhost:5984'
-          , dbname:'/pleni_site_two'
+          , dbname:'/pleni_site_one'
           , view:'/_design/default/_view/wait'
         })
         .then(functions.look)
