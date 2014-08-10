@@ -263,24 +263,6 @@ var functions={
     }
 };
 
-var messages={
-    ready: {planner:'ready!!'}
-  , run:   {planner:'running'}
-  , stop:  {planner:'stopped'}
-};
-
-app.set('port',process.env.PORT||3001);
-app.disable('x-powered-by');
-app.use(bodyparser.json())
-
-http.createServer(app).listen(app.get('port'),function(){
-    console.log('Express server listening on port '+app.get('port'));
-});
-
-app.get('/',function(request,response){
-    response.json(messages.ready);
-});
-
 app.post('/_run',function(request,response){
     planner.run();
     response.json(messages.run);
@@ -290,7 +272,4 @@ app.post('/_stop',function(request,response){
     planner.stop();
     response.json(messages.stop);
 });
-
-module.exports=app;
-module.exports.messages=messages;
 

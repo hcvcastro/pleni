@@ -1,7 +1,7 @@
 'use strict';
 
 var should=require('should')
-  , f=require('../functions/couchdb')
+  , f=require('../../../planners/functions/couchdb')
 
 var setting={
     host:'http://localhost:5984'
