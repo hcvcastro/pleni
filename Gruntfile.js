@@ -43,9 +43,10 @@ module.exports=function(grunt){
                 files:['server/views/{,*/}*.jade']
               , options:{livereload:reloadPort}
             }
-          , testcontrol:{
-                files:['test/*.js']
-              , tasks:['mochacli']
+/* -------- test-driven watching -------------------------------------------- */
+          , test_planners:{
+                files:['test/planners/{,*/}*.js']
+              , tasks:['mochacli:planners']
             }
 /* -------- documentation watching ------------------------------------------ */
           , tex:{
@@ -65,9 +66,7 @@ module.exports=function(grunt){
                 reporter:'spec'
               , bail:true
             }
-          , basic:  ['test/planners/basic.js'  ]
-          , clock:  ['test/planners/clock.js'  ]
-          , site_creator:['test/planners/site_creator.js']
+          , planners: ['test/planners/{,*/}*.js']
         }
 
       , latex:{

@@ -13,8 +13,8 @@ var request=require('request')
  */
 exports.getsitetask=function(args){
     var deferred=Q.defer()
-      , view='/_design/default/_view/wait
-      , url=args.host+'/'+args.dbname+args.view+'?limit=1'
+      , view='/_design/default/_view/wait'
+      , url=args.host+'/'+args.dbname+view+'?limit=1'
       , headers={
             'Cookie':args.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'

@@ -6,8 +6,8 @@ var request=require('supertest')
   , app=server.app
   , messages=server.messages
 
-describe('Basic Express Server',function(){
-    describe('REST functions',function(){
+describe('basic express server',function(){
+    describe('rest functions',function(){
         it('GET /',function(done){
             request(app)
                 .get('/')
