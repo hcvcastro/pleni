@@ -7,5 +7,6 @@ var task=function(){}
 
 server(planner(task,1,1000),3001);
 
+exports.app=server.app;
 exports.messages=server.messages;
 

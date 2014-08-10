@@ -69,7 +69,7 @@ exports.couchdbauth=function(args){
  */
 exports.createdb=function(args){
     var deferred=Q.defer()
-      , url=args.host+args.dbname
+      , url=args.host+'/'+args.dbname
       , headers={
             'Cookie':args.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -98,7 +98,7 @@ exports.createdb=function(args){
  */
 exports.deletedb=function(args){
     var deferred=Q.defer()
-      , url=args.host+args.dbname
+      , url=args.host+'/'+args.dbname
       , headers={
             'Cookie':args.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'

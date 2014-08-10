@@ -7,13 +7,13 @@ var request=require('request')
  * args definition
  *      host
  *      dbname
- *      cookie
+ *      cookie <- getting from auth
  *      site_type
  *      site_url
  */
 exports.createsummary=function(args){
     var deferred=Q.defer()
-      , url=args.host+args.dbname+'/summary'
+      , url=args.host+'/'+args.dbname+'/summary'
       , headers={
             'Cookie':args.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -39,12 +39,12 @@ exports.createsummary=function(args){
  * args definition
  *      host
  *      dbname
- *      cookie
+ *      cookie <- getting from auth
  *      site_url
  */
 exports.createrootsite=function(args){
     var deferred=Q.defer()
-      , url=args.host+args.dbname+'/'+encodeURIComponent('page_/')
+      , url=args.host+'/'+args.dbname+'/'+encodeURIComponent('page_/')
       , headers={
             'Cookie':args.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -70,11 +70,11 @@ exports.createrootsite=function(args){
  * args definition
  *      host
  *      dbname
- *      cookie
+ *      cookie <- getting from auth
  */
 exports.createdesigndocument=function(args){
     var deferred=Q.defer()
-      , url=args.host+args.dbname+'/_design/default'
+      , url=args.host+'/'+args.dbname+'/_design/default'
       , headers={
             'Cookie':args.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -84,7 +84,7 @@ exports.createdesigndocument=function(args){
           , 'views':{
                 'wait':{
                     'map':'function(doc){if(doc.status&&doc.status'
-                         +'==\'wait\'){emit(doc.site,doc._rev)}}',
+                         +'==\'wait\'){emit(doc.url,doc._rev)}}',
                 },
             }
         };

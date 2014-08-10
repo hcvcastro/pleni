@@ -1,72 +1,43 @@
 'use strict';
 
-var express=require('express')
-  , bodyparser=require('body-parser')
-  , http=require('http')
-  , request=require('request')
+var request=require('request')
   , Q=require('q')
-  , cheerio=require('cheerio')
-  , app=express();
 
-var planner={
-    interval: 3000
-  , run:function(){
-        console.log('Run ... '+Date.now());
-        this.stop();
-        var self=this;
-        this.id=setInterval(function(){self.task();},this.interval);
-    }
-  , stop:function(){
-        if(typeof this.id=='object'){
-            console.log('Stop ... '+Date.now());
-            clearInterval(this.id);
-            delete this.id;
+/*
+ * args definition
+ *      host
+ *      dbname
+ *      cookie <- getting from auth
+ *      site_type
+ *      site_url
+ */
+exports.getsitetask=function(args){
+    var deferred=Q.defer()
+      , view='/_design/default/_view/wait
+      , url=args.host+'/'+args.dbname+args.view+'?limit=1'
+      , headers={
+            'Cookie':args.cookie
+          , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
-    }
-  , task:function(){
-        var self=this;
-        functions.get({
-            host:'http://localhost:5984'
-          , dbname:'/pleni_site_one'
-          , view:'/_design/default/_view/wait'
-        })
-        .then(functions.look)
-        .then(functions.headers)
-        .then(functions.fetch)
-        .then(functions.scrap)
-        .then(functions.register)
-        .then(functions.spread)
-        .fail(function(error){
-            if(error){
-                console.log('ERROR');
-                console.log(error);
-                self.stop();
-            }
-        })
-    }
-};
 
-var functions={
-    get:function(settings){
-        var deferred=Q.defer()
-          , url=settings.host+settings.dbname+settings.view+'?limit=1';
-
-        request.get({url:url},function(error,response,body){
-            if(!error&&response.statusCode==200){
-                var json=JSON.parse(body);
+    request.put({url:url,headers:headers},function(error,response){
+        if(!error){
+            if(response.statusCode==200){
+                var json=JSON.parse(response.body);
                 if(json.total_rows!=0){
                     var row=json.rows[0];
-                    deferred.resolve([settings, row]);
-                    return;
-                }else{
-                    deferred.reject({task:'finish'});
                 }
             }
-            deferred.reject(error);
-        });
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
 
-        return deferred.promise;
-    }
+    return deferred.promise;
+};
+
+/*
   , look:function(args){
         var deferred=Q.defer()
           , doc='/'+encodeURIComponent(args[1].id)
@@ -153,7 +124,7 @@ var functions={
                         return;
                     }
 
-                    if(/^[a-z]*:\/\/.*/i.test(link)){
+                    if(/^[a-z]*:\/\/.*---/i.test(link)){
                         var sub=link.slice(0,args[1].key.length);
                         if(sub==args[1].key){
                             link2=link.substr(sub.length);
@@ -260,16 +231,7 @@ var functions={
         }
 
         return deferred.promise;
-    }
-};
-
-app.post('/_run',function(request,response){
-    planner.run();
-    response.json(messages.run);
-});
-
-app.post('/_stop',function(request,response){
-    planner.stop();
-    response.json(messages.stop);
-});
+    
+  }
+*/
 

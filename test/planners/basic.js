@@ -51,7 +51,7 @@ describe('Basic Express Server',function(){
                 .expect(200)
                 .end(function(err,res){
                     res.should.be.json;
-                    app.messages.stop.should.be.eql(res.body);
+                    messages.stop.should.be.eql(res.body);
                     done();
                 });
         });
@@ -63,7 +63,7 @@ describe('Basic Express Server',function(){
                 .expect(200)
                 .end(function(err,res){
                     res.should.be.json;
-                    app.messages.add.should.be.eql(res.body);
+                    messages.add.should.be.eql(res.body);
                     done();
                 });
         });
@@ -75,7 +75,7 @@ describe('Basic Express Server',function(){
                 .expect(200)
                 .end(function(err,res){
                     res.should.be.json;
-                    app.messages.delete.should.be.eql(res.body);
+                    messages.delete.should.be.eql(res.body);
                     done();
                 });
         });

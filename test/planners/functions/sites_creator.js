@@ -2,13 +2,13 @@
 
 var should=require('should')
   , f=require('../../../planners/functions/couchdb')
-  , g=require('../../../planners/functions/sites')
+  , g=require('../../../planners/functions/sites_creator')
 
 var setting={
     host:'http://localhost:5984'
   , dbuser:'jacobian'
   , dbpass:'asdf'
-  , dbname:'/test'
+  , dbname:'test'
   , site_type: 'site'
   , site_url: 'http://galao.main'
 };

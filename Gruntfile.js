@@ -26,6 +26,10 @@ module.exports=function(grunt){
                 files:['planners/clock.js']
               , tasks:['develop:clock']
             }
+          , site_creator:{
+                files:['planners/site_creator.js']
+              , tasks:['develop:site_creator']
+            }
 /* -------- director watching ----------------------------------------------- */
           , js:{
                 files:['public/js/*.js']
@@ -53,6 +57,7 @@ module.exports=function(grunt){
       , develop:{
             basic:   { file:'planners/basic.js'    }
           , clock:   { file:'planners/clock.js'    }
+          , site_creator: { file:'planners/site_creator.js'  }
         }
 
       , mochacli:{
@@ -60,7 +65,9 @@ module.exports=function(grunt){
                 reporter:'spec'
               , bail:true
             }
-          , clock:['test/planners/clock.js']
+          , basic:  ['test/planners/basic.js'  ]
+          , clock:  ['test/planners/clock.js'  ]
+          , site_creator:['test/planners/site_creator.js']
         }
 
       , latex:{
@@ -95,7 +102,7 @@ module.exports=function(grunt){
 
 //    grunt.registerTask('serve:control',['develop:control','watch:control']);
 
-    ['basic','clock']
+    ['basic','clock','site_creator']
     .forEach(function(element){
         grunt.registerTask(
             'test:'+element,

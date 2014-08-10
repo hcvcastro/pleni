@@ -7,7 +7,7 @@ var setting={
     host:'http://localhost:5984'
   , dbuser:'jacobian'
   , dbpass:'asdf'
-  , dbname:'/test'
+  , dbname:'test'
 };
 
 describe('couchdb functions',function(){
