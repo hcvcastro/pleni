@@ -8,8 +8,6 @@ var request=require('request')
  *      host
  *      dbname
  *      cookie <- getting from auth
- *      site_type
- *      site_url
  */
 exports.getsitetask=function(args){
     var deferred=Q.defer()
@@ -20,12 +18,14 @@ exports.getsitetask=function(args){
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
-    request.put({url:url,headers:headers},function(error,response){
+    request.get({url:url,headers:headers},function(error,response){
         if(!error){
             if(response.statusCode==200){
                 var json=JSON.parse(response.body);
                 if(json.total_rows!=0){
-                    var row=json.rows[0];
+                    args['wait_task']=json.rows[0];
+                    deferred.resolve(args);
+                    return;
                 }
             }
             deferred.reject(response.body);
@@ -38,58 +38,88 @@ exports.getsitetask=function(args){
 };
 
 /*
-  , look:function(args){
-        var deferred=Q.defer()
-          , doc='/'+encodeURIComponent(args[1].id)
-          , url=args[0].host+args[0].dbname+doc
-          , body={
-                _rev:args[1].value
-              , site:args[1].key
-              , status:'lock'
-              , type:'page'
-              , timestamp:Date.now()
-        };
+ * args definition
+ *      host
+ *      dbname
+ *      cookie
+ *      wait_task <- {id,key,value} <- from mapreduce in couchdb
+ */
+exports.looksitetask=function(args){
+    var deferred=Q.defer()
+      , doc='/'+encodeURIComponent(args['wait_task'].id)
+      , url=args.host+'/'+args.dbname+doc
+      , headers={
+            'Cookie':args.cookie
+          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+        }
+      , body={
+            _rev:args['wait_task'].value
+          , site:args['wait_task'].key
+          , status:'lock'
+          , type:'page'
+          , timestamp:Date.now()
+        }
 
-        console.log('->  '+url);
-        request.put({url:url,json:body},function(error,response,body){
-            if(!error&&response.statusCode==201){
-                if(body.ok){
-                    deferred.resolve(args.concat(body));
+    request.put({url:url,headers:headers,json:body},function(error,response){
+        if(!error){
+            if(response.statusCode==201){
+                if(response.body.ok){
+                    args['look_task']=response.body;
+                    deferred.resolve(args);
                     return;
                 }
             }
-            deferred.reject(error);
-        });
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
 
-        return deferred.promise;
-    }
-  , headers:function(args){
-        var deferred=Q.defer()
-          , site=args[1].key+args[1].id.substr(5);
+    return deferred.promise;
+};
 
-        console.log('    -> '+site);
-        request.head({url:site},function(error,response,body){
-            if(!error){
-                var headers=response.headers
-                  , body=false;
+/*
+ * args definition
+ *      wait_task <- {id,key,value} <- from mapreduce in couchdb
+ *      agent     <- user agent for request
+ *      cookie
+ */
+exports.getheadrequest=function(args){
+    var deferred=Q.defer()
+      , url=args['wait_task'].key+args['wait_task'].id.substr(5)
+      , headers={
+            'Cookie':args.cookie
+          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+          , 'User-Agent':args.agent
+        }
 
-                // header analysis (TODO)
-                if (headers['content-type'] == 'text/html') {
-                    body=true;
-                }
+    request.head({url:url,headers:headers},function(error,response){
+        if(!error){
+            var r_headers=response.headers
+              , valid_headers=[
+                    /text\/html/i
+                ]
 
-                deferred.resolve(args.concat({
-                    request:site
-                  , status:response.statusCode
-                  , headers:headers
-                  , fetchbody:body
-                }));
+            r_body=valid_headers.some(function(element){
+                return element.test(r_headers['content-type']);
+            });
+
+            args['request_head']={
+                'status':response.statusCode
+              , 'headers':r_headers
+              , 'get':r_body
             }
-            deferred.reject(error);
-        });
 
-        return deferred.promise;
-    }
+            deferred.resolve(args);
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+
+/*
   , fetch:function(args){
         var deferred=Q.defer();
 

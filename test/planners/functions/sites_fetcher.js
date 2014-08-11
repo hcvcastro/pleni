@@ -11,87 +11,64 @@ var setting={
   , dbpass:'asdf'
   , dbname:'test'
   , site_type: 'site'
-  , site_url: 'http://galao.main'
+  , site_url: 'http://galao.local'
+  , agent:'request'
 }
 
 describe('site fetcher pages functions',function(){
-    var cookie;
+    var packet;
 
-    /*before(function(done){
-        f.couchdbauth(setting
-            host:setting.host
-          , dbuser:setting.dbuser
-          , dbpass:setting.dbpass
-        })
-        .then(function(args){
-            cookie=args.cookie
-            f.createdb({
-                host:setting.host
-              , dbname:setting.dbname
-              , cookie:cookie
-            })
-            .done(function(args){
-                done();
-            });
-        });
-    });*/
-
-    describe('testing get a waiting task',function(){
-        it('getting wait page',function(done){
+    before(function(done){
+        f.couchdbauth(setting)
+        .then(f.createdb)
+        .then(g.createsummary)
+        .then(g.createrootsite)
+        .then(g.createdesigndocument)
+        .done(function(args){
+            packet=args;
             done();
-            /*g.createsummary({
-                host:setting.host
-              , dbname:setting.dbname
-              , cookie:cookie
-              , site_type:setting.site_type
-              , site_url:setting.site_url
-            })
-            .done(function(args){
-                args.should.have.property('rev_summary');
-                done();
-            });*/
         });
     });
 
-    /*describe('testing create of root page',function(){
-        it('document page_/ creation',function(done){
-            g.createrootsite({
-                host:setting.host
-              , dbname:setting.dbname
-              , cookie:cookie
-              , site_type:setting.site_type
-              , site_url:setting.site_url
-            })
+    describe('testing get a waiting task',function(){
+        it('getting wait page',function(done){
+            h.getsitetask(packet)
             .done(function(args){
-                args.should.have.property('rev_root');
+                args.should.have.property('wait_task');
+                packet=args;
+                done();
+            });
+        });
+    });
+
+    describe('testing look a page in repository',function(){
+        it('look a waiting page',function(done){
+            h.looksitetask(packet)
+            .done(function(args){
+                args.should.have.property('look_task');
+                packet=args;
+                done();
+            });
+        });
+    });
+
+/*    describe('testing head request in a page',function(){
+        it('head request',function(done){
+            h.getheadrequest(packet)
+            .done(function(args){
+                console.log(args);
+                args.should.have.property('request_head');
+                packet=args;
                 done();
             });
         });
     });*/
 
-    /*describe('testing create default design document',function(){
-        it('design document creation',function(done){
-            g.createdesigndocument({
-                host:setting.host
-              , dbname:setting.dbname
-              , cookie:cookie
-            })
-            .done(function(args){
-                args.should.have.property('rev_design');
-                done();
-            });
-        });
-    });*/
-
-    /*after(function(done){
-        f.deletedb({
-            host:setting.host
-          , dbname:setting.dbname
-          , cookie:cookie
-        })
+    after(function(done){
+        f.deletedb(packet)
         .done(function(args){
             done();
         });
-    });*/
+    });
 });
 

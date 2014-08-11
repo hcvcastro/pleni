@@ -66,7 +66,8 @@ module.exports=function(grunt){
                 reporter:'spec'
               , bail:true
             }
-          , planners: ['test/planners/{,*/}*.js']
+          //, planners: ['test/planners/{,*/}*.js']
+          , planners: ['test/planners/functions/sites_fetcher.js']
         }
 
       , latex:{

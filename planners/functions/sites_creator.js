@@ -84,7 +84,7 @@ exports.createdesigndocument=function(args){
           , 'views':{
                 'wait':{
                     'map':'function(doc){if(doc.status&&doc.status'
-                         +'==\'wait\'){emit(doc.url,doc._rev)}}',
+                         +'==\'wait\'){emit(doc.site,doc._rev)}}',
                 },
             }
         };
