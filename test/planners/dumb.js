@@ -2,7 +2,7 @@
 
 var request=require('supertest')
   , should=require('should')
-  , server=require('../../planners/basic')
+  , server=require('../../planners/dumb')
   , app=server.app
   , messages=server.messages
 
@@ -11,18 +11,6 @@ describe('basic express server',function(){
         it('GET /',function(done){
             request(app)
                 .get('/')
-                .expect('Content-Type',/json/)
-                .expect(200)
-                .end(function(err,res){
-                    res.should.be.json;
-                    messages.ready.should.be.eql(res.body);
-                    done();
-                });
-        });
-
-        it('GET /status',function(done){
-            request(app)
-                .get('/status')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -52,6 +40,18 @@ describe('basic express server',function(){
                 .end(function(err,res){
                     res.should.be.json;
                     messages.stop.should.be.eql(res.body);
+                    done();
+                });
+        });
+
+        it('GET /status',function(done){
+            request(app)
+                .get('/status')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.should.be.json;
+                    messages.ready.should.be.eql(res.body);
                     done();
                 });
         });

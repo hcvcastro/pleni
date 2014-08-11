@@ -18,9 +18,9 @@ module.exports=function(grunt){
               , livereload:reloadPort
             }
 /* -------- planners watching ----------------------------------------------- */
-          , basic:{
-                files:['planners/basic.js']
-              , tasks:['develop:basic']
+          , dumb:{
+                files:['planners/dumb.js']
+              , tasks:['develop:dumb']
             }
           , clock:{
                 files:['planners/clock.js']
@@ -60,7 +60,7 @@ module.exports=function(grunt){
         }
 
       , develop:{
-            basic:   { file:'planners/basic.js'    }
+            dumb:   { file:'planners/dumb.js'    }
           , clock:   { file:'planners/clock.js'    }
           , site_creator: { file:'planners/site_creator.js'  }
           , site_fetcher: { file:'planners/site_fetcher.js'  }
@@ -71,7 +71,8 @@ module.exports=function(grunt){
                 reporter:'spec'
               , bail:true
             }
-          , planners: ['test/planners/{,*/}*.js']
+          , planners: ['test/planners/dumb.js']
+          //, planners: ['test/planners/{,*/}*.js']
         }
 
       , latex:{
@@ -106,7 +107,7 @@ module.exports=function(grunt){
 
 //    grunt.registerTask('serve:control',['develop:control','watch:control']);
 
-    ['basic','clock','site_creator','site_fetcher']
+    ['dumb','clock','site_creator','site_fetcher']
     .forEach(function(element){
         grunt.registerTask(
             'test:'+element,

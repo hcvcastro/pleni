@@ -13,7 +13,6 @@ module.exports=function(task,times,delay){
 
     return {
         run:function(){
-            //console.log('running: '+counter);
             this.id=setInterval(function(){
                 if(infinite||counter>0){
                     task()
@@ -25,7 +24,6 @@ module.exports=function(task,times,delay){
         }
       , stop:function(){
             if(typeof this.id=='object'){
-                //console.log('stopping');
                 clearInterval(this.id);
             }
         }
