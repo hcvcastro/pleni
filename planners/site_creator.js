@@ -10,9 +10,9 @@ var task=function(){
         host:'http://localhost:5984'
       , dbuser:'jacobian'
       , dbpass:'asdf'
-      , dbname:'pleni_site_two'
+      , dbname:'pleni_site_galao'
       , site_type:'site'
-      , site_url:'http://galao.main'
+      , site_url:'http://galao.local'
     }
 
     f.testcouchdb(packet)

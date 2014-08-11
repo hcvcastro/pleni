@@ -3,57 +3,36 @@
 var server=require('./functions/server')
   , planner=require('./functions/planner')
   , f=require('./functions/couchdb')
-  , g=require('./functions/sites')
+  , g=require('./functions/sites_creator')
+  , h=require('./functions/sites_fetcher')
 
 var task=function(){
     var packet={
         host:'http://localhost:5984'
       , dbuser:'jacobian'
       , dbpass:'asdf'
-      , dbname:'pleni_site_two'
-      , site_type:'site'
-      , site_url:'http://galao.main'
+      , dbname:'pleni_site_galao'
     }
 
     f.testcouchdb(packet)
-    .then(f.couchdbauth)
-    .then(f.createdb)
-    .then(g.createsummary)
-    .then(g.createrootsite)
-    .then(g.createdesignview)
+    .then(h.getsitetask)
+    .then(h.looksitetask)
+    .then(h.getheadrequest)
+    .then(h.getgetrequest)
+    .then(h.bodyanalyzerlinks)
+    .then(h.completesitetask)
+    .then(h.spreadsitelinks)
     .fail(function(error){
+        console.log('error:');
         console.log(error);
     })
-    .done(function(){
-        console.log('repository created');
+    .done(function(args){
+        console.log('task finished');
     });
 }
 
-server(planner(task,1,1000),3001);
+server(planner(task,Number.POSITIVE_INFINITY,1000),3001);
 
 exports.app=server.app;
 exports.messages=server.messages;
 
-
-/*
-        functions.get({
-            host:'http://localhost:5984'
-          , dbname:'/pleni_site_one'
-          , view:'/_design/default/_view/wait'
-        })
-        .then(functions.look)
-        .then(functions.headers)
-        .then(functions.fetch)
-        .then(functions.scrap)
-        .then(functions.register)
-        .then(functions.spread)
-        .fail(function(error){
-            if(error){
-                console.log('ERROR');
-                console.log(error);
-                self.stop();
-            }
-        })
-
-};
-*/

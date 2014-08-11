@@ -98,6 +98,8 @@ exports.getheadrequest=function(args){
             var r_headers=response.headers
               , valid_headers=[
                     /text\/html/i
+                  , /application\/javascript/i
+                  , /text\/css/i
                 ]
               , r_body=valid_headers.some(function(element){
                     return element.test(r_headers['content-type']);
@@ -301,7 +303,7 @@ exports.spreadsitelinks=function(args){
             var doc='/page_'+encodeURIComponent(element)
               , document={
                     status:'wait'
-                  , site:args['wait_task'].key
+                  , url:args['wait_task'].key
                   , type:'page'
                   , timestamp:Date.now()
             };
