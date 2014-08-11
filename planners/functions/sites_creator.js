@@ -52,6 +52,8 @@ exports.createrootsite=function(args){
       , body={
             status:'wait'
           , url:args.site_url
+          , type:'page'
+          , timestamp:Date.now()
         }
 
     request.put({url:url,headers:headers,json:body},function(error,response){
@@ -84,7 +86,7 @@ exports.createdesigndocument=function(args){
           , 'views':{
                 'wait':{
                     'map':'function(doc){if(doc.status&&doc.status'
-                         +'==\'wait\'){emit(doc.site,doc._rev)}}',
+                         +'==\'wait\'){emit(doc.url,doc._rev)}}',
                 },
             }
         };

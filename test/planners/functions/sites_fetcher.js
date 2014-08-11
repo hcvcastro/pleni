@@ -20,10 +20,10 @@ describe('site fetcher pages functions',function(){
 
     before(function(done){
         f.couchdbauth(setting)
-        .then(f.createdb)
-        .then(g.createsummary)
-        .then(g.createrootsite)
-        .then(g.createdesigndocument)
+       .then(f.createdb)
+       .then(g.createsummary)
+       .then(g.createrootsite)
+       .then(g.createdesigndocument)
         .done(function(args){
             packet=args;
             done();
@@ -52,17 +52,64 @@ describe('site fetcher pages functions',function(){
         });
     });
 
-/*    describe('testing head request in a page',function(){
+    describe('testing head request in a page',function(){
         it('head request',function(done){
             h.getheadrequest(packet)
             .done(function(args){
-                console.log(args);
                 args.should.have.property('request_head');
                 packet=args;
                 done();
             });
         });
-    });*/
+    });
+
+    describe('testing get request in a page',function(){
+        it('get request',function(done){
+            h.getgetrequest(packet)
+            .done(function(args){
+                if(args['request_head'].get){
+                    args.should.have.property('request_get');
+                }
+                packet=args;
+                done();
+            });
+        });
+    });
+
+    describe('testing body analyzer in a page',function(){
+        it('body analyzer for links',function(done){
+            h.bodyanalyzerlinks(packet)
+            .done(function(args){
+                if(args['request_head'].get){
+                    args.should.have.property('body_links');
+                    args.should.have.property('body_related');
+                }
+                packet=args;
+                done();
+            });
+        });
+    });
+
+    describe('testing complete a page in repository',function(){
+        it('complete a look page',function(done){
+            h.completesitetask(packet)
+            .done(function(args){
+                args.should.have.property('complete_task');
+                packet=args;
+                done();
+            });
+        });
+    });
+
+    describe('testing of spreading new pages',function(){
+        it('spread the links extracted',function(done){
+            h.spreadsitelinks(packet)
+            .done(function(args){
+                packet=args;
+                done();
+            });
+        });
+    });
 
     after(function(done){
         f.deletedb(packet)

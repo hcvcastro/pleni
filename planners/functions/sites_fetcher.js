@@ -2,6 +2,9 @@
 
 var request=require('request')
   , Q=require('q')
+  , sha1=require('sha1')
+  , md5=require('MD5')
+  , cheerio=require('cheerio')
 
 /*
  * args definition
@@ -54,8 +57,8 @@ exports.looksitetask=function(args){
         }
       , body={
             _rev:args['wait_task'].value
-          , site:args['wait_task'].key
-          , status:'lock'
+          , url:args['wait_task'].key
+          , status:'look'
           , type:'page'
           , timestamp:Date.now()
         }
@@ -82,15 +85,12 @@ exports.looksitetask=function(args){
  * args definition
  *      wait_task <- {id,key,value} <- from mapreduce in couchdb
  *      agent     <- user agent for request
- *      cookie
  */
 exports.getheadrequest=function(args){
     var deferred=Q.defer()
       , url=args['wait_task'].key+args['wait_task'].id.substr(5)
       , headers={
-            'Cookie':args.cookie
-          , 'X-CouchDB-WWW-Authenticate':'Cookie'
-          , 'User-Agent':args.agent
+            'User-Agent':args.agent
         }
 
     request.head({url:url,headers:headers},function(error,response){
@@ -99,17 +99,15 @@ exports.getheadrequest=function(args){
               , valid_headers=[
                     /text\/html/i
                 ]
-
-            r_body=valid_headers.some(function(element){
-                return element.test(r_headers['content-type']);
-            });
+              , r_body=valid_headers.some(function(element){
+                    return element.test(r_headers['content-type']);
+                })
 
             args['request_head']={
                 'status':response.statusCode
               , 'headers':r_headers
               , 'get':r_body
             }
-
             deferred.resolve(args);
             return;
         }
@@ -120,148 +118,204 @@ exports.getheadrequest=function(args){
 };
 
 /*
-  , fetch:function(args){
-        var deferred=Q.defer();
-
-        if(!args[3].fetchbody){
-            deferred.resolve(args.concat({}));
-        }else{
-            request.get({url:args[3].request},function(error,response){
-                deferred.resolve(args.concat({
-                    status:response.statusCode
-                  , headers:response.headers
-                  , body:response.body
-                }));
-            });
+ * args definition
+ *      request_head <- {status,headers,get}
+ *      wait_task    <- {id,key,value} <- from mapreduce in couchdb
+ *      agent        <- user agent for request
+ */
+exports.getgetrequest=function(args){
+    var deferred=Q.defer()
+      , url=args['wait_task'].key+args['wait_task'].id.substr(5)
+      , headers={
+            'User-Agent':args.agent
         }
 
-        return deferred.promise;
-    }
-  , scrap:function(args){
-        var deferred=Q.defer();
+    if(!args['request_head'].get){
+        deferred.resolve(args);
+    }else{
+        request.get({url:url,headers:headers},function(error,response){
+            if(!error){
+                var r_headers=response.headers
+                  , r_body=response.body
 
-        if(!args[3].fetchbody){
-            deferred.resolve(args.concat({}));
-        }else{
-            var $=cheerio.load(args[4].body)
-              , links={script:[],link:[],a:[],img:[]}
-              , prop=[]
-              , register_link=function(link, haystack){
-                    var result={orig:link,type:'?'}
-                      , link2=link;
-
-                    if(link==undefined){
-                        return;
-                    }
-
-                    if(/^[a-z]*:\/\/.*---/i.test(link)){
-                        var sub=link.slice(0,args[1].key.length);
-                        if(sub==args[1].key){
-                            link2=link.substr(sub.length);
-                        }else{
-                            result.type='remote';
-                        }
-                    }
-                    
-                    if(result.type=='?'){
-                        if(link2.slice(0,1)=='/'){
-                            result.type='absolute';
-                            result.clean=link2;
-                        }else{
-                            result.type='relative';
-                            var anchor=args[3].request
-                              , i=anchor.lastIndexOf('/')
-                              , base=anchor.substr(0,i+1)
-                              , path=base.substr(args[1].key.length);
-
-                            result.clean=path+link2;
-                        }
-                        prop.push(result.clean);
-                    }
-
-                    haystack.push(result);
-                };
-
-            // body analysis (TODO)
-            $('script').each(function(i,element){
-                register_link($(this).attr('src'),links.script);
-            });
-            $('link').each(function(i,element){
-                register_link($(this).attr('href'),links.link);
-            });
-            $('a').each(function(i,element){
-                register_link($(this).attr('href'),links.a);
-            });
-            $('img').each(function(i,element){
-                register_link($(this).attr('src'),links.img);
-            });
-
-            deferred.resolve(args.concat({links:links,prop:prop}));
-        }
-        return deferred.promise;
-    }
-  , register:function(args){
-        var deferred=Q.defer()
-          , doc='/'+encodeURIComponent(args[1].id)
-          , url=args[0].host+args[0].dbname+doc
-          , body={
-                _rev:args[2].rev
-              , site:args[1].key
-              , status:'complete'
-              , type:'page'
-              , timestamp:Date.now()
-              , head:{
-                    status: args[3].status
-                  , headers: args[3].headers
+                args['request_get']={
+                    'status':response.statusCode
+                  , 'headers':r_headers
+                  , 'body':r_body
+                  , 'sha1':sha1(r_body)
+                  , 'md5':md5(r_body)
                 }
-            };
+                deferred.resolve(args);
+                return;
+            }
+            deferred.reject(error);
+        });
+    }
 
-        if(args[3].fetchbody){
-            body.get={
-                status: args[4].status
-              , headers: args[4].headers
-              , body: args[4].body
-            };
-            body.links=args[5].links;
+    return deferred.promise;
+};
+
+/*
+ * args definition
+ *      wait_task    <- {id,key,value} <- from mapreduce in couchdb
+ *      request_head <- {status,headers,get}
+ *      request_get  <- {status,headers,body,sha1,md5}
+ */
+exports.bodyanalyzerlinks=function(args){
+    var deferred=Q.defer()
+      , origin=args['wait_task'].key
+      , url=args['wait_task'].key+args['wait_task'].id.substr(5)
+
+    if(!args['request_head'].get){
+        deferred.resolve(args);
+    }else{
+        var $=cheerio.load(args['request_get'].body)
+          , links={script:[],link:[],a:[],img:[],form:[]}
+          , samedomain=[]
+          , register_link=function(link,haystack){
+                var result={orig:link,type:'?'}
+                  , link2=link;
+
+                if(link==undefined){
+                    return;
+                }
+
+                if(/^[a-z]*:\/\/.*/i.test(link)){
+                    var sub=link.slice(0,origin.length);
+                    if(sub==origin){
+                        link2=link.substr(sub.length);
+                    }else{
+                        result.type='remote';
+                    }
+                }
+                
+                if(result.type=='?'){
+                    if(link2.slice(0,1)=='/'){
+                        result.type='absolute';
+                        result.clean=link2;
+                    }else{
+                        result.type='relative';
+                        var anchor=url
+                          , i=anchor.lastIndexOf('/')
+                          , base=anchor.substr(0,i+1)
+                          , path=base.substr(origin.length);
+
+                        result.clean=path+link2;
+                    }
+                    samedomain.push(result.clean);
+                }
+
+                haystack.push(result);
+            }
+
+        // body analysis (TODO)
+        $('script').each(function(i,element){
+            register_link($(this).attr('src'),links.script);
+        });
+        $('link').each(function(i,element){
+            register_link($(this).attr('href'),links.link);
+        });
+        $('a').each(function(i,element){
+            register_link($(this).attr('href'),links.a);
+        });
+        $('img').each(function(i,element){
+            register_link($(this).attr('src'),links.img);
+        });
+        $('form').each(function(i,element){
+            register_link($(this).attr('action'),links.form);
+        });
+
+        args['body_links']=links;
+        args['body_related']=samedomain;
+        deferred.resolve(args);
+    }
+
+    return deferred.promise;
+};
+
+/*
+ * args definition
+ *      host
+ *      dbname
+ *      cookie
+ *      agent
+ *      wait_task <- {id,key,value}
+ *      look_task <- {ok,id,rev}
+ */
+exports.completesitetask=function(args){
+    var deferred=Q.defer()
+      , doc='/'+encodeURIComponent(args['look_task'].id)
+      , url=args.host+'/'+args.dbname+doc
+      , headers={
+            'Cookie':args.cookie
+          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+        }
+      , body={
+            _rev:args['look_task'].rev
+          , url:args['wait_task'].key
+          , status:'complete'
+          , type:'page'
+          , timestamp:Date.now()
         }
 
-        request.put({url:url,json:body},function(error,response,body){
-            if(!error&&response.statusCode==201){
-                if(body.ok){
+    body['agent']=args['agent'];
+    body['request_head']=args['request_head'];
+
+    if(args['request_head'].get){
+        body['request_get']=args['request_get'];
+        body['links']=args['body_links'];
+    }
+
+    request.put({url:url,headers:headers,json:body},function(error,response){
+        if(!error){
+            if(response.statusCode==201){
+                if(response.body.ok){
+                    args['complete_task']=response.body;
                     deferred.resolve(args);
                     return;
                 }
             }
-            deferred.reject(error);
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+
+/*
+ * args definition
+ *      host
+ *      dbname
+ *      body_related <- Array <- from body analyzer function
+ *      wait_task    <- {id,key,value}
+ */
+exports.spreadsitelinks=function(args){
+    var deferred=Q.defer()
+      , url=args.host+'/'+args.dbname
+      , documents=[]
+
+    if(args['body_related']){
+        args['body_related'].forEach(function(element){
+            var doc='/page_'+encodeURIComponent(element)
+              , document={
+                    status:'wait'
+                  , site:args['wait_task'].key
+                  , type:'page'
+                  , timestamp:Date.now()
+            };
+
+            request.put({url:url+doc,json:document},function(error,response){
+                if(!error){
+                    documents.push(element);
+                }
+            });
         });
 
-        return deferred.promise;
+        deferred.resolve(args);
     }
-  , spread:function(args){
-        var deferred=Q.defer()
-          , url=args[0].host+args[0].dbname;
 
-        if(args[5].prop){
-            args[5].prop.forEach(function(element){
-                var doc='/page_'+encodeURIComponent(element)
-                  , body={
-                        site:args[1].key
-                      , status:'wait'
-                      , type:'page'
-                      , timestamp:Date.now()
-                };
-
-                request.put({url:url+doc,json:body},function(error,response,body){
-                    if(!error){
-                        console.log('        -> '
-                            +response.statusCode+' '+element);
-                    }
-                });
-            });
-        }
-
-        return deferred.promise;
-    
-  }
-*/
+    return deferred.promise;
+};
 
