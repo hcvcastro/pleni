@@ -8,10 +8,11 @@ var server=require('./functions/server')
 
 var task=function(){
     var packet={
-        host:'http://localhost:5984'
+        host:'http://hiperborea.com.bo:5984'
       , dbuser:'jacobian'
       , dbpass:'asdf'
-      , dbname:'pleni_site_galao'
+      , dbname:'pleni_site_koala'
+      , agent:'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20120813 Firefox/16.0'
     }
 
     f.testcouchdb(packet)
