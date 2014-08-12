@@ -17,23 +17,26 @@ exports.set=function(port){
 
 exports.listen=function(planner){
     app.get('/_status',function(request,response){
-        response.json(planner.status());
+        response.json(planner.status(response));
     });
     app.post('/_run',function(request,response){
-        response.json(planner.run());
+        response.json(planner.run(response));
     });
     app.post('/_stop',function(request,response){
-        response.json(planner.stop());
+        response.json(planner.stop(response));
     });
 
-    app.get('/:task',function(request,response){
-        response.json(planner.gettask());
-    });
     app.put('/:task',function(request,response){
-        response.json(planner.addtask());
+        response.json(
+            planner.settask(request.params.task,response.body,response));
+    });
+    app.get('/:tid',function(request,response){
+        response.json(
+            planner.gettask(request.params.tid,response));
     });
     app.delete('/:tid',function(request,response){
-        response.json(planner.removeTask());
+        response.json(
+            planner.removetask(request.params.tid,response));
     });
 };
 
@@ -43,6 +46,5 @@ module.exports.run=function(){
     });
 };
 
-//module.exports.app=app;
-//module.exports.messages=messages;
+module.exports.app=app;
 

@@ -77,18 +77,33 @@ describe('basic express server',function(){
                 .end(function(err,res){
                     res.should.be.json;
                     res.body.should.have.property('ok').with.eql(true);
+                    res.body.should.have.property('tid');
+                    tid=res.body.tid;
                     done();
                 });
         });
 
-        it('GET /task',function(done){
+/*        it('GET /task',function(done){
             request(app)
                 .get('/task')
+                .expect('Content-Type',/json/)
+                .expect(404)
+                .end(function(err,res){
+                    res.should.be.json;
+                    res.body.should.be.eql({ok:false});
+                    done();
+                });
+        });
+
+        it('GET /:tid',function(done){
+            request(app)
+                .get('/'+tid)
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
                     res.should.be.json;
                     res.body.should.have.property('ok').with.eql(true);
+                    res.body.should.have.property('task');
                     done();
                 });
         });
@@ -100,10 +115,48 @@ describe('basic express server',function(){
                 .expect(404)
                 .end(function(err,res){
                     res.should.be.json;
-                    res.body.should.have.property('ok').with.eql(true);
+                    res.body.should.be.eql({ok:false});
                     done();
                 });
         });
+
+        it('PUT /newtask',function(done){
+            request(app)
+                .put('/newtask')
+                .expect('Content-Type',/json/)
+                .expect(403)
+                .end(function(err,res){
+                    res.should.be.json;
+                    res.body.should.have.property('ok').with.eql(false);
+                    res.body.should.have.not.property('tid');
+                    done();
+                });
+        });
+
+        it('DELETE /:tid',function(done){
+            request(app)
+                .delete('/'+tid)
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.should.be.json;
+                    res.body.should.be.eql({ok:true});
+                    done();
+                });
+        });
+
+        it('PUT /newtask',function(done){
+            request(app)
+                .put('/newtask')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.should.be.json;
+                    res.body.should.have.property('ok').with.eql(true);
+                    res.body.should.have.property('tid');
+                    done();
+                });
+        });*/
     });
 });
 
