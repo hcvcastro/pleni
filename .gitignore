@@ -31,3 +31,7 @@ docs/*.aux
 docs/*.dvi
 docs/*.toc
 
+#additional scripts
+scripts/site_creator_*.sh
+scripts/site_fetcher_*.sh
+

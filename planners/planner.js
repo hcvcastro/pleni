@@ -21,16 +21,16 @@ var planner=function(){
                 this.tid=f.generatorid({})['random'];
                 this.name=name;
                 this.action=action;
+                var count=1;
 
                 if(query['count']!=undefined){
                     var _count=parseInt(query['count']);
                     if(_count<0){
                         _count=Number.POSITIVE_INFINITY;
                     }
-                    this.setcount(_count);
-                }else{
-                    this.setcount(1);
+                    count=_count;
                 }
+                this.setcount(count);
 
                 if(query['delay']!=undefined){
                     var _delay=parseInt(query['delay']);
@@ -40,6 +40,10 @@ var planner=function(){
                     this.interval=_delay;
                 }
 
+                console.log('new task: '+this.name);
+                console.log('count: '+count);
+                console.log('delay: '+this.interval);
+                console.log(action);
                 return {ok:true,tid:this.tid};
             }
             response.status(403);
