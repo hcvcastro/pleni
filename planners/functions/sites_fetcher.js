@@ -91,13 +91,12 @@ exports.looksitetask=function(args){
 exports.getheadrequest=function(args){
     var deferred=Q.defer()
       , url=args['wait_task'].key+args['wait_task'].id.substr(5)
+      , headers={}
 
     if(args.req_headers){
         headers=args.req_headers;
     }else if(args.agent){
         headers={'User-Agent':args.agent}
-    }else{
-        headers={};
     }
 
     request.head({url:url,headers:headers},function(error,response){
@@ -137,13 +136,12 @@ exports.getheadrequest=function(args){
 exports.getgetrequest=function(args){
     var deferred=Q.defer()
       , url=args['wait_task'].key+args['wait_task'].id.substr(5)
+      , headers={}
 
     if(args.req_headers){
         headers=args.req_headers;
     }else if(args.agent){
         headers={'User-Agent':args.agent}
-    }else{
-        headers={};
     }
 
     if(!args['request_head'].get){

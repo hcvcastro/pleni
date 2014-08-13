@@ -47,11 +47,6 @@ module.exports=function(grunt){
                 files:['server/views/{,*/}*.jade']
               , options:{livereload:reloadPort}
             }
-/* -------- test-driven watching -------------------------------------------- */
-          , test_planners:{
-                files:['test/planners/{,*/}*.js']
-              , tasks:['mochacli:planners']
-            }
 /* -------- documentation watching ------------------------------------------ */
           , tex:{
                 files:['docs/*.tex']
@@ -69,8 +64,15 @@ module.exports=function(grunt){
                 reporter:'spec'
               , bail:true
             }
-          , planners: ['test/planners/dumb.js']
-          //, planners: ['test/planners/{,*/}*.js']
+          , dumb: [
+                'test/planners/functions/{,*/}*.js'
+              , 'test/planners/dumb.js'
+            ]
+          , planners: [
+                'test/planners/functions/{,*/}*.js'
+              , 'test/planners/planner_server.js'
+              , 'test/planners/planner_scheduler.js'
+            ]
         }
 
       , latex:{
@@ -105,7 +107,7 @@ module.exports=function(grunt){
 
 //    grunt.registerTask('serve:control',['develop:control','watch:control']);
 
-    ['dumb','clock','site_creator','site_fetcher']
+    ['dumb','planners']
     .forEach(function(element){
         grunt.registerTask(
             'test:'+element,

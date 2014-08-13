@@ -166,6 +166,19 @@ describe('default planner server',function(){
                     res.should.be.json;
                     res.body.should.have.property('ok').with.eql(true);
                     res.body.should.have.property('tid');
+                    tid=res.body.tid;
+                    done();
+                });
+        });
+
+        it('DELETE /:tid',function(done){
+            request(app)
+                .delete('/'+tid)
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.should.be.json;
+                    res.body.should.be.eql({ok:true});
                     done();
                 });
         });

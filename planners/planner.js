@@ -83,7 +83,7 @@ var planner=function(){
 
 planner.prototype=new scheduler();
 
-server.set(3000);
+server.set(3001);
 server.listen(new planner());
 server.run();
 
