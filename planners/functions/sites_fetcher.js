@@ -83,15 +83,22 @@ exports.looksitetask=function(args){
 
 /*
  * args definition
- *      wait_task <- {id,key,value} <- from mapreduce in couchdb
- *      agent     <- user agent for request
+ *      wait_task   <- {id,key,value} <- from mapreduce in couchdb
+ * optionally:
+ *      req_headers <- customized headers for request
+ *      agent       <- user agent for request
  */
 exports.getheadrequest=function(args){
     var deferred=Q.defer()
       , url=args['wait_task'].key+args['wait_task'].id.substr(5)
-      , headers={
-            'User-Agent':args.agent
-        }
+
+    if(args.req_headers){
+        headers=args.req_headers;
+    }else if(args.agent){
+        headers={'User-Agent':args.agent}
+    }else{
+        headers={};
+    }
 
     request.head({url:url,headers:headers},function(error,response){
         if(!error){
@@ -123,14 +130,21 @@ exports.getheadrequest=function(args){
  * args definition
  *      request_head <- {status,headers,get}
  *      wait_task    <- {id,key,value} <- from mapreduce in couchdb
- *      agent        <- user agent for request
+ * optionally:
+ *      req_headers <- customized headers for request
+ *      agent       <- user agent for request
  */
 exports.getgetrequest=function(args){
     var deferred=Q.defer()
       , url=args['wait_task'].key+args['wait_task'].id.substr(5)
-      , headers={
-            'User-Agent':args.agent
-        }
+
+    if(args.req_headers){
+        headers=args.req_headers;
+    }else if(args.agent){
+        headers={'User-Agent':args.agent}
+    }else{
+        headers={};
+    }
 
     if(!args['request_head'].get){
         deferred.resolve(args);

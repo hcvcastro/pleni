@@ -1,21 +1,12 @@
 'use strict';
 
-var server=require('./functions/server')
-  , planner=require('./functions/planner')
-  , f=require('./functions/couchdb')
+var f=require('./functions/couchdb')
   , g=require('./functions/sites_creator')
   , h=require('./functions/sites_fetcher')
 
-var task=function(){
-    var packet={
-        host:'http://hiperborea.com.bo:5984'
-      , dbuser:'jacobian'
-      , dbpass:'asdf'
-      , dbname:'pleni_site_koala'
-      , agent:'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:16.0) Gecko/20120813 Firefox/16.0'
-    }
-
-    f.testcouchdb(packet)
+module.exports=function(params,repeat,stop){
+    f.testcouchdb(params)
+    .then(f.couchdbauth)
     .then(h.getsitetask)
     .then(h.looksitetask)
     .then(h.getheadrequest)
@@ -24,16 +15,21 @@ var task=function(){
     .then(h.completesitetask)
     .then(h.spreadsitelinks)
     .fail(function(error){
-        console.log('error:');
         console.log(error);
+        stop();
     })
     .done(function(args){
-        console.log('task finished');
+        console.log(args);
+        repeat();
     });
-}
+};
 
-server(planner(task,Number.POSITIVE_INFINITY,1000),3001);
+module.exports.valid=function(args){
+    var result=['host','dbuser','dbpass','dbname']
+        .every(function(element){
+            return args[element]!==undefined;
+        });
 
-exports.app=server.app;
-exports.messages=server.messages;
+    return result;
+};
 

@@ -19,20 +19,20 @@ module.exports=function(grunt){
             }
 /* -------- planners watching ----------------------------------------------- */
           , dumb:{
-                files:['planners/dumb.js']
+                files:[
+                    'planners/dumb.js'
+                  , 'planners/abstracts/scheduler.js'
+                  , 'planners/abstracts/server.js'
+                ]
               , tasks:['develop:dumb']
             }
-          , clock:{
-                files:['planners/clock.js']
-              , tasks:['develop:clock']
-            }
-          , site_creator:{
-                files:['planners/site_creator.js']
-              , tasks:['develop:site_creator']
-            }
-          , site_fetcher:{
-                files:['planners/site_fetcher.js']
-              , tasks:['develop:site_fetcher']
+          , planner:{
+                files:[
+                    'planners/planner.js'
+                  , 'planners/abstracts/scheduler.js'
+                  , 'planners/abstracts/server.js'
+                ]
+              , tasks:['develop:planner']
             }
 /* -------- director watching ----------------------------------------------- */
           , js:{
@@ -60,10 +60,8 @@ module.exports=function(grunt){
         }
 
       , develop:{
-            dumb:   { file:'planners/dumb.js'    }
-          , clock:   { file:'planners/clock.js'    }
-          , site_creator: { file:'planners/site_creator.js'  }
-          , site_fetcher: { file:'planners/site_fetcher.js'  }
+            dumb:    { file:'planners/dumb.js'    }
+          , planner: { file:'planners/planner.js' }
         }
 
       , mochacli:{

@@ -2,19 +2,22 @@
 
 var scheduler=function(task,count,interval){
     this._status='stopped';
-
-    if(count==Number.POSITIVE_INFINITY){
-        this._infinite=true;
-        this.count=0;
-    }else{
-        this._infinite=false;
-        this.count=count;
-    }
-
-    this._interval=interval||1000;
+    this._timeout;
+    this.interval=interval||1000;
     this.task=task;
 
-    this._timeout;
+    this.setcount=function(count){
+        if(count!=undefined){
+            if(count==Number.POSITIVE_INFINITY){
+                this._infinite=true;
+                this.count=0;
+            }else{
+                this._infinite=false;
+                this.count=parseInt(count);
+            }
+        }
+    };
+    this.setcount(count);
 
     this.status=function(){
         return {status:this._status};
@@ -50,7 +53,7 @@ var scheduler=function(task,count,interval){
             }else{
                 self.stop();
             }
-        },this._interval);
+        },this.interval);
     };
 };
 

@@ -15,12 +15,31 @@ var planner=function(){
     this.name;
     this.action;
 
-    this.settask=function(name,action,response){
+    this.settask=function(name,query,action,response){
         if(this.tid===undefined){
             if(this.valid_tasks.some(function(element){return element===name})){
                 this.tid=f.generatorid({})['random'];
                 this.name=name;
                 this.action=action;
+
+                if(query['count']!=undefined){
+                    var _count=parseInt(query['count']);
+                    if(_count<0){
+                        _count=Number.POSITIVE_INFINITY;
+                    }
+                    this.setcount(_count);
+                }else{
+                    this.setcount(1);
+                }
+
+                if(query['delay']!=undefined){
+                    var _delay=parseInt(query['delay']);
+                    if(_delay<0){
+                        _delay=1000;
+                    }
+                    this.interval=_delay;
+                }
+
                 return {ok:true,tid:this.tid};
             }
         }
@@ -63,7 +82,6 @@ var planner=function(){
 };
 
 planner.prototype=new scheduler();
-planner.prototype.count=Number.POSITIVE_INFINITY;
 
 server.set(3000);
 server.listen(new planner());
