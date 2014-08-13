@@ -52,16 +52,6 @@ var scheduler=function(task,count,interval){
             }
         },this._interval);
     };
-
-    this.settask=function(){
-        return {ok:true};
-    };
-    this.gettask=function(){
-        return {ok:true};
-    };
-    this.removetask=function(){
-        return {ok:true};
-    };
 };
 
 module.exports=scheduler;

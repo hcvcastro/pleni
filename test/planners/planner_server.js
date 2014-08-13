@@ -2,10 +2,10 @@
 
 var request=require('supertest')
   , should=require('should')
-  , server=require('../../planners/dumb')
+  , server=require('../../planners/planner')
   , app=server.app
 
-describe('basic express server',function(){
+describe('default planner server',function(){
     describe('rest functions',function(){
         var tid;
 
@@ -73,17 +73,15 @@ describe('basic express server',function(){
             request(app)
                 .put('/task')
                 .expect('Content-Type',/json/)
-                .expect(200)
+                .expect(403)
                 .end(function(err,res){
                     res.should.be.json;
-                    res.body.should.have.property('ok').with.eql(true);
-                    res.body.should.have.property('tid');
-                    tid=res.body.tid;
+                    res.body.should.have.property('ok').with.eql(false);
                     done();
                 });
         });
 
-/*        it('GET /task',function(done){
+        it('GET /task',function(done){
             request(app)
                 .get('/task')
                 .expect('Content-Type',/json/)
@@ -91,6 +89,19 @@ describe('basic express server',function(){
                 .end(function(err,res){
                     res.should.be.json;
                     res.body.should.be.eql({ok:false});
+                    done();
+                });
+        });
+
+        it('PUT /site_creator',function(done){
+            request(app)
+                .put('/site_creator')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.should.be.json;
+                    res.body.should.have.property('ok').with.eql(true);
+                    tid=res.body.tid;
                     done();
                 });
         });
@@ -103,7 +114,8 @@ describe('basic express server',function(){
                 .end(function(err,res){
                     res.should.be.json;
                     res.body.should.have.property('ok').with.eql(true);
-                    res.body.should.have.property('task');
+                    res.body.should.have.property('task')
+                        .with.eql('site_creator');
                     done();
                 });
         });
@@ -145,9 +157,9 @@ describe('basic express server',function(){
                 });
         });
 
-        it('PUT /newtask',function(done){
+        it('PUT /site_fetcher',function(done){
             request(app)
-                .put('/newtask')
+                .put('/site_fetcher')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -156,7 +168,7 @@ describe('basic express server',function(){
                     res.body.should.have.property('tid');
                     done();
                 });
-        });*/
+        });
     });
 });
 

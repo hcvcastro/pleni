@@ -28,7 +28,7 @@ exports.listen=function(planner){
 
     app.put('/:task',function(request,response){
         response.json(
-            planner.settask(request.params.task,response.body,response));
+            planner.settask(request.params.task,request.body,response));
     });
     app.get('/:tid',function(request,response){
         response.json(

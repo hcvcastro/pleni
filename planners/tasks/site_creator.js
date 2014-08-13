@@ -1,21 +1,10 @@
 'use strict';
 
-var server=require('./functions/server')
-  , planner=require('./functions/planner')
-  , f=require('./functions/couchdb')
-  , g=require('./functions/sites_creator')
+var f=require('../functions/couchdb')
+  , g=require('../functions/sites_creator')
 
-var task=function(){
-    var packet={
-        host:'http://localhost:5984'
-      , dbuser:'jacobian'
-      , dbpass:'asdf'
-      , dbname:'pleni_site_galao'
-      , site_type:'site'
-      , site_url:'http://galao.local'
-    }
-
-    f.testcouchdb(packet)
+module.exports=function(params,repeat,stop){
+    f.testcouchdb(params)
     .then(f.couchdbauth)
     .then(f.createdb)
     .then(g.createsummary)
@@ -23,15 +12,20 @@ var task=function(){
     .then(g.createdesigndocument)
     .fail(function(error){
         console.log(error);
+        stop();
     })
     .done(function(args){
-        console.log('repository created');
         console.log(args);
+        repeat();
     });
-}
+};
 
-server(planner(task,1,1000),3001);
+module.exports.valid=function(args){
+    var result=['host','dbuser','dbpass','dbname','site_type','site_url']
+        .every(function(element){
+            return args[element]!==undefined;
+        });
 
-exports.app=server.app;
-exports.messages=server.messages;
+    return result;
+};
 
