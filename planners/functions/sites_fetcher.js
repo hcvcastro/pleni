@@ -5,6 +5,8 @@ var request=require('request')
   , sha1=require('sha1')
   , md5=require('MD5')
   , cheerio=require('cheerio')
+  , _url=require('url')
+  , _path=require('path')
 
 /*
  * args definition
@@ -177,72 +179,75 @@ exports.getgetrequest=function(args){
  */
 exports.bodyanalyzerlinks=function(args){
     var deferred=Q.defer()
-      , origin=args['wait_task'].key
-      , url=args['wait_task'].key+args['wait_task'].id.substr(5)
 
     if(!args['request_head'].get){
         deferred.resolve(args);
-    }else{
-        var $=cheerio.load(args['request_get'].body)
-          , links={script:[],link:[],a:[],img:[],form:[]}
-          , samedomain=[]
-          , register_link=function(link,haystack){
-                var result={orig:link,type:'?'}
-                  , link2=link;
-
-                if(link==undefined){
-                    return;
-                }
-
-                if(/^[a-z]*:\/\/.*/i.test(link)){
-                    var sub=link.slice(0,origin.length);
-                    if(sub==origin){
-                        link2=link.substr(sub.length);
-                    }else{
-                        result.type='remote';
-                    }
-                }
-                
-                if(result.type=='?'){
-                    if(link2.slice(0,1)=='/'){
-                        result.type='absolute';
-                        result.clean=link2;
-                    }else{
-                        result.type='relative';
-                        var anchor=url
-                          , i=anchor.lastIndexOf('/')
-                          , base=anchor.substr(0,i+1)
-                          , path=base.substr(origin.length);
-
-                        result.clean=path+link2;
-                    }
-                    samedomain.push(result.clean);
-                }
-
-                haystack.push(result);
-            }
-
-        // body analysis (TODO)
-        $('script').each(function(i,element){
-            register_link($(this).attr('src'),links.script);
-        });
-        $('link').each(function(i,element){
-            register_link($(this).attr('href'),links.link);
-        });
-        $('a').each(function(i,element){
-            register_link($(this).attr('href'),links.a);
-        });
-        $('img').each(function(i,element){
-            register_link($(this).attr('src'),links.img);
-        });
-        $('form').each(function(i,element){
-            register_link($(this).attr('action'),links.form);
-        });
-
-        args['body_links']=links;
-        args['body_related']=samedomain;
-        deferred.resolve(args);
+        return deferred.promise;
     }
+
+    var origin=args['wait_task'].key
+      , url=args['wait_task'].key+args['wait_task'].id.substr(5)
+      , $=cheerio.load(args['request_get'].body)
+      , links={script:[],link:[],a:[],img:[],form:[]}
+      , samedomain=[];
+
+    function register_link(link,haystack){
+        var _p=_url.parse(link);
+        var result={orig:link,type:'?'}
+          , link2=link
+
+        if(link==undefined){
+            return;
+        }
+
+        if(/^[a-z]*:\/\/.*/i.test(link)){
+            var sub=link.slice(0,origin.length);
+            if(sub==origin){
+                link2=link.substr(sub.length);
+            }else{
+                result.type='remote';
+            }
+        }
+
+        if(result.type=='?'){
+            if(link2.slice(0,1)=='/'){
+                result.type='absolute';
+                result.clean=link2;
+            }else{
+                result.type='relative';
+                var anchor=url
+                  , i=anchor.lastIndexOf('/')
+                  , base=anchor.substr(0,i+1)
+                  , path=base.substr(origin.length);
+
+                result.clean=path+link2;
+            }
+            samedomain.push(result.clean);
+        }
+
+        haystack.push(result);
+    }
+
+    // body analysis (TODO)
+    $('script').each(function(i,element){
+        register_link($(this).attr('src'),links.script);
+    });
+    $('link').each(function(i,element){
+        register_link($(this).attr('href'),links.link);
+    });
+    $('a').each(function(i,element){
+        register_link($(this).attr('href'),links.a);
+    });
+    $('img').each(function(i,element){
+        register_link($(this).attr('src'),links.img);
+    });
+    $('form').each(function(i,element){
+        register_link($(this).attr('action'),links.form);
+    });
+
+    args['body_links']=links;
+    args['body_related']=samedomain;
+    deferred.resolve(args);
 
     return deferred.promise;
 };
