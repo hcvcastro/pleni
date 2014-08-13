@@ -185,47 +185,21 @@ exports.bodyanalyzerlinks=function(args){
         return deferred.promise;
     }
 
-    var origin=args['wait_task'].key
-      , url=args['wait_task'].key+args['wait_task'].id.substr(5)
-      , $=cheerio.load(args['request_get'].body)
+    var $=cheerio.load(args['request_get'].body)
       , links={script:[],link:[],a:[],img:[],form:[]}
-      , samedomain=[];
+      , samedomain=[]
+      , base=_url.parse(args['wait_task'].key+args['wait_task'].id.substr(5))
 
     function register_link(link,haystack){
-        var _p=_url.parse(link);
-        var result={orig:link,type:'?'}
-          , link2=link
+        if(link==undefined){return}
 
-        if(link==undefined){
-            return;
+        var parse=_url.parse(_url.resolve(base,link));
+        if(parse.host===base.host){
+            samedomain.push(parse.path);
         }
 
-        if(/^[a-z]*:\/\/.*/i.test(link)){
-            var sub=link.slice(0,origin.length);
-            if(sub==origin){
-                link2=link.substr(sub.length);
-            }else{
-                result.type='remote';
-            }
-        }
-
-        if(result.type=='?'){
-            if(link2.slice(0,1)=='/'){
-                result.type='absolute';
-                result.clean=link2;
-            }else{
-                result.type='relative';
-                var anchor=url
-                  , i=anchor.lastIndexOf('/')
-                  , base=anchor.substr(0,i+1)
-                  , path=base.substr(origin.length);
-
-                result.clean=path+link2;
-            }
-            samedomain.push(result.clean);
-        }
-
-        haystack.push(result);
+        parse.href=link;
+        haystack.push(parse);
     }
 
     // body analysis (TODO)
