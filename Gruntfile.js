@@ -34,7 +34,11 @@ module.exports=function(grunt){
                 ]
               , tasks:['develop:planner']
             }
-/* -------- director watching ----------------------------------------------- */
+/* -------- master watching ------------------------------------------------- */
+          , master:{
+                files:['master/app.js']
+              , tasks:['develop:master']
+            }
           , js:{
                 files:['public/js/*.js']
               , options:{livereload:reloadPort}
@@ -57,6 +61,7 @@ module.exports=function(grunt){
       , develop:{
             dumb:    { file:'planners/dumb.js'    }
           , planner: { file:'planners/planner.js' }
+          , master:  { file:'master/app.js'       }
         }
 
       , mochacli:{
@@ -84,29 +89,6 @@ module.exports=function(grunt){
         }
     });
 
-//    grunt.config.requires('watch.control.files');
-//    filescontrol=grunt.config('watch.control.files');
-//    filescontrol=grunt.file.expand(filescontrol);
-
-//    grunt.registerTask('delayed-livereload-control',
-//        'Live reload after the node server has restarted.',function(){
-//        var done=this.async();
-//        setTimeout(function(){
-//            request.get('http://localhost:'+reloadPort+'/changed?files='
-//            +filescontrol.join(','),function(err,res){
-//                var reloaded=!err&&res.statusCode===200;
-//                if(reloaded){
-//                    grunt.log.ok('Delayed live reload successful.');
-//                }else{
-//                    grunt.log.error('Unable to make a delayed live reload.');
-//                }
-//                done(reloaded);
-//            });
-//        },500);
-//    });
-
-//    grunt.registerTask('serve:control',['develop:control','watch:control']);
-
     ['dumb','planners']
     .forEach(function(element){
         grunt.registerTask(
@@ -117,5 +99,28 @@ module.exports=function(grunt){
             'serve:'+element,
             ['develop:'+element,'watch:'+element]);
     });
+
+    grunt.config.requires('watch.master.files');
+    filescontrol=grunt.config('watch.master.files');
+    filescontrol=grunt.file.expand(filescontrol);
+
+    grunt.registerTask('delayed-livereload-control',
+        'Live reload after the node server has restarted.',function(){
+        var done=this.async();
+        setTimeout(function(){
+            request.get('http://localhost:'+reloadPort+'/changed?files='
+            +filescontrol.join(','),function(err,res){
+                var reloaded=!err&&res.statusCode===200;
+                if(reloaded){
+                    grunt.log.ok('Delayed live reload successful.');
+                }else{
+                    grunt.log.error('Unable to make a delayed live reload.');
+                }
+                done(reloaded);
+            });
+        },500);
+    });
+
+    grunt.registerTask('serve:master',['develop:master','watch:master']);
 };
 
