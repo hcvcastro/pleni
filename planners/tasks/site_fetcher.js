@@ -18,7 +18,9 @@ module.exports=function(params,repeat,stop){
         stop();
     })
     .done(function(args){
-        console.log('fetcher --> '+args['complete_task'].id)
+        if(args&&args['complete_task']){
+            console.log('fetcher --> '+args['complete_task'].id)
+        }
         repeat();
     });
 };

@@ -19,8 +19,6 @@ BODY=$(cat << EOF
 EOF
 )
 
-echo $BODY
-
 curl -H 'Content-type: application/json' \
      -X PUT $REQUEST \
      -d $BODY
