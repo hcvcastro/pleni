@@ -1,25 +1,24 @@
 'use strict';
 
-var f=require('./functions/couchdb')
-  , g=require('./functions/sites_creator')
-  , h=require('./functions/sites_fetcher')
+var f=require('../functions/couchdb')
+  , g=require('../functions/sites_fetcher')
 
 module.exports=function(params,repeat,stop){
     f.testcouchdb(params)
     .then(f.couchdbauth)
-    .then(h.getsitetask)
-    .then(h.looksitetask)
-    .then(h.getheadrequest)
-    .then(h.getgetrequest)
-    .then(h.bodyanalyzerlinks)
-    .then(h.completesitetask)
-    .then(h.spreadsitelinks)
+    .then(g.getsitetask)
+    .then(g.looksitetask)
+    .then(g.getheadrequest)
+    .then(g.getgetrequest)
+    .then(g.bodyanalyzerlinks)
+    .then(g.completesitetask)
+    .then(g.spreadsitelinks)
     .fail(function(error){
         console.log(error);
         stop();
     })
     .done(function(args){
-        console.log(args);
+        console.log('fetcher --> '+args['complete_task'].id)
         repeat();
     });
 };

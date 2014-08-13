@@ -42,6 +42,8 @@ var planner=function(){
 
                 return {ok:true,tid:this.tid};
             }
+            response.status(403);
+            return {ok:false,message:'task no recognized'};
         }
         response.status(403);
         return {ok:false};

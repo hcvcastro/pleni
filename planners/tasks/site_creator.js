@@ -15,7 +15,7 @@ module.exports=function(params,repeat,stop){
         stop();
     })
     .done(function(args){
-        console.log(args);
+        console.log('creator --> '+args['dbname'])
         repeat();
     });
 };
