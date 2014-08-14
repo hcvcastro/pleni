@@ -6,7 +6,8 @@ module.exports=function(app){
       , paqError=require('../json-response').error;
 
     app.get('/repositories',function(request,response){
-        response.render('pages/repositories',global.app.db);
+        response.render('pages/repositories');
+        //response.render('pages/repositories',global.app.db);
     });
 
     app.post('/settings/testdb',function(request,response){
@@ -68,7 +69,7 @@ module.exports=function(app){
         fs.writeFile(dbfile,JSON.stringify(json),
             function(err){
                 if(err){throw err;}
-                global.app.db=json;
+                //global.app.db=json;
         });
 
         response.json(paqSuccess.dbsave);

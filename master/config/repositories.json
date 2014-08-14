@@ -1,0 +1,15 @@
+{
+    "localhost": {
+        "host":"http://localhost:5984"
+      , "dbuser":"jacobian
+      , "dbpass":"asdf"
+      , "prefix":"pleni_"
+    }
+  , "hiperborea": {
+        "host":"http://hiperborea.com.bo:5984"
+      , "dbuser":"jacobian
+      , "dbpass":"asdf"
+      , "prefix":"pleni_"
+    }
+}
+

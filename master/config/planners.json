@@ -1,0 +1,12 @@
+{
+    "localhost": {
+        "host":"http://localhost:3001"
+    }
+  , "hiperborea": {
+        "host":"http://hiperborea.com.bo:3001"
+    }
+  , "dozer": {
+        "host":"http://167.157.28.34:3001"
+    }
+}
+

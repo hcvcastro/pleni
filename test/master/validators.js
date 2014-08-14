@@ -1,45 +1,45 @@
 'use strict';
 
-var assert=require('assert')
-  , validate=require('../server/validators');
+var should=require('should')
+  , validate=require('../../master/validators')
 
 describe('validators',function(){
     describe('validators functions',function(){
         it('empty validation',function(done){
-            assert.equal(validate.notEmpty(),false);
-            assert.equal(validate.notEmpty(''),false);
-            assert.equal(validate.notEmpty('test'),true);
+            validate.notEmpty().should.be.false;
+            validate.notEmpty('').should.be.false;
+            validate.notEmpty('test').should.be.true;
             done();
         });
 
         it('host validation',function(done){
-            assert.equal(validate.validHost(),false);
-            assert.equal(validate.validHost('nothing'),false);
-            assert.equal(validate.validHost('localhost'),true);
-            assert.equal(validate.validHost('127.0.0.1'),true);
-            assert.equal(validate.validHost('http://main.local/'),true);
-            assert.equal(validate.validHost('rsync://main.local/'),false);
+            validate.validHost().should.be.false;
+            validate.validHost('nothing').should.be.false;
+            validate.validHost('localhost').should.be.true;
+            validate.validHost('127.0.0.1').should.be.true;
+            validate.validHost('http://main.local/').should.be.true;
+            validate.validHost('rsync://main.local/').should.be.false;
             done();
         });
 
         it('port validation',function(done){
-            assert.equal(validate.validPort(''),false);
-            assert.equal(validate.validPort('-80'),false);
-            assert.equal(validate.validPort('0'),false);
-            assert.equal(validate.validPort('1'),true);
-            assert.equal(validate.validPort('1024'),true);
-            assert.equal(validate.validPort('65536'),false);
+            validate.validPort('').should.be.false;
+            validate.validPort('-80').should.be.false;
+            validate.validPort('0').should.be.false;
+            validate.validPort('1').should.be.true;
+            validate.validPort('1024').should.be.true;
+            validate.validPort('65536').should.be.false;
             done();
         });
 
         it('slug validation',function(done){
-            assert.equal(validate.validSlug(),false);
-            assert.equal(validate.validSlug(''),false);
-            assert.equal(validate.validSlug('1'),false);
-            assert.equal(validate.validSlug('a'),true);
-            assert.equal(validate.validSlug('perfect'),true);
-            assert.equal(validate.validSlug('perfect1'),true);
-            assert.equal(validate.validSlug('perfect_'),true);
+            validate.validSlug().should.be.false;
+            validate.validSlug('').should.be.false;
+            validate.validSlug('1').should.be.false;
+            validate.validSlug('a').should.be.true;
+            validate.validSlug('perfect').should.be.true;
+            validate.validSlug('perfect1').should.be.true;
+            validate.validSlug('perfect_').should.be.true;
             done();
         });
     });

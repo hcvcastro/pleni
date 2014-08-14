@@ -1,30 +1,18 @@
 'use strict';
 
-global.app={};
-
 var express=require('express')
   , favicon=require('serve-favicon')
   , bodyparser=require('body-parser')
-  , fs=require('fs')
   , http=require('http')
   , path=require('path')
-  , app=express();
+  , app=express()
 
 app.set('port',process.env.PORT||3000);
 app.set('views',path.join(__dirname,'views'));
 app.set('view engine','jade');
-
-// read a database configuration
-/*fs.readFile(path.join(__dirname,'database.json'),'utf8',function(err,data){
-    if(err){throw err;}
-    global.app.db=JSON.parse(data);
-});*/
-
 app.disable('x-powered-by');
 app.use(favicon(path.join(__dirname,'..','public','img','favicon.ico')));
-
-app.use(bodyparser.urlencoded({extended:false}));
-app.use(bodyparser.json())
+app.use(bodyparser.json());
 
 app.use(require('stylus').middleware({
     src:path.join(__dirname,'stylus'),
