@@ -4,24 +4,32 @@ var express=require('express')
   , favicon=require('serve-favicon')
   , bodyparser=require('body-parser')
   , http=require('http')
-  , path=require('path')
+  , join=require('path').join
+  , loadconfig=require('./loadconfig')
   , app=express()
 
+// sync methods
+app.set('repositories',
+    loadconfig(join(__dirname,'config','repositories.json')));
+app.set('planners',
+    loadconfig(join(__dirname,'config','planners.json')));
+
+// async methods
 app.set('port',process.env.PORT||3000);
-app.set('views',path.join(__dirname,'views'));
+app.set('views',join(__dirname,'views'));
 app.set('view engine','jade');
 app.disable('x-powered-by');
-app.use(favicon(path.join(__dirname,'..','public','img','favicon.ico')));
+app.use(favicon(join(__dirname,'..','public','img','favicon.ico')));
 app.use(bodyparser.json());
 
 app.use(require('stylus').middleware({
-    src:path.join(__dirname,'stylus'),
-    dest:path.join(__dirname,'..','public','css'),
+    src:join(__dirname,'stylus'),
+    dest:join(__dirname,'..','public','css'),
     compress:true
 }));
 
-app.use(express.static(path.join(__dirname,'..','public')));
-app.use(express.static(path.join(__dirname,'..','bower_components')));
+app.use(express.static(join(__dirname,'..','public')));
+app.use(express.static(join(__dirname,'..','bower_components')));
 app.locals.pretty=true;
 
 require('./controllers/home')(app);

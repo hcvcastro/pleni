@@ -1,16 +1,26 @@
 'use strict';
 
-module.exports=function(app){
-    var validate=require('../validators')
-      , paqSuccess=require('../json-response').success
-      , paqError=require('../json-response').error;
+var validate=require('../validators')
+  , paqSuccess=require('../json-response').success
+  , paqError=require('../json-response').error
 
-    app.get('/repositories',function(request,response){
+module.exports=function(app){
+    app.get('/repositories/view',function(request,response){
         response.render('pages/repositories');
-        //response.render('pages/repositories',global.app.db);
     });
 
-    app.post('/settings/testdb',function(request,response){
+    app.get('/repositories',function(request,response){
+        var filtered=app.get('repositories')
+
+        for(var a in filtered){
+            delete filtered[a].dbuser;
+            delete filtered[a].dbpass;
+        }
+
+        response.json(filtered);
+    });
+
+    /*app.post('/settings/testdb',function(request,response){
         var host=request.body.host
           , port=request.body.port;
 
@@ -45,9 +55,9 @@ module.exports=function(app){
         }).on('error',function(error){
             response.json(paqError.network);
         });
-    });
+    });*/
 
-    app.post('/settings/savedb',function(request,response){
+    /*app.post('/settings/savedb',function(request,response){
         var host=request.body.host
           , port=request.body.port
           , prefix=request.body.prefix;
@@ -73,6 +83,6 @@ module.exports=function(app){
         });
 
         response.json(paqSuccess.dbsave);
-    });
+    });*/
 };
 

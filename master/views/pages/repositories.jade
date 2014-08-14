@@ -1,19 +1,16 @@
 div.container
     div.row
+        ol.breadcrumb.col-md-8
+            li: a(href='') ::
+        div.btn-toolbar.col-md-4(role='toolbar')
+            div.btn-group.btn-group-sm
+                button.btn.btn-default(type='button') Add connection
+                button.btn.btn-default(type='button') Check all
+    div.row
         div.col-md-8(role='main')
-            ol.breadcrumb
-                li: a(href='') /repositories
-            div.btn-toolbar(role='toolbar')
-                div.btn-group.btn-group-sm
-                    button.btn.btn-default(type='button') New connection
             section.index(ng-show='panel==\'index\'')
                 p You can create repositories or view the state of fetching in
                 everywhere repository created.
-                br
-                br
-                div.row
-                    div.col-md-6.col-md-offset-3
-                        button.btn.btn-primary.btn-lg.btn-block(type='button',ng-click='showcreate()') Create Repository
             section.create(ng-show='panel==\'create\'')
                 h2 New repository
                 div.alert.alert-dismissible.hide(role='alert')
@@ -33,6 +30,12 @@ div.container
                 h2 Repository: %s
         div.col-md-4
             div.list-group
-                a.list-group-item(ng-repeat='repository in repositories') {{repository}}
-                span.list-group-item(ng-hide='repositories.length') No repositories founded
+                a.list-group-item(ng-repeat='(name,config) in repositories')
+                    h2 {{name}}
+                    p
+                        strong host:&nbsp;
+                        {{config.host}}
+                    p
+                        strong prefix:&nbsp;
+                        {{config.prefix}}
 
