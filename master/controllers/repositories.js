@@ -5,8 +5,8 @@ module.exports=function(app){
       , paqSuccess=require('../json-response').success
       , paqError=require('../json-response').error;
 
-    app.get('/settings',function(request,response){
-        response.render('pages/settings',global.app.db);
+    app.get('/repositories',function(request,response){
+        response.render('pages/repositories',global.app.db);
     });
 
     app.post('/settings/testdb',function(request,response){

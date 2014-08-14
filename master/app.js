@@ -37,8 +37,8 @@ app.use(express.static(path.join(__dirname,'..','bower_components')));
 app.locals.pretty=true;
 
 require('./controllers/home')(app);
-require('./controllers/settings')(app);
-require('./controllers/fetch')(app);
+require('./controllers/repositories')(app);
+require('./controllers/planners')(app);
 
 app.use(function(req,res){
     res.status(404).render('404.jade',{

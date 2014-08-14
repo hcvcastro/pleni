@@ -1,7 +1,11 @@
 div.container
     div.row
         div.col-md-8(role='main')
-            h1 Fetching
+            ol.breadcrumb
+                li: a(href='') /repositories
+            div.btn-toolbar(role='toolbar')
+                div.btn-group.btn-group-sm
+                    button.btn.btn-default(type='button') New connection
             section.index(ng-show='panel==\'index\'')
                 p You can create repositories or view the state of fetching in
                 everywhere repository created.
@@ -28,10 +32,6 @@ div.container
             section.read(ng-show='panel==\'read\'')
                 h2 Repository: %s
         div.col-md-4
-            div.list-group
-                a.list-group-item(ng-click='showindex()') Index repositories
-                a.list-group-item(ng-click='showcreate()') New repository
-            h2 Repositories
             div.list-group
                 a.list-group-item(ng-repeat='repository in repositories') {{repository}}
                 span.list-group-item(ng-hide='repositories.length') No repositories founded

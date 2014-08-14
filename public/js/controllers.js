@@ -4,7 +4,7 @@ var controllers=angular.module('PleniControllers',[]);
 
 controllers.controller('HomeController',['$scope',function($scope){}]);
 
-controllers.controller('SettingsController',
+controllers.controller('RepositoriesController',
     ['$scope','$http',function($scope,$http){
 
     var showWaiting=function(){
@@ -58,7 +58,7 @@ controllers.controller('SettingsController',
     };
 }]);
 
-controllers.controller('FetchController',
+controllers.controller('PlannersController',
     ['$scope','$http',function($scope,$http){
 
     $scope.panel='index';

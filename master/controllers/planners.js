@@ -5,8 +5,8 @@ module.exports=function(app){
       , paqSuccess=require('../json-response').success
       , paqError=require('../json-response').error;
 
-    app.get('/fetch',function(request,response){
-        response.render('pages/fetch');
+    app.get('/planners',function(request,response){
+        response.render('pages/planners');
     });
 
     app.get('/repositories',function(request,response){

@@ -36,19 +36,22 @@ module.exports=function(grunt){
             }
 /* -------- master watching ------------------------------------------------- */
           , master:{
-                files:['master/app.js']
-              , tasks:['develop:master']
+                files:[
+                    'master/app.js'
+                  , 'master/controllers/*.js'
+                ]
+              , tasks:['develop:master','delayed-livereload']
             }
           , js:{
                 files:['public/js/*.js']
               , options:{livereload:reloadPort}
             }
           , styl:{
-                files:['server/stylus/*.styl']
+                files:['master/stylus/*.styl']
               , options:{livereload:reloadPort}
             }
           , jade:{
-                files:['server/views/{,*/}*.jade']
+                files:['master/views/{,*/}*.jade']
               , options:{livereload:reloadPort}
             }
 /* -------- documentation watching ------------------------------------------ */
@@ -104,7 +107,7 @@ module.exports=function(grunt){
     filescontrol=grunt.config('watch.master.files');
     filescontrol=grunt.file.expand(filescontrol);
 
-    grunt.registerTask('delayed-livereload-control',
+    grunt.registerTask('delayed-livereload',
         'Live reload after the node server has restarted.',function(){
         var done=this.async();
         setTimeout(function(){
@@ -121,6 +124,6 @@ module.exports=function(grunt){
         },500);
     });
 
-    grunt.registerTask('serve:master',['develop:master','watch:master']);
+    grunt.registerTask('serve:master',['develop:master','watch']);
 };
 
