@@ -81,6 +81,11 @@ module.exports=function(grunt){
               , 'test/planners/planner_server.js'
               , 'test/planners/planner_scheduler.js'
             ]
+          , master: [
+                'test/master/utils/{,*/}*.js'
+              , 'test/master/home.js'
+              , 'test/master/repositories.js'
+            ]
         }
 
       , latex:{
@@ -125,5 +130,6 @@ module.exports=function(grunt){
     });
 
     grunt.registerTask('serve:master',['develop:master','watch']);
+    grunt.registerTask('test:master',['mochacli:master']);
 };
 

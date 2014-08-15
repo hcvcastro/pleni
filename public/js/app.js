@@ -28,7 +28,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute'])
 .controller('RepositoriesController',
     ['$scope','$http','Repositories',function($scope,$http,Repositories){
 
-    $scope.panel='index';
+    $scope.panel='add';
     $scope.repositories={};
 
     Repositories.list().then(function(result){

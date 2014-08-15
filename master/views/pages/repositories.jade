@@ -1,41 +1,52 @@
 div.container
     div.row
         ol.breadcrumb.col-md-8
-            li: a(href='') ::
+            li: a(href='/#/home') ::
         div.btn-toolbar.col-md-4(role='toolbar')
             div.btn-group.btn-group-sm
-                button.btn.btn-default(type='button') Add connection
-                button.btn.btn-default(type='button') Check all
+                button.btn.btn-default(type='button') Add Connection
     div.row
         div.col-md-8(role='main')
             section.index(ng-show='panel==\'index\'')
                 p You can create repositories or view the state of fetching in
                 everywhere repository created.
-            section.create(ng-show='panel==\'create\'')
-                h2 New repository
+            section.create(ng-show='panel==\'add\'')
+                h2 Add Connection
                 div.alert.alert-dismissible.hide(role='alert')
                     button.close(type='button',data-dismiss='alert')
                         span(aria-hidden='true') &times;
                         span.sr-only Close
                     p.message
-                form.form-horizontal(role='form',ng-submit='createrepo()')
+                form.form-horizontal(role='form',ng-init='host=\'#{host}\';port=#{port};prefix=\'#{prefix}\'',ng-submit='savedb()')
                     div.form-group
-                        label.col-sm-2.control-label Name
+                        label.col-sm-2.control-label Host
                         div.col-sm-10
-                            input.form-control(type='text',placeholder='Name of repository',required,ng-model='repository')
+                            input.form-control(type='text',placeholder='The host without scheme or a IP',required,ng-model='host')
+                    div.form-group
+                        label.col-sm-2.control-label Port
+                        div.col-sm-10
+                            input.form-control(type='number',placeholder='The port',min=1,max=65535,required,ng-model='port')
+                    div.form-group
+                        label.col-sm-2.control-label Prefix
+                        div.col-sm-10
+                            input.form-control(type='text',placeholder='The prefix used in the database server',ng-model='prefix')
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
-                            button.btn.btn-primary(type='submit') Create
+                            button.btn.btn-primary(type='submit') Save
+                            button.btn.btn-default(type='button',ng-click='testdb()') Test Connection
+                            div#test
+                                span.loader.hide
+                                span.result.hide
             section.read(ng-show='panel==\'read\'')
                 h2 Repository: %s
         div.col-md-4
             div.list-group
                 a.list-group-item(ng-repeat='(name,config) in repositories')
-                    h2 {{name}}
-                    p
-                        strong host:&nbsp;
-                        {{config.host}}
-                    p
-                        strong prefix:&nbsp;
-                        {{config.prefix}}
+                    h3 {{name}}
+                    div.row
+                        div.col-md-2: strong host:
+                        div.col-md-2 {{config.host}}
+                    div.row
+                        div.col-md-2: strong prefix:
+                        div.col-md-2 {{config.prefix}}
 

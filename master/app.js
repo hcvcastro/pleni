@@ -1,9 +1,9 @@
 'use strict';
 
-var express=require('express')
+var http=require('http')
+  , express=require('express')
   , favicon=require('serve-favicon')
   , bodyparser=require('body-parser')
-  , http=require('http')
   , join=require('path').join
   , loadconfig=require('./loadconfig')
   , app=express()

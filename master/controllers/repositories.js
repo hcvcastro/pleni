@@ -1,8 +1,8 @@
 'use strict';
 
 var validate=require('../validators')
-  , paqSuccess=require('../json-response').success
-  , paqError=require('../json-response').error
+  , _success=require('../json-response').success
+  , _error=require('../json-response').error
 
 module.exports=function(app){
     app.get('/repositories/view',function(request,response){
@@ -18,6 +18,17 @@ module.exports=function(app){
         }
 
         response.json(filtered);
+    });
+
+    app.put('/repositories',function(request,response){
+        var repositories=request.body;
+        for(var i in repositories){
+//            validate.validSlug(i);
+//            validate.validHost(repositories[i].host);
+//            validate.valid
+        }
+        console.log(request.body);
+        response.json({ok:true});
     });
 
     /*app.post('/settings/testdb',function(request,response){

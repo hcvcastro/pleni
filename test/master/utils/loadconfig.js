@@ -2,12 +2,12 @@
 
 var should=require('should')
   , path=require('path')
-  , loadconfig=require('../../master/loadconfig')
+  , loadconfig=require('../../../master/loadconfig')
 
 describe('loading the config files',function(){
     it('loading repositories.js',function(done){
         var config=loadconfig(path.join(
-            __dirname,'..','..','master','config','repositories.json'));
+            __dirname,'..','..','..','master','config','repositories.json'));
 
         config.should.be.json;
         for(var a in config){
@@ -21,7 +21,7 @@ describe('loading the config files',function(){
 
     it('loading planners.js',function(done){
         var config=loadconfig(path.join(
-            __dirname,'..','..','master','config','planners.json'));
+            __dirname,'..','..','..','master','config','planners.json'));
 
         config.should.be.json;
         for(var b in config){
