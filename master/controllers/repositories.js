@@ -11,19 +11,23 @@ module.exports=function(app){
     });
 
     app.get('/repositories',function(request,response){
-        var filtered=app.get('repositories');
+        var repositories=app.get('repositories')
+          , filtered={}
 
-        for(var a in filtered){
-            delete filtered[a].dbuser;
-            delete filtered[a].dbpass;
+        for(var repository in repositories){
+            filtered[repository]={
+                host: repositories[repository].host
+              , port: repositories[repository].port
+              , prefix: repositories[repository].prefix
+            }
         }
 
         response.json(filtered);
     });
 
     app.put('/repositories',function(request,response){
-        var repositories=request.body;
-        var result=true;
+        var repositories=request.body
+          , result=true
 
         for(var i in repositories){
             result&=validate.validSlug(i)
@@ -55,14 +59,12 @@ module.exports=function(app){
     });
 
     app.post('/repositories',function(request,response){
-        var repository=request.body;
-
-        var result=validate.validSlug(repository.id)
+        var repository=request.body
+          , result=validate.validSlug(repository.id)
                   &validate.validHost(repository.host)
                   &validate.validPort(repository.port)
                   &validate.validSlug(repository.dbuser)
                   &validate.validSlug(repository.prefix)
-        ;
 
         if(result){
             repository.id=validate.toString(repository.id);
@@ -72,13 +74,15 @@ module.exports=function(app){
             repository.dbpass=validate.toString(repository.dbpass);
             repository.prefix=validate.toString(repository.prefix);
 
-            var id=repository.id;
-            delete repository.id;
-
             var repositories = app.get('repositories');
-            repositories.id=repository;
+            repositories[repository.id]={
+                host:repository.host
+              , port:repository.port
+              , dbuser:repository.dbuser
+              , dbpass:repository.dbpass
+              , prefix:repository.prefix
+            };
             app.set('repositories',repositories);
-
             response.status(202).json(_success.ok);
         }else{
             response.status(400).json(_error.validation);
@@ -125,7 +129,88 @@ module.exports=function(app){
     });
 
     app.get('/repositories/:repository',function(request,response){
-        response.status(404).json(_error.notfound)
+        var repositories=app.get('repositories')
+          , repository=validate.toString(request.params.repository)
+
+        if(repositories[repository]){
+            response.status(200).json({
+                host: repositories[repository].host
+              , port: repositories[repository].port
+              , prefix: repositories[repository].prefix
+            });
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+
+    app.put('/repositories/:repository',function(request,response){
+        var repository=request.body
+          , result=validate.validSlug(request.params.repository)
+                  &validate.validHost(repository.host)
+                  &validate.validPort(repository.port)
+                  &validate.validSlug(repository.dbuser)
+                  &validate.validSlug(repository.prefix)
+
+        if(result){
+            repository.host=validate.toValidHost(repository.host);
+            repository.port=validate.toInt(repository.port);
+            repository.dbuser=validate.toString(repository.dbuser);
+            repository.dbpass=validate.toString(repository.dbpass);
+            repository.prefix=validate.toString(repository.prefix);
+
+            var repositories = app.get('repositories');
+            repositories[request.params.repository]={
+                host:repository.host
+              , port:repository.port
+              , dbuser:repository.dbuser
+              , dbpass:repository.dbpass
+              , prefix:repository.prefix
+            };
+            app.set('repositories',repositories);
+            response.status(202).json(_success.ok);
+        }else{
+            response.status(400).json(_error.validation);
+        }
+    });
+
+    app.delete('/repositories/:repository',function(request,response){
+        var repositories=app.get('repositories')
+
+        if(repositories[request.params.repository]){
+            delete repositories[request.params.repository];
+            app.set('repositories',repositories);
+            response.status(200).json(_success.ok);
+        }else{
+            response.status(404).json(_error.notfound);
+        }
+    });
+
+    app.post('/repositories/:repository/_check',function(request,response){
+        var repositories=app.get('repositories')
+          , repository=validate.toString(request.params.repository)
+
+        if(repositories[repository]){
+            f.testcouchdb({
+                host:repositories[repository].host+':'
+                    +repositories[repository].port
+              , dbuser:repositories[repository].dbuser
+              , dbpass:repositories[repository].dbpass
+            })
+            .then(f.couchdbauth)
+            .then(function(args){
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(403).json(_error.auth);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
     });
 };
 
