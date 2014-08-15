@@ -12,16 +12,15 @@ module.exports=function(app){
 
     app.get('/repositories',function(request,response){
         var repositories=app.get('repositories')
-          , filtered={}
-
-        for(var repository in repositories){
-            filtered[repository]={
-                host: repositories[repository].host
-              , port: repositories[repository].port
-              , prefix: repositories[repository].prefix
-            }
+          , filtered=new Array()
+        for(var i in repositories){
+            filtered.push({
+                id:     repositories[i].id
+              , host:   repositories[i].host
+              , port:   repositories[i].port
+              , prefix: repositories[i].prefix
+            });
         }
-
         response.json(filtered);
     });
 
@@ -30,13 +29,15 @@ module.exports=function(app){
           , result=true
 
         for(var i in repositories){
-            result&=validate.validSlug(i)
-                  &validate.validHost(repositories[i].host)
-                  &validate.validPort(repositories[i].port)
-                  &validate.validSlug(repositories[i].dbuser)
-                  &validate.validSlug(repositories[i].prefix)
+            result&=validate.validSlug(repositories[i].id)
+                   &validate.validHost(repositories[i].host)
+                   &validate.validPort(repositories[i].port)
+                   &validate.validSlug(repositories[i].dbuser)
+                   &validate.validSlug(repositories[i].prefix)
             ;
             if(result){
+                repositories[i].id=
+                    validate.toString(repositories[i].id);
                 repositories[i].host=
                     validate.toValidHost(repositories[i].host);
                 repositories[i].port=
@@ -90,7 +91,7 @@ module.exports=function(app){
     });
 
     app.delete('/repositories',function(request,response){
-        app.set('repositories',{});
+        app.set('repositories',[]);
         response.status(200).json(_success.ok);
     });
 
@@ -132,15 +133,19 @@ module.exports=function(app){
         var repositories=app.get('repositories')
           , repository=validate.toString(request.params.repository)
 
-        if(repositories[repository]){
-            response.status(200).json({
-                host: repositories[repository].host
-              , port: repositories[repository].port
-              , prefix: repositories[repository].prefix
-            });
-        }else{
-            response.status(404).json(_error.notfound)
+        for(var i in repositories){
+            if(repositories[i].id==repository){
+                response.status(200).json({
+                    id:     repositories[i].id
+                  , host:   repositories[i].host
+                  , port:   repositories[i].port
+                  , prefix: repositories[i].prefix
+                });
+                return;
+            }
         }
+
+        response.status(404).json(_error.notfound)
     });
 
     app.put('/repositories/:repository',function(request,response){

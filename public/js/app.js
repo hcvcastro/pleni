@@ -1,6 +1,6 @@
 'use strict';
 
-var pleniApp=angular.module('PleniApp',['ngRoute'])
+var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
 .config(['$routeProvider',function($routeProvider){
     $routeProvider
         .when('/home',{
@@ -19,21 +19,51 @@ var pleniApp=angular.module('PleniApp',['ngRoute'])
             redirectTo: '/home'
         });
 }])
-.factory('Repositories',function($http){
-    return {
-        list:function(params){return $http.get('/repositories')}
-    };
-})
+.factory('Repositories',['$resource',function($resource){
+    return $resource('/repositories/:repository',{
+        repository:'@repository'
+    },{
+        save:{
+            method:'PUT'
+        }
+    }
+    );
+}])
 .controller('HomeController',['$scope',function($scope){}])
 .controller('RepositoriesController',
     ['$scope','$http','Repositories',function($scope,$http,Repositories){
+    $scope.repositories=Repositories.query();
+    $scope.id='';
+    $scope.host='';
+    $scope.dbuser='';
+    $scope.dbpass='';
+    $scope.prefix='';
 
-    $scope.panel='add';
-    $scope.repositories={};
-
-    Repositories.list().then(function(result){
-        $scope.repositories=result.data;
-    });
+    $scope.add=function(){
+        $scope.title='Add connection';
+        $scope.type='add';
+    };
+    $scope.get=function(repository){
+        Repositories.get({repository:repository},function(repository){
+            $scope.title='Repository: '+repository.id;
+            $scope.type='get';
+            $scope.id=repository.id;
+            $scope.host=repository.host;
+            $scope.port=parseInt(repository.port);
+            $scope.prefix=repository.prefix;
+        });
+    };
+    $scope.send=function(){
+        if($scope.type=='add'){
+            var connection=new Repositories();
+            connection.id=$scope.id;
+            connection.host=$scope.host;
+            connection.dbuser=$scope.dbuser;
+            connection.dbpass=$scope.dbpass;
+            connection.prefix=$scope.prefix;
+            connection.$save();
+        }
+    };
 }])
 .controller('PlannersController',
     ['$scope','$http',function($scope,$http){

@@ -4,28 +4,37 @@ div.container
             li: a(href='/#/home') ::
         div.btn-toolbar.col-md-4(role='toolbar')
             div.btn-group.btn-group-sm
-                button.btn.btn-default(type='button') Add Connection
+                button.btn.btn-default(type='button',ng-click='add()') Add Connection
     div.row
         div.col-md-8(role='main')
-            section.index(ng-show='panel==\'index\'')
-                p You can create repositories or view the state of fetching in
-                everywhere repository created.
-            section.create(ng-show='panel==\'add\'')
-                h2 Add Connection
+            section
+                h2 {{title}}
                 div.alert.alert-dismissible.hide(role='alert')
                     button.close(type='button',data-dismiss='alert')
                         span(aria-hidden='true') &times;
                         span.sr-only Close
                     p.message
-                form.form-horizontal(role='form',ng-init='host=\'#{host}\';port=#{port};prefix=\'#{prefix}\'',ng-submit='savedb()')
+                form.form-horizontal(role='form',ng-submit='send()')
+                    div.form-group
+                        label.col-sm-2.control-label Name
+                        div.col-sm-10
+                            input.form-control(type='text',placeholder='The name for the new connection',required,ng-model='id')
                     div.form-group
                         label.col-sm-2.control-label Host
                         div.col-sm-10
-                            input.form-control(type='text',placeholder='The host without scheme or a IP',required,ng-model='host')
+                            input.form-control(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='host')
                     div.form-group
                         label.col-sm-2.control-label Port
                         div.col-sm-10
-                            input.form-control(type='number',placeholder='The port',min=1,max=65535,required,ng-model='port')
+                            input.form-control(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='port')
+                    div.form-group(ng-show='type===\'add\'')
+                        label.col-sm-2.control-label User DB
+                        div.col-sm-10
+                            input.form-control(type='text',placeholder='The host without scheme or a IP',required,ng-model='dbuser')
+                    div.form-group(ng-show='type==\'add\'')
+                        label.col-sm-2.control-label Password DB
+                        div.col-sm-10
+                            input.form-control(type='password',placeholder='The host without scheme or a IP',required,ng-model='dbpass')
                     div.form-group
                         label.col-sm-2.control-label Prefix
                         div.col-sm-10
@@ -33,20 +42,19 @@ div.container
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
                             button.btn.btn-primary(type='submit') Save
-                            button.btn.btn-default(type='button',ng-click='testdb()') Test Connection
+                            button.btn.btn-default(type='button',ng-click='send()') Test Connection
                             div#test
                                 span.loader.hide
                                 span.result.hide
-            section.read(ng-show='panel==\'read\'')
-                h2 Repository: %s
         div.col-md-4
             div.list-group
-                a.list-group-item(ng-repeat='(name,config) in repositories')
-                    h3 {{name}}
+                div.list-group-item(ng-repeat='repository in repositories')
+                    a(ng-click='get(repository.id)')
+                        h3 {{repository.id}}
                     div.row
                         div.col-md-2: strong host:
-                        div.col-md-2 {{config.host}}
+                        div.col-md-2 {{repository.host}}
                     div.row
                         div.col-md-2: strong prefix:
-                        div.col-md-2 {{config.prefix}}
+                        div.col-md-2 {{repository.prefix}}
 
