@@ -54,6 +54,10 @@ module.exports=function(grunt){
                 files:['master/views/{,*/}*.jade']
               , options:{livereload:reloadPort}
             }
+          , test_master:{
+                files:['test/master/repositories.js']
+              , tasks:['mochacli:master']
+          }
 /* -------- documentation watching ------------------------------------------ */
           , tex:{
                 files:['docs/*.tex']

@@ -1,16 +1,19 @@
 'use strict';
 
 exports.error = {
-    validation:     {result:false,message:'Validation error'}
-  , network:        {result:false,message:'Network error'}
-  , connection:     {result:false,message:'Connection error'}
-  , json:           {result:false,message:'JSON error'}
-  , notimplemented: {result:false,message:'Not implemented service'}
+    validation:     {ok:false,message:'Validation error'}
+  , network:        {ok:false,message:'Network error'}
+  , connection:     {ok:false,message:'Connection error'}
+  , notfound:       {ok:false,message:'Resource not found'}
+  , auth:           {ok:false,message:'Authorization error'}
+  , json:           {ok:false,message:'JSON error'}
+  , notimplemented: {ok:false,message:'Not implemented service'}
 };
 
 exports.success = {
-    connection: {result:true,message:'Success connection'}
-  , dbsave:     {result:true,message:'CouchDB settings changed'}
-  , dbcreate:   {result:true,message:'Repository created'}
+    ok:         {ok:true}
+  , connection: {ok:true,message:'Success connection'}
+  , dbsave:     {ok:true,message:'CouchDB settings changed'}
+  , dbcreate:   {ok:true,message:'Repository created'}
 };
 
