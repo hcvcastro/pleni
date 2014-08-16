@@ -1,20 +1,40 @@
 div.container
     div.row
-        ol.breadcrumb.col-md-8
-            li: a(href='/#/home') ::
-        div.btn-toolbar.col-md-4(role='toolbar')
+        div.btn-toolbar.col-md-12(role='toolbar')
             div.btn-group.btn-group-sm
                 button.btn.btn-default(type='button',ng-click='add()') Add Connection
+    br
     div.row
         div.col-md-8(role='main')
-            section
+            section(ng-show='type==\'\'')
+                :markdown
+                    #Repositories
+                    In this page you can add connectionis to the couchdb databases in different servers.
+            section(ng-show='type==\'get\'')
+                ul.nav.nav-tabs(role='tablist')
+                    li.active
+                        a View
+                    li
+                        a Edit
+                    li
+                        a Delete
+            section(ng-show='panel==\'view\'')
+                h2 {{title}}
+                    br
+                    small {{host}}:{{port}}/{{prefix}}
+                button.btn.btn-default(type='button',ng-click='scan()') Scan databases
+                button.btn.btn-default(type='button',ng-click='check()') Check connection
+                div#test
+                    span.loader.hide
+                    span.result.hide
+            section(ng-show='panel==\'config\'')
                 h2 {{title}}
                 div.alert.alert-dismissible.hide(role='alert')
                     button.close(type='button',data-dismiss='alert')
                         span(aria-hidden='true') &times;
                         span.sr-only Close
                     p.message
-                form.form-horizontal(role='form',ng-submit='send()')
+                form.form-horizontal(role='form',ng-submit='save()')
                     div.form-group
                         label.col-sm-2.control-label Name
                         div.col-sm-10
@@ -38,11 +58,11 @@ div.container
                     div.form-group
                         label.col-sm-2.control-label Prefix
                         div.col-sm-10
-                            input.form-control(type='text',placeholder='The prefix used in the database server',ng-model='prefix')
+                            input.form-control(type='text',placeholder='The prefix used in the database server',required,ng-model='prefix')
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
                             button.btn.btn-primary(type='submit') Save
-                            button.btn.btn-default(type='button',ng-click='send()') Test Connection
+                            button.btn.btn-default(type='button',ng-click='check()') Test Connection
                             div#test
                                 span.loader.hide
                                 span.result.hide
@@ -51,10 +71,6 @@ div.container
                 div.list-group-item(ng-repeat='repository in repositories')
                     a(ng-click='get(repository.id)')
                         h3 {{repository.id}}
-                    div.row
-                        div.col-md-2: strong host:
-                        div.col-md-2 {{repository.host}}
-                    div.row
-                        div.col-md-2: strong prefix:
-                        div.col-md-2 {{repository.prefix}}
+                            br
+                            small {{repository.host}}:{{repository.port}}/{{repository.prefix}}
 

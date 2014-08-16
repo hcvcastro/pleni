@@ -36,15 +36,15 @@ describe('repositories controller functions',function(){
         });
 
         [
-            {test:'',expected:_success.ok,status:202}
-          , {test:{},expected:_success.ok,status:202}
-          , {test:{"":""},expected:_error.validation,status:400}
-          , {test:{"__":""},expected:_error.validation,status:400}
-          , {test:{"host":{}},expected:_error.validation,status:400}
-          , {test:{"host":{host:""}},expected:_error.validation,status:400}
+            {test:'',expected:_success.ok,status:201}
+          , {test:{},expected:_success.ok,status:201}
+          , {test:{"":""},expected:_error.validation,status:403}
+          , {test:{"__":""},expected:_error.validation,status:403}
+          , {test:{"host":{}},expected:_error.validation,status:403}
+          , {test:{"host":{host:""}},expected:_error.validation,status:403}
           , {test:{"host":
               {host:"http://localhost"}},
-              expected:_error.validation,status:400}
+              expected:_error.validation,status:403}
           , {test:[
               {
                   id:"localhost"
@@ -54,7 +54,7 @@ describe('repositories controller functions',function(){
                 , dbpass:'boo.'
                 , prefix:'p_'
               }
-            ],expected:_success.ok,status:202}
+            ],expected:_success.ok,status:201}
         ]
         .forEach(function(element){
             it('PUT /repositories',function(done){
@@ -73,14 +73,14 @@ describe('repositories controller functions',function(){
             });
         });
 
-/*        [
-            {test:'',expected:_error.validation,status:400}
-          , {test:{},expected:_error.validation,status:400}
-          , {test:{id:1},expected:_error.validation,status:400}
-          , {test:{repository:''},expected:_error.validation,status:400}
-          , {test:{repository:'1'},expected:_error.validation,status:400}
-          , {test:{repository:'/'},expected:_error.validation,status:400}
-          , {test:{repository:'...'},expected:_error.validation,status:400}
+        [
+            {test:'',expected:_error.validation,status:403}
+          , {test:{},expected:_error.validation,status:403}
+          , {test:{id:1},expected:_error.validation,status:403}
+          , {test:{repository:''},expected:_error.validation,status:403}
+          , {test:{repository:'1'},expected:_error.validation,status:403}
+          , {test:{repository:'/'},expected:_error.validation,status:403}
+          , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                   id:"localhost"
                 , host:"http://localhost"
@@ -88,7 +88,7 @@ describe('repositories controller functions',function(){
                 , dbuser:'boo'
                 , dbpass:'boo.'
                 , prefix:'p_'
-            },expected:_success.ok,status:202}
+            },expected:_success.ok,status:201}
         ]
         .forEach(function(element){
             it('POST /repositories',function(done){
@@ -105,7 +105,7 @@ describe('repositories controller functions',function(){
                         done();
                     });
             });
-        });*/
+        });
 
         it('DELETE /repositories',function(done){
             request(app)
@@ -120,14 +120,14 @@ describe('repositories controller functions',function(){
                 });
         });
 
-/*        [
-            {test:'',expected:_error.validation,status:400}
-          , {test:{},expected:_error.validation,status:400}
-          , {test:{id:1},expected:_error.validation,status:400}
-          , {test:{repository:''},expected:_error.validation,status:400}
-          , {test:{repository:'1'},expected:_error.validation,status:400}
-          , {test:{repository:'/'},expected:_error.validation,status:400}
-          , {test:{repository:'...'},expected:_error.validation,status:400}
+        [
+            {test:'',expected:_error.validation,status:403}
+          , {test:{},expected:_error.validation,status:403}
+          , {test:{id:1},expected:_error.validation,status:403}
+          , {test:{repository:''},expected:_error.validation,status:403}
+          , {test:{repository:'1'},expected:_error.validation,status:403}
+          , {test:{repository:'/'},expected:_error.validation,status:403}
+          , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                   host:"http://localhost"
                 , port:8080
@@ -139,7 +139,7 @@ describe('repositories controller functions',function(){
                 , port:5984
                 , dbuser:'boo'
                 , dbpass:'boo.'
-            },expected:_error.auth,status:403}
+            },expected:_error.auth,status:401}
           , {test:{
                   host:"http://localhost"
                 , port:5984
@@ -161,7 +161,7 @@ describe('repositories controller functions',function(){
                         done();
                     });
             });
-        });*/
+        });
     });
 
     describe('rest function for resources',function(){
@@ -205,22 +205,22 @@ describe('repositories controller functions',function(){
         });
 
         [
-          , {test:{},id:{},expected:_error.validation,status:400}
-          , {test:{"":""},id:'asdf',expected:_error.validation,status:400}
-          , {test:{"__":""},id:250,expected:_error.validation,status:400}
-          , {test:{"host":{}},id:'asdf',expected:_error.validation,status:400}
+          , {test:{},id:{},expected:_error.validation,status:403}
+          , {test:{"":""},id:'asdf',expected:_error.validation,status:403}
+          , {test:{"__":""},id:250,expected:_error.validation,status:403}
+          , {test:{"host":{}},id:'asdf',expected:_error.validation,status:403}
           , {test:{"host":{host:""}},id:'asdf',
-              expected:_error.validation,status:400}
+              expected:_error.validation,status:403}
           , {test:{"host":
               {host:"http://localhost"}},id:'asdf',
-              expected:_error.validation,status:400}
+              expected:_error.validation,status:403}
           , {test:{
                   host:"http://localhost"
                 , port:8080
                 , dbuser:'boo'
                 , dbpass:'boo.'
                 , prefix:'p_'
-            },id:'asdf',expected:_success.ok,status:202}
+            },id:'asdf',expected:_success.ok,status:201}
         ]
         .forEach(function(element){
             it('PUT /repositories/:repository',function(done){
@@ -239,7 +239,7 @@ describe('repositories controller functions',function(){
             });
         });
 
-        /*it('DELETE /repositories/:repository',function(done){
+        it('DELETE /repositories/:repository',function(done){
             request(app)
                 .delete('/repositories/asdf')
                 .expect('Content-Type',/json/)
@@ -250,9 +250,9 @@ describe('repositories controller functions',function(){
                     res.body.should.eql(_success.ok);
                     done();
                 });
-        });*/
+        });
 
-        /*it('DELETE /repositories/:repository',function(done){
+        it('DELETE /repositories/:repository',function(done){
             request(app)
                 .delete('/repositories/asdf')
                 .expect('Content-Type',/json/)
@@ -262,9 +262,9 @@ describe('repositories controller functions',function(){
                     res.body.should.eql(_error.notfound);
                     done();
                 });
-        });*/
+        });
 
-        /*[
+        [
             {test:'asdf',expected:_error.notfound,status:404}
           , {test:'localhost',expected:_success.ok,status:200}
         ]
@@ -281,7 +281,7 @@ describe('repositories controller functions',function(){
                         done();
                     });
             });
-        });*/
+        });
     });
 });
 
