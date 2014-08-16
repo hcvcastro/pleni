@@ -55,6 +55,32 @@ describe('couchdb functions',function(){
         });
     });
 
+    describe('testing list of databases',function(){
+        var cookie;
+
+        before(function(done){
+            f.couchdbauth({
+                host:setting.host
+              , dbuser:setting.dbuser
+              , dbpass:setting.dbpass
+            })
+            .done(function(args){
+                cookie=args.cookie;
+                done();
+            });
+        });
+
+        it('listing of databases',function(done){
+            f.listdb({
+                host:setting.host
+              , cookie:cookie
+            })
+            .done(function(args){
+                done();
+            });
+        });
+    });
+
     describe('testing creation of database',function(){
         var cookie;
 

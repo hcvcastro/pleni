@@ -52,6 +52,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
     $scope.panel='';
     $scope.type='';
     $scope.repositories=Repositories.query();
+    $scope.databases=new Array();
     $scope.id='';
     $scope.host='';
     $scope.dbuser='';
@@ -126,8 +127,17 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
         }
     };
     $scope.scan=function(){
+        to_waiting();
         if($scope.type='get'){
-
+            $http
+            .post('/repositories/'+$scope.id+'/_databases',{})
+            .success(function(data){
+                $scope.databases=data;
+                to_hide('ok','complete');
+            })
+            .error(function(data){
+                to_hide('fail','fail');
+            });
         }
     };
     $scope.clean=function(){

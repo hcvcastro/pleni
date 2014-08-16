@@ -38,13 +38,13 @@ describe('repositories controller functions',function(){
         [
             {test:'',expected:_success.ok,status:201}
           , {test:{},expected:_success.ok,status:201}
-          , {test:{"":""},expected:_error.validation,status:403}
-          , {test:{"__":""},expected:_error.validation,status:403}
-          , {test:{"host":{}},expected:_error.validation,status:403}
-          , {test:{"host":{host:""}},expected:_error.validation,status:403}
+          , {test:{"":""},expected:_success.ok,status:201}
+          , {test:{"__":""},expected:_success.ok,status:201}
+          , {test:{"host":{}},expected:_success.ok,status:201}
+          , {test:{"host":{host:""}},expected:_success.ok,status:201}
           , {test:{"host":
               {host:"http://localhost"}},
-              expected:_error.validation,status:403}
+              expected:_success.ok,status:201}
           , {test:[
               {
                   id:"localhost"

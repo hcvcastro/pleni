@@ -64,6 +64,35 @@ exports.couchdbauth=function(args){
 /*
  * args definition
  *      host
+ *      cookie
+ */
+exports.listdb=function(args){
+    var deferred=Q.defer()
+      , url=args.host+'/_all_dbs'
+      , headers={
+            'Cookie':args.cookie
+          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+        }
+
+    request.get({url:url,headers:headers},function(error,response){
+        if(!error){
+            if(response.statusCode==200){
+                args['all_dbs']=response.body;
+                deferred.resolve(args);
+                return;
+            }
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+
+/*
+ * args definition
+ *      host
  *      dbname
  *      cookie
  */

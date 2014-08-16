@@ -9,7 +9,7 @@ div.container
             section(ng-show='type==\'\'')
                 :markdown
                     #Repositories
-                    In this page you can add connectionis to the couchdb databases in different servers.
+                    In this page you can view and add connections to the couchdb databases in different servers.
             section(ng-show='type==\'get\'')
                 ul.nav.nav-tabs(role='tablist')
                     li.active
@@ -27,6 +27,9 @@ div.container
                 div#test
                     span.loader.hide
                     span.result.hide
+                div(ng-hide='databases.length==0')
+                    br
+                    h3 Available databases
             section(ng-show='panel==\'config\'')
                 h2 {{title}}
                 div.alert.alert-dismissible.hide(role='alert')
