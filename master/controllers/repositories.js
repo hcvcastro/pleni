@@ -51,24 +51,36 @@ module.exports=function(app){
     });
 
     app.post('/repositories',function(request,response){
-        var repositories=app.get('repositories')
-
         if(validate.validSlug(request.body.id)
             &validate.validHost(request.body.host)
             &validate.validPort(request.body.port)
             &validate.validSlug(request.body.dbuser)
             &validate.validSlug(request.body.prefix)){
-            repositories.push({
-                id:     validate.toString(request.body.id)
-              , host:   validate.toValidHost(request.body.host)
-              , port:   validate.toInt(request.body.port)
-              , dbuser: validate.toString(request.body.dbuser)
-              , dbpass: validate.toString(request.body.dbpass)
-              , prefix: validate.toString(request.body.prefix)
-            });
 
-            app.set('repositories',repositories);
-            response.status(201).json(_success.ok);
+            var id=validate.toString(request.body.id)
+              , repositories=app.get('repositories')
+              , repository=get_repository(id,repositories)
+              , new_repository={
+                    id:     id
+                  , host:   validate.toValidHost(request.body.host)
+                  , port:   validate.toInt(request.body.port)
+                  , dbuser: validate.toString(request.body.dbuser)
+                  , dbpass: validate.toString(request.body.dbpass)
+                  , prefix: validate.toString(request.body.prefix)
+                }
+
+            if(!repository){
+                repositories.push(new_repository);
+                app.set('repositories',repositories);
+                response.status(201).json({
+                    id:     new_repository.id
+                  , host:   new_repository.host
+                  , port:   new_repository.port
+                  , prefix: new_repository.prefix
+                });
+            }else{
+                response.status(403).json(_error.notoverride);
+            }
         }else{
             response.status(403).json(_error.validation);
         }

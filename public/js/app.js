@@ -18,6 +18,9 @@ var show_alert=function(type,message){
         $('#test>span.result').removeClass('ok fail')
                               .addClass(mes1).html(mes2);
     }
+  , focus=function(element){
+        $(element).focus();
+    }
 
 // Angular functions
 var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
@@ -49,65 +52,76 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
 .controller('HomeController',['$scope',function($scope){}])
 .controller('RepositoriesController',
     ['$scope','$http','Repositories',function($scope,$http,Repositories){
-    $scope.panel='';
-    $scope.type='';
-    $scope.repositories=Repositories.query();
-    $scope.databases=new Array();
-    $scope.id='';
-    $scope.host='';
-    $scope.dbuser='';
-    $scope.dbpass='';
-    $scope.prefix='';
+    $scope.env={
+        panel:'index'
+      , type:''
+    };
+    $scope.repository={
+        id:''
+      , host:''
+      , dbuser:''
+      , dbpass:''
+      , prefix:''
+    };
+    $scope.current='';
+    $scope.repositories={};
+    Repositories.query(function(data){
+        for(var i=0;i<data.length;i++){
+            $scope.repositories[data[i].id]={
+                host:data[i].host
+              , port:data[i].port
+              , prefix:data[i].prefix
+              , status:'unknown'
+              , databases:new Array()
+            };
+        }
+    });
 
     $scope.add=function(){
-        $scope.clean();
-        $scope.panel='config';
-        $scope.title='Add connection';
-        $scope.type='add';
+        $scope.prepare('new','config');
+        $scope.current='';
     };
     $scope.get=function(repository){
-        $scope.clean();
-        $scope.panel='view';
-        $scope.type='get';
-        Repositories.get({repository:repository},function(repository){
-            $scope.title='Repository: '+repository.id;
-            $scope.id=repository.id;
-            $scope.host=repository.host;
-            $scope.port=parseInt(repository.port);
-            $scope.prefix=repository.prefix;
-        });
+        $scope.prepare('view','get');
+        $scope.current=repository;
     };
     $scope.save=function(){
         to_waiting();
-        if($scope.type=='add'){
+        if($scope.env.panel=='new'){
             var connection=new Repositories();
-            connection.id=$scope.id;
-            connection.host=$scope.host;
-            connection.port=$scope.port;
-            connection.dbuser=$scope.dbuser;
-            connection.dbpass=$scope.dbpass;
-            connection.prefix=$scope.prefix;
+            connection.id=$scope.repository.id;
+            connection.host=$scope.repository.host;
+            connection.port=$scope.repository.port;
+            connection.dbuser=$scope.repository.dbuser;
+            connection.dbpass=$scope.repository.dbpass;
+            connection.prefix=$scope.repository.prefix;
             connection.$save(function(data){
-                $scope.repositories=Repositories.query();
+                $scope.repositories[data.id]={
+                    host:data.host
+                  , port:data.port
+                  , prefix:data.prefix
+                  , status:'unknown'
+                  , databases:new Array()
+                };
                 show_alert('success','Connection added');
-                to_hide('ok','ok');
+                to_hide('ok','');
             },function(error){
                 show_alert('danger',error.data.message);
-                to_hide('fail','fail');
+                to_hide('fail','');
             });
-        }else if($scope.type=='get'){
+        }else if($scope.env.panel=='view'){
             
         }
     };
     $scope.check=function(){
         to_waiting();
-        if($scope.type=='add'){
+        if($scope.env.panel=='new'){
             $http
             .post('/repositories/_check',{
-                host:$scope.host
-              , port:$scope.port
-              , dbuser:$scope.dbuser
-              , dbpass:$scope.dbpass
+                host:$scope.repository.host
+              , port:$scope.repository.port
+              , dbuser:$scope.repository.dbuser
+              , dbpass:$scope.repository.dbpass
             })
             .success(function(data){
                 to_hide('ok','ok');
@@ -115,84 +129,41 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
             .error(function(data){
                 to_hide('fail','fail');
             });
-        }else if($scope.type='get'){
+        }else if($scope.env.panel='view'){
             $http
-            .post('/repositories/'+$scope.id+'/_check',{})
+            .post('/repositories/'+$scope.current+'/_check',{})
             .success(function(data){
+                $scope.repositories[$scope.current].status='online';
                 to_hide('ok','ok');
             })
             .error(function(data){
+                $scope.repositories[$scope.current].status='offline';
                 to_hide('fail','fail');
             });
         }
     };
     $scope.scan=function(){
         to_waiting();
-        if($scope.type='get'){
+        if($scope.env.panel='view'){
             $http
-            .post('/repositories/'+$scope.id+'/_databases',{})
+            .post('/repositories/'+$scope.current+'/_databases',{})
             .success(function(data){
-                $scope.databases=data;
+                $scope.repositories[$scope.current].databases=data;
                 to_hide('ok','complete');
             })
             .error(function(data){
+                $scope.repositories[$scope.current].status='offline';
                 to_hide('fail','fail');
             });
         }
     };
-    $scope.clean=function(){
+    $scope.prepare=function(panel,type){
         to_hide('fail','');
         hide_alert();
+        $scope.env={panel:panel,type:type};
     };
 }])
 .controller('PlannersController',
     ['$scope','$http',function($scope,$http){
 }]);
 
-/*
-
-    $scope.testdb=function(){
-        $http.post('/settings/testdb',{host:$scope.host,port:$scope.port})
-            .success(function(data){
-                if(data.result){
-                }else{
-                    hideWaiting('fail',data.message);
-                }
-            })
-            .error(function(){
-                hideWaiting('fail','Error');
-            });
-    };
-
-    $scope.savedb=function(){
-        showWaiting();
-        $http.post('/settings/savedb',
-            {host:$scope.host,port:$scope.port,prefix:$scope.prefix})
-            .success(function(data){
-                hideWaiting('ok','');
-                if(data.result){
-                    showAlert('success',data.message);
-                }else{
-                    showAlert('danger',data.message);
-                }
-            })
-            .error(function(){
-                hideWaiting('fail','');
-                showAlert('danger','Connection error');
-            });
-
-    };
-
-
-
-    $scope.showindex=function(){$scope.panel='index';};
-    $scope.showcreate=function(){$scope.panel='create';};
-
-    $scope.createrepo=function(){
-        $http.post('/repositories',
-            {repository:$scope.repository})
-            .success(function(data){
-                console.log('created');
-            });
-    };
-*/

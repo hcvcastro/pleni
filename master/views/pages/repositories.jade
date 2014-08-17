@@ -6,32 +6,40 @@ div.container
     br
     div.row
         div.col-md-8(role='main')
-            section(ng-show='type==\'\'')
+            section(ng-show='env.panel==\'index\'')
                 :markdown
                     #Repositories
                     In this page you can view and add connections to the couchdb databases in different servers.
-            section(ng-show='type==\'get\'')
-                ul.nav.nav-tabs(role='tablist')
-                    li.active
-                        a View
-                    li
-                        a Edit
-                    li
-                        a Delete
-            section(ng-show='panel==\'view\'')
-                h2 {{title}}
+            section(ng-show='env.panel==\'view\'')
+                h2 {{current}}
                     br
-                    small {{host}}:{{port}}/{{prefix}}
+                    small {{repositories[current].host}}:{{repositories[current].port}}/{{repositories[current].prefix}}
+                ul.nav.nav-tabs(role='tablist')
+                    li(ng-class='{active: env.type==\'get\'}')
+                        a View
+                    li(ng-class='{active: env.type==\'config\'}')
+                        a Edit
+                    li(ng-class='{active: env.type==\'delete\'}')
+                        a Delete
+            section(ng-show='env.panel==\'new\'')
+                h2 Add connection
+            section(ng-show='env.type==\'get\'')
+                br
                 button.btn.btn-default(type='button',ng-click='scan()') Scan databases
                 button.btn.btn-default(type='button',ng-click='check()') Check connection
                 div#test
                     span.loader.hide
                     span.result.hide
-                div(ng-hide='databases.length==0')
+                div(ng-hide='repositories[current].databases.length==0')
                     br
                     h3 Available databases
-            section(ng-show='panel==\'config\'')
-                h2 {{title}}
+                    div.media(ng-repeat='database in repositories[current].databases')
+                        div.pull-left
+                            span.media-object.glyphicon.glyphicon-cloud-download.size90
+                        div.media-body
+                            h4.media-heading {{database}}
+                            p 
+            section(ng-show='env.type==\'config\'')
                 div.alert.alert-dismissible.hide(role='alert')
                     button.close(type='button',data-dismiss='alert')
                         span(aria-hidden='true') &times;
@@ -41,27 +49,27 @@ div.container
                     div.form-group
                         label.col-sm-2.control-label Name
                         div.col-sm-10
-                            input.form-control(type='text',placeholder='The name for the new connection',required,ng-model='id')
+                            input.form-control(type='text',placeholder='The name for the new connection',required,ng-model='repository.id')
                     div.form-group
                         label.col-sm-2.control-label Host
                         div.col-sm-10
-                            input.form-control(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='host')
+                            input.form-control(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='repository.host')
                     div.form-group
                         label.col-sm-2.control-label Port
                         div.col-sm-10
-                            input.form-control(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='port')
-                    div.form-group(ng-show='type===\'add\'')
+                            input.form-control(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='repository.port')
+                    div.form-group
                         label.col-sm-2.control-label User DB
                         div.col-sm-10
-                            input.form-control(type='text',placeholder='The host without scheme or a IP',required,ng-model='dbuser')
-                    div.form-group(ng-show='type==\'add\'')
+                            input.form-control(type='text',placeholder='The host without scheme or a IP',required,ng-model='repository.dbuser')
+                    div.form-group
                         label.col-sm-2.control-label Password DB
                         div.col-sm-10
-                            input.form-control(type='password',placeholder='The host without scheme or a IP',required,ng-model='dbpass')
+                            input.form-control(type='password',placeholder='The host without scheme or a IP',required,ng-model='repository.dbpass')
                     div.form-group
                         label.col-sm-2.control-label Prefix
                         div.col-sm-10
-                            input.form-control(type='text',placeholder='The prefix used in the database server',required,ng-model='prefix')
+                            input.form-control(type='text',placeholder='The prefix used in the database server',required,ng-model='repository.prefix')
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
                             button.btn.btn-primary(type='submit') Save
@@ -69,11 +77,10 @@ div.container
                             div#test
                                 span.loader.hide
                                 span.result.hide
+            section(ng-show='env.type==\'delete\'')
+                h3 deletion waka waka
         div.col-md-4
             div.list-group
-                div.list-group-item(ng-repeat='repository in repositories')
-                    a(ng-click='get(repository.id)')
-                        h3 {{repository.id}}
-                            br
-                            small {{repository.host}}:{{repository.port}}/{{repository.prefix}}
+                a.list-group-item(ng-repeat='(id,data) in repositories',ng-click='get(id)',ng-class='{\'list-group-item-success\': repositories[id].status==\'online\',\'list-group-item-danger\': repositories[id].status==\'offline\'}') {{id}}
+                    span.badge {{repositories[id].databases.length}}
 

@@ -5,6 +5,7 @@ exports.error = {
   , network:        {ok:false,message:'Network error'}
   , connection:     {ok:false,message:'Connection error'}
   , notfound:       {ok:false,message:'Resource not found'}
+  , notoverride:    {ok:false,message:'Resource cannot overridden'}
   , auth:           {ok:false,message:'Authorization error'}
   , json:           {ok:false,message:'JSON error'}
   , notimplemented: {ok:false,message:'Not implemented service'}

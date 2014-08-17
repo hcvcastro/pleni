@@ -88,7 +88,7 @@ describe('repositories controller functions',function(){
                 , dbuser:'boo'
                 , dbpass:'boo.'
                 , prefix:'p_'
-            },expected:_success.ok,status:201}
+            },expected:_error.notoverride,status:403}
         ]
         .forEach(function(element){
             it('POST /repositories',function(done){
@@ -102,6 +102,33 @@ describe('repositories controller functions',function(){
                         res.should.be.json;
                         res.body.should.have.property('ok');
                         res.body.should.eql(element.expected);
+                        done();
+                    });
+            });
+        });
+
+        [
+            {test:{
+                  id:"test"
+                , host:"http://localhost"
+                , port:8080
+                , dbuser:'boo'
+                , dbpass:'boo.'
+                , prefix:'p_'
+            },expected:_success.ok,status:201}
+        ]
+        .forEach(function(element){
+            it('POST /repositories',function(done){
+                request(app)
+                    .post('/repositories')
+                    .send(element.test)
+                    .expect('Content-Type',/json/)
+                    .expect(element.status)
+                    .end(function(err,res){
+                        res.statusCode.should.be.eql(element.status);
+                        res.should.be.json;
+                        res.body.should.have.property('id')
+                           .and.have.eql(element.test.id);
                         done();
                     });
             });

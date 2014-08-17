@@ -22,7 +22,11 @@ exports.validHost=function(host){
         && (validator.isIP(host)||validator.isURL(host));
 };
 exports.toValidHost=function(host){
-    var _slash=url.resolve(host,'/');
+    var parse=url.parse(host)
+    if(parse.protocol==null){
+        host='http://'+host  // <--default protocol
+    }
+    var _slash=url.resolve(host,'/')
     return _slash.slice(0,-1);
 }
 

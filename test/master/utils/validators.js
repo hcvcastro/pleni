@@ -16,6 +16,7 @@ describe('validators functions',function(){
         validate.validHost('nothing').should.be.false;
         validate.validHost('localhost').should.be.true;
         validate.validHost('127.0.0.1').should.be.true;
+        validate.validHost('hiperborea.com.bo').should.be.true;
         validate.validHost('http://main.local/').should.be.true;
         validate.validHost('http://main.local').should.be.true;
         validate.validHost('rsync://main.local/').should.be.false;
@@ -28,6 +29,8 @@ describe('validators functions',function(){
         validate.toValidHost('http://localhost/')
             .should.be.equal('http://localhost');
         validate.toValidHost('http://localhost')
+            .should.be.equal('http://localhost');
+        validate.toValidHost('localhost')
             .should.be.equal('http://localhost');
         done();
     });
