@@ -54,10 +54,15 @@ module.exports=function(grunt){
                 files:['master/views/{,*/}*.jade']
               , options:{livereload:reloadPort}
             }
+/* -------- testing watching ------------------------------------------------ */
+          , test_functions:{
+                files:['test/planners/functions/*.js']
+              , tasks:['mochacli:functions']
+            }
           , test_master:{
                 files:['test/master/repositories.js']
               , tasks:['mochacli:master']
-          }
+            }
 /* -------- documentation watching ------------------------------------------ */
           , tex:{
                 files:['docs/*.tex']
@@ -76,13 +81,14 @@ module.exports=function(grunt){
                 reporter:'spec'
               , bail:true
             }
-          , dumb: [
+          , functions:[
                 'test/planners/functions/{,*/}*.js'
-              , 'test/planners/dumb.js'
+            ]
+          , dumb: [
+                'test/planners/dumb.js'
             ]
           , planners: [
-                'test/planners/functions/{,*/}*.js'
-              , 'test/planners/planner_server.js'
+                'test/planners/planner_server.js'
               , 'test/planners/planner_scheduler.js'
             ]
           , master: [

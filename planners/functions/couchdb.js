@@ -77,7 +77,7 @@ exports.listdb=function(args){
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
             if(response.statusCode==200){
-                args['all_dbs']=response.body;
+                args['all_dbs']=JSON.parse(response.body);
                 deferred.resolve(args);
                 return;
             }
@@ -85,6 +85,73 @@ exports.listdb=function(args){
             return;
         }
         deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+
+/*
+ * args definition
+ *      host
+ *      dbname
+ *      cookie
+ */
+var getdb=function(args){
+    var deferred=Q.defer()
+      , url=args.host+'/'+args.dbname
+      , headers={
+            'Cookie':args.cookie
+          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+        }
+
+    request.get({url:url,headers:headers},function(error,response){
+        if(!error){
+            if(response.statusCode==200){
+                args['getdb']=response.body
+                deferred.resolve(args);
+                return;
+            }
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+exports.getdb=getdb;
+
+/*
+ * args defintion
+ *      host
+ *      cookie
+ *      prefix
+ *      all_dbs
+ */
+exports.getdbs=function(args){
+    var deferred=Q.defer()
+      , list=args['all_dbs']
+      , filter=list.filter(function(element){
+            return element.lastIndexOf(args.prefix,0)===0
+        })
+
+    Q.all(filter.map(function(element){
+        return getdb({
+            host:   args.host
+          , cookie: args.cookie
+          , dbname: element
+        });
+    }))
+    .spread(function(){
+        var map=new Array()
+
+        for(var i in arguments){
+            map.push(JSON.parse(arguments[i].getdb));
+        }
+        deferred.resolve(map);
+    })
+    .done(function(args){
+        deferred.resolve(args);
     });
 
     return deferred.promise;

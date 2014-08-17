@@ -46,6 +46,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
     return $resource('/repositories/:repository',{
         repository:'@repository'
     },{
+        update: {method:'PUT'}
     }
     );
 }])
@@ -54,11 +55,12 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
     ['$scope','$http','Repositories',function($scope,$http,Repositories){
     $scope.env={
         panel:'index'
-      , type:''
+      , type:'index'
     };
     $scope.repository={
         id:''
       , host:''
+      , port:''
       , dbuser:''
       , dbpass:''
       , prefix:''
@@ -82,19 +84,19 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
         $scope.current='';
     };
     $scope.get=function(repository){
-        $scope.prepare('view','get');
+        $scope.prepare('view','view');
         $scope.current=repository;
     };
     $scope.save=function(){
         to_waiting();
+        var connection=new Repositories();
+        connection.host=$scope.repository.host;
+        connection.port=$scope.repository.port;
+        connection.dbuser=$scope.repository.dbuser;
+        connection.dbpass=$scope.repository.dbpass;
+        connection.prefix=$scope.repository.prefix;
         if($scope.env.panel=='new'){
-            var connection=new Repositories();
             connection.id=$scope.repository.id;
-            connection.host=$scope.repository.host;
-            connection.port=$scope.repository.port;
-            connection.dbuser=$scope.repository.dbuser;
-            connection.dbpass=$scope.repository.dbpass;
-            connection.prefix=$scope.repository.prefix;
             connection.$save(function(data){
                 $scope.repositories[data.id]={
                     host:data.host
@@ -110,12 +112,41 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
                 to_hide('fail','');
             });
         }else if($scope.env.panel=='view'){
-            
+            connection.$update({repository:$scope.current},function(data){
+                $scope.repositories[$scope.current]={
+                    host:data.host
+                  , port:data.port
+                  , prefix:data.prefix
+                  , status:'unknown'
+                  , databases:new Array()
+                };
+                show_alert('success','Connection updated');
+                to_hide('ok','');
+            },function(error){
+                show_alert('danger',error.data.message);
+                to_hide('fail','');
+            });
+        }
+    };
+    $scope.remove=function(){
+        to_waiting();
+        if($scope.env.panel='view'){
+            var connection=new Repositories();
+            connection.$delete({repository:$scope.current},function(data){
+                delete $scope.repositories[$scope.current];
+                $scope.current='';
+                $scope.prepare('index','index');
+                show_alert('success','Connection removed');
+            },function(error){
+                show_alert('danger',error.data.message);
+                to_hide('fail','');
+            });
+            console.log('deleting...');
         }
     };
     $scope.check=function(){
         to_waiting();
-        if($scope.env.panel=='new'){
+        if($scope.env.type=='config'){
             $http
             .post('/repositories/_check',{
                 host:$scope.repository.host
@@ -129,7 +160,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
             .error(function(data){
                 to_hide('fail','fail');
             });
-        }else if($scope.env.panel='view'){
+        }else if($scope.env.type='view'){
             $http
             .post('/repositories/'+$scope.current+'/_check',{})
             .success(function(data){
@@ -148,6 +179,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
             $http
             .post('/repositories/'+$scope.current+'/_databases',{})
             .success(function(data){
+                $scope.repositories[$scope.current].status='online';
                 $scope.repositories[$scope.current].databases=data;
                 to_hide('ok','complete');
             })
@@ -155,6 +187,29 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
                 $scope.repositories[$scope.current].status='offline';
                 to_hide('fail','fail');
             });
+        }
+    };
+    $scope.view=function(){
+        if($scope.env.type!='view'){
+            $scope.prepare('view','view');
+        }
+    };
+    $scope.edit=function(){
+        if($scope.env.type!='config'){
+            $scope.prepare('view','config');
+            $scope.repository={
+                id:$scope.current
+              , host:$scope.repositories[$scope.current].host
+              , port:parseInt($scope.repositories[$scope.current].port)
+              , dbuser:''
+              , dbpass:''
+              , prefix:$scope.repositories[$scope.current].prefix
+            };
+        }
+    };
+    $scope.delete=function(){
+        if($scope.env.type!='delete'){
+            $scope.prepare('view','delete');
         }
     };
     $scope.prepare=function(panel,type){

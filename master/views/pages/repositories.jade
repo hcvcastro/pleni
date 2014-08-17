@@ -6,6 +6,11 @@ div.container
     br
     div.row
         div.col-md-8(role='main')
+            div.alert.alert-dismissible.hide(role='alert')
+                button.close(type='button',data-dismiss='alert')
+                    span(aria-hidden='true') &times;
+                    span.sr-only Close
+                p.message
             section(ng-show='env.panel==\'index\'')
                 :markdown
                     #Repositories
@@ -15,15 +20,15 @@ div.container
                     br
                     small {{repositories[current].host}}:{{repositories[current].port}}/{{repositories[current].prefix}}
                 ul.nav.nav-tabs(role='tablist')
-                    li(ng-class='{active: env.type==\'get\'}')
-                        a View
+                    li(ng-class='{active: env.type==\'view\'}')
+                        a(ng-click='view()') View
                     li(ng-class='{active: env.type==\'config\'}')
-                        a Edit
+                        a(ng-click='edit()') Edit
                     li(ng-class='{active: env.type==\'delete\'}')
-                        a Delete
+                        a(ng-click='delete()') Delete
             section(ng-show='env.panel==\'new\'')
                 h2 Add connection
-            section(ng-show='env.type==\'get\'')
+            section(ng-show='env.type==\'view\'')
                 br
                 button.btn.btn-default(type='button',ng-click='scan()') Scan databases
                 button.btn.btn-default(type='button',ng-click='check()') Check connection
@@ -33,20 +38,23 @@ div.container
                 div(ng-hide='repositories[current].databases.length==0')
                     br
                     h3 Available databases
-                    div.media(ng-repeat='database in repositories[current].databases')
-                        div.pull-left
-                            span.media-object.glyphicon.glyphicon-cloud-download.size90
-                        div.media-body
-                            h4.media-heading {{database}}
-                            p 
+                    br
+                    div.row
+                        div.col-md-6(ng-repeat='database in repositories[current].databases')
+                            div.media.panel.panel-default.extra-padding
+                                div.pull-left
+                                    span.media-object.glyphicon.glyphicon-cloud-download.size90
+                                div.media-body
+                                    h3.media-heading {{database.db_name}}
+                                    ul
+                                        li #[strong Documents:] {{database.doc_count}}
+                                        li #[strong Sequence:] {{database.update_seq}}
+                                        li #[strong Data size:] {{database.data_size}}
+                                        li #[strong Disk size:] {{database.disk_size}}
             section(ng-show='env.type==\'config\'')
-                div.alert.alert-dismissible.hide(role='alert')
-                    button.close(type='button',data-dismiss='alert')
-                        span(aria-hidden='true') &times;
-                        span.sr-only Close
-                    p.message
+                br
                 form.form-horizontal(role='form',ng-submit='save()')
-                    div.form-group
+                    div.form-group(ng-show='env.panel==\'new\'')
                         label.col-sm-2.control-label Name
                         div.col-sm-10
                             input.form-control(type='text',placeholder='The name for the new connection',required,ng-model='repository.id')
@@ -78,7 +86,16 @@ div.container
                                 span.loader.hide
                                 span.result.hide
             section(ng-show='env.type==\'delete\'')
-                h3 deletion waka waka
+                br
+                form.form-horizontal(role='form',ng-submit='remove()')
+                    div.form-group
+                        label.col-sm-10 Press the button if you want remove the connection with repository.
+                    div.form-group
+                        div.col-sm-offset-2.col-sm-10
+                            button.btn.btn-primary(type='submit') Remove connection
+                            div#test
+                                span.loader.hide
+                                span.result.hide
         div.col-md-4
             div.list-group
                 a.list-group-item(ng-repeat='(id,data) in repositories',ng-click='get(id)',ng-class='{\'list-group-item-success\': repositories[id].status==\'online\',\'list-group-item-danger\': repositories[id].status==\'offline\'}') {{id}}

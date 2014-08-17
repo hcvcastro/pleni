@@ -8,6 +8,7 @@ var setting={
   , dbuser:'jacobian'
   , dbpass:'asdf'
   , dbname:'test'
+  , prefix:'pleni_'
 };
 
 describe('couchdb functions',function(){
@@ -76,6 +77,49 @@ describe('couchdb functions',function(){
               , cookie:cookie
             })
             .done(function(args){
+                args.should.be.an.Object;
+                args.should.have.property('all_dbs');
+                args.all_dbs.should.be.an.Array;
+                done();
+            });
+        });
+    });
+
+    describe('testing of getting properties',function(){
+        var cookie;
+        var databases;
+
+        before(function(done){
+            f.couchdbauth({
+                host:setting.host
+              , dbuser:setting.dbuser
+              , dbpass:setting.dbpass
+            })
+            .then(f.listdb)
+            .done(function(args){
+                cookie=args.cookie;
+                databases=args.all_dbs;
+                done();
+            });
+        });
+
+        it('getting properties',function(done){
+            f.getdbs({
+                host:setting.host
+              , cookie:cookie
+              , prefix:setting.prefix
+              , all_dbs:databases
+            })
+            .done(function(args){
+                args.should.be.an.Array;
+                for(var i in args){
+                    args[i].should.have.property('db_name');
+                    args[i].should.have.property('doc_count');
+                    args[i].should.have.property('update_seq');
+                    args[i].should.have.property('disk_size');
+                    args[i].should.have.property('data_size');
+                    args[i].should.have.property('instance_start_time');
+                }
                 done();
             });
         });

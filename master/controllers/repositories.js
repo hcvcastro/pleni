@@ -1,6 +1,7 @@
 'use strict';
 
-var validate=require('../validators')
+var pretty=require('prettysize')
+  , validate=require('../validators')
   , _success=require('../json-response').success
   , _error=require('../json-response').error
   , f=require('../../planners/functions/couchdb')
@@ -166,11 +167,21 @@ module.exports=function(app){
             if(repository){
                 repositories[repository[0]]=new_repository;
                 app.set('repositories',repositories);
-                response.status(200).json(_success.ok);
+                response.status(200).json({
+                    id:     new_repository.id
+                  , host:   new_repository.host
+                  , port:   new_repository.port
+                  , prefix: new_repository.prefix
+                });
             }else{
                 repositories.push(new_repository);
                 app.set('repositories',repositories);
-                response.status(201).json(_success.ok);
+                response.status(201).json({
+                    id:     new_repository.id
+                  , host:   new_repository.host
+                  , port:   new_repository.port
+                  , prefix: new_repository.prefix
+                });
             }
         }else{
             response.status(403).json(_error.validation);
@@ -226,20 +237,34 @@ module.exports=function(app){
           , repository=get_repository(id,repositories)
 
         if(repository){
+            var prefix=repository[1].prefix
+
             f.testcouchdb({
                 host:   repository[1].host+':'+
                         repository[1].port
               , dbuser: repository[1].dbuser
               , dbpass: repository[1].dbpass
+              , prefix: prefix
             })
             .then(f.couchdbauth)
             .then(f.listdb)
+            .then(f.getdbs)
             .then(function(args){
-                var list=JSON.parse(args['all_dbs'])
-                  , filter=list.filter(function(element){
-                        return element.lastIndexOf(repository[1].prefix,0)===0
-                    })
-                response.status(200).json(filter);
+                var refined=args.map(function(element){
+                    var regex=/([a-z0-9]+)_(.*)/i
+                      , name=element.db_name.substring(prefix.length)
+                      , match=regex.exec(name)
+
+                    return {
+                        db_name:    match[2]
+                      , db_type:    match[1]
+                      , doc_count:  element.doc_count
+                      , disk_size:  pretty(element.disk_size)
+                      , data_size:  pretty(element.data_size)
+                      , update_seq: element.update_seq
+                    }
+                });
+                response.status(200).json(refined);
             })
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){

@@ -247,7 +247,14 @@ describe('repositories controller functions',function(){
                 , dbuser:'boo'
                 , dbpass:'boo.'
                 , prefix:'p_'
-            },id:'asdf',expected:_success.ok,status:201}
+            },id:'asdf',status:201}
+          , {test:{
+                  host:"http://localhost"
+                , port:5984
+                , dbuser:'admin'
+                , dbpass:'asdf'
+                , prefix:'p_'
+            },id:'asdf',status:200}
         ]
         .forEach(function(element){
             it('PUT /repositories/:repository',function(done){
@@ -258,9 +265,19 @@ describe('repositories controller functions',function(){
                     .expect(element.status)
                     .end(function(err,res){
                         res.statusCode.should.be.eql(element.status);
-                        res.should.be.json;
-                        res.body.should.have.property('ok');
-                        res.body.should.eql(element.expected);
+                        switch(res.statusCode){
+                            case 403:
+                                res.should.be.json;
+                                res.body.should.have.property('ok');
+                                res.body.should.eql(element.expected);
+                                break;
+                            case 200:
+                            case 201:
+                                res.should.be.json;
+                                res.body.should.have.property('id')
+                                   .and.have.eql(element.id);
+                                break;
+                        }
                         done();
                     });
             });
@@ -305,6 +322,41 @@ describe('repositories controller functions',function(){
                         res.statusCode.should.be.eql(element.status);
                         res.body.should.have.property('ok');
                         res.body.should.eql(element.expected);
+                        done();
+                    });
+            });
+        });
+
+        [
+            {test:'asdf',expected:_error.notfound,status:404}
+          , {test:'localhost',status:200}
+        ]
+        .forEach(function(element){
+            it('POST /repositories/:repository/_databases',function(done){
+                request(app)
+                    .post('/repositories/'+element.test+'/_databases')
+                    .expect('Content-Type',/json/)
+                    .expect(element.status)
+                    .end(function(err,res){
+                        res.statusCode.should.be.eql(element.status);
+                        switch(res.statusCode){
+                            case 401:
+                            case 404:
+                                res.body.should.have.property('ok');
+                                res.body.should.eql(element.expected);
+                                break;
+                            case 200:
+                                res.body.should.have.an.Array;
+                                for(var i in res.body){
+                                    res.body[i].should.be.property('db_name');
+                                    res.body[i].should.be.property('db_type');
+                                    res.body[i].should.be.property('doc_count');
+                                    res.body[i].should.be.property('disk_size');
+                                    res.body[i].should.be.property('data_size');
+                                    res.body[i].should.be.property('update_seq')
+                                }
+                                break;
+                        }
                         done();
                     });
             });
