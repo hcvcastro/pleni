@@ -23,7 +23,7 @@ var show_alert=function(type,message){
     }
 
 // Angular functions
-var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
+var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
 .config(['$routeProvider',function($routeProvider){
     $routeProvider
         .when('/home',{
@@ -44,15 +44,13 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
 }])
 .factory('Repositories',['$resource',function($resource){
     return $resource('/repositories/:repository',{
-        repository:'@repository'
-    },{
-        update: {method:'PUT'}
-    }
-    );
+        repository:'@repository'},{update: {method:'PUT'}});
 }])
 .controller('HomeController',['$scope',function($scope){}])
 .controller('RepositoriesController',
-    ['$scope','$http','Repositories',function($scope,$http,Repositories){
+    ['$scope','$http','$sessionStorage','Repositories',
+    function($scope,$http,$sessionStorage,Repositories){
+    $scope.sessionStorage=$sessionStorage;
     $scope.env={
         panel:'index'
       , type:'index'
@@ -66,19 +64,24 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
       , prefix:''
     };
     $scope.current='';
-    $scope.repositories={};
-    Repositories.query(function(data){
-        for(var i=0;i<data.length;i++){
-            $scope.repositories[data[i].id]={
-                host:data[i].host
-              , port:data[i].port
-              , prefix:data[i].prefix
-              , status:'unknown'
-              , databases:new Array()
-            };
-        }
-    });
 
+    if(!$scope.sessionStorage.repositories){
+        $scope.sessionStorage.repositories={};
+    }
+    $scope.repositories=$scope.sessionStorage.repositories;
+    $scope.refresh=function(){
+        Repositories.query(function(data){
+            for(var i=0;i<data.length;i++){
+                $scope.repositories[data[i].id]={
+                    host:data[i].host
+                  , port:data[i].port
+                  , prefix:data[i].prefix
+                  , status:'unknown'
+                  , databases:new Array()
+                };
+            }
+        });
+    };
     $scope.add=function(){
         $scope.prepare('new','config');
         $scope.current='';
@@ -219,14 +222,12 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
 }])
 .factory('Planners',['$resource',function($resource){
     return $resource('/planners/:planner',{
-        repository:'@planner'
-    },{
-        update: {method:'PUT'}
-    }
-    );
+        repository:'@planner'},{update: {method:'PUT'}});
 }])
 .controller('PlannersController',
-    ['$scope','$http','Planners',function($scope,$http,Planners){
+    ['$scope','$http','$sessionStorage','Planners',
+    function($scope,$http,$sessionStorage,Planners){
+    $scope.sessionStorage=$sessionStorage;
     $scope.env={
         panel:'index'
       , type:'index'
@@ -237,17 +238,22 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
       , port:''
     };
     $scope.current='';
-    $scope.planners={};
-    Planners.query(function(data){
-        for(var i=0;i<data.length;i++){
-            $scope.planners[data[i].id]={
-                host:data[i].host
-              , port:data[i].port
-              , status:'unknown'
-            };
-        }
-    });
 
+    if(!$scope.sessionStorage.planners){
+        $scope.sessionStorage.planners={};
+    }
+    $scope.planners=$scope.sessionStorage.planners;
+    $scope.refresh=function(){
+        Planners.query(function(data){
+            for(var i=0;i<data.length;i++){
+                $scope.planners[data[i].id]={
+                    host:data[i].host
+                  , port:data[i].port
+                  , status:'unknown'
+                };
+            }
+        });
+    };
     $scope.add=function(){
         $scope.prepare('new','config');
         $scope.current='';

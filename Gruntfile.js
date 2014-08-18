@@ -13,16 +13,9 @@ module.exports=function(grunt){
         pkg: grunt.file.readJSON('package.json')
 
       , watch:{
-            options:{
-                nospawn:true
-            }
 /* -------- planners watching ----------------------------------------------- */
-          , dumb:{
-                files:[
-                    'planners/dumb.js'
-                  , 'planners/abstracts/scheduler.js'
-                  , 'planners/abstracts/server.js'
-                ]
+            dumb:{
+                files:['planners/dumb.js']
               , tasks:['develop:dumb']
             }
           , planner:{
@@ -30,25 +23,27 @@ module.exports=function(grunt){
                     'planners/planner.js'
                   , 'planners/abstracts/scheduler.js'
                   , 'planners/abstracts/server.js'
-                  , 'planners/functions/planner.js'
+                  , 'planners/functions/{,*/}*.js'
                 ]
               , tasks:['develop:planner']
             }
 /* -------- master watching ------------------------------------------------- */
           , master:{
                 files:[
-                    'master/app.js'
-                  , 'master/controllers/*.js'
+                    'master/{,*/}*.js'
+                  , 'master/{,*/}*.json'
                 ]
-              , tasks:['develop:master','delayed-livereload']
+              , tasks:[
+                    'develop:master'
+                ]
               , options:{livereload:reloadPort}
             }
           , js:{
-                files:['public/js/*.js']
+                files:['public/js/{,*/}*.js']
               , options:{livereload:reloadPort}
             }
           , styl:{
-                files:['master/stylus/*.styl']
+                files:['master/stylus/{,*/}*.styl']
               , options:{livereload:reloadPort}
             }
           , jade:{
@@ -56,30 +51,41 @@ module.exports=function(grunt){
               , options:{livereload:reloadPort}
             }
 /* -------- testing watching ------------------------------------------------ */
+          , test_dumb:{
+                files:['test/planners/dumb.js']
+              , tasks:['mochacli:dumb']
+            }
           , test_functions:{
-                files:['test/planners/functions/*.js']
+                files:['test/planners/functions/{,*/}*.js']
               , tasks:['mochacli:functions']
             }
+          , test_planner:{
+                files:[
+                    'test/planner/planner_scheduler.js'
+                  , 'test/planner/planner_server.js'
+                ]
+              , tasks:['mochacli:planner']
+            }
           , test_master:{
-                files:['test/master/planners.js']
+                files:['test/master/{,*/}*.js']
               , tasks:['mochacli:master']
             }
 /* -------- documentation watching ------------------------------------------ */
           , tex:{
-                files:['docs/*.tex']
+                files:['docs/perfil.tex']
               , tasks:['latex']
             }
         }
 
       , develop:{
-            dumb:    { file:'planners/dumb.js'    }
-          , planner: {
+            dumb:{file:'planners/dumb.js'}
+          , planner:{
                 file:'planners/planner.js'
               , env:{
                     PORT:grunt.option('port')
                 }
             }
-          , master:  { file:'master/app.js'       }
+          , master:{file:'master/app.js'}
         }
 
       , mochacli:{
@@ -87,22 +93,13 @@ module.exports=function(grunt){
                 reporter:'spec'
               , bail:true
             }
-          , functions:[
-                'test/planners/functions/{,*/}*.js'
-            ]
-          , dumb: [
-                'test/planners/dumb.js'
-            ]
-          , planner: [
+          , functions:['test/planners/functions/{,*/}*.js']
+          , dumb:['test/planners/dumb.js']
+          , planner:[
                 'test/planners/planner_server.js'
               , 'test/planners/planner_scheduler.js'
             ]
-          , master: [
-                'test/master/utils/{,*/}*.js'
-//              , 'test/master/home.js'
-//              , 'test/master/repositories.js'
-              , 'test/master/planners.js'
-            ]
+          , master:['test/master/{,*/}*.js']
         }
 
       , latex:{
@@ -114,19 +111,12 @@ module.exports=function(grunt){
         }
     });
 
-    ['dumb','planner']
-    .forEach(function(element){
-        grunt.registerTask(
-            'test:'+element,
-            ['mochacli:'+element]
-        );
-        grunt.registerTask(
-            'serve:'+element,[
-            'develop:'+element
-          , 'watch:'+element
-          , 'watch:test_planners'
-        ]);
-    });
+    grunt.registerTask('test:dumb',['mochacli:dumb']);
+    grunt.registerTask('test:planner',[
+        'mochacli:functions'
+      , 'mochacli:planner'
+    ]);
+    grunt.registerTask('test:master',['mochacli:master']);
 
     grunt.config.requires('watch.master.files');
     filescontrol=grunt.config('watch.master.files');
@@ -134,28 +124,38 @@ module.exports=function(grunt){
 
     grunt.registerTask('delayed-livereload',
         'Live reload after the node server has restarted.',function(){
-        var done=this.async();
+        var done=this.async()
+          , url='http://localhost:'+reloadPort+'/changed?files='
+               +filescontrol.join(',')
+
         setTimeout(function(){
-            request.get('http://localhost:'+reloadPort+'/changed?files='
-            +filescontrol.join(','),function(err,res){
-                var reloaded=!err&&res.statusCode===200;
+            request.get(url,function(err,res){
+                var reloaded=!err&&res.statusCode===200
+
                 if(reloaded){
-                    grunt.log.ok('Delayed live reload successful.');
+                    grunt.log.ok('Delayed live reload successful.')
                 }else{
-                    grunt.log.error('Unable to make a delayed live reload.');
+                    grunt.log.error('Unable to make a delayed live reload.')
                 }
-                done(reloaded);
-            });
-        },500);
+                done(reloaded)
+            })
+        },500)
     });
 
+    grunt.registerTask('serve:dumb',[
+        'develop:dumb'
+      , 'watch:dumb'
+      , 'watch:test_dumb'
+    ]);
+    grunt.registerTask('serve:planner',[
+        'develop:planner'
+      , 'watch:planner'
+      , 'watch:test_functions'
+      , 'watch:test_planner'
+    ]);
     grunt.registerTask('serve:master',[
         'develop:master'
-      , 'watch:master'
-      , 'watch:js'
-      , 'watch:styl'
-      , 'watch:jade'
+      , 'watch'
     ]);
-    grunt.registerTask('test:master',['mochacli:master']);
 };
 
