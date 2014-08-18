@@ -247,5 +247,119 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
             };
         }
     });
+
+    $scope.add=function(){
+        $scope.prepare('new','config');
+        $scope.current='';
+    };
+    $scope.get=function(planner){
+        $scope.prepare('view','view');
+        $scope.current=planner;
+    };
+    $scope.save=function(){
+        to_waiting();
+        var connection=new Planners();
+        connection.host=$scope.planner.host;
+        connection.port=$scope.planner.port;
+        if($scope.env.panel=='new'){
+            connection.id=$scope.planner.id;
+            connection.$save(function(data){
+                $scope.planners[data.id]={
+                    host:data.host
+                  , port:data.port
+                  , status:'unknown'
+                };
+                show_alert('success','Planner added');
+                to_hide('ok','');
+            },function(error){
+                show_alert('danger',error.data.message);
+                to_hide('fail','');
+            });
+        }else if($scope.env.panel=='view'){
+            connection.$update({planner:$scope.current},function(data){
+                $scope.planners[$scope.current]={
+                    host:data.host
+                  , port:data.port
+                  , status:'unknown'
+                };
+                show_alert('success','Connection updated');
+                to_hide('ok','');
+            },function(error){
+                show_alert('danger',error.data.message);
+                to_hide('fail','');
+            });
+        }
+    };
+    $scope.remove=function(){
+        to_waiting();
+        if($scope.env.panel='view'){
+            var connection=new Planners();
+            connection.$delete({planner:$scope.current},function(data){
+                delete $scope.planners[$scope.current];
+                $scope.current='';
+                $scope.prepare('index','index');
+                show_alert('success','Connection removed');
+            },function(error){
+                show_alert('danger',error.data.message);
+                to_hide('fail','');
+            });
+        }
+    };
+    $scope.check=function(){
+        to_waiting();
+        if($scope.env.type=='config'){
+            $http
+            .post('/planners/_check',{
+                host:$scope.planner.host
+              , port:$scope.planner.port
+            })
+            .success(function(data){
+                to_hide('ok','ok');
+            })
+            .error(function(data){
+                to_hide('fail','fail');
+            });
+        }else if($scope.env.type='view'){
+            $http
+            .post('/planners/'+$scope.current+'/_check',{})
+            .success(function(data){
+                $scope.planners[$scope.current].status='online';
+                to_hide('ok','ok');
+            })
+            .error(function(data){
+                $scope.planners[$scope.current].status='offline';
+                to_hide('fail','fail');
+            });
+        }
+    };
+    $scope.control=function(){
+        to_waiting();
+
+    };
+    $scope.view=function(){
+        if($scope.env.type!='view'){
+            $scope.prepare('view','view');
+        }
+    };
+    $scope.edit=function(){
+        if($scope.env.type!='config'){
+            $scope.prepare('view','config');
+            $scope.planner={
+                id:$scope.current
+              , host:$scope.planners[$scope.current].host
+              , port:parseInt($scope.planners[$scope.current].port)
+            };
+        }
+    };
+    $scope.delete=function(){
+        if($scope.env.type!='delete'){
+            $scope.prepare('view','delete');
+        }
+    };
+    $scope.prepare=function(panel,type){
+        to_hide('fail','');
+        hide_alert();
+        $scope.env={panel:panel,type:type};
+    };
 }]);
 
