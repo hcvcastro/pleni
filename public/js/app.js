@@ -35,7 +35,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
             controller:'RepositoriesController'
         })
         .when('/planners',{
-            templateUrl:'/planners',
+            templateUrl:'/planners/view',
             controller:'PlannersController'
         })
         .otherwise({
@@ -141,7 +141,6 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
                 show_alert('danger',error.data.message);
                 to_hide('fail','');
             });
-            console.log('deleting...');
         }
     };
     $scope.check=function(){
@@ -218,7 +217,35 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
         $scope.env={panel:panel,type:type};
     };
 }])
+.factory('Planners',['$resource',function($resource){
+    return $resource('/planners/:planner',{
+        repository:'@planner'
+    },{
+        update: {method:'PUT'}
+    }
+    );
+}])
 .controller('PlannersController',
-    ['$scope','$http',function($scope,$http){
+    ['$scope','$http','Planners',function($scope,$http,Planners){
+    $scope.env={
+        panel:'index'
+      , type:'index'
+    };
+    $scope.planner={
+        id:''
+      , host:''
+      , port:''
+    };
+    $scope.current='';
+    $scope.planners={};
+    Planners.query(function(data){
+        for(var i=0;i<data.length;i++){
+            $scope.planners[data[i].id]={
+                host:data[i].host
+              , port:data[i].port
+              , status:'unknown'
+            };
+        }
+    });
 }]);
 

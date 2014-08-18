@@ -1,15 +1,22 @@
 div.container
+    br
+    div.row
+        div.btn-toolbar.col-md-12(role='toolbar')
+            div.btn-group.btn-group-sm
+                button.btn.btn-default(type='button',ng-click='add()') Add Planner
+    br
     div.row
         div.col-md-8(role='main')
-            section
-                h1 Settings
-                h2 CouchDB Settings
-                div.alert.alert-dismissible.hide(role='alert')
-                    button.close(type='button',data-dismiss='alert')
-                        span(aria-hidden='true') &times;
-                        span.sr-only Close
-                    p.message
-        div.col-md-4.hidden-xs
-            ul.list-group
-                li.list-group-item: a CouchDB Settings
+            div.alert.alert-dismissible.hide(role='alert')
+                button.close(type='button',data-dismiss='alert')
+                    span(aria-hidden='true') &times;
+                    span.sr-only Close
+                p.message
+            section(ng-show='env.panel==\'index\'')
+                :markdown
+                    #Planners
+                    In this page you can view and add connections to the planners in different servers.
+        div.col-md-4
+            div.list-group
+                a.list-group-item(ng-repeat='(id,data) in planners',ng-click='get(id)',ng-class='{\'list-group-item-success\': planners[id].status==\'online\',\'list-group-item-danger\': planners[id].status==\'offline\'}') {{id}}
 

@@ -89,7 +89,7 @@ var planner=function(){
 
 planner.prototype=new scheduler();
 
-server.set(3001);
+server.set(process.env.PORT||3001);
 server.listen(new planner());
 server.run();
 

@@ -15,7 +15,6 @@ module.exports=function(grunt){
       , watch:{
             options:{
                 nospawn:true
-              , livereload:reloadPort
             }
 /* -------- planners watching ----------------------------------------------- */
           , dumb:{
@@ -41,6 +40,7 @@ module.exports=function(grunt){
                   , 'master/controllers/*.js'
                 ]
               , tasks:['develop:master','delayed-livereload']
+              , options:{livereload:reloadPort}
             }
           , js:{
                 files:['public/js/*.js']
@@ -60,7 +60,7 @@ module.exports=function(grunt){
               , tasks:['mochacli:functions']
             }
           , test_master:{
-                files:['test/master/repositories.js']
+                files:['test/master/planners.js']
               , tasks:['mochacli:master']
             }
 /* -------- documentation watching ------------------------------------------ */
@@ -72,7 +72,12 @@ module.exports=function(grunt){
 
       , develop:{
             dumb:    { file:'planners/dumb.js'    }
-          , planner: { file:'planners/planner.js' }
+          , planner: {
+                file:'planners/planner.js'
+              , env:{
+                    PORT:grunt.option('port')
+                }
+            }
           , master:  { file:'master/app.js'       }
         }
 
@@ -87,14 +92,15 @@ module.exports=function(grunt){
           , dumb: [
                 'test/planners/dumb.js'
             ]
-          , planners: [
+          , planner: [
                 'test/planners/planner_server.js'
               , 'test/planners/planner_scheduler.js'
             ]
           , master: [
                 'test/master/utils/{,*/}*.js'
-              , 'test/master/home.js'
-              , 'test/master/repositories.js'
+//              , 'test/master/home.js'
+//              , 'test/master/repositories.js'
+              , 'test/master/planners.js'
             ]
         }
 
@@ -107,7 +113,7 @@ module.exports=function(grunt){
         }
     });
 
-    ['dumb','planners']
+    ['dumb','planner']
     .forEach(function(element){
         grunt.registerTask(
             'test:'+element,
