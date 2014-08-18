@@ -198,5 +198,33 @@ module.exports=function(app){
             response.status(404).json(_error.notfound)
         }
     });
+
+    app.put('/planners/:planner/_takecontrol',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host: planner[1].host+':'+
+                      planner[1].port
+            })
+            .then(f.takecontrol)
+            .then(function(args){
+                //console.log();
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    };
 };
 

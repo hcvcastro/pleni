@@ -340,6 +340,10 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.control=function(){
         to_waiting();
+        if($scope.env.type=='view'){
+//            $http
+//            .post
+        }
     };
     $scope.view=function(){
         if($scope.env.type!='view'){

@@ -19,7 +19,7 @@ exports.testplanner=function(args){
                     return;
                 }
             }
-            deferred.reject(response.body);
+            deferred.reject(JSON.parse(response.body));
             return;
         }
         deferred.reject(error);
@@ -37,14 +37,14 @@ exports.takecontrol=function(args){
       , url=args.host+'/clock?count=1&delay=1000'
 
     request.put({url:url},function(error,response){
-console.log(response.statusCode);
-console.log(response.body);
         if(!error){
             if(response.statusCode==200){
+                var body=JSON.parse(response.body);
+                args['tid']=body.tid
                 deferred.resolve(args);
                 return;
             }
-            deferred.reject(response.body);
+            deferred.reject(JSON.parse(response.body));
             return;
         }
         deferred.reject(error);
@@ -52,3 +52,28 @@ console.log(response.body);
 
     return deferred.promise;
 };
+
+/* args definition
+ *      host
+ *      tid <-- task id (given in takecontrol)
+ */
+exports.loosecontrol=function(args){
+    var deferred=Q.defer()
+      , url=args.host+'/'+args.tid
+
+    request.del({url:url},function(error,response){
+        if(!error){
+            if(response.statusCode==200){
+                var body=JSON.parse(response.body);
+                deferred.resolve(args);
+                return;
+            }
+            deferred.reject(JSON.parse(response.body));
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+

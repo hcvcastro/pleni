@@ -40,11 +40,7 @@ var planner=function(){
                     this.interval=_delay;
                 }
 
-                console.log('new task: '+this.name);
-                console.log('count: '+count);
-                console.log('delay: '+this.interval);
-                console.log(action);
-
+                console.log('PUT TASK:'+this.name+'('+count+')('+this.interval+')');
                 response.status(200);
                 return {ok:true,tid:this.tid};
             }
@@ -57,6 +53,7 @@ var planner=function(){
 
     this.gettask=function(tid,response){
         if(this.tid===tid){
+            response.status(200);
             return {ok:true,task:this.name};
         }else{
             response.status(404);
@@ -66,9 +63,13 @@ var planner=function(){
 
     this.removetask=function(tid,response){
         if(this.tid===tid){
+            console.log('DEL TASK:'+this.name);
+
             this.tid=undefined;
             this.name=undefined;
             this.action=undefined;
+
+            response.status(200);
             return {ok:true};
         }else{
             response.status(404);
