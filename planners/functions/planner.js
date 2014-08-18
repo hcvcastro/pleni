@@ -27,3 +27,28 @@ exports.testplanner=function(args){
 
     return deferred.promise;
 };
+
+/*
+ * args definition
+ *      host
+ */
+exports.takecontrol=function(args){
+    var deferred=Q.defer()
+      , url=args.host+'/clock?count=1&delay=1000'
+
+    request.put({url:url},function(error,response){
+console.log(response.statusCode);
+console.log(response.body);
+        if(!error){
+            if(response.statusCode==200){
+                deferred.resolve(args);
+                return;
+            }
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};

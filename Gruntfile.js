@@ -30,6 +30,7 @@ module.exports=function(grunt){
                     'planners/planner.js'
                   , 'planners/abstracts/scheduler.js'
                   , 'planners/abstracts/server.js'
+                  , 'planners/functions/planner.js'
                 ]
               , tasks:['develop:planner']
             }
@@ -120,8 +121,11 @@ module.exports=function(grunt){
             ['mochacli:'+element]
         );
         grunt.registerTask(
-            'serve:'+element,
-            ['develop:'+element,'watch:'+element]);
+            'serve:'+element,[
+            'develop:'+element
+          , 'watch:'+element
+          , 'watch:test_planners'
+        ]);
     });
 
     grunt.config.requires('watch.master.files');
@@ -145,7 +149,13 @@ module.exports=function(grunt){
         },500);
     });
 
-    grunt.registerTask('serve:master',['develop:master','watch']);
+    grunt.registerTask('serve:master',[
+        'develop:master'
+      , 'watch:master'
+      , 'watch:js'
+      , 'watch:styl'
+      , 'watch:jade'
+    ]);
     grunt.registerTask('test:master',['mochacli:master']);
 };
 

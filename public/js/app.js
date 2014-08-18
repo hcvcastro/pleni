@@ -334,7 +334,6 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource'])
     };
     $scope.control=function(){
         to_waiting();
-
     };
     $scope.view=function(){
         if($scope.env.type!='view'){
