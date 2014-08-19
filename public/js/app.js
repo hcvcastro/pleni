@@ -65,10 +65,6 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.current='';
 
-    if(!$scope.sessionStorage.repositories){
-        $scope.sessionStorage.repositories={};
-    }
-    $scope.repositories=$scope.sessionStorage.repositories;
     $scope.refresh=function(){
         Repositories.query(function(data){
             for(var i=0;i<data.length;i++){
@@ -82,6 +78,11 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             }
         });
     };
+    if(!$scope.sessionStorage.repositories){
+        $scope.sessionStorage.repositories={};
+        $scope.refresh();
+    }
+    $scope.repositories=$scope.sessionStorage.repositories;
     $scope.add=function(){
         $scope.prepare('new','config');
         $scope.current='';
@@ -239,10 +240,6 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.current='';
 
-    if(!$scope.sessionStorage.planners){
-        $scope.sessionStorage.planners={};
-    }
-    $scope.planners=$scope.sessionStorage.planners;
     $scope.refresh=function(){
         Planners.query(function(data){
             for(var i=0;i<data.length;i++){
@@ -254,6 +251,11 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             }
         });
     };
+    if(!$scope.sessionStorage.planners){
+        $scope.sessionStorage.planners={};
+        $scope.refresh();
+    }
+    $scope.planners=$scope.sessionStorage.planners;
     $scope.add=function(){
         $scope.prepare('new','config');
         $scope.current='';

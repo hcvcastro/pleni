@@ -225,6 +225,6 @@ module.exports=function(app){
         }else{
             response.status(404).json(_error.notfound)
         }
-    };
+    });
 };
 
