@@ -32,11 +32,18 @@ div.container
                 h2 Add planner
             section(ng-show='env.type==\'view\'')
                 br
-                button.btn.btn-default(type='button',ng-click='control()') Take control
+                button.btn.btn-default(type='button',ng-click='take()') Take control
+                button.btn.btn-default(type='button',ng-click='loose()') Loose control
                 button.btn.btn-default(type='button',ng-click='check()') Check connection
                 div#test
                     span.loader.hide
                     span.result.hide
+                div(ng-show='planners[current].exclusive==true')
+                    br
+                    h3 Available tasks
+                    br
+                    div.row
+                        p lorem
             section(ng-show='env.type==\'config\'')
                 br
                 form.form-horizontal(role='form',ng-submit='save()')
@@ -75,4 +82,5 @@ div.container
                 br
             div.list-group
                 a.list-group-item(ng-repeat='(id,data) in planners',ng-click='get(id)',ng-class='{\'list-group-item-success\': planners[id].status==\'online\',\'list-group-item-danger\': planners[id].status==\'offline\'}') {{id}}
+                    span.badge(ng-show='planners[id].exclusive') taken
 

@@ -32,7 +32,7 @@ exports.testplanner=function(args){
  * args definition
  *      host
  */
-exports.takecontrol=function(args){
+exports.take=function(args){
     var deferred=Q.defer()
       , url=args.host+'/clock?count=1&delay=1000'
 
@@ -57,7 +57,7 @@ exports.takecontrol=function(args){
  *      host
  *      tid <-- task id (given in takecontrol)
  */
-exports.loosecontrol=function(args){
+exports.loose=function(args){
     var deferred=Q.defer()
       , url=args.host+'/'+args.tid
 

@@ -303,6 +303,35 @@ describe('planners controller functions',function(){
                     });
             });
         });
+
+        var tid;
+
+        it('PUT /planners/:planner/_take',function(done){
+            request(app)
+                .put('/planners/localhost/_take')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200)
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(_success.ok);
+                    tid=res.body.tid;
+                    done();
+                });
+        });
+
+        it('DELETE /planners/:planner/_loose',function(done){
+            request(app)
+                .delete('/planners/localhost/_loose')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200)
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(_success.ok);
+                    done();
+                });
+        });
     });
 });
 

@@ -30,7 +30,7 @@ describe('planner functions',function(){
         });
 
         it('take control of planner server',function(done){
-            f.takecontrol({host:url})
+            f.take({host:url})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('host').and.be.eql(url);
@@ -41,7 +41,7 @@ describe('planner functions',function(){
         });
 
         it('take control of planner server failure',function(done){
-            f.takecontrol({host:url})
+            f.take({host:url})
             .fail(function(error){
                 error.should.be.an.Object;
                 error.should.have.property('ok').and.be.eql(false);
@@ -52,7 +52,7 @@ describe('planner functions',function(){
         });
 
         it('loose control of planner server',function(done){
-            f.loosecontrol({host:url,tid:tid})
+            f.loose({host:url,tid:tid})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('host').and.be.eql(url);

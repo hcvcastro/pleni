@@ -42,14 +42,20 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             redirectTo: '/home'
         });
 }])
-.factory('Repositories',['$resource',function($resource){
-    return $resource('/repositories/:repository',{
-        repository:'@repository'},{update: {method:'PUT'}});
-}])
 .controller('HomeController',['$scope',function($scope){}])
+.factory('Repositories',['$resource',function($resource){
+    return $resource('/repositories/:repository/:action',{
+        repository:'@repository'
+      , action:'@action'
+    },{
+        update:{method:'PUT'}
+      , check:{method:'POST',params:{action:'_check'}}
+      , scan:{method:'POST',params:{action:'_databases'},isArray:true}
+    });
+}])
 .controller('RepositoriesController',
-    ['$scope','$http','$sessionStorage','Repositories',
-    function($scope,$http,$sessionStorage,Repositories){
+    ['$scope','$sessionStorage','Repositories',
+    function($scope,$sessionStorage,Repositories){
     $scope.sessionStorage=$sessionStorage;
     $scope.env={
         panel:'index'
@@ -93,12 +99,13 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.save=function(){
         to_waiting();
-        var connection=new Repositories();
-        connection.host=$scope.repository.host;
-        connection.port=$scope.repository.port;
-        connection.dbuser=$scope.repository.dbuser;
-        connection.dbpass=$scope.repository.dbpass;
-        connection.prefix=$scope.repository.prefix;
+        var connection=new Repositories({
+            host:$scope.repository.host
+          , port:$scope.repository.port
+          , dbuser:$scope.repository.dbuser
+          , dbpass:$scope.repository.dbpass
+          , prefix:$scope.repository.prefix
+        });
         if($scope.env.panel=='new'){
             connection.id=$scope.repository.id;
             connection.$save(function(data){
@@ -135,8 +142,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     $scope.remove=function(){
         to_waiting();
         if($scope.env.panel='view'){
-            var connection=new Repositories();
-            connection.$delete({repository:$scope.current},function(data){
+            Repositories.delete({repository:$scope.current},function(data){
                 delete $scope.repositories[$scope.current];
                 $scope.current='';
                 $scope.prepare('index','index');
@@ -150,27 +156,23 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     $scope.check=function(){
         to_waiting();
         if($scope.env.type=='config'){
-            $http
-            .post('/repositories/_check',{
+            var connection=new Repositories({
                 host:$scope.repository.host
               , port:$scope.repository.port
               , dbuser:$scope.repository.dbuser
               , dbpass:$scope.repository.dbpass
-            })
-            .success(function(data){
+            });
+            connection.$check({},function(data){
                 to_hide('ok','ok');
-            })
-            .error(function(data){
+            },function(error){
                 to_hide('fail','fail');
             });
         }else if($scope.env.type='view'){
-            $http
-            .post('/repositories/'+$scope.current+'/_check',{})
-            .success(function(data){
+            Repositories.check({repository:$scope.current},
+            function(data){
                 $scope.repositories[$scope.current].status='online';
                 to_hide('ok','ok');
-            })
-            .error(function(data){
+            },function(error){
                 $scope.repositories[$scope.current].status='offline';
                 to_hide('fail','fail');
             });
@@ -179,14 +181,12 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     $scope.scan=function(){
         to_waiting();
         if($scope.env.panel='view'){
-            $http
-            .post('/repositories/'+$scope.current+'/_databases',{})
-            .success(function(data){
+            Repositories.scan({repository:$scope.current},
+            function(data){
                 $scope.repositories[$scope.current].status='online';
                 $scope.repositories[$scope.current].databases=data;
                 to_hide('ok','complete');
-            })
-            .error(function(data){
+            },function(error){
                 $scope.repositories[$scope.current].status='offline';
                 to_hide('fail','fail');
             });
@@ -222,12 +222,19 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
 }])
 .factory('Planners',['$resource',function($resource){
-    return $resource('/planners/:planner',{
-        repository:'@planner'},{update: {method:'PUT'}});
+    return $resource('/planners/:planner/:action',{
+        planner:'@planner'
+      , action:'@action'
+    },{
+        update:{method:'PUT'}
+      , check:{method:'POST',params:{action:'_check'}}
+      , take:{method:'PUT',params:{action:'_take'}}
+      , loose:{method:'DELETE',params:{action:'_loose'}}
+    });
 }])
 .controller('PlannersController',
-    ['$scope','$http','$sessionStorage','Planners',
-    function($scope,$http,$sessionStorage,Planners){
+    ['$scope','$sessionStorage','Planners',
+    function($scope,$sessionStorage,Planners){
     $scope.sessionStorage=$sessionStorage;
     $scope.env={
         panel:'index'
@@ -247,6 +254,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                     host:data[i].host
                   , port:data[i].port
                   , status:'unknown'
+                  , exclusive:false
                 };
             }
         });
@@ -266,9 +274,10 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.save=function(){
         to_waiting();
-        var connection=new Planners();
-        connection.host=$scope.planner.host;
-        connection.port=$scope.planner.port;
+        var connection=new Planners({
+            host:$scope.planner.host
+          , port:$scope.planner.port
+        });
         if($scope.env.panel=='new'){
             connection.id=$scope.planner.id;
             connection.$save(function(data){
@@ -276,6 +285,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                     host:data.host
                   , port:data.port
                   , status:'unknown'
+                  , exclusive:false
                 };
                 show_alert('success','Planner added');
                 to_hide('ok','');
@@ -289,6 +299,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                     host:data.host
                   , port:data.port
                   , status:'unknown'
+                  , exclusive:false
                 };
                 show_alert('success','Connection updated');
                 to_hide('ok','');
@@ -301,8 +312,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     $scope.remove=function(){
         to_waiting();
         if($scope.env.panel='view'){
-            var connection=new Planners();
-            connection.$delete({planner:$scope.current},function(data){
+            Planners.delete({planner:$scope.current},function(data){
                 delete $scope.planners[$scope.current];
                 $scope.current='';
                 $scope.prepare('index','index');
@@ -316,35 +326,46 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     $scope.check=function(){
         to_waiting();
         if($scope.env.type=='config'){
-            $http
-            .post('/planners/_check',{
+            var connection=new Planners({
                 host:$scope.planner.host
               , port:$scope.planner.port
-            })
-            .success(function(data){
+            });
+            connection.$check({},function(data){
                 to_hide('ok','ok');
-            })
-            .error(function(data){
+            },function(error){
                 to_hide('fail','fail');
             });
         }else if($scope.env.type='view'){
-            $http
-            .post('/planners/'+$scope.current+'/_check',{})
-            .success(function(data){
+            Planners.check({planner:$scope.current},
+            function(data){
                 $scope.planners[$scope.current].status='online';
                 to_hide('ok','ok');
-            })
-            .error(function(data){
+            },function(error){
                 $scope.planners[$scope.current].status='offline';
                 to_hide('fail','fail');
             });
         }
     };
-    $scope.control=function(){
+    $scope.take=function(){
         to_waiting();
         if($scope.env.type=='view'){
-//            $http
-//            .post
+            Planners.take({planner:$scope.current},function(data){
+                $scope.planners[$scope.current].exclusive=true;
+                to_hide('ok','complete');
+            },function(error){
+                to_hide('fail','fail');
+            });
+        }
+    };
+    $scope.loose=function(){
+        to_waiting();
+        if($scope.env.type=='view'){
+            Planners.loose({planner:$scope.current},function(data){
+                $scope.planners[$scope.current].exclusive=false;
+                to_hide('ok','complete');
+            },function(error){
+                to_hide('fail','fail');
+            });
         }
     };
     $scope.view=function(){
