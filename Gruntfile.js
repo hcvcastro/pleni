@@ -78,11 +78,16 @@ module.exports=function(grunt){
         }
 
       , develop:{
-            dumb:{file:'planners/dumb.js'}
+            dumb:{
+                file:'planners/dumb.js'
+              , env:{
+                    PORT:grunt.option('port')||3001
+                }
+            }
           , planner:{
                 file:'planners/planner.js'
               , env:{
-                    PORT:grunt.option('port')
+                    PORT:grunt.option('port')||3001
                 }
             }
           , master:{file:'master/app.js'}

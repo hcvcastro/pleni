@@ -2,7 +2,7 @@
 
 var request=require('supertest')
   , should=require('should')
-  , server=require('../../planners/planner')
+  , server=require('../../planners/dumb')
   , app=server.app
 
 describe('rest functions for planner server',function(){
@@ -23,6 +23,18 @@ describe('rest functions for planner server',function(){
     it('GET /_status',function(done){
         request(app)
             .get('/_status')
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.should.be.json;
+                res.body.should.be.eql({status:'stopped'});
+                done();
+            });
+    });
+
+    it('GET /_api',function(done){
+        request(app)
+            .get('_api')
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){

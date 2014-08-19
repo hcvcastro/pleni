@@ -2,30 +2,27 @@
 
 var server=require('./abstracts/server')
   , scheduler=require('./abstracts/scheduler')
+  , ok={ok:true}
 
 var planner=function(){
-    this.settask=function(){
-        return {ok:true};
-    };
-    this.gettask=function(){
-        return {ok:true};
-    };
-    this.removetask=function(){
-        return {ok:true};
-    };
+    this.api=    function(request,response){response.status(200).json({})}
+    this.create= function(request,response){response.status(200).json(ok)}
+    this.remove= function(request,response){response.status(200).json(ok)}
+    this.set=    function(request,response){response.status(200).json(ok)}
+    this.get=    function(request,response){response.status(200).json(ok)}
 };
 
-planner.prototype=new scheduler();
-planner.prototype.count=Number.POSITIVE_INFINITY;
-
-planner.prototype.task=function(repeat,stop){
-    console.log('duh!');
+planner.prototype=new scheduler(function(repeat,stop){
+    setTimeout(function(){
+        console.log('duh');
+    }, 3000);
     repeat();
-}
+},30,0);
 
-server.set(3000);
+server.set(process.env.PORT);
 server.listen(new planner());
 server.run();
 
-exports.app=server.app;
+module.exports=planner;
+module.exports.app=server.app;
 

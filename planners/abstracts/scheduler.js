@@ -1,59 +1,72 @@
 'use strict';
 
-var scheduler=function(task,count,interval){
+var queue=require('async').queue
+  , scheduler=function(task,count,interval){
     this._status='stopped';
     this._timeout;
-    this.interval=interval||1000;
     this.task=task;
 
-    this.setcount=function(count){
+    this.count=function(count){
         if(count!=undefined){
             if(count==Number.POSITIVE_INFINITY){
                 this._infinite=true;
-                this.count=0;
+                this._count=0;
             }else{
                 this._infinite=false;
-                this.count=parseInt(count);
+                this._count=parseInt(count);
             }
         }
     };
-    this.setcount(count);
+    this.count(count);
 
-    this.status=function(){
-        return {status:this._status};
-    };
-
-    this.run=function(){
-        if(this._timeout==undefined){
-            this.schedule();
-            this._status='running';
+    this.interval=function(interval){
+        if(interval==undefined){
+            interval=1000;
         }
-        return this.status();
+        this._interval=interval;
+    };
+    this.interval(interval);
+
+    this.status=function(request,response){
+        response.status(200).json({status:this._status});
     };
 
-    this.stop=function(){
-        if(this._timeout!=undefined){
-            clearTimeout(this._timeout);
-            this._timeout=undefined;
-            this._status='stopped';
-        }
-
-        return this.status();
+    this.run=function(request,response){
+        this._run();
+        this.status(request,response);
     };
 
-    this.schedule=function(){
+    this.stop=function(request,response){
+        this._stop();
+        this.status(request,response);
+    };
+
+    this._schedule=function(){
         var self=this;
         this._timeout=setTimeout(function(){
-            if(self._infinite||self.count>0){
-                self.count--;
+            if(self._infinite||self._count>0){
+                self._count--;
                 self.task(
-                    function(){self.schedule();},
-                    function(){self.stop();}
+                    function(){self._schedule();},
+                    function(){self._stop();}
                 );
             }else{
-                self.stop();
+                self._stop();
             }
-        },this.interval);
+        },this._interval);
+    };
+    this._run=function(){
+        if(!this._timeout){
+            this._schedule();
+            this._status='running';
+        }
+    };
+    this._stop=function(){
+        if(this._timeout){
+            clearTimeout(this._timeout);
+            delete this._timeout;
+            this._status='stopped'
+        }
     };
 };
 

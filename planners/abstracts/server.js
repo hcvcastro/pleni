@@ -17,30 +17,31 @@ exports.set=function(port){
 
 exports.listen=function(planner){
     app.get('/_status',function(request,response){
-        response.json(planner.status(response));
+        planner.status(request,response);
     });
-    app.post('/_run',function(request,response){
-        response.json(planner.run(response));
-    });
-    app.post('/_stop',function(request,response){
-        response.json(planner.stop(response));
+    app.get('/_api',function(request,response){
+        planner.api(request,response);
     });
 
-    app.put('/:task',function(request,response){
-        response.json(
-            planner.settask(
-                request.params.task,
-                request.query,
-                request.body,
-                response));
+    app.post('/:tid/_run',function(request,response){
+        planner.run(request,response);
+    });
+    app.post('/:tid/_stop',function(request,response){
+        planner.stop(request,response);
+    });
+
+    app.post('/',function(request,response){
+        planner.create(request,response);
+    });
+
+    app.put('/:tid',function(request,response){
+        planner.set(request,response);
     });
     app.get('/:tid',function(request,response){
-        response.json(
-            planner.gettask(request.params.tid,response));
+        planner.get(request,response);
     });
     app.delete('/:tid',function(request,response){
-        response.json(
-            planner.removetask(request.params.tid,response));
+        planner.remove(request,response);
     });
 };
 

@@ -2,12 +2,10 @@
 
 var request=require('supertest')
   , should=require('should')
-  , server=require('../../planners/dumb')
+  , server=require('../../../planners/dumb')
   , app=server.app
 
-describe('rest functions for dump server',function(){
-    var tid;
-
+describe('rest functions for planner server',function(){
     it('GET /',function(done){
         request(app)
             .get('/')
@@ -32,9 +30,21 @@ describe('rest functions for dump server',function(){
             });
     });
 
-    it('POST /_run',function(done){
+    it('GET /_api',function(done){
         request(app)
-            .post('/_run')
+            .get('/_api')
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.should.be.json;
+                res.body.should.be.eql({});
+                done();
+            });
+    });
+
+    it('POST /:tid/_run',function(done){
+        request(app)
+            .post('/test/_run')
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -56,9 +66,9 @@ describe('rest functions for dump server',function(){
             });
     });
 
-    it('POST /_stop',function(done){
+    it('POST /:tid/_stop',function(done){
         request(app)
-            .post('/_stop')
+            .post('/test/_stop')
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -68,11 +78,23 @@ describe('rest functions for dump server',function(){
             });
     });
 
+    it('POST /',function(done){
+        request(app)
+            .post('/')
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.should.be.json;
+                res.body.should.have.property('ok').with.eql(true);
+                done();
+            });
+    });
+
     it('PUT /task',function(done){
         request(app)
             .put('/task')
             .expect('Content-Type',/json/)
-            .expect(200)
+            .expect(403)
             .end(function(err,res){
                 res.should.be.json;
                 res.body.should.have.property('ok').with.eql(true);
@@ -83,6 +105,18 @@ describe('rest functions for dump server',function(){
     it('GET /task',function(done){
         request(app)
             .get('/task')
+            .expect('Content-Type',/json/)
+            .expect(404)
+            .end(function(err,res){
+                res.should.be.json;
+                res.body.should.have.property('ok').with.eql(true);
+                done();
+            });
+    });
+
+    it('PUT /site_creator',function(done){
+        request(app)
+            .put('/site_creator')
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){

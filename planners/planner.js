@@ -40,7 +40,8 @@ var planner=function(){
                     this.interval=_delay;
                 }
 
-                console.log('PUT TASK:'+this.name+'('+count+')('+this.interval+')');
+                console.log('PUT TASK:'+this.name
+                    +'('+count+')('+this.interval+')');
                 response.status(200);
                 return {ok:true,tid:this.tid};
             }
@@ -92,7 +93,7 @@ var planner=function(){
 
 planner.prototype=new scheduler();
 
-server.set(process.env.PORT||3001);
+server.set(process.env.PORT);
 server.listen(new planner());
 server.run();
 
