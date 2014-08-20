@@ -2,9 +2,9 @@
 
 var server=require('./abstracts/server')
   , scheduler=require('./abstracts/scheduler')
-  , validate=require('./validators')
-  , _success=require('./json-response').success
-  , _error=require('./json-response').error
+  , validate=require('./utils/validators')
+  , _success=require('./utils/json-response').success
+  , _error=require('./utils/json-response').error
   , f=require('./functions/random')
 
 var planner=function(){

@@ -58,7 +58,7 @@ describe('planner functions',function(){
                 args.should.have.property('host').and.be.eql(url);
                 done();
             })
-        })
+        });
     });
 });
 

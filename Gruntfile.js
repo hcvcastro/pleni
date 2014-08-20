@@ -101,8 +101,7 @@ module.exports=function(grunt){
                 'test/planners/planner/server.js'
               , 'test/planners/planner/scheduler.js'
             ]
-          //, master:['test/master/{,*/}*.js']
-          , master:['test/master/planners.js']
+          , master:['test/master/{,*/}*.js']
         }
 
       , latex:{

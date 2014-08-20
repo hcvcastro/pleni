@@ -34,17 +34,17 @@ exports.testplanner=function(args){
  */
 exports.take=function(args){
     var deferred=Q.defer()
-      , url=args.host+'/clock?count=1&delay=1000'
+      , url=args.host
 
-    request.put({url:url},function(error,response){
+    request.post({url:url,json:{task:'exclusive'}},function(error,response){
         if(!error){
             if(response.statusCode==200){
-                var body=JSON.parse(response.body);
+                var body=response.body;
                 args['tid']=body.tid
                 deferred.resolve(args);
                 return;
             }
-            deferred.reject(JSON.parse(response.body));
+            deferred.reject(response.body);
             return;
         }
         deferred.reject(error);
