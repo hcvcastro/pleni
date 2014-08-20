@@ -2,7 +2,7 @@
 
 var request=require('supertest')
   , should=require('should')
-  , server=require('../../planners/dumb')
+  , server=require('../../../planners/planner')
   , app=server.app
 
 describe('rest functions for planner server',function(){
@@ -14,8 +14,10 @@ describe('rest functions for planner server',function(){
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
+                res.statusCode.should.be.eql(200);
                 res.should.be.json;
-                res.body.should.be.eql({planner:'ready for action'});
+                res.body.should.have.property('planner')
+                res.body.planner.should.have.be.eql('ready for action');
                 done();
             });
     });
@@ -26,6 +28,7 @@ describe('rest functions for planner server',function(){
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
+                res.statusCode.should.be.eql(200);
                 res.should.be.json;
                 res.body.should.be.eql({status:'stopped'});
                 done();
@@ -34,17 +37,29 @@ describe('rest functions for planner server',function(){
 
     it('GET /_api',function(done){
         request(app)
-            .get('_api')
+            .get('/_api')
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
+                res.statusCode.should.be.eql(200);
                 res.should.be.json;
-                res.body.should.be.eql({status:'stopped'});
                 done();
             });
     });
 
-    it('POST /_run',function(done){
+    it('POST /',function(done){
+        request(app)
+            .post('/')
+            .expect('Content-Type',/json/)
+            .expect(403)
+            .end(function(err,res){
+                res.should.be.json;
+                res.body.should.have.property('ok').with.eql(false);
+                done();
+            });
+    });
+
+/*    it('POST /_run',function(done){
         request(app)
             .post('/_run')
             .expect('Content-Type',/json/)
@@ -78,21 +93,9 @@ describe('rest functions for planner server',function(){
                 res.body.should.be.eql({status:'stopped'});
                 done();
             });
-    });
+    });*/
 
-    it('PUT /task',function(done){
-        request(app)
-            .put('/task')
-            .expect('Content-Type',/json/)
-            .expect(403)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.have.property('ok').with.eql(false);
-                done();
-            });
-    });
-
-    it('GET /task',function(done){
+    /*it('GET /task',function(done){
         request(app)
             .get('/task')
             .expect('Content-Type',/json/)
@@ -192,6 +195,6 @@ describe('rest functions for planner server',function(){
                 res.body.should.be.eql({ok:true});
                 done();
             });
-    });
+    });*/
 });
 

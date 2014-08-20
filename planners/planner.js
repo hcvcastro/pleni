@@ -6,7 +6,7 @@ var server=require('./abstracts/server')
 
 var planner=function(){
     this.valid_tasks=[
-        'clock'
+        'exclusive'
       , 'site_creator'
       , 'site_fetcher'
     ];
@@ -15,7 +15,12 @@ var planner=function(){
     this.name;
     this.action;
 
-    this.settask=function(name,query,action,response){
+    this.api=function(request,response){response.status(200).json({})}
+
+    this.create=function(request,response){
+        var body=response.body;
+          , query=
+
         if(this.tid===undefined){
             if(this.valid_tasks.some(function(element){return element===name})){
                 this.tid=f.generatorid({})['random'];
@@ -42,17 +47,18 @@ var planner=function(){
 
                 console.log('PUT TASK:'+this.name
                     +'('+count+')('+this.interval+')');
-                response.status(200);
-                return {ok:true,tid:this.tid};
+                response.status(200).json({ok:true,tid:this.tid});
             }
-            response.status(403);
-            return {ok:false,message:'task no recognized'};
+            response.status(403).json({ok:false,message:'task no recognized'});
         }
-        response.status(403);
-        return {ok:false};
-    };
+        response.status(403).json({ok:false,message:''}); //TODO
+    }
 
-    this.gettask=function(tid,response){
+    this.remove= function(request,response){response.status(200).json(ok)}
+    this.set=    function(request,response){response.status(200).json(ok)}
+    this.get=    function(request,response){response.status(200).json(ok)}
+
+    /*this.gettask=function(tid,response){
         if(this.tid===tid){
             response.status(200);
             return {ok:true,task:this.name};
@@ -88,7 +94,7 @@ var planner=function(){
                 stop();
             }
         }
-    };
+    };*/
 };
 
 planner.prototype=new scheduler();
