@@ -62,7 +62,7 @@ var planner=function(){
 
         response.status(403).json(_error.notoverride);
         return;
-    }
+    };
 
     this.remove=function(request,response){
         if(this.tid!==undefined&&this.tid===request.params.tid){
@@ -76,7 +76,7 @@ var planner=function(){
         }
 
         response.status(404).json(_error.notfound);
-    }
+    };
 
     this.get=function(request,response){
         if(this.tid!==undefined&&this.tid===request.params.tid){
@@ -89,8 +89,30 @@ var planner=function(){
         }
 
         response.status(404).json(_error.notfound);
-    }
-/*    this.task=function(repeat,stop){
+    };
+
+    this.run=function(request,response){
+        if(this.tid!==undefined&&this.tid===request.params.tid){
+            this.action=request.body;
+            this._run();
+            this.status(request,response);
+            return;
+        }
+
+        response.status(404).json(_error.notfound);
+    };
+
+    this.stop=function(request,response){
+        if(this.tid!==undefined&&this.tid===request.params.tid){
+            this._stop();
+            this.status(request,response);
+            return;
+        }
+        
+        response.status(404).json(_error.notfound);
+    };
+
+    this.task=function(repeat,stop){
         if(this.name!=undefined){
             var func=require('./tasks/'+this.name);
             if(func.valid(this.action)){
@@ -100,7 +122,7 @@ var planner=function(){
                 stop();
             }
         }
-    };*/
+    };
 };
 
 planner.prototype=new scheduler();

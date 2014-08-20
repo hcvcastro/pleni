@@ -8,7 +8,6 @@ var request=require('request')
  *      host
  *      dbname
  *      cookie <- getting from auth
- *      site_type
  *      site_url
  */
 exports.createsummary=function(args){
@@ -19,7 +18,7 @@ exports.createsummary=function(args){
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , body={
-            type:args.site_type
+            type:'site'
           , url:args.site_url
         }
 

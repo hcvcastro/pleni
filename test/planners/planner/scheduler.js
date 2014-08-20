@@ -2,42 +2,80 @@
 
 var request=require('supertest')
   , should=require('should')
-  , server=require('../../planners/planner')
+  , server=require('../../../planners/planner')
   , app=server.app
 
 describe('tasks functions for planner scheduler',function(){
     var tid;
 
-    it('PUT /site_creator',function(done){
+    before(function(done){
         request(app)
-            .put('/site_creator')
+            .post('/')
             .send({
-                host:'http://localhost:5984'
-              , dbuser:'jacobian'
-              , dbpass:'asdf'
-              , dbname:'test2'
-              , site_type:'site'
-              , site_url:'http://galao.local'
+                task:'exclusive'
+              , count: 1
+              , interval: 1000
             })
             .expect('Content-Type',/json/)
-            .expect(200)
+            .expect(403)
             .end(function(err,res){
-                res.should.be.json;
-                res.body.should.have.property('ok').with.eql(true);
-                res.body.should.have.property('tid');
-                tid=res.body.tid;
+                tid=res.body.tid
                 done();
             });
     });
 
-    it('POST /_run',function(done){
+    it('POST /:tid/_run',function(done){
         request(app)
-            .post('/_run')
+            .post('/'+tid+'/_run')
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
+                res.statusCode.should.be.eql(200);
                 res.should.be.json;
-                res.body.should.be.eql({status:'running'});
+                res.body.should.have.property('status');
+                res.body.status.should.be.eql('running');
+                done();
+            });
+    });
+
+    it('GET /_status',function(done){
+        request(app)
+            .get('/_status')
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.property('status');
+                res.body.status.should.be.eql('running');
+                done();
+            });
+    });
+
+    it('POST /:tid/_stop',function(done){
+        request(app)
+            .post('/'+tid+'/_stop')
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.property('status');
+                res.body.status.should.be.eql('stopped');
+                done();
+            });
+    });
+
+    it('GET /_status',function(done){
+        request(app)
+            .get('/_status')
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.property('status');
+                res.body.status.should.be.eql('stopped');
                 done();
             });
     });

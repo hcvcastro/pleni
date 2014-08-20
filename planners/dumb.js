@@ -14,7 +14,7 @@ var planner=function(){
 planner.prototype=new scheduler(function(repeat,stop){
     setTimeout(function(){
         console.log('duh');
-    }, 3000);
+    }, 1000);
     repeat();
 },30,0);
 

@@ -21,7 +21,7 @@ module.exports=function(params,repeat,stop){
 };
 
 module.exports.valid=function(args){
-    var result=['host','dbuser','dbpass','dbname','site_type','site_url']
+    var result=['host','dbuser','dbpass','dbname','site_url']
         .every(function(element){
             return args[element]!==undefined;
         });
