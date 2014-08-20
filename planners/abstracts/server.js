@@ -22,26 +22,22 @@ exports.listen=function(planner){
     app.get('/_api',function(request,response){
         planner.api(request,response);
     });
+    app.post('/',function(request,response){
+        planner.create(request,response);
+    });
+
+    app.get('/:tid',function(request,response){
+        planner.get(request,response);
+    });
+    app.delete('/:tid',function(request,response){
+        planner.remove(request,response);
+    });
 
     app.post('/:tid/_run',function(request,response){
         planner.run(request,response);
     });
     app.post('/:tid/_stop',function(request,response){
         planner.stop(request,response);
-    });
-
-    app.post('/',function(request,response){
-        planner.create(request,response);
-    });
-
-    app.put('/:tid',function(request,response){
-        planner.set(request,response);
-    });
-    app.get('/:tid',function(request,response){
-        planner.get(request,response);
-    });
-    app.delete('/:tid',function(request,response){
-        planner.remove(request,response);
     });
 };
 

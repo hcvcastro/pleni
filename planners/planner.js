@@ -2,6 +2,9 @@
 
 var server=require('./abstracts/server')
   , scheduler=require('./abstracts/scheduler')
+  , validate=require('./validators')
+  , _success=require('./json-response').success
+  , _error=require('./json-response').error
   , f=require('./functions/random')
 
 var planner=function(){
@@ -18,73 +21,76 @@ var planner=function(){
     this.api=function(request,response){response.status(200).json({})}
 
     this.create=function(request,response){
-        var body=response.body;
-          , query=
-
         if(this.tid===undefined){
-            if(this.valid_tasks.some(function(element){return element===name})){
-                this.tid=f.generatorid({})['random'];
-                this.name=name;
-                this.action=action;
-                var count=1;
+            if(validate.validSlug(request.body.task)){
+                var name=validate.toString(request.body.task)
+                  , count=validate.toInt(request.body.count)
+                  , interval=validate.toInt(request.body.interval)
+                  , valid_task=this.valid_tasks.some(function(element){
+                        return element===name})
 
-                if(query['count']!=undefined){
-                    var _count=parseInt(query['count']);
-                    if(_count<0){
-                        _count=Number.POSITIVE_INFINITY;
+                if(valid_task){
+                    this.tid=f.generatorid({})['random'];
+                    this.name=name;
+
+                    if(isNaN(count)){
+                        count=1
                     }
-                    count=_count;
-                }
-                this.setcount(count);
-
-                if(query['delay']!=undefined){
-                    var _delay=parseInt(query['delay']);
-                    if(_delay<0){
-                        _delay=1000;
+                    if(count<0){
+                        count=Number.POSITIVE_INFINITY;
                     }
-                    this.interval=_delay;
+                    this.count(count);
+
+                    if(isNaN(interval)||interval<0){
+                        interval=1000
+                    }
+                    this.interval(interval);
+
+                    console.log('PUT TASK:'+this.name
+                        +'('+count+')('+interval+') --> '+this.tid);
+                    response.status(200).json({ok:true,tid:this.tid});
+                    return;
                 }
 
-                console.log('PUT TASK:'+this.name
-                    +'('+count+')('+this.interval+')');
-                response.status(200).json({ok:true,tid:this.tid});
+                response.status(403).json(_error.notfound);
+                return;
             }
-            response.status(403).json({ok:false,message:'task no recognized'});
+
+            response.status(403).json(_error.validation);
+            return;
         }
-        response.status(403).json({ok:false,message:''}); //TODO
+
+        response.status(403).json(_error.notoverride);
+        return;
     }
 
-    this.remove= function(request,response){response.status(200).json(ok)}
-    this.set=    function(request,response){response.status(200).json(ok)}
-    this.get=    function(request,response){response.status(200).json(ok)}
-
-    /*this.gettask=function(tid,response){
-        if(this.tid===tid){
-            response.status(200);
-            return {ok:true,task:this.name};
-        }else{
-            response.status(404);
-            return {ok:false};
-        }
-    };
-
-    this.removetask=function(tid,response){
-        if(this.tid===tid){
+    this.remove=function(request,response){
+        if(this.tid!==undefined&&this.tid===request.params.tid){
             console.log('DEL TASK:'+this.name);
 
             this.tid=undefined;
             this.name=undefined;
-            this.action=undefined;
 
-            response.status(200);
-            return {ok:true};
-        }else{
-            response.status(404);
-            return {ok:false};
+            response.status(200).json(_success.ok);
+            return;
         }
-    };
 
-    this.task=function(repeat,stop){
+        response.status(404).json(_error.notfound);
+    }
+
+    this.get=function(request,response){
+        if(this.tid!==undefined&&this.tid===request.params.tid){
+            response.status(200).json({
+                task:this.name
+              , count:this._count
+              , interval:this._interval
+            });
+            return;
+        }
+
+        response.status(404).json(_error.notfound);
+    }
+/*    this.task=function(repeat,stop){
         if(this.name!=undefined){
             var func=require('./tasks/'+this.name);
             if(func.valid(this.action)){

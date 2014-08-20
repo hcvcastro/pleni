@@ -89,53 +89,5 @@ describe('rest functions for planner server',function(){
                 done();
             });
     });
-
-    it('PUT /task',function(done){
-        request(app)
-            .put('/task')
-            .expect('Content-Type',/json/)
-            .expect(403)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.have.property('ok').with.eql(true);
-                done();
-            });
-    });
-
-    it('GET /task',function(done){
-        request(app)
-            .get('/task')
-            .expect('Content-Type',/json/)
-            .expect(404)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.have.property('ok').with.eql(true);
-                done();
-            });
-    });
-
-    it('PUT /site_creator',function(done){
-        request(app)
-            .put('/site_creator')
-            .expect('Content-Type',/json/)
-            .expect(200)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.have.property('ok').with.eql(true);
-                done();
-            });
-    });
-
-    it('DELETE /task',function(done){
-        request(app)
-            .delete('/task')
-            .expect('Content-Type',/json/)
-            .expect(404)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.have.property('ok').with.eql(true);
-                done();
-            });
-    });
 });
 

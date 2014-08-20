@@ -8,7 +8,6 @@ var planner=function(){
     this.api=    function(request,response){response.status(200).json({})}
     this.create= function(request,response){response.status(200).json(ok)}
     this.remove= function(request,response){response.status(200).json(ok)}
-    this.set=    function(request,response){response.status(200).json(ok)}
     this.get=    function(request,response){response.status(200).json(ok)}
 };
 

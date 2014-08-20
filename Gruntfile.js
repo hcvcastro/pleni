@@ -52,7 +52,7 @@ module.exports=function(grunt){
             }
 /* -------- testing watching ------------------------------------------------ */
           , test_dumb:{
-                files:['test/planners/dumb.js']
+                files:['test/planners/dumb/server.js']
               , tasks:['mochacli:dumb']
             }
           , test_functions:{
@@ -60,10 +60,7 @@ module.exports=function(grunt){
               , tasks:['mochacli:functions']
             }
           , test_planner:{
-                files:[
-                    'test/planner/planner_scheduler.js'
-                  , 'test/planner/planner_server.js'
-                ]
+                files:['test/planners/planner/{,*/}*.js']
               , tasks:['mochacli:planner']
             }
           , test_master:{
@@ -99,10 +96,10 @@ module.exports=function(grunt){
               , bail:true
             }
           , functions:['test/planners/functions/{,*/}*.js']
-          , dumb:['test/planners/dumb.js']
+          , dumb:['test/planners/dumb/server.js']
           , planner:[
-                'test/planners/planner_server.js'
-              , 'test/planners/planner_scheduler.js'
+                'test/planners/planner/server.js'
+              , 'test/planners/planner/scheduler.js'
             ]
           //, master:['test/master/{,*/}*.js']
           , master:['test/master/planners.js']
@@ -155,9 +152,10 @@ module.exports=function(grunt){
     ]);
     grunt.registerTask('serve:planner',[
         'develop:planner'
-      , 'watch:planner'
-      , 'watch:test_functions'
-      , 'watch:test_planner'
+//     , 'watch:planner'
+//     , 'watch:test_functions'
+//     , 'watch:test_planner'
+      , 'watch'
     ]);
     grunt.registerTask('serve:master',[
         'develop:master'

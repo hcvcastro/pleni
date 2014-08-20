@@ -50,86 +50,48 @@ describe('rest functions for planner server',function(){
     it('POST /',function(done){
         request(app)
             .post('/')
+            .send({
+                task:'exclusive'
+              , count: 1
+              , interval: 1000
+            })
             .expect('Content-Type',/json/)
             .expect(403)
             .end(function(err,res){
-                res.should.be.json;
-                res.body.should.have.property('ok').with.eql(false);
-                done();
-            });
-    });
-
-/*    it('POST /_run',function(done){
-        request(app)
-            .post('/_run')
-            .expect('Content-Type',/json/)
-            .expect(200)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.be.eql({status:'running'});
-                done();
-            });
-    });
-
-    it('GET /_status',function(done){
-        request(app)
-            .get('/_status')
-            .expect('Content-Type',/json/)
-            .expect(200)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.be.eql({status:'running'});
-                done();
-            });
-    });
-
-    it('POST /_stop',function(done){
-        request(app)
-            .post('/_stop')
-            .expect('Content-Type',/json/)
-            .expect(200)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.be.eql({status:'stopped'});
-                done();
-            });
-    });*/
-
-    /*it('GET /task',function(done){
-        request(app)
-            .get('/task')
-            .expect('Content-Type',/json/)
-            .expect(404)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.be.eql({ok:false});
-                done();
-            });
-    });
-
-    it('PUT /site_creator',function(done){
-        request(app)
-            .put('/site_creator')
-            .expect('Content-Type',/json/)
-            .expect(200)
-            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
                 res.should.be.json;
                 res.body.should.have.property('ok').with.eql(true);
-                tid=res.body.tid;
+                res.body.should.have.property('tid')
+                tid=res.body.tid
                 done();
             });
     });
 
-    it('GET /:tid',function(done){
+    it('GET /task',function(done){
         request(app)
             .get('/'+tid)
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
+                res.statusCode.should.be.eql(200);
                 res.should.be.json;
-                res.body.should.have.property('ok').with.eql(true);
-                res.body.should.have.property('task')
-                    .with.eql('site_creator');
+                res.body.should.have.property('task');
+                res.body.should.have.property('count');
+                res.body.should.have.property('interval');
+                done();
+            });
+    });
+
+    it('POST /',function(done){
+        request(app)
+            .post('/')
+            .send({task:'exclusive'})
+            .expect('Content-Type',/json/)
+            .expect(403)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(403);
+                res.should.be.json;
+                res.body.should.have.property('ok').and.eql(false);
                 done();
             });
     });
@@ -140,21 +102,9 @@ describe('rest functions for planner server',function(){
             .expect('Content-Type',/json/)
             .expect(404)
             .end(function(err,res){
+                res.statusCode.should.be.eql(404);
                 res.should.be.json;
-                res.body.should.be.eql({ok:false});
-                done();
-            });
-    });
-
-    it('PUT /newtask',function(done){
-        request(app)
-            .put('/newtask')
-            .expect('Content-Type',/json/)
-            .expect(403)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.have.property('ok').with.eql(false);
-                res.body.should.have.not.property('tid');
+                res.body.should.have.property('ok').and.eql(false);
                 done();
             });
     });
@@ -165,36 +115,24 @@ describe('rest functions for planner server',function(){
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
+                res.statusCode.should.be.eql(200);
                 res.should.be.json;
-                res.body.should.be.eql({ok:true});
+                res.body.should.have.property('ok').and.eql(true);
                 done();
             });
     });
 
-    it('PUT /site_fetcher',function(done){
+    it('GET /task',function(done){
         request(app)
-            .put('/site_fetcher')
+            .get('/task')
             .expect('Content-Type',/json/)
-            .expect(200)
+            .expect(404)
             .end(function(err,res){
+                res.statusCode.should.be.eql(404);
                 res.should.be.json;
-                res.body.should.have.property('ok').with.eql(true);
-                res.body.should.have.property('tid');
-                tid=res.body.tid;
+                res.body.should.have.property('ok').and.eql(false);
                 done();
             });
     });
-
-    it('DELETE /:tid',function(done){
-        request(app)
-            .delete('/'+tid)
-            .expect('Content-Type',/json/)
-            .expect(200)
-            .end(function(err,res){
-                res.should.be.json;
-                res.body.should.be.eql({ok:true});
-                done();
-            });
-    });*/
 });
 
