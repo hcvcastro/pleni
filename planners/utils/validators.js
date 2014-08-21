@@ -26,8 +26,8 @@ exports.toValidHost=function(host){
     if(parse.protocol==null){
         host='http://'+host  // <--default protocol
     }
-    var _slash=url.resolve(host,'/')
-    return _slash.slice(0,-1);
+
+    return url.resolve(host,'/').slice(0,-1);
 }
 
 exports.validPort=function(port){

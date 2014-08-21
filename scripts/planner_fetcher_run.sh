@@ -1,12 +1,12 @@
 #!/bin/bash
 
 HOST='http://localhost:3001'
-TID='a24e6cdcdc67c317f9ce567a0bf3d7040066af48'
+TID=${1}
 
 DBHOST='http://localhost:5984'
 DBUSER='jacobian'
 DBPASS='asdf'
-DBNAME='pleni_site_test'
+DBNAME=${2}
 
 REQUEST=$HOST/$TID/_run
 BODY=$(cat << EOF

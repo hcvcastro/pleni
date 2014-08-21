@@ -1,7 +1,8 @@
-'use strict';
+'u  e strict';
 
 var f=require('../functions/couchdb')
   , g=require('../functions/sites_fetcher')
+  , validate=require('../utils/validators')
 
 module.exports=function(params,repeat,stop){
     f.testcouchdb(params)
@@ -13,24 +14,31 @@ module.exports=function(params,repeat,stop){
     .then(g.bodyanalyzerlinks)
     .then(g.completesitetask)
     .then(g.spreadsitelinks)
+    .then(function(args){
+        if(args.complete_task){
+            console.log('RUN fetcher --> '+args['complete_task'].id);
+        }
+        repeat();
+    })
     .fail(function(error){
         console.log(error);
         stop();
     })
-    .done(function(args){
-        if(args&&args['complete_task']){
-            console.log('fetcher --> '+args['complete_task'].id)
-        }
-        repeat();
-    });
+    .done();
 };
 
-module.exports.valid=function(args){
-    var result=['host','dbuser','dbpass','dbname']
-        .every(function(element){
-            return args[element]!==undefined;
-        });
+module.exports.cleanargs=function(args){
+    if(validate.validHost(args.host)
+        &&validate.validSlug(args.dbuser)
+        &&validate.validSlug(args.dbname)){
 
-    return result;
+    var result=['host','dbuser','dbpass','dbname']
+        return {
+            host:   validate.toValidHost(args.host)
+          , dbuser: validate.toString(args.dbuser)
+          , dbpass: validate.toString(args.dbpass)
+          , dbname: validate.toString(args.dbname)
+        };
+    }
 };
 

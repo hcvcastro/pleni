@@ -92,10 +92,18 @@ var planner=function(){
     };
 
     this.run=function(request,response){
-        if(this.tid!==undefined&&this.tid===request.params.tid){
-            this.action=request.body;
-            this._run();
-            this.status(request,response);
+        if(this.tid!==undefined
+            &&this.name!==undefined
+            &&this.tid===request.params.tid){
+
+            this.action=require('./tasks/'+this.name).cleanargs(request.body)
+            if(this.action!==undefined){
+                this._run();
+                this.status(request,response);
+            }else{
+                this._stop();
+                response.status(403).json(_error.validation);
+            }
             return;
         }
 
@@ -113,15 +121,7 @@ var planner=function(){
     };
 
     this.task=function(repeat,stop){
-        if(this.name!=undefined){
-            var func=require('./tasks/'+this.name);
-            if(func.valid(this.action)){
-                func(this.action,repeat,stop);
-            }else{
-                console.log('bad package');
-                stop();
-            }
-        }
+        require('./tasks/'+this.name)(this.action,repeat,stop);
     };
 };
 
