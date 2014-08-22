@@ -5,7 +5,9 @@ module.exports=function(params,repeat,stop){
     repeat();
 };
 
-module.exports.valid=function(args){
-    return true;
+module.exports.cleanargs=function(args){
+    return {};
 };
+
+module.exports.args={};
 

@@ -18,7 +18,16 @@ var planner=function(){
     this.name;
     this.action;
 
-    this.api=function(request,response){response.status(200).json({})}
+    this.api=function(request,response){
+        var map=this.valid_tasks.map(function(element){
+            var args=require('./tasks/'+element).args
+
+            args._task=element;
+            return args;
+        })
+
+        response.status(200).json(map);
+    }
 
     this.create=function(request,response){
         if(this.tid===undefined){
@@ -66,6 +75,7 @@ var planner=function(){
 
     this.remove=function(request,response){
         if(this.tid!==undefined&&this.tid===request.params.tid){
+            this._stop();
             console.log('DEL TASK:'+this.name);
 
             this.tid=undefined;

@@ -1,7 +1,7 @@
 'use strict';
 
 var should=require('should')
-  , validate=require('../../../master/validators')
+  , validate=require('../../../planners/utils/validators')
 
 describe('validators functions',function(){
     it('empty validation',function(done){

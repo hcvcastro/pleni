@@ -95,7 +95,10 @@ module.exports=function(grunt){
                 reporter:'spec'
               , bail:true
             }
-          , functions:['test/planners/functions/{,*/}*.js']
+          , functions:[
+                'test/planners/functions/{,*/}*.js'
+              , 'test/planners/utils/{,*/}*.js'
+            ]
           , dumb:['test/planners/dumb/server.js']
           , planner:[
                 'test/planners/planner/server.js'
@@ -151,10 +154,9 @@ module.exports=function(grunt){
     ]);
     grunt.registerTask('serve:planner',[
         'develop:planner'
-//     , 'watch:planner'
-//     , 'watch:test_functions'
-//     , 'watch:test_planner'
-      , 'watch'
+      , 'watch:planner'
+      , 'watch:test_functions'
+      , 'watch:test_planner'
     ]);
     grunt.registerTask('serve:master',[
         'develop:master'

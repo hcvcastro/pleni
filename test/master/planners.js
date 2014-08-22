@@ -4,9 +4,9 @@ var request=require('supertest')
   , should=require('should')
   , join=require('path').join
   , app=require('../../master/app')
-  , _success=require('../../master/json-response').success
-  , _error=require('../../master/json-response').error
-  , loadconfig=require('../../master/loadconfig')
+  , _success=require('../../planners/utils/json-response').success
+  , _error=require('../../planners/utils/json-response').error
+  , loadconfig=require('../../master/utils/loadconfig')
 
 describe('planners controller functions',function(){
     describe('rest functions for collection',function(){
@@ -304,11 +304,29 @@ describe('planners controller functions',function(){
             });
         });
 
+        it('POST /planners/:planner/_api',function(done){
+            request(app)
+                .post('/planners/localhost/_api')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200)
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(_success.ok);
+                    done();
+                });
+        });
+
         var tid;
 
-        it('PUT /planners/:planner/_take',function(done){
+        it('POST /planners/:planner/_set',function(done){
             request(app)
-                .put('/planners/localhost/_take')
+                .post('/planners/localhost/_set')
+                .send({
+                    name:'exclusive'
+                  , count:1
+                  , interval:1000
+                })
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -320,7 +338,19 @@ describe('planners controller functions',function(){
                 });
         });
 
-        it('DELETE /planners/:planner/_loose',function(done){
+        it('POST /planners/:planner/_run',function(done){
+            request(app)
+                .post('/planners/localhost/_run')
+                .send()
+                .expect('Content-type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should
+                });
+        });
+
+        /*it('DELETE /planners/:planner/_loose',function(done){
             request(app)
                 .delete('/planners/localhost/_loose')
                 .expect('Content-Type',/json/)
@@ -331,7 +361,7 @@ describe('planners controller functions',function(){
                     res.body.should.eql(_success.ok);
                     done();
                 });
-        });
+        });*/
     });
 });
 

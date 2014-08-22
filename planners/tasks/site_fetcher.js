@@ -42,3 +42,10 @@ module.exports.cleanargs=function(args){
     }
 };
 
+module.exports.args={
+    host:''
+  , dbuser:''
+  , dbpass:''
+  , dbname:''
+};
+

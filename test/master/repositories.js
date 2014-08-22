@@ -4,9 +4,9 @@ var request=require('supertest')
   , should=require('should')
   , join=require('path').join
   , app=require('../../master/app')
-  , _success=require('../../master/json-response').success
-  , _error=require('../../master/json-response').error
-  , loadconfig=require('../../master/loadconfig')
+  , _success=require('../../planners/utils/json-response').success
+  , _error=require('../../planners/utils/json-response').error
+  , loadconfig=require('../../master/utils/loadconfig')
 
 describe('repositories controller functions',function(){
     describe('rest functions for collection',function(){

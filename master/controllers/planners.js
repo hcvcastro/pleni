@@ -1,8 +1,8 @@
 'use strict';
 
-var validate=require('../validators')
-  , _success=require('../json-response').success
-  , _error=require('../json-response').error
+var validate=require('../../planners/utils/validators')
+  , _success=require('../../planners/utils/json-response').success
+  , _error=require('../../planners/utils/json-response').error
   , f=require('../../planners/functions/planner')
 
 module.exports=function(app){
@@ -199,7 +199,7 @@ module.exports=function(app){
         }
     });
 
-    app.put('/planners/:planner/_take',function(request,response){
+    app.post('/planners/:planner/_api',function(request,response){
         var id=validate.toString(request.params.planner)
           , planners=app.get('planners')
           , planner=get_planner(id,planners)
@@ -209,7 +209,36 @@ module.exports=function(app){
                 host: planner[1].host+':'+
                       planner[1].port
             })
-            .then(f.take)
+            .then(f.api)
+            .then(function(args){
+                planners[planner[0]].all_tasks=args.all_tasks;
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+
+    app.post('/planners/:planner/_set',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host: planner[1].host+':'+
+                      planner[1].port
+              , task: request.body
+            })
+            .then(f.set)
             .then(function(args){
                 planners[planner[0]].tid=args.tid;
                 response.status(200).json(_success.ok);
@@ -227,19 +256,21 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/planners/:planner/_loose',function(request,response){
+    app.post('/planners/:planner/_run',function(request,response){
         var id=validate.toString(request.params.planner)
           , planners=app.get('planners')
           , planner=get_planner(id,planners)
 
         if(planner){
             f.testplanner({
-                host: planner[1].host+':'+
-                      planner[1].port
-              , tid:  planner[1].tid
+                host:  planner[1].host+':'+
+                       planner[1].port
+              , tid:   planner[1].tid
+              , targs: request.body
             })
-            .then(f.loose)
+            .then(f.run)
             .then(function(args){
+                planners[planner[0]].tid=args.tid;
                 response.status(200).json(_success.ok);
             })
             .fail(function(error){

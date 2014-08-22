@@ -32,15 +32,14 @@ exports.testplanner=function(args){
  * args definition
  *      host
  */
-exports.take=function(args){
+exports.api=function(args){
     var deferred=Q.defer()
-      , url=args.host
+      , url=args.host+'/_api'
 
-    request.post({url:url,json:{task:'exclusive'}},function(error,response){
+    request.get({url:url},function(error,response){
         if(!error){
             if(response.statusCode==200){
-                var body=response.body;
-                args['tid']=body.tid
+                args['all_tasks']=JSON.parse(response.body);
                 deferred.resolve(args);
                 return;
             }
@@ -55,20 +54,102 @@ exports.take=function(args){
 
 /* args definition
  *      host
- *      tid <-- task id (given in takecontrol)
+ *      task <-- the task for planner
+ *          name
+ *          count
+ *          interval
  */
-exports.loose=function(args){
+exports.set=function(args){
+    var deferred=Q.defer()
+      , url=args.host+'/'
+      , body={
+            task:args.task.name
+          , count:args.task.count
+          , interval:args.task.interval
+        }
+
+    request.post({url:url,json:body},function(error,response){
+        if(!error){
+            if(response.statusCode==200){
+                args['tid']=response.body.tid
+                deferred.resolve(args);
+                return;
+            }
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+
+/*
+ * args definition
+ *      host
+ *      tid <-- task id
+ *      targs <-- arguments needed for task
+ */
+exports.run=function(args){
+    var deferred=Q.defer()
+      , url=args.host+'/'+args.tid+'/_run'
+      , body=args.targs
+
+    request.post({url:url,json:body},function(error,response){
+        if(!error){
+            if(response.statusCode==200){
+                deferred.resolve(args);
+                return;
+            }
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+
+/*
+ * args definition
+ *      host
+ *      tid <-- task id
+ */
+exports.stop=function(args){
+    var deferred=Q.defer()
+      , url=args.host+'/'+args.tid+'/_stop'
+
+    request.post({url:url},function(error,response){
+        if(!error){
+            if(response.statusCode==200){
+                deferred.resolve(args);
+                return;
+            }
+            deferred.reject(response.body);
+            return;
+        }
+        deferred.reject(error);
+    });
+
+    return deferred.promise;
+};
+
+/*
+ * args definition
+ *      host
+ *      tid <-- task id
+ */
+exports.delete=function(args){
     var deferred=Q.defer()
       , url=args.host+'/'+args.tid
 
     request.del({url:url},function(error,response){
         if(!error){
             if(response.statusCode==200){
-                var body=JSON.parse(response.body);
                 deferred.resolve(args);
                 return;
             }
-            deferred.reject(JSON.parse(response.body));
+            deferred.reject(response.body);
             return;
         }
         deferred.reject(error);

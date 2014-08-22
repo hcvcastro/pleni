@@ -1,9 +1,9 @@
 'use strict';
 
 var pretty=require('prettysize')
-  , validate=require('../validators')
-  , _success=require('../json-response').success
-  , _error=require('../json-response').error
+  , validate=require('../../planners/utils/validators')
+  , _success=require('../../planners/utils/json-response').success
+  , _error=require('../../planners/utils/json-response').error
   , f=require('../../planners/functions/couchdb')
 
 module.exports=function(app){

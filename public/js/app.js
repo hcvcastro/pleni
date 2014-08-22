@@ -228,8 +228,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     },{
         update:{method:'PUT'}
       , check:{method:'POST',params:{action:'_check'}}
-      , take:{method:'PUT',params:{action:'_take'}}
-      , loose:{method:'DELETE',params:{action:'_loose'}}
+      , scan:{method:'POST',params:{action:'_api'},isArray:true}
     });
 }])
 .controller('PlannersController',
@@ -346,24 +345,16 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             });
         }
     };
-    $scope.take=function(){
+    $scope.scan=function(){
         to_waiting();
-        if($scope.env.type=='view'){
-            Planners.take({planner:$scope.current},function(data){
-                $scope.planners[$scope.current].exclusive=true;
+        if($scope.env.panel='view'){
+            Planners.scan({planner:$scope.current},
+            function(data){
+                $scope.planners[$scope.current].status='online';
+                $scope.planners[$scope.current].tasks=data;
                 to_hide('ok','complete');
             },function(error){
-                to_hide('fail','fail');
-            });
-        }
-    };
-    $scope.loose=function(){
-        to_waiting();
-        if($scope.env.type=='view'){
-            Planners.loose({planner:$scope.current},function(data){
-                $scope.planners[$scope.current].exclusive=false;
-                to_hide('ok','complete');
-            },function(error){
+                $scope.planners[$scope.current].status='offline';
                 to_hide('fail','fail');
             });
         }

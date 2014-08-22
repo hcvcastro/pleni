@@ -5,7 +5,7 @@ var http=require('http')
   , favicon=require('serve-favicon')
   , bodyparser=require('body-parser')
   , join=require('path').join
-  , loadconfig=require('./loadconfig')
+  , loadconfig=require('./utils/loadconfig')
   , app=express()
 
 // sync methods

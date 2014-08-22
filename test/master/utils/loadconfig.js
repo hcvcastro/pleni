@@ -2,7 +2,7 @@
 
 var should=require('should')
   , path=require('path')
-  , loadconfig=require('../../../master/loadconfig')
+  , loadconfig=require('../../../master/utils/loadconfig')
 
 describe('loading the config files',function(){
     it('loading repositories.js',function(done){
