@@ -1,0 +1,73 @@
+{
+    "_id":"_design/default"
+  , "language":"javascript"
+  , "views":{
+        "headers":{
+            "map":"function(doc) {
+                if(doc.request_get.headers){
+                    var header=doc.request_get.headers;
+                    var head=[header.server,header['x-powered-by'],doc.request_get.status,header['content-type']];
+                    emit(head);
+                }
+            }"
+        }
+      , "status":{
+            "map":"function(doc){
+                if(doc.request_get.headers){
+                    var header=doc.request_get.headers;
+                    var head=[header.server,header['x-powered-by'],doc.request_get.status,header['content-type']];
+                    for(var i in head){
+                        if(head[i]==404){
+                            emit(head[i]);
+                        }
+                    }
+                }
+            }"
+        }
+      , "forms":{
+            "map":"function(doc){
+                if(doc.links.form){
+                    for(var i in doc.links.form){
+                        emit(doc.links.form[i].pathname);
+                    }
+                }
+            }"
+        }
+      , "javascripts":{
+            "map":"function(doc){
+                if(doc.links.script){
+                    for(var i in doc.links.script){
+                        emit(doc.links.script[i].pathname);
+                    }
+                }
+            }"
+        }
+      , "redirects":{
+            "map":"function(doc){
+                if(doc.links.a){
+                    for(var i in doc.links.a){
+                        emit(doc.links.a[i].pathname);
+                    }
+                }
+            }"
+        }
+      , "images":{
+            "map":"function(doc){
+                if(doc.links.img){
+                    for(var i in doc.links.img){
+                        emit(doc.links.img[i].pathname);
+                    }
+                }
+            }"
+        }
+      , "hashes":{
+            "map":"function(doc){
+                if(doc.request_get.sha1){
+                    var a=[doc._id,doc.request_get.sha1,doc.request_get.md5];
+                    emit(a);
+                }
+            }"
+        }
+    }
+}
+
