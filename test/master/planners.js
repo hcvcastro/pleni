@@ -341,27 +341,43 @@ describe('planners controller functions',function(){
         it('POST /planners/:planner/_run',function(done){
             request(app)
                 .post('/planners/localhost/_run')
-                .send()
+                .send({})
                 .expect('Content-type',/json/)
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200);
-                    res.body.should
-                });
-        });
-
-        /*it('DELETE /planners/:planner/_loose',function(done){
-            request(app)
-                .delete('/planners/localhost/_loose')
-                .expect('Content-Type',/json/)
-                .expect(200)
-                .end(function(err,res){
-                    res.statusCode.should.be.eql(200)
                     res.body.should.have.property('ok');
                     res.body.should.eql(_success.ok);
                     done();
                 });
-        });*/
+        });
+
+        it('POST /planners/:planner/_stop',function(done){
+            request(app)
+                .post('/planners/localhost/_stop')
+                .send({})
+                .expect('Content-type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(_success.ok);
+                    done();
+                });
+        });
+
+        it('DELETE /planners/:planner/_remove',function(done){
+            request(app)
+                .delete('/planners/localhost/_remove')
+                .expect('Content-type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(_success.ok);
+                    done();
+                });
+        });
     });
 });
 

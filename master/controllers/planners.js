@@ -212,7 +212,7 @@ module.exports=function(app){
             .then(f.api)
             .then(function(args){
                 planners[planner[0]].all_tasks=args.all_tasks;
-                response.status(200).json(_success.ok);
+                response.status(200).json(args.all_tasks);
             })
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){
@@ -271,6 +271,65 @@ module.exports=function(app){
             .then(f.run)
             .then(function(args){
                 planners[planner[0]].tid=args.tid;
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+
+    app.post('/planners/:planner/_stop',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host:  planner[1].host+':'+
+                       planner[1].port
+              , tid:   planner[1].tid
+              , targs: request.body
+            })
+            .then(f.stop)
+            .then(function(args){
+                planners[planner[0]].tid=args.tid;
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+
+    app.delete('/planners/:planner/_remove',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host:  planner[1].host+':'+
+                       planner[1].port
+              , tid:   planner[1].tid
+            })
+            .then(f.remove)
+            .then(function(args){
+                delete planners[planner[0]].tid;
                 response.status(200).json(_success.ok);
             })
             .fail(function(error){

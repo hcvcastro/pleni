@@ -34,17 +34,22 @@ div.container
                 br
                 div.btn-toolbar(role='toolbar')
                     div.btn-group.btn-group-sm
-                        button.btn.btn-default(type='button',ng-click='scan()') Scan tasks
+                        button.btn.btn-default(type='button',ng-click='api()') Scan tasks
                         button.btn.btn-success(type='button',ng-click='check()') Check connection
                     div#test
                         span.loader.hide
                         span.result.hide
-                div(ng-show='planners[current].exclusive==true')
+                div(ng-hide='planners[current].tasks.length==0')
                     br
                     h3 Available tasks
                     br
                     div.row
-                        p lorem
+                        div.col-md-6(ng-repeat='task in planners[current].tasks')
+                            div.media.panel.panel-default.extra-padding
+                                div.pull-left
+                                    span.media-object.glyphicon.glyphicon-cloud-download.size90
+                                div.media-body
+                                    h3.media-heading {{task._task}}
             section(ng-show='env.type==\'config\'')
                 br
                 form.form-horizontal(role='form',ng-submit='save()')

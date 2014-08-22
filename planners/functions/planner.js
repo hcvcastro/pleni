@@ -139,7 +139,7 @@ exports.stop=function(args){
  *      host
  *      tid <-- task id
  */
-exports.delete=function(args){
+exports.remove=function(args){
     var deferred=Q.defer()
       , url=args.host+'/'+args.tid
 

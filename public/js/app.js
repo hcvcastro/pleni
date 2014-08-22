@@ -228,7 +228,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     },{
         update:{method:'PUT'}
       , check:{method:'POST',params:{action:'_check'}}
-      , scan:{method:'POST',params:{action:'_api'},isArray:true}
+      , api:{method:'POST',params:{action:'_api'},isArray:true}
     });
 }])
 .controller('PlannersController',
@@ -254,6 +254,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                   , port:data[i].port
                   , status:'unknown'
                   , exclusive:false
+                  , tasks:new Array()
                 };
             }
         });
@@ -285,6 +286,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                   , port:data.port
                   , status:'unknown'
                   , exclusive:false
+                  , tasks:new Array()
                 };
                 show_alert('success','Planner added');
                 to_hide('ok','');
@@ -299,6 +301,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                   , port:data.port
                   , status:'unknown'
                   , exclusive:false
+                  , tasks:new Array()
                 };
                 show_alert('success','Connection updated');
                 to_hide('ok','');
@@ -345,13 +348,15 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             });
         }
     };
-    $scope.scan=function(){
+    $scope.api=function(){
         to_waiting();
         if($scope.env.panel='view'){
-            Planners.scan({planner:$scope.current},
+            Planners.api({planner:$scope.current},
             function(data){
                 $scope.planners[$scope.current].status='online';
                 $scope.planners[$scope.current].tasks=data;
+
+console.log($scope.planners);
                 to_hide('ok','complete');
             },function(error){
                 $scope.planners[$scope.current].status='offline';
