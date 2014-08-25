@@ -21,7 +21,6 @@ var show_alert=function(type,message){
   , focus=function(element){
         $(element).focus();
     }
-
 // Angular functions
 var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
 .config(['$routeProvider',function($routeProvider){
@@ -228,6 +227,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     },{
         update:{method:'PUT'}
       , check:{method:'POST',params:{action:'_check'}}
+      , status:{method:'POST',params:{action:'_status'}}
       , api:{method:'POST',params:{action:'_api'},isArray:true}
     });
 }])
@@ -348,6 +348,17 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             });
         }
     };
+    $scope.status=function(){
+        to_waiting();
+        if($scope.env.type=='view'){
+            Planners.status({planner:$scope.current},
+            function(data){
+
+            },function(error){
+
+            });
+        }
+    };
     $scope.api=function(){
         to_waiting();
         if($scope.env.panel='view'){
@@ -355,8 +366,6 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             function(data){
                 $scope.planners[$scope.current].status='online';
                 $scope.planners[$scope.current].tasks=data;
-
-console.log($scope.planners);
                 to_hide('ok','complete');
             },function(error){
                 $scope.planners[$scope.current].status='offline';

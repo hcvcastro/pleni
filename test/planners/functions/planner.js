@@ -30,6 +30,15 @@ describe('planner functions',function(){
             });
         });
 
+        it('get status for planner server',function(done){
+            f.status({host:url})
+            .done(function(args){
+                args.should.be.an.Object;
+                args.should.have.property('status');
+                done();
+            })
+        });
+
         it('get api for planner server',function(done){
             f.api({host:url})
             .done(function(args){
@@ -80,7 +89,7 @@ describe('planner functions',function(){
         });
 
         it('remove task in planner server',function(done){
-            f.delete({host:url,tid:tid})
+            f.remove({host:url,tid:tid})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('host');

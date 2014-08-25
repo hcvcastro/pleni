@@ -35,21 +35,23 @@ div.container
                 div.btn-toolbar(role='toolbar')
                     div.btn-group.btn-group-sm
                         button.btn.btn-default(type='button',ng-click='api()') Scan tasks
+                        button.btn.btn-default(type='button',ng-click='status()') Check status
                         button.btn.btn-success(type='button',ng-click='check()') Check connection
                     div#test
                         span.loader.hide
                         span.result.hide
                 div(ng-hide='planners[current].tasks.length==0')
                     br
-                    h3 Available tasks
+                    h3 Set a task
                     br
                     div.row
-                        div.col-md-6(ng-repeat='task in planners[current].tasks')
-                            div.media.panel.panel-default.extra-padding
-                                div.pull-left
-                                    span.media-object.glyphicon.glyphicon-cloud-download.size90
-                                div.media-body
-                                    h3.media-heading {{task._task}}
+                        div.col-sm-3
+                            ul.nav.nav-pills.nav-stacked
+                                li(ng-repeat='task in planners[current].tasks')
+                                    a {{task._task}}
+                        div.col-sm-9
+                            div.panel.panel-default
+                                div.panel-body asdf
             section(ng-show='env.type==\'config\'')
                 br
                 form.form-horizontal(role='form',ng-submit='save()')

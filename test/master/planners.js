@@ -311,8 +311,10 @@ describe('planners controller functions',function(){
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200)
-                    res.body.should.have.property('ok');
-                    res.body.should.eql(_success.ok);
+                    res.body.should.be.an.Array;
+                    for(var i=0;i<res.body.length;i++){
+                        res.body[i].should.have.property('_task');
+                    }
                     done();
                 });
         });
@@ -348,6 +350,20 @@ describe('planners controller functions',function(){
                     res.statusCode.should.be.eql(200);
                     res.body.should.have.property('ok');
                     res.body.should.eql(_success.ok);
+                    done();
+                });
+        });
+
+        it('POST /planners/:planner/_status',function(done){
+            request(app)
+                .post('/planners/localhost/_status')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200)
+                    console.log(res.body);
+                    res.body.should.have.property('host');
+                    res.body.should.have.property('status');
                     done();
                 });
         });
