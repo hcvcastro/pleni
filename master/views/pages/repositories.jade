@@ -7,6 +7,12 @@ div.container
                 button.btn.btn-primary(type='button',ng-click='refresh()') Refresh repositories
     br
     div.row
+        div.col-md-4.navbar-right
+            div.visible-xs-block.visible-sm-block
+                br
+            div.list-group
+                a.list-group-item(ng-repeat='(id,data) in repositories',ng-click='get(id)',ng-class='{\'list-group-item-success\': repositories[id].status==\'online\',\'list-group-item-danger\': repositories[id].status==\'offline\'}') {{id}}
+                    span.badge {{repositories[id].databases.length}}
         div.col-md-8(role='main')
             div.alert.alert-dismissible.hide(role='alert')
                 button.close(type='button',data-dismiss='alert')
@@ -100,10 +106,4 @@ div.container
                             div#test
                                 span.loader.hide
                                 span.result.hide
-        div.col-md-4
-            div.visible-xs-block.visible-sm-block
-                br
-            div.list-group
-                a.list-group-item(ng-repeat='(id,data) in repositories',ng-click='get(id)',ng-class='{\'list-group-item-success\': repositories[id].status==\'online\',\'list-group-item-danger\': repositories[id].status==\'offline\'}') {{id}}
-                    span.badge {{repositories[id].databases.length}}
 

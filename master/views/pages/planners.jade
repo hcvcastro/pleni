@@ -7,6 +7,13 @@ div.container
                 button.btn.btn-primary(type='button',ng-click='refresh()') Refresh planners
     br
     div.row
+        div.col-md-4.navbar-right
+            div.visible-xs-block.visible-sm-block
+                br
+            div.list-group
+                a.list-group-item(ng-repeat='(id,data) in planners',ng-click='get(id)',ng-class='{\'list-group-item-info\':planners[id].status==\'taken\',\'list-group-item-success\': planners[id].status==\'online\',\'list-group-item-danger\': planners[id].status==\'offline\'}') {{id}}
+                    span.badge {{data.tasks.length}}
+                    span.badge(ng-show='data.action!=\'unknown\'') {{data.action}}
         div.col-md-8(role='main')
             div.alert.alert-dismissible.hide(role='alert')
                 button.close(type='button',data-dismiss='alert')
@@ -50,16 +57,16 @@ div.container
                         div.form-group
                             label.col-sm-2.control-label Task
                             div.col-sm-10
-                                select.form-control
-                                    option(ng-repeat='task in planners[current].tasks') {{task._task}}
+                                select.form-control(placeholder='The task for loading in planner',required,ng-model='task.name')
+                                    option(ng-repeat='task in planners[current].tasks') {{task.name}}
                         div.form-group
                             label.col-sm-2.control-label Count
                             div.col-sm-10
-                                input.form-control(type='number')
+                                input.form-control(type='number',placeholder='The number of times the task will be performed',min=-1,required,ng-model='task.count')
                         div.form-group
                             label.col-sm-2.control-label Interval
                             div.col-sm-10
-                                input.form-control(type='number')
+                                input.form-control(type='number',placeholder='The time interval between the task calls',min=0,required,ng-model='task.interval')
                         div.form-group
                             div.col-sm-offset-2.col-sm-10
                                 button.btn.btn-primary(type='submit') Send
@@ -104,11 +111,4 @@ div.container
                             div#test
                                 span.loader.hide
                                 span.result.hide
-        div.col-md-4
-            div.visible-xs-block.visible-sm-block
-                br
-            div.list-group
-                a.list-group-item(ng-repeat='(id,data) in planners',ng-click='get(id)',ng-class='{\'list-group-item-info\':planners[id].status==\'taken\',\'list-group-item-success\': planners[id].status==\'online\',\'list-group-item-danger\': planners[id].status==\'offline\'}') {{id}}
-                    span.badge {{data.tasks.length}}
-                    span.badge(ng-show='data.action!=\'unknown\'') {{data.action}}
 

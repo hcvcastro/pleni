@@ -247,6 +247,11 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
       , port:''
     };
     $scope.current='';
+    $scope.task={
+        name:'exclusive'
+      , count:1
+      , interval:1000
+    };
 
     $scope.refresh=function(){
         Planners.query(function(data){
@@ -404,11 +409,8 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     $scope.settask=function(){
         to_waiting();
         if($scope.env.panel='view'){
-            Planners.set({planner:$scope.current},{
-                name:'exclusive'
-              , count:1
-              , interval:1000
-            },function(data){
+            Planners.set({planner:$scope.current},$scope.task,
+            function(data){
                 $scope.planners[$scope.current].status='taken';
                 to_hide('ok','task established');
             },function(error){

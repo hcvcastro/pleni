@@ -360,7 +360,6 @@ describe('planners controller functions',function(){
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200)
-                    console.log(res.body);
                     res.body.should.have.property('host');
                     res.body.should.have.property('status');
                     done();

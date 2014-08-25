@@ -20,10 +20,10 @@ var planner=function(){
 
     this.api=function(request,response){
         var map=this.valid_tasks.map(function(element){
-            var args=require('./tasks/'+element).args
-
-            args._task=element;
-            return args;
+            return {
+                name:element
+              , args:require('./tasks/'+element).args
+            };
         })
 
         response.status(200).json(map);
