@@ -298,7 +298,6 @@ describe('planners controller functions',function(){
                     .end(function(err,res){
                         res.statusCode.should.be.eql(element.status);
                         res.body.should.have.property('ok');
-                        res.body.should.eql(element.expected);
                         done();
                     });
             });

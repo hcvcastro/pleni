@@ -229,6 +229,8 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
       , check:{method:'POST',params:{action:'_check'}}
       , status:{method:'POST',params:{action:'_status'}}
       , api:{method:'POST',params:{action:'_api'},isArray:true}
+      , set:{method:'POST',params:{action:'_set'}}
+      , remove:{method:'DELETE',params:{action:'_remove'}}
     });
 }])
 .controller('PlannersController',
@@ -253,7 +255,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                     host:data[i].host
                   , port:data[i].port
                   , status:'unknown'
-                  , exclusive:false
+                  , action:'unknown'
                   , tasks:new Array()
                 };
             }
@@ -285,7 +287,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                     host:data.host
                   , port:data.port
                   , status:'unknown'
-                  , exclusive:false
+                  , action:'unknown'
                   , tasks:new Array()
                 };
                 show_alert('success','Planner added');
@@ -300,7 +302,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                     host:data.host
                   , port:data.port
                   , status:'unknown'
-                  , exclusive:false
+                  , action:'unknown'
                   , tasks:new Array()
                 };
                 show_alert('success','Connection updated');
@@ -340,7 +342,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
         }else if($scope.env.type='view'){
             Planners.check({planner:$scope.current},
             function(data){
-                $scope.planners[$scope.current].status='online';
+                $scope.planners[$scope.current].status=data.status;
                 to_hide('ok','ok');
             },function(error){
                 $scope.planners[$scope.current].status='offline';
@@ -353,9 +355,11 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
         if($scope.env.type=='view'){
             Planners.status({planner:$scope.current},
             function(data){
-
+                $scope.planners[$scope.current].action=data.status;
+                to_hide('ok','ok');
             },function(error){
-
+                $scope.planners[$scope.current].status='offline';
+                to_hide('fail','fail');
             });
         }
     };
@@ -364,7 +368,6 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
         if($scope.env.panel='view'){
             Planners.api({planner:$scope.current},
             function(data){
-                $scope.planners[$scope.current].status='online';
                 $scope.planners[$scope.current].tasks=data;
                 to_hide('ok','complete');
             },function(error){
@@ -397,6 +400,33 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
         to_hide('fail','');
         hide_alert();
         $scope.env={panel:panel,type:type};
+    };
+    $scope.settask=function(){
+        to_waiting();
+        if($scope.env.panel='view'){
+            Planners.set({planner:$scope.current},{
+                name:'exclusive'
+              , count:1
+              , interval:1000
+            },function(data){
+                $scope.planners[$scope.current].status='taken';
+                to_hide('ok','task established');
+            },function(error){
+                to_hide('fail',error.data.message);
+            });
+        }
+    };
+    $scope.removetask=function(){
+        to_waiting();
+        if($scope.env.panel='view'){
+            Planners.remove({planner:$scope.current},
+            function(data){
+                $scope.planners[$scope.current].status='online';
+                to_hide('ok','task removed');
+            },function(error){
+                to_hide('fail','fail');
+            });
+        }
     };
 }]);
 

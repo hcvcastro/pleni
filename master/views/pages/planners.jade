@@ -34,24 +34,43 @@ div.container
                 br
                 div.btn-toolbar(role='toolbar')
                     div.btn-group.btn-group-sm
+                        button.btn.btn-default(type='button',ng-click='removetask()') Remove task
+                    div.btn-group.btn-group-sm
                         button.btn.btn-default(type='button',ng-click='api()') Scan tasks
-                        button.btn.btn-default(type='button',ng-click='status()') Check status
+                        button.btn.btn-default(type='button',ng-click='status()') Check action
                         button.btn.btn-success(type='button',ng-click='check()') Check connection
                     div#test
                         span.loader.hide
                         span.result.hide
-                div(ng-hide='planners[current].tasks.length==0')
+                div(ng-show='planners[current].status==\'online\'')
                     br
                     h3 Set a task
                     br
-                    div.row
-                        div.col-sm-3
-                            ul.nav.nav-pills.nav-stacked
-                                li(ng-repeat='task in planners[current].tasks')
-                                    a {{task._task}}
-                        div.col-sm-9
-                            div.panel.panel-default
-                                div.panel-body asdf
+                    form.form-horizontal(role='form',ng-submit='settask()')
+                        div.form-group
+                            label.col-sm-2.control-label Task
+                            div.col-sm-10
+                                select.form-control
+                                    option(ng-repeat='task in planners[current].tasks') {{task._task}}
+                        div.form-group
+                            label.col-sm-2.control-label Count
+                            div.col-sm-10
+                                input.form-control(type='number')
+                        div.form-group
+                            label.col-sm-2.control-label Interval
+                            div.col-sm-10
+                                input.form-control(type='number')
+                        div.form-group
+                            div.col-sm-offset-2.col-sm-10
+                                button.btn.btn-primary(type='submit') Send
+                div(ng-show='planners[current].status==\'taken\'')
+                    br
+                    h3 Execute a task
+                    br
+                    form.form-horizontal(role='form',ng-submit='runtask()')
+                        div.form-group
+                            div.col-sm-offset-2.col-sm-10
+                                button.btn.btn-primary(type='submit') Send
             section(ng-show='env.type==\'config\'')
                 br
                 form.form-horizontal(role='form',ng-submit='save()')
@@ -89,6 +108,7 @@ div.container
             div.visible-xs-block.visible-sm-block
                 br
             div.list-group
-                a.list-group-item(ng-repeat='(id,data) in planners',ng-click='get(id)',ng-class='{\'list-group-item-success\': planners[id].status==\'online\',\'list-group-item-danger\': planners[id].status==\'offline\'}') {{id}}
-                    span.badge(ng-show='planners[id].exclusive') taken
+                a.list-group-item(ng-repeat='(id,data) in planners',ng-click='get(id)',ng-class='{\'list-group-item-info\':planners[id].status==\'taken\',\'list-group-item-success\': planners[id].status==\'online\',\'list-group-item-danger\': planners[id].status==\'offline\'}') {{id}}
+                    span.badge {{data.tasks.length}}
+                    span.badge(ng-show='data.action!=\'unknown\'') {{data.action}}
 

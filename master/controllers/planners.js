@@ -184,13 +184,18 @@ module.exports=function(app){
                       planner[1].port
             })
             .then(function(args){
-                response.status(200).json(_success.ok);
+                var _status=planners[planner[0]].tid==undefined
+                  , _message=_status?'online':'taken'
+
+                response.status(200).json({ok:true,status:_message});
             })
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
                 }
             })
             .done();
@@ -219,6 +224,8 @@ module.exports=function(app){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
                 }
             })
             .done();
@@ -247,6 +254,8 @@ module.exports=function(app){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
                 }
             })
             .done();
@@ -276,6 +285,8 @@ module.exports=function(app){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
                 }
             })
             .done();
@@ -306,6 +317,8 @@ module.exports=function(app){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
                 }
             })
             .done();
@@ -336,6 +349,8 @@ module.exports=function(app){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
                 }
             })
             .done();
@@ -365,6 +380,8 @@ module.exports=function(app){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
                 }
             })
             .done();
