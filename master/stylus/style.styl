@@ -65,10 +65,21 @@ div#test
         opacity: 0.8
     }
 
+@keyframes spin2
+    from {
+        transform: rotate(0deg)
+    }
+    50% {
+        transform: rotate(180deg)
+    }
+    to {
+        transform: rotate(360deg)
+    }
+
 #logo
     width: auto
     height: 20.0rem
-    animation: spin 12s linear infinite
+    animation: spin2 10s linear infinite
 
 .jumbotron
     background-color: #a0a0a0

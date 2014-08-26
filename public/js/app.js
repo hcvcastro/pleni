@@ -22,7 +22,7 @@ var show_alert=function(type,message){
         $(element).focus();
     }
 // JSONEditor settings
-JSONEditor.defaults.options.theme='html'
+JSONEditor.defaults.options.theme='bootstrap2'
 JSONEditor.defaults.options.iconlib='bootstrap3'
 JSONEditor.defaults.options.disable_collapse=true
 JSONEditor.defaults.options.disable_edit_json=true
@@ -32,11 +32,7 @@ var build_jsoneditor=function(args){
         schema:{
             type:'object'
           , title:args.name
-          , properties:{
-                model:{
-                    type:'string'
-                }
-            }
+          , properties:args.scheme
         }
     });
 }
@@ -164,7 +160,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.remove=function(){
         to_waiting();
-        if($scope.env.panel='view'){
+        if($scope.env.panel=='view'){
             Repositories.delete({repository:$scope.current},function(data){
                 delete $scope.repositories[$scope.current];
                 $scope.current='';
@@ -190,7 +186,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             },function(error){
                 to_hide('fail','fail');
             });
-        }else if($scope.env.type='view'){
+        }else if($scope.env.type=='view'){
             Repositories.check({repository:$scope.current},
             function(data){
                 $scope.repositories[$scope.current].status='online';
@@ -203,7 +199,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.scan=function(){
         to_waiting();
-        if($scope.env.panel='view'){
+        if($scope.env.panel=='view'){
             Repositories.scan({repository:$scope.current},
             function(data){
                 $scope.repositories[$scope.current].status='online';
@@ -250,11 +246,13 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
       , action:'@action'
     },{
         update:{method:'PUT'}
-      , check:{method:'POST',params:{action:'_check'}}
-      , status:{method:'POST',params:{action:'_status'}}
-      , api:{method:'POST',params:{action:'_api'},isArray:true}
-      , set:{method:'POST',params:{action:'_set'}}
+      , check: {method:'POST',  params:{action:'_check'}}
+      , status:{method:'POST',  params:{action:'_status'}}
+      , api:   {method:'POST',  params:{action:'_api'},    isArray:true}
+      , set:   {method:'POST',  params:{action:'_set'}}
       , remove:{method:'DELETE',params:{action:'_remove'}}
+      , run:   {method:'POST',  params:{action:'_run'}}
+      , stop:  {method:'POST',  params:{action:'_stop'}}
     });
 }])
 .controller('PlannersController',
@@ -279,7 +277,6 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
       , count:1
       , interval:1000
     };
-    $scope.ctask='';
 
     $scope.refresh=function(){
         Planners.query(function(data){
@@ -348,7 +345,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.remove=function(){
         to_waiting();
-        if($scope.env.panel='view'){
+        if($scope.env.panel=='view'){
             Planners.delete({planner:$scope.current},function(data){
                 delete $scope.planners[$scope.current];
                 $scope.current='';
@@ -372,11 +369,11 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             },function(error){
                 to_hide('fail','fail');
             });
-        }else if($scope.env.type='view'){
+        }else if($scope.env.type=='view'){
             Planners.check({planner:$scope.current},
             function(data){
                 $scope.planners[$scope.current].status=data.status;
-                to_hide('ok','ok');
+                to_hide('ok',data.status);
             },function(error){
                 $scope.planners[$scope.current].status='offline';
                 to_hide('fail','fail');
@@ -389,7 +386,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             Planners.status({planner:$scope.current},
             function(data){
                 $scope.planners[$scope.current].action=data.status;
-                to_hide('ok','ok');
+                to_hide('ok',data.status);
             },function(error){
                 $scope.planners[$scope.current].status='offline';
                 to_hide('fail','fail');
@@ -398,7 +395,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.api=function(){
         to_waiting();
-        if($scope.env.panel='view'){
+        if($scope.env.panel=='view'){
             Planners.api({planner:$scope.current},
             function(data){
                 $scope.planners[$scope.current].tasks=data;
@@ -434,30 +431,29 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
         hide_alert();
         $scope.env={panel:panel,type:type};
     };
-    $scope.$watch('current+ctask',function(newv){
-        if(newv!==''){
+    $scope.editor=function(value){
+        if(value!==''&&$scope.planners[$scope.current].status=='taken'){
             var tasks=$scope.planners[$scope.current].tasks
-              , name=$scope.ctask
+              , name=$scope.planners[$scope.current].task
               , args=tasks.filter(function(element){
                     if(element.name==name){
                         return true;
                     }
                 })
 
-console.log(args);
-console.log(name);
-            if(args!==undefined&args.length==1){
-                build_jsoneditor(args[0]);
-            }
+            console.log(args[0]);
+            build_jsoneditor(args[0]);
         }
-    });
+    };
+    $scope.$watch('current',$scope.editor);
     $scope.settask=function(){
         to_waiting();
-        if($scope.env.panel='view'){
+        if($scope.env.panel=='view'){
             Planners.set({planner:$scope.current},$scope.task,
             function(data){
                 $scope.planners[$scope.current].status='taken';
-                $scope.ctask=$scope.task.name;
+                $scope.planners[$scope.current].task=$scope.task.name;
+                $scope.editor($scope.current);
                 to_hide('ok','task established');
             },function(error){
                 to_hide('fail',error.data.message);
@@ -466,11 +462,34 @@ console.log(name);
     };
     $scope.removetask=function(){
         to_waiting();
-        if($scope.env.panel='view'){
+        if($scope.env.panel=='view'){
             Planners.remove({planner:$scope.current},
             function(data){
                 $scope.planners[$scope.current].status='online';
+                delete $scope.planners[$scope.current].task;
                 to_hide('ok','task removed');
+            },function(error){
+                to_hide('fail','fail');
+            });
+        }
+    };
+    $scope.runtask=function(){
+        if($scope.env.panel=='view'){
+            Planners.run({planner:$scope.current},
+            function(data){
+                $scope.planners[$scope.current].action='running';
+                to_hide('ok','running...');
+            },function(error){
+                to_hide('fail','fail');
+            });
+        }
+    };
+    $scope.stoptask=function(){
+        if($scope.env.panel=='view'){
+            Planners.stop({planner:$scope.current},
+            function(data){
+                $scope.planners[$scope.current].action='stopped';
+                to_hide('ok','...stopped');
             },function(error){
                 to_hide('fail','fail');
             });

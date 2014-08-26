@@ -312,7 +312,8 @@ describe('planners controller functions',function(){
                     res.statusCode.should.be.eql(200)
                     res.body.should.be.an.Array;
                     for(var i=0;i<res.body.length;i++){
-                        res.body[i].should.have.property('_task');
+                        res.body[i].should.have.property('name');
+                        res.body[i].should.have.property('scheme');
                     }
                     done();
                 });

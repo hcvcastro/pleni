@@ -38,11 +38,21 @@ module.exports.cleanargs=function(args){
     }
 };
 
-module.exports.args={
-    host:''
-  , dbuser:''
-  , dbpass:''
-  , dbname:''
-  , site_url:''
+module.exports.scheme={
+    'host':{
+        type:'string'
+    }
+  , 'dbuser':{
+        type:'string'
+    }
+  , 'dbpass':{
+        type:'string'
+    }
+  , 'dbname':{
+        type:'string'
+    }
+  , 'site_url':{
+        type:'string'
+    }
 };
 

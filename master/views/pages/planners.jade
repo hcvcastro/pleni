@@ -3,7 +3,7 @@ div.container
     div.row
         div.btn-toolbar.col-md-12(role='toolbar')
             div.btn-group.btn-group-sm
-                button.btn.btn-default(type='button',ng-click='add()') Add Planner
+                button.btn.btn-default(type='button',ng-click='add()') Add planner
                 button.btn.btn-primary(type='button',ng-click='refresh()') Refresh planners
     br
     div.row
@@ -40,17 +40,16 @@ div.container
             section(ng-show='env.type==\'view\'')
                 br
                 div.btn-toolbar(role='toolbar')
-                    div.btn-group.btn-group-sm
+                    div.btn-group.btn-group-sm(ng-show='planners[current].status==\'taken\'')
+                        button.btn.btn-default(type='button',ng-click='status()') Check action
                         button.btn.btn-default(type='button',ng-click='removetask()') Remove task
                     div.btn-group.btn-group-sm
-                        button.btn.btn-default(type='button',ng-click='api()') Scan tasks
-                        button.btn.btn-default(type='button',ng-click='status()') Check action
                         button.btn.btn-success(type='button',ng-click='check()') Check connection
                     div#test
                         span.loader.hide
                         span.result.hide
+                br
                 div(ng-show='planners[current].status==\'online\'')
-                    br
                     h3 Set a task
                     br
                     form.form-horizontal(role='form',ng-submit='settask()')
@@ -70,12 +69,17 @@ div.container
                         div.form-group
                             div.col-sm-offset-2.col-sm-10
                                 button.btn.btn-primary(type='submit') Send
+                                button.btn.btn-default(type='button',ng-click='api()') Scan tasks
                 div(ng-show='planners[current].status==\'taken\'')
                     br
-                    h3 Execute a task
+                    h3 Execute task
                     br
                     form.form-horizontal(role='form',ng-submit='runtask()')
                         div#editor
+                        div.form-group
+                            div.col-sm-offset-2.col-sm-10
+                                button.btn.btn-success(type='submit') Run task
+                                button.btn.btn-danger(type='button',ng-click='stoptask()') Stop task
             section(ng-show='env.type==\'config\'')
                 br
                 form.form-horizontal(role='form',ng-submit='save()')
@@ -94,7 +98,7 @@ div.container
                     div.form-group
                         div.col-sm-offset-2.col-sm-10
                             button.btn.btn-primary(type='submit') Save
-                            button.btn.btn-default(type='button',ng-click='check()') Test Connection
+                            button.btn.btn-default(type='button',ng-click='check()') Test connection
                             div#test
                                 span.loader.hide
                                 span.result.hide

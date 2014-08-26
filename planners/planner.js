@@ -22,7 +22,7 @@ var planner=function(){
         var map=this.valid_tasks.map(function(element){
             return {
                 name:element
-              , args:require('./tasks/'+element).args
+              , scheme:require('./tasks/'+element).scheme
             };
         })
 
