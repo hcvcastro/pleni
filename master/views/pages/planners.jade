@@ -11,9 +11,9 @@ div.container
             div.visible-xs-block.visible-sm-block
                 br
             div.list-group
-                a.list-group-item(ng-repeat='(id,data) in planners',ng-click='get(id)',ng-class='{\'list-group-item-info\':planners[id].status==\'taken\',\'list-group-item-success\': planners[id].status==\'online\',\'list-group-item-danger\': planners[id].status==\'offline\'}') {{id}}
+                a.list-group-item(ng-repeat='(id,data) in planners',ng-click='get(id)',ng-class='{\'list-group-item-info\':planners[id].status==\'taken\',\'list-group-item-success\': planners[id].status==\'online\',\'list-group-item-danger\': planners[id].status==\'offline\'}')
+                    span.glyphicon(ng-class='{\'glyphicon-play\':data.action==\'running\',\'glyphicon-stop\':data.action==\'stopped\'}')  {{id}}
                     span.badge {{data.tasks.length}}
-                    span.badge(ng-show='data.action!=\'unknown\'') {{data.action}}
         div.col-md-8(role='main')
             div.alert.alert-dismissible.hide(role='alert')
                 button.close(type='button',data-dismiss='alert')
@@ -75,9 +75,7 @@ div.container
                     h3 Execute a task
                     br
                     form.form-horizontal(role='form',ng-submit='runtask()')
-                        div.form-group
-                            div.col-sm-offset-2.col-sm-10
-                                button.btn.btn-primary(type='submit') Send
+                        div#editor
             section(ng-show='env.type==\'config\'')
                 br
                 form.form-horizontal(role='form',ng-submit='save()')

@@ -21,6 +21,25 @@ var show_alert=function(type,message){
   , focus=function(element){
         $(element).focus();
     }
+// JSONEditor settings
+JSONEditor.defaults.options.theme='html'
+JSONEditor.defaults.options.iconlib='bootstrap3'
+JSONEditor.defaults.options.disable_collapse=true
+JSONEditor.defaults.options.disable_edit_json=true
+JSONEditor.defaults.options.disable_properties=true
+var build_jsoneditor=function(args){
+    $('#editor').jsoneditor({
+        schema:{
+            type:'object'
+          , title:args.name
+          , properties:{
+                model:{
+                    type:'string'
+                }
+            }
+        }
+    });
+}
 // Angular functions
 var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
 .config(['$routeProvider',function($routeProvider){
@@ -41,7 +60,9 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             redirectTo: '/home'
         });
 }])
-.controller('HomeController',['$scope',function($scope){}])
+.controller('HomeController',['$scope',function($scope){
+    $('header nav ul li').removeClass('active');
+}])
 .factory('Repositories',['$resource',function($resource){
     return $resource('/repositories/:repository/:action',{
         repository:'@repository'
@@ -55,6 +76,9 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
 .controller('RepositoriesController',
     ['$scope','$sessionStorage','Repositories',
     function($scope,$sessionStorage,Repositories){
+    $('header nav ul li').removeClass('active');
+    $('header nav ul li:nth-child(1)').addClass('active');
+
     $scope.sessionStorage=$sessionStorage;
     $scope.env={
         panel:'index'
@@ -236,6 +260,9 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
 .controller('PlannersController',
     ['$scope','$sessionStorage','Planners',
     function($scope,$sessionStorage,Planners){
+    $('header nav ul li').removeClass('active');
+    $('header nav ul li:nth-child(2)').addClass('active');
+
     $scope.sessionStorage=$sessionStorage;
     $scope.env={
         panel:'index'
@@ -252,6 +279,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
       , count:1
       , interval:1000
     };
+    $scope.ctask='';
 
     $scope.refresh=function(){
         Planners.query(function(data){
@@ -406,12 +434,30 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
         hide_alert();
         $scope.env={panel:panel,type:type};
     };
+    $scope.$watch('current+ctask',function(newv){
+        if(newv!==''){
+            var tasks=$scope.planners[$scope.current].tasks
+              , name=$scope.ctask
+              , args=tasks.filter(function(element){
+                    if(element.name==name){
+                        return true;
+                    }
+                })
+
+console.log(args);
+console.log(name);
+            if(args!==undefined&args.length==1){
+                build_jsoneditor(args[0]);
+            }
+        }
+    });
     $scope.settask=function(){
         to_waiting();
         if($scope.env.panel='view'){
             Planners.set({planner:$scope.current},$scope.task,
             function(data){
                 $scope.planners[$scope.current].status='taken';
+                $scope.ctask=$scope.task.name;
                 to_hide('ok','task established');
             },function(error){
                 to_hide('fail',error.data.message);
