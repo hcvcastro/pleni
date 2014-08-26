@@ -22,19 +22,20 @@ var show_alert=function(type,message){
         $(element).focus();
     }
 // JSONEditor settings
-JSONEditor.defaults.options.theme='bootstrap2'
+JSONEditor.defaults.options.theme='bootstrap3'
 JSONEditor.defaults.options.iconlib='bootstrap3'
 JSONEditor.defaults.options.disable_collapse=true
 JSONEditor.defaults.options.disable_edit_json=true
 JSONEditor.defaults.options.disable_properties=true
 var build_jsoneditor=function(args){
-    $('#editor').jsoneditor({
+    var editor=new JSONEditor(document.getElementById('editor'),{
         schema:{
             type:'object'
           , title:args.name
           , properties:args.scheme
         }
-    });
+    })
+    return editor;
 }
 // Angular functions
 var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
@@ -440,9 +441,11 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
                         return true;
                     }
                 })
-
-            console.log(args[0]);
-            build_jsoneditor(args[0]);
+            
+            if($scope.jsoneditor){
+                $scope.jsoneditor.destroy();
+            }
+            $scope.jsoneditor=build_jsoneditor(args[0]);
         }
     };
     $scope.$watch('current',$scope.editor);
@@ -475,7 +478,7 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
     };
     $scope.runtask=function(){
         if($scope.env.panel=='view'){
-            Planners.run({planner:$scope.current},
+            Planners.run({planner:$scope.current},$scope.jsoneditor.getValue(),
             function(data){
                 $scope.planners[$scope.current].action='running';
                 to_hide('ok','running...');
