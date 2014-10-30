@@ -2,7 +2,7 @@
 
 HOST='http://localhost:3001'
 TASK='site_remove'
-COUNT=1
+COUNT=${1:-1}
 DELAY=1000
 
 REQUEST=$HOST/

@@ -20,7 +20,7 @@ var request=require('request')
  *              headers
  *              get
  */
-exports.headrequest=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.task.wait.key+args.task.wait.id.substr(5)
       , headers={}

@@ -7,7 +7,7 @@ DBHOST='http://localhost:5984'
 DBUSER='jacobian'
 DBPASS='asdf'
 DBNAME=${2}
-SITE_URL='http://galao.local/'
+SITE_URL=${3}
 
 REQUEST=$HOST/$TID/_run
 BODY=$(cat << EOF

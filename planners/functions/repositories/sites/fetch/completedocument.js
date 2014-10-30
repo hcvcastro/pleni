@@ -38,8 +38,11 @@ var request=require('request')
  * args outputs
  *      task
  *          complete
+ *              ok
+ *              id
+ *              rev
  */
-exports.completedocument=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , doc='/'+encodeURIComponent(args.task.lock.id)
       , url=args.db.host+'/'+args.db.name+doc
@@ -55,11 +58,13 @@ exports.completedocument=function(args){
           , timestamp:Date.now()
         }
 
-    body.headers=args.headers;
-    body.head=args.head;
-    if(args.head.get){
-        body.get=args.get;
-        body.ref=args.ref;
+    if(args.headers){
+        body.headers=args.headers;
+    }
+    body.head=args.task.head;
+    if(args.task.head.get){
+        body.get=args.task.get;
+        body.ref=args.task.ref;
     }
 
     request.put({url:url,headers:headers,json:body},function(error,response){

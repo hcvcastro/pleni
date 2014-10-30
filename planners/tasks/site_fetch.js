@@ -1,22 +1,29 @@
-'u  e strict';
+'use strict';
 
-var f=require('../functions/couchdb')
-  , g=require('../functions/sites_fetcher')
-  , validate=require('../utils/validators')
+var validate=require('../utils/validators')
+  , test=require('../functions/databases/test')
+  , auth=require('../functions/databases/auth')
+  , wait=require('../functions/repositories/sites/fetch/getwaitdocument')
+  , lock=require('../functions/repositories/sites/fetch/lockdocument')
+  , head=require('../functions/repositories/sites/fetch/headrequest')
+  , get=require('../functions/repositories/sites/fetch/getrequest')
+  , body=require('../functions/repositories/sites/fetch/bodyanalyzer')
+  , complete=require('../functions/repositories/sites/fetch/completedocument')
+  , spread=require('../functions/repositories/sites/fetch/spreadrefs')
 
 module.exports=function(params,repeat,stop){
-    f.testcouchdb(params)
-    .then(f.couchdbauth)
-    .then(g.getsitetask)
-    .then(g.looksitetask)
-    .then(g.getheadrequest)
-    .then(g.getgetrequest)
-    .then(g.bodyanalyzerlinks)
-    .then(g.completesitetask)
-    .then(g.spreadsitelinks)
+    test(params)
+    .then(auth)
+    .then(wait)
+    .then(lock)
+    .then(head)
+    .then(get)
+    .then(body)
+    .then(complete)
+    .then(spread)
     .then(function(args){
-        if(args.complete_task){
-            console.log('RUN fetch --> '+args['complete_task'].id);
+        if(args.task.complete){
+            console.log('RUN fetch --> '+args.task.complete.id);
         }
         repeat();
     })
@@ -28,18 +35,14 @@ module.exports=function(params,repeat,stop){
 };
 
 module.exports.cleanargs=function(args){
-    if(validate.validHost(args.host)
-        &&validate.validSlug(args.dbuser)
-        &&validate.validSlug(args.dbname)){
-
-    var result=['host','dbuser','dbpass','dbname']
-        return {
-            host:   validate.toValidHost(args.host)
-          , dbuser: validate.toString(args.dbuser)
-          , dbpass: validate.toString(args.dbpass)
-          , dbname: validate.toString(args.dbname)
-        };
-    }
+    return {
+        db: {
+            host:validate.toValidHost(args.host)
+          , user:validate.toString(args.dbuser)
+          , pass:validate.toString(args.dbpass)
+          , name:validate.toString(args.dbname)
+        }
+    };
 };
 
 module.exports.scheme={

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HOST='http://localhost:3001'
-TASK='site_fetcher'
+TASK='site_fetch'
 COUNT=-1
 DELAY=1000
 

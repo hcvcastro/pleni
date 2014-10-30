@@ -17,7 +17,7 @@ var request=require('request')
  *          ref
  *              related
  */
-exports.spreadsitelinks=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
       , documents=[]

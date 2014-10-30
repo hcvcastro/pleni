@@ -30,7 +30,7 @@ var request=require('request')
  *              links
  *              related
  */
-exports.bodyanalyzer=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
 
     if(!args.task.head.get){
@@ -70,6 +70,9 @@ exports.bodyanalyzer=function(args){
             register_link($(this).attr('action'),links.form);
         });
 
+        if(!args.task.ref){
+            args.task.ref={};
+        }
         args.task.ref.links=links;
         args.task.ref.related=samedomain;
         deferred.resolve(args);

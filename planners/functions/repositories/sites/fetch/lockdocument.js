@@ -24,7 +24,7 @@ var request=require('request')
  *              id
  *              rev
  */
-exports.lockdocument=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , doc='/'+encodeURIComponent(args.task.wait.id)
       , url=args.db.host+'/'+args.db.name+doc
