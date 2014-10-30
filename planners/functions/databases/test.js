@@ -9,7 +9,7 @@ var request=require('request')
  *      db
  *          host
  */
-exports.test=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host
 

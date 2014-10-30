@@ -18,7 +18,7 @@ var request=require('request')
  *      site
  *          root
  */
-exports.rootsite=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/'+encodeURIComponent('page_/')
       , headers={

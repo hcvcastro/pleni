@@ -18,7 +18,7 @@ var request=require('request')
  *      site
  *          summary
  */
-exports.summary=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/summary'
       , headers={

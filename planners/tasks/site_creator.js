@@ -1,18 +1,22 @@
 'use strict';
 
-var f=require('../functions/couchdb')
-  , g=require('../functions/sites_creator')
-  , validate=require('../utils/validators')
+var validate=require('../utils/validators')
+  , test=require('../functions/databases/test')
+  , auth=require('../functions/databases/auth')
+  , db=require('../functions/databases/create')
+  , summary=require('../functions/repositories/sites/create/summary')
+  , rootsite=require('../functions/repositories/sites/create/rootsite')
+  , design=require('../functions/repositories/sites/create/documentdesign')
 
 module.exports=function(params,repeat,stop){
-    f.testcouchdb(params)
-    .then(f.couchdbauth)
-    .then(f.createdb)
-    .then(g.createsummary)
-    .then(g.createrootsite)
-    .then(g.createdesigndocument)
+    test(params)
+    .then(auth)
+    .then(db)
+    .then(summary)
+    .then(rootsite)
+    .then(design)
     .then(function(args){
-        console.log('RUN creator --> '+args['dbname']);
+        console.log('RUN creator --> '+args.db.name);
         repeat();
     })
     .fail(function(error){
@@ -29,16 +33,20 @@ module.exports.cleanargs=function(args){
         &&validate.validHost(args.site_url)){
 
         return {
-            host:     validate.toValidHost(args.host)
-          , dbuser:   validate.toString(args.dbuser)
-          , dbpass:   validate.toString(args.dbpass)
-          , dbname:   validate.toString(args.dbname)
-          , site_url: validate.toValidHost(args.site_url)
+            db: {
+                host:validate.toValidHost(args.host)
+              , user:validate.toString(args.dbuser)
+              , pass:validate.toString(args.dbpass)
+              , name:validate.toString(args.dbname)
+            }
+          , site: {
+                url: validate.toValidHost(args.site_url)
+            }
         };
     }
 };
 
-module.exports.scheme={
+/*module.exports.scheme={
     'host':{
         type:'string'
     }
@@ -54,5 +62,5 @@ module.exports.scheme={
   , 'site_url':{
         type:'string'
     }
-};
+};*/
 

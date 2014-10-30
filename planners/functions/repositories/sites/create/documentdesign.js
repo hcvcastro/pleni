@@ -16,7 +16,7 @@ var request=require('request')
  *      site
  *          design
  */
-exports.designdocument=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/_design/default'
       , headers={

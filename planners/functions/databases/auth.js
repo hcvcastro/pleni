@@ -15,7 +15,7 @@ var request=require('request')
  *      auth
  *          cookie
  */
-exports.auth=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/_session'
       , body={
@@ -29,6 +29,9 @@ exports.auth=function(args){
                 var regex=/^(.*); Version=1;.*$/i
                   , exec=regex.exec(response.headers['set-cookie'])
                 
+                if(!args.auth){
+                    args.auth={}
+                }
                 args.auth.cookie=exec[1];
                 deferred.resolve(args);
                 return;
