@@ -5,7 +5,7 @@ var server=require('./abstracts/server')
   , validate=require('./utils/validators')
   , _success=require('./utils/json-response').success
   , _error=require('./utils/json-response').error
-  , f=require('./functions/random')
+  , generator=require('./functions/utils/random').sync
 
 var planner=function(){
     this.valid_tasks=[
@@ -39,7 +39,7 @@ var planner=function(){
                         return element===name})
 
                 if(valid_task){
-                    this.tid=f.generatorid({})['random'];
+                    this.tid=generator().toString();
                     this.name=name;
 
                     if(isNaN(count)){

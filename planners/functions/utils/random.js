@@ -3,14 +3,21 @@
 var Q=require('q')
   , sha1=require('sha1')
 
-/* args definition
- *      id
+/*
+ * Function for random generator
+ * args inputs
+ *
+ * args outputs
+ *      random
  */
-exports.generatorid=function(args){
-    var random=generator();
-    args['random']=sha1(random);
+exports.generator=function(args){
+    var deferred=Q.defer()
+      , random=generator()
 
-    return args;
+    args.random=sha1(random);
+
+    deferred.resolve(args);
+    return deferred.promise;
 };
 
 var generator=function(low,high){
@@ -19,4 +26,5 @@ var generator=function(low,high){
 
     return Math.floor(Math.random()*(_high-_low)+_low);
 };
+exports.sync=generator;
 

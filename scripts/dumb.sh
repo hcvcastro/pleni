@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# script for test the dumb planner
+# this planner makes nothing
+
 PLANNER_HOST='http://localhost'
 PLANNER_PORT=3001
 
