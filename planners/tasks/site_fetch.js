@@ -16,7 +16,7 @@ module.exports=function(params,repeat,stop){
     .then(g.spreadsitelinks)
     .then(function(args){
         if(args.complete_task){
-            console.log('RUN fetcher --> '+args['complete_task'].id);
+            console.log('RUN fetch --> '+args['complete_task'].id);
         }
         repeat();
     })

@@ -12,7 +12,7 @@ var request=require('request')
  *      auth
  *          cookie
  */
-exports.delete=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
       , headers={

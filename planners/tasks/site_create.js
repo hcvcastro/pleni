@@ -16,7 +16,7 @@ module.exports=function(params,repeat,stop){
     .then(rootsite)
     .then(design)
     .then(function(args){
-        console.log('RUN creator --> '+args.db.name);
+        console.log('RUN create --> '+args.db.name);
         repeat();
     })
     .fail(function(error){

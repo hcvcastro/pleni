@@ -10,8 +10,9 @@ var server=require('./abstracts/server')
 var planner=function(){
     this.valid_tasks=[
         'exclusive'
-      , 'site_creator'
-      , 'site_fetcher'
+      , 'site_create'
+      , 'site_fetch'
+      , 'site_remove'
     ];
 
     this.tid;
