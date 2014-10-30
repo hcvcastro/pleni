@@ -34,6 +34,7 @@ module.exports=function(args){
     var deferred=Q.defer()
 
     if(!args.task.head.get){
+        // TODO add customized analyzer for specific mime types
         deferred.resolve(args);
     }else{
         var $=cheerio.load(args.task.get.body)

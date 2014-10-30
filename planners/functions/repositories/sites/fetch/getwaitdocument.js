@@ -39,6 +39,9 @@ module.exports=function(args){
                     args.task.wait=json.rows[0];
                     deferred.resolve(args);
                     return;
+                }else{
+                    deferred.reject({"complete":true});
+                    return;
                 }
             }
             deferred.reject(response.body);
