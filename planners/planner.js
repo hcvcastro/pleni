@@ -138,7 +138,7 @@ var planner=function(){
 
 planner.prototype=new scheduler();
 
-server.set(process.env.PORT);
+server.set(process.env.PORT||3001);
 server.listen(new planner());
 server.run();
 

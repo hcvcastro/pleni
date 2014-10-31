@@ -12,12 +12,16 @@ var request=require('request')
  *          list
  *      auth
  *          cookie
+ *
+ * args output
+ *      db
+ *          explist
  */
-exports.getdbs=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , list=args.db.list
       , filter=list.filter(function(element){
-            return element.lastIndexOf(args.prefix,0)===0
+            return element.lastIndexOf(args.db.prefix,0)===0
         })
 
     Q.all(filter.map(function(element){
@@ -33,7 +37,8 @@ exports.getdbs=function(args){
         for(var i in arguments){
             map.push(JSON.parse(arguments[i].getdb));
         }
-        deferred.resolve(map);
+        args.db.explist=map
+        deferred.resolve(args);
     })
     .done(function(args){
         deferred.resolve(args);

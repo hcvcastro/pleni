@@ -10,7 +10,7 @@ var Q=require('q')
  * args outputs
  *      random
  */
-exports.generator=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , random=generator()
 
@@ -26,5 +26,5 @@ var generator=function(low,high){
 
     return Math.floor(Math.random()*(_high-_low)+_low);
 };
-exports.sync=generator;
+module.exports.sync=generator;
 

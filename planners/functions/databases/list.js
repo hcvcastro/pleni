@@ -16,7 +16,7 @@ var request=require('request')
  *      db
  *          list
  */
-exports.list=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/_all_dbs'
       , headers={

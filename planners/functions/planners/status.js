@@ -9,7 +9,7 @@ var request=require('request')
  *      planner
  *          host
  */
-exports.status=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.planner.host+'/_status'
 

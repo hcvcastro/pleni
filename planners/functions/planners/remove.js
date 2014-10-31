@@ -10,7 +10,7 @@ var request=require('request')
  *          host
  *          tid <-- task id
  */
-exports.remove=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.planner.host+'/'+args.planner.tid
 

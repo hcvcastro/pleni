@@ -1,7 +1,13 @@
 'use strict';
 
 var should=require('should')
-  , f=require('../../../planners/functions/planner')
+  , test=require('../../../planners/functions/planners/test')
+  , api=require('../../../planners/functions/planners/api')
+  , status=require('../../../planners/functions/planners/status')
+  , set=require('../../../planners/functions/planners/set')
+  , run=require('../../../planners/functions/planners/run')
+  , stop=require('../../../planners/functions/planners/stop')
+  , remove=require('../../../planners/functions/planners/remove')
   , setting={
         host:'http://localhost'
       , port:3001
@@ -13,7 +19,7 @@ describe('planner functions',function(){
           , tid
 
         it('planner server success connection',function(done){
-            f.testplanner({host:url})
+            test({host:url})
             .done(function(args){
                 args.host.should.equal(url);
                 done();
@@ -21,7 +27,7 @@ describe('planner functions',function(){
         });
 
         it('planner server connection error',function(done){
-            f.testplanner({host:setting.host+':'+(setting.port-2)})
+            test({host:setting.host+':'+(setting.port-2)})
             .fail(function(error){
                 'connect'.should.equal(error.syscall);
             })
@@ -31,7 +37,7 @@ describe('planner functions',function(){
         });
 
         it('get status for planner server',function(done){
-            f.status({host:url})
+            status({host:url})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('status');
@@ -40,7 +46,7 @@ describe('planner functions',function(){
         });
 
         it('get api for planner server',function(done){
-            f.api({host:url})
+            api({host:url})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('all_tasks');
@@ -50,7 +56,7 @@ describe('planner functions',function(){
         });
 
         it('set task in planner server',function(done){
-            f.set({host:url,task:{name:'exclusive',count:1,interval:1000}})
+            set({host:url,task:{name:'exclusive',count:1,interval:1000}})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('host').and.be.eql(url);
@@ -60,7 +66,7 @@ describe('planner functions',function(){
         });
 
         it('set task in planner server (error)',function(done){
-            f.set({host:url,task:{name:'exclusive',count:1,interval:1000}})
+            set({host:url,task:{name:'exclusive',count:1,interval:1000}})
             .fail(function(error){
                 error.should.be.an.Object;
                 error.should.have.property('ok').and.be.eql(false);
@@ -69,7 +75,7 @@ describe('planner functions',function(){
         });
 
         it('running task in planner server',function(done){
-            f.run({host:url,tid:tid,targs:{}})
+            run({host:url,tid:tid,targs:{}})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('host');
@@ -79,7 +85,7 @@ describe('planner functions',function(){
         });
 
         it('stopping task in planner server',function(done){
-            f.stop({host:url,tid:tid})
+            stop({host:url,tid:tid})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('host');
@@ -89,7 +95,7 @@ describe('planner functions',function(){
         });
 
         it('remove task in planner server',function(done){
-            f.remove({host:url,tid:tid})
+            remove({host:url,tid:tid})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('host');

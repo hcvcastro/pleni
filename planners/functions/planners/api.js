@@ -10,7 +10,7 @@ var request=require('request')
  *          host
  *          tasks
  */
-exports.api=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.planner.host+'/_api'
 

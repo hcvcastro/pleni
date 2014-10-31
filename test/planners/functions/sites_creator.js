@@ -1,8 +1,8 @@
 'use strict';
 
 var should=require('should')
-  , f=require('../../../planners/functions/couchdb')
-  , g=require('../../../planners/functions/sites_creator')
+  , test=require('../../../planners/functions/databases/test')
+  , auth=require('../../../planners/functions/databases/auth')
 
 var setting={
     host:'http://localhost:5984'

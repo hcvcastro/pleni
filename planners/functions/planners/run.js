@@ -11,7 +11,7 @@ var request=require('request')
  *          tid <-- task id
  *          targs <-- arguments needed for task
  */
-exports.run=function(args){
+module.exports=function(args){
     var deferred=Q.defer()
       , url=args.planner.host+'/'+args.planner.tid+'/_run'
       , body=args.planner.targs

@@ -18,7 +18,7 @@ planner.prototype=new scheduler(function(repeat,stop){
     repeat();
 },30,0);
 
-server.set(process.env.PORT);
+server.set(process.env.PORT||3001);
 server.listen(new planner());
 server.run();
 
