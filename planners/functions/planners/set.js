@@ -12,6 +12,10 @@ var request=require('request')
  *          name
  *          count
  *          interval
+ *
+ * args output
+ *      planner
+ *          tid
  */
 module.exports=function(args){
     var deferred=Q.defer()

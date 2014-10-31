@@ -8,6 +8,9 @@ var request=require('request')
  * args input
  *      planner
  *          host
+ *
+ * args output
+ *      planner
  *          tasks
  */
 module.exports=function(args){

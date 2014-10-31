@@ -3,31 +3,36 @@
 var should=require('should')
   , test=require('../../../planners/functions/databases/test')
   , auth=require('../../../planners/functions/databases/auth')
+  , create=require('../../../planners/functions/databases/create')
+  , summary=require('../../../planners/functions/repositories/sites/create/summary')
 
-var setting={
-    host:'http://localhost:5984'
-  , dbuser:'jacobian'
-  , dbpass:'asdf'
-  , dbname:'test'
-  , site_type: 'site'
-  , site_url: 'http://galao.main'
-};
+var host='http://localhost:5984'
+  , user='jacobian'
+  , pass='asdf'
+  , name='test'
+  , url='http://galao.main'
 
 describe('site initial scaffolding functions',function(){
     var cookie;
 
     before(function(done){
-        f.couchdbauth({
-            host:setting.host
-          , dbuser:setting.dbuser
-          , dbpass:setting.dbpass
+        auth({
+            db:{
+                host:host
+              , user:user
+              , pass:pass
+            }
         })
         .then(function(args){
-            cookie=args.cookie
-            f.createdb({
-                host:setting.host
-              , dbname:setting.dbname
-              , cookie:cookie
+            cookie=args.auth.cookie
+            create({
+                db:{
+                    host:host
+                  , name:name
+                }
+              , auth:{
+                  cookie:cookie
+                }
             })
             .done(function(args){
                 done();
@@ -37,15 +42,20 @@ describe('site initial scaffolding functions',function(){
 
     describe('testing create of summary',function(){
         it('document summary creation',function(done){
-            g.createsummary({
-                host:setting.host
-              , dbname:setting.dbname
-              , cookie:cookie
-              , site_type:setting.site_type
-              , site_url:setting.site_url
+            summary({
+                db:{
+                    host:host
+                  , name:name
+                }
+              , auth:{
+                    cookie:cookie
+                }
+              , site:{
+                    url:url
+                }
             })
             .done(function(args){
-                args.should.have.property('rev_summary');
+                args.site.should.have.property('summary');
                 done();
             });
         });

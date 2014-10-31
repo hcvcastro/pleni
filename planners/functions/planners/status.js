@@ -8,6 +8,10 @@ var request=require('request')
  * args input
  *      planner
  *          host
+ *
+ * args output
+ *      planner
+ *          status
  */
 module.exports=function(args){
     var deferred=Q.defer()
