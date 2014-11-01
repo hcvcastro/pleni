@@ -1,9 +1,9 @@
 #!/bin/bash
 
 HOST='http://localhost:3001'
-TID='ddef29f6e5decef899f16e5c99f0605d975a300c'
+TID=${1}
 
-REQUEST=$HOST/$TID/_run
+REQUEST=$HOST/$TID/_stop
 BODY=$(cat << EOF
 {}
 EOF
