@@ -1,10 +1,14 @@
 'use strict';
 
 var should=require('should')
-  , test=require('../../../planners/functions/databases/test')
-  , auth=require('../../../planners/functions/databases/auth')
-  , create=require('../../../planners/functions/databases/create')
-  , summary=require('../../../planners/functions/repositories/sites/create/summary')
+  , base='../../../planners/functions'
+  , test=require(base+'/databases/test')
+  , auth=require(base+'/databases/auth')
+  , create=require(base+'/databases/create')
+  , summary=require(base+'/repositories/sites/create/summary')
+  , rootsite=require(base+'/repositories/sites/create/rootsite')
+  , design=require(base+'/repositories/sites/create/designdocument')
+  , remove=require(base+'/databases/remove')
 
 var host='http://localhost:5984'
   , user='jacobian'
@@ -63,15 +67,20 @@ describe('site initial scaffolding functions',function(){
 
     describe('testing create of root page',function(){
         it('document page_/ creation',function(done){
-            g.createrootsite({
-                host:setting.host
-              , dbname:setting.dbname
-              , cookie:cookie
-              , site_type:setting.site_type
-              , site_url:setting.site_url
+            rootsite({
+                db:{
+                    host:host
+                  , name:name
+                }
+              , auth:{
+                    cookie:cookie
+                }
+              , site:{
+                    url:url
+                }
             })
             .done(function(args){
-                args.should.have.property('rev_root');
+                args.site.should.have.property('root');
                 done();
             });
         });
@@ -79,23 +88,34 @@ describe('site initial scaffolding functions',function(){
 
     describe('testing create default design document',function(){
         it('design document creation',function(done){
-            g.createdesigndocument({
-                host:setting.host
-              , dbname:setting.dbname
-              , cookie:cookie
+            design({
+                db:{
+                    host:host
+                  , name:name
+                }
+              , auth:{
+                    cookie:cookie
+                }
+              , site:{
+                    url:url
+                }
             })
             .done(function(args){
-                args.should.have.property('rev_design');
+                args.site.should.have.property('design');
                 done();
             });
         });
     });
 
     after(function(done){
-        f.deletedb({
-            host:setting.host
-          , dbname:setting.dbname
-          , cookie:cookie
+        remove({
+            db:{
+                host:host
+              , name:name
+            }
+          , auth:{
+              cookie:cookie
+            }
         })
         .done(function(args){
             done();

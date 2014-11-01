@@ -4,7 +4,7 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for creation of document design for fetch sites
+ * Function for creation of a design document for fetch sites
  * args inputs
  *      db
  *          host

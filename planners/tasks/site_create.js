@@ -6,7 +6,7 @@ var validate=require('../utils/validators')
   , db=require('../functions/databases/create')
   , summary=require('../functions/repositories/sites/create/summary')
   , rootsite=require('../functions/repositories/sites/create/rootsite')
-  , design=require('../functions/repositories/sites/create/documentdesign')
+  , design=require('../functions/repositories/sites/create/designdocument')
 
 module.exports=function(params,repeat,stop){
     test(params)
