@@ -71,7 +71,7 @@ curl -X GET http://localhost:3001/_api
 "dbpass":{"type":"string"},"dbname":{"type":"string"}}}]
 ```
 
-## Availables tasks
+## Available tasks
 The planner have a different available tasks:
 
 ### exclusive
@@ -90,6 +90,42 @@ sh planner/exclusive/stop.sh 604
 {"status":"stopped"}
 # release control of the planner
 sh planner/exclusive/delete.sh 604
+{"ok":true}
+```
+
+### site_create
+For creation of repository in couchdb server, can be used as shown in the
+example:
+
+```sh
+cd pleni
+# set the task in planner
+sh planner/create/set.sh
+{"ok":true,"tid":"672"}
+# run the task in planner
+sh planner/create/run.sh 672 google http://www.google.com.bo
+{"status":"running"}
+# release control of the planner
+sh planner/create/delete.sh 604
+{"ok":true}
+```
+
+### site_fetch
+For fetch the pages to couchdb repository, can be used as shown in the example:
+
+```sh
+cd pleni
+# set the task in planner
+sh planner/fetch/set.sh
+{"ok":true,"tid":"198"}
+# run the task in planner
+sh planner/fetch/run.sh 198 google
+{"status":"running"}
+# stop the task in planner
+sh planner/fetch/stop.sh 198
+{"status":"stopped"}
+# release control of the planner
+sh planner/fetch/delete.sh 198
 {"ok":true}
 ```
 
