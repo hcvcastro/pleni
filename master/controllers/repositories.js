@@ -4,7 +4,6 @@ var pretty=require('prettysize')
   , validate=require('../../planners/utils/validators')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
-  , f=require('../../planners/functions/couchdb')
 
 module.exports=function(app){
     app.get('/repositories/view',function(request,response){

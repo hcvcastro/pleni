@@ -3,7 +3,6 @@
 var validate=require('../../planners/utils/validators')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
-  , f=require('../../planners/functions/planner')
 
 module.exports=function(app){
     app.get('/planners/view',function(request,response){

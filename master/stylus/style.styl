@@ -2,6 +2,9 @@ body, header, section, footer, div, h1, h2, h3, h4, h5, p, ul, li
     margin: 0
     padding: 0
 
+header.navbar
+    margin-bottom: 0
+
 body
     font-family: Helvetica Neue, Arial, Helvetica, sans-serif
     font-size: 11pt
@@ -15,10 +18,13 @@ footer.panel
     margin-bottom: 0
 
 a
-    cursor:pointer
+    cursor: pointer
+    outline: none
+
+a:focus
+    outline: none
 
 #wrapper
-    margin-top: 50px
     h1
         margin: 2.0rem 0
     h2
@@ -29,11 +35,12 @@ a
 
 .size90
     font-size: 4.6rem
+
 .extra-padding
     padding: 1.0rem
 
 div#test
-    display: inline;
+    display: inline
     .loader
         position: absolute
         width: 2.7rem
@@ -82,11 +89,10 @@ div#test
     animation: spin2 10s linear infinite
 
 .jumbotron
-    background-color: #a0a0a0
+    background-color: #c0c0c0
     background-image: url(/img/tile.svg)
-    box-shadow: 0em -0.2em 0.7em #000000 inset
+    box-shadow: 0em -0.1em 0.3em #000000 inset
     h1
         small
             color: #505050
-
 

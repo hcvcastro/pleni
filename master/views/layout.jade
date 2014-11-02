@@ -6,7 +6,7 @@ html(lang='en')
         link(rel='stylesheet',href='/bootstrap/dist/css/bootstrap-theme.min.css')
         link(rel='stylesheet',href='css/style.css')
     body(ng-app='PleniApp')
-        header.navbar.navbar-inverse.navbar-fixed-top(role='banner')
+        header.navbar(role='banner')
             div.container
                 div.navbar-header
                     button.navbar-toggle(type='button',data-toggle='collapse',data-target='.bs-navbar-collapse')
@@ -19,7 +19,6 @@ html(lang='en')
                     ul.nav.navbar-nav
                         li: a(href='/#/repositories') Repositories
                         li: a(href='/#/planners') Planners
-                    //- ul.nav.navbar-nav.navbar-right
         block content
             #wrapper(ng-view)
                 block main
