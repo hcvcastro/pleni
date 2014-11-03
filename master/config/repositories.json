@@ -3,16 +3,16 @@
         "id":"localhost"
       , "host":"http://localhost"
       , "port":"5984"
-      , "dbuser":"jacobian"
-      , "dbpass":"asdf"
+      , "user":"jacobian"
+      , "pass":"asdf"
       , "prefix":"pleni_"
     }
   , {
         "id":"hiperborea"
       , "host":"http://hiperborea.com.bo"
       , "port":"5984"
-      , "dbuser":"jacobian"
-      , "dbpass":"asdf"
+      , "user":"jacobian"
+      , "pass":"asdf"
       , "prefix":"pleni_"
     }
 ]

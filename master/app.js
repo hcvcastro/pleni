@@ -4,6 +4,7 @@ var http=require('http')
   , express=require('express')
   , favicon=require('serve-favicon')
   , bodyparser=require('body-parser')
+  , lessmiddleware=require('less-middleware')
   , join=require('path').join
   , loadconfig=require('./utils/loadconfig')
   , app=express()
@@ -22,10 +23,9 @@ app.disable('x-powered-by');
 app.use(favicon(join(__dirname,'..','public','img','favicon.ico')));
 app.use(bodyparser.json());
 
-app.use(require('stylus').middleware({
-    src:join(__dirname,'stylus'),
-    dest:join(__dirname,'..','public','css'),
-    compress:true
+app.use(lessmiddleware(join(__dirname,'..','public'),{
+    dest:join(__dirname,'..','public')
+  , compress:true
 }));
 
 app.use(express.static(join(__dirname,'..','public')));
