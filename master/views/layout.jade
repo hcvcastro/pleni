@@ -1,29 +1,25 @@
 doctype html
 html(lang='en')
     head
-        title <~~ pleni
+        title ↶ ᴾᴸᴱᴺᴵ ↷ ⛁
         link(rel='stylesheet',href='css/style.css')
     body(ng-app='PleniApp')
-        header(role='banner')
-            div.container
-                div.navbar-header
-                    button.navbar-toggle(type='button',data-toggle='collapse',data-target='.bs-navbar-collapse')
-                        span.sr-only Toggle navigation
-                        span.icon-bar
-                        span.icon-bar
-                        span.icon-bar
-                    a.navbar-brand(href='/#/home') Pleni
-                nav.collapse.navbar-collapse.bs-navbar-collapse(role='navigation')
-                    ul.nav.navbar-nav
-                        li: a(href='/#/repositories') Repositories
-                        li: a(href='/#/planners') Planners
+        header
+            nav
+                ul
+                    li: a(href='/#/home') Pleni
+                    li: a(href='/#/resources') Resources
+                    li: a(href='/#/tasks') Tasks
+                .clearfix
         block content
             #wrapper(ng-view)
                 block main
-            br
+        footer
+            nav
+                ul
+                    li: a(target='_BLANK',href='http://hiperborea.com.bo') Hiperbórea
+                    li: a(target='_BLANK',href='http://github.com/hiperborea/pleni') Código fuente
         script(src='/jquery/dist/jquery.min.js')
-        script(src='/bootstrap/dist/js/bootstrap.min.js')
-        script(src='/bootstrap/js/transition.js')
         script(src='/json-editor/dist/jsoneditor.min.js')
         script(src='/angular/angular.js')
         script(src='/angular-route/angular-route.js')
