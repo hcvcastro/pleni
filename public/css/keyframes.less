@@ -1,4 +1,4 @@
-@keyframes node1 {
+@keyframes spin1 {
     from {
         transform: rotate(0deg);
     }
@@ -10,17 +10,43 @@
     }
 }
 
+@keyframes spin2 {
+    from {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(-180deg);
+    }
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
 .node1 {
-    position: relative;
-    top: 35%;
-    left: 10%;
-    animation: node1 10s linear infinite;
+    position: absolute;
+    top: 128px;
+    left: 128px;
+    animation: spin1 12s linear infinite;
 }
 
 .node2 {
-    position: relative;
-    top: 35%;
-    left: 10%;
-    animation: node1 20s linear infinite;
+    position: absolute;
+    top: 96px;
+    left: 96px;
+    animation: spin2 16s linear infinite;
+}
+
+.node3 {
+    position: absolute;
+    top: 64px;
+    left: 64px;
+    animation: spin1 20s linear infinite;
+}
+
+.node4 {
+    position: absolute;
+    top: 96px;
+    left: 32px;
+    animation: spin2 24s linear infinite;
 }
 

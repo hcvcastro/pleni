@@ -10,12 +10,12 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="192"
-   height="192"
+   width="384"
+   height="256"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="node1.svg">
+   sodipodi:docname="node4.svg">
   <defs
      id="defs4">
     <linearGradient
@@ -209,9 +209,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="136.18456"
-     inkscape:cy="86.923857"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="92.940799"
+     inkscape:cy="100.76864"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -250,29 +250,17 @@
      inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-860.36109)">
+     transform="translate(0,-1848.7233)">
     <g
-       id="g3019"
-       transform="matrix(1.5416667,0,0,1.5416667,-5.3333384,-570.02896)">
-      <g
-         transform="matrix(1.5,0,0,1.5,76,-526.18056)"
-         id="g3018">
-        <path
-           style="fill:#184848;fill-opacity:1;fill-rule:evenodd;stroke:none"
-           d="m 2.6666667,988.36109 c -17.6747907,0 -31.9999997,14.32521 -31.9999997,32.00001 0,17.6748 14.325209,32 31.9999997,32 17.6748003,0 32.0000003,-14.3252 32.0000003,-32 0,-17.6748 -14.3252,-32.00001 -32.0000003,-32.00001 z m 0,3.02713 c 15.9996273,0 28.9728753,12.97328 28.9728753,28.97288 0,15.9996 -12.973248,28.9729 -28.9728753,28.9729 -15.9996147,0 -28.9728757,-12.9733 -28.9728757,-28.9729 0,-15.9996 12.973261,-28.97288 28.9728757,-28.97288 z"
-           id="path2990"
-           inkscape:export-filename="/home/jacobian/Proyectos/pleni/public/img/path3800.png"
-           inkscape:export-xdpi="180"
-           inkscape:export-ydpi="180"
-           inkscape:connector-curvature="0" />
-        <path
-           inkscape:connector-curvature="0"
-           id="path3800"
-           d="m 21.249765,1020.3611 c 0,10.2631 -8.319936,18.583 -18.583104,18.583 -10.263148,0 -18.583092,-8.3199 -18.583092,-18.583 0,-10.2632 8.3199439,-18.5831 18.583092,-18.5831 10.263168,0 18.583104,8.3199 18.583104,18.5831 z"
-           style="fill:#184848;fill-opacity:1;fill-rule:evenodd;stroke:none"
-           inkscape:export-xdpi="180"
-           inkscape:export-ydpi="180" />
-      </g>
+       id="g3018"
+       transform="matrix(0.22959924,0,0,0.22959924,-5.7759773,1748.8779)">
+      <path
+         inkscape:export-ydpi="180"
+         inkscape:export-xdpi="180"
+         style="fill:#184848;fill-opacity:1;fill-rule:evenodd;stroke:none"
+         d="m 94.84342,992.3612 c 0,19.2434 -15.59988,34.8433 -34.843324,34.8433 -19.243422,0 -34.843317,-15.5999 -34.843317,-34.8433 0,-19.24343 15.599895,-34.84331 34.843317,-34.84331 19.243444,0 34.843324,15.59988 34.843324,34.84331 z"
+         id="path3800"
+         inkscape:connector-curvature="0" />
     </g>
   </g>
 </svg>
