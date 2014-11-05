@@ -45,6 +45,10 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             templateUrl:'/home',
             controller:'HomeController'
         })
+        .when('/resources',{
+            templateUrl:'/resources/view',
+            controller:'ResourcesController'
+        })
         .when('/repositories',{
             templateUrl:'/repositories/view',
             controller:'RepositoriesController'
