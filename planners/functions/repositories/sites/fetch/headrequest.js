@@ -5,7 +5,7 @@ var request=require('request')
 
 /*
  * Function for make a HTTP HEAD request to url
- * args inputs
+ * args input
  *      task
  *          wait
  *              id
@@ -13,7 +13,7 @@ var request=require('request')
  *              value
  *      headers(*)
  *
- * args outputs
+ * args output
  *      task
  *          head
  *              status

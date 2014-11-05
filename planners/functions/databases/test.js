@@ -5,7 +5,7 @@ var request=require('request')
 
 /*
  * Function for test the couchdb server
- * args inputs
+ * args input
  *      db
  *          host
  */

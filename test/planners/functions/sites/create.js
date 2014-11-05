@@ -1,7 +1,7 @@
 'use strict';
 
 var should=require('should')
-  , base='../../../planners/functions'
+  , base='../../../../planners/functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
   , create=require(base+'/databases/create')

@@ -10,9 +10,9 @@ var server=require('./abstracts/server')
 var planner=function(){
     this.valid_tasks=[
         'exclusive'
-      , 'site_create'
-      , 'site_fetch'
-      , 'site_remove'
+      , 'site/create'
+      , 'site/fetch'
+      , 'site/remove'
     ];
 
     this.tid;
@@ -107,7 +107,7 @@ var planner=function(){
             &&this.name!==undefined
             &&this.tid===request.params.tid){
 
-            this.action=require('./tasks/'+this.name).cleanargs(request.body)
+            this.action=require('./tasks/'+this.name).clean(request.body)
             if(this.action!==undefined){
                 this._run();
                 this.status(request,response);

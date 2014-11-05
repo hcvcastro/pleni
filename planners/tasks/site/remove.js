@@ -1,9 +1,10 @@
 'use strict';
 
-var validate=require('../utils/validators')
-  , test=require('../functions/databases/test')
-  , auth=require('../functions/databases/auth')
-  , remove=require('../functions/databases/remove')
+var validate=require('../../utils/validators')
+  , base='../../functions'
+  , test=require(base+'/databases/test')
+  , auth=require(base+'/databases/auth')
+  , remove=require(base+'/databases/remove')
 
 module.exports=function(params,repeat,stop){
     test(params)

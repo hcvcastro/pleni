@@ -5,14 +5,14 @@ var request=require('request')
 
 /*
  * Function for creation of a design document for fetch sites
- * args inputs
+ * args input
  *      db
  *          host
  *          name
  *      auth
  *          cookie
  *
- * args outputs
+ * args output
  *      site
  *          design
  */

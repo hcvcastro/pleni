@@ -7,7 +7,7 @@ var request=require('request')
 
 /*
  * Function for make a HTTP GET request to url
- * args inputs
+ * args input
  *      task
  *          wait
  *              id
@@ -19,7 +19,7 @@ var request=require('request')
  *              get
  *      headers(*)
  *      
- * args outputs
+ * args output
  *      task
  *          get
  *              status

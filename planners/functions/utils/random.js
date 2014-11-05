@@ -5,9 +5,7 @@ var Q=require('q')
 
 /*
  * Function for random generator
- * args inputs
- *
- * args outputs
+ * args output
  *      random
  */
 module.exports=function(args){

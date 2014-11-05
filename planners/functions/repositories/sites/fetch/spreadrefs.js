@@ -5,7 +5,7 @@ var request=require('request')
 
 /*
  * Function for propagate refs in site repository
- * args inputs
+ * args input
  *      db
  *          host
  *          name

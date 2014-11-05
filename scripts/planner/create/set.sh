@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HOST='http://localhost:3001'
-TASK='site_create'
+TASK='site/create'
 COUNT=1
 DELAY=1000
 

@@ -1,15 +1,16 @@
 'use strict';
 
-var validate=require('../utils/validators')
-  , test=require('../functions/databases/test')
-  , auth=require('../functions/databases/auth')
-  , wait=require('../functions/repositories/sites/fetch/getwaitdocument')
-  , lock=require('../functions/repositories/sites/fetch/lockdocument')
-  , head=require('../functions/repositories/sites/fetch/headrequest')
-  , get=require('../functions/repositories/sites/fetch/getrequest')
-  , body=require('../functions/repositories/sites/fetch/bodyanalyzer')
-  , complete=require('../functions/repositories/sites/fetch/completedocument')
-  , spread=require('../functions/repositories/sites/fetch/spreadrefs')
+var validate=require('../../utils/validators')
+  , base='../../functions'
+  , test=require(base+'/databases/test')
+  , auth=require(base+'/databases/auth')
+  , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
+  , lock=require(base+'/repositories/sites/fetch/lockdocument')
+  , head=require(base+'/repositories/sites/fetch/headrequest')
+  , get=require(base+'/repositories/sites/fetch/getrequest')
+  , body=require(base+'/repositories/sites/fetch/bodyanalyzer')
+  , complete=require(base+'/repositories/sites/fetch/completedocument')
+  , spread=require(base+'/repositories/sites/fetch/spreadrefs')
 
 module.exports=function(params,repeat,stop){
     test(params)

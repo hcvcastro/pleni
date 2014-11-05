@@ -5,7 +5,7 @@ var request=require('request')
 
 /*
  * Function for lock a wating document
- * args inputs
+ * args input
  *      db
  *          host
  *          name
@@ -18,7 +18,7 @@ var request=require('request')
  *              value
  *
  * args outputs
- *      task
+ *      tas
  *          lock
  *              ok
  *              id

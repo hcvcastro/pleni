@@ -5,9 +5,12 @@ module.exports=function(params,repeat,stop){
     repeat();
 };
 
-module.exports.cleanargs=function(args){
+
+module.exports.clean=function(args){
     return {};
 };
 
+/*
 module.exports.scheme={};
+*/
 

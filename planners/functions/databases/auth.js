@@ -5,13 +5,13 @@ var request=require('request')
 
 /*
  * Function for get a cookie session in couchdb server
- * args inputs
+ * args input
  *      db
  *          host
  *          user
  *          pass
  *
- * args outputs
+ * args output
  *      auth
  *          cookie
  */

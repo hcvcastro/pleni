@@ -5,7 +5,7 @@ var request=require('request')
 
 /*
  * Function for change status in document for fetch
- * args inputs
+ * args input
  *      db
  *          host
  *          name
@@ -35,7 +35,7 @@ var request=require('request')
  *              related
  *      headers(*)
  *      
- * args outputs
+ * args output
  *      task
  *          complete
  *              ok

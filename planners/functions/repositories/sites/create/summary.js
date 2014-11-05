@@ -5,7 +5,7 @@ var request=require('request')
 
 /*
  * Function for creation of summary document in fetch sites
- * args inputs
+ * args input
  *      db
  *          host
  *          name
@@ -14,7 +14,7 @@ var request=require('request')
  *      site
  *          url
  *
- * args outputs
+ * args output
  *      site
  *          summary
  */

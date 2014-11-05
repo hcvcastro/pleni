@@ -5,14 +5,14 @@ var request=require('request')
 
 /*
  * Function for get a document in wait status
- * args inputs
+ * args input
  *      db
  *          host
  *          name
  *      auth
  *          cookie
  *
- * args outputs
+ * args output
  *      task
  *          wait
  *              id

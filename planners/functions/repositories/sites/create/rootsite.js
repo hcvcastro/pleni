@@ -5,7 +5,7 @@ var request=require('request')
 
 /*
  * Function for creation of rootsite document for site fetching
- * args inputs
+ * args input
  *      db
  *          host
  *          name
@@ -14,7 +14,7 @@ var request=require('request')
  *      site
  *          url
  *
- * args outputs
+ * args output
  *      site
  *          root
  */

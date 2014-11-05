@@ -1,23 +1,43 @@
 'use strict';
 
-var validate=require('../utils/validators')
-  , test=require('../functions/databases/test')
-  , auth=require('../functions/databases/auth')
-  , db=require('../functions/databases/create')
-  , summary=require('../functions/repositories/sites/create/summary')
-  , rootsite=require('../functions/repositories/sites/create/rootsite')
-  , design=require('../functions/repositories/sites/create/designdocument')
+var validate=require('../../utils/validators')
+  , base='../../functions'
+  , test=require(base+'/databases/test')
+  , auth=require(base+'/databases/auth')
+  , create=require(base+'/databases/create')
+  , summary=require(base+'/repositories/sites/create/summary')
+  , rootsite=require(base+'/repositories/sites/create/rootsite')
+  , design=require(base+'/repositories/sites/create/designdocument')
 
+/*
+ * Task for creation of a repository of site
+ * args input
+ *      db
+ *          host
+ *          name
+ *          user
+ *          pass
+ *      site
+ *          url
+ *
+ * args output
+ *      auth
+ *          cookie
+ *      site
+ *          summary
+ *          root
+ *          design
+ */
 module.exports=function(params,repeat,stop){
     test(params)
     .then(auth)
-    .then(db)
+    .then(create)
     .then(summary)
     .then(rootsite)
     .then(design)
     .then(function(args){
         console.log('RUN create --> '+args.db.name);
-        repeat();
+        stop();
     })
     .fail(function(error){
         console.log(error);
@@ -26,7 +46,7 @@ module.exports=function(params,repeat,stop){
     .done();
 };
 
-module.exports.cleanargs=function(args){
+module.exports.clean=function(args){
     if(validate.validHost(args.host)
         &&validate.validSlug(args.dbuser)
         &&validate.validSlug(args.dbname)

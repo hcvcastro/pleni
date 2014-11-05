@@ -7,7 +7,7 @@ var request=require('request')
 
 /*
  * Function for links analysis in HTML BODY
- * args inputs
+ * args input
  *      task
  *          wait
  *              id
@@ -24,7 +24,7 @@ var request=require('request')
  *              sha1
  *              md5
  *
- * args outputs
+ * args output
  *      task
  *          ref
  *              links
