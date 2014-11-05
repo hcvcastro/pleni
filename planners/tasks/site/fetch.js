@@ -12,6 +12,46 @@ var validate=require('../../utils/validators')
   , complete=require(base+'/repositories/sites/fetch/completedocument')
   , spread=require(base+'/repositories/sites/fetch/spreadrefs')
 
+/*
+ * Task for fetch os pages in a site repository
+ * args input
+ *      db
+ *          host
+ *          name
+ *          user
+ *          pass
+ *      headers(*)
+ *
+ * args output
+ *      auth
+ *          cookie
+ *      task
+ *          wait
+ *              id
+ *              key
+ *              value
+ *          lock
+ *              id
+ *              key
+ *              value
+ *          head
+ *              status
+ *              headers
+ *              get
+ *          get
+ *              status
+ *              headers
+ *              body
+ *              sha1
+ *              md5
+ *          ref
+ *              links
+ *              related
+ *          complete
+ *              ok
+ *              id
+ *              rev
+ */
 module.exports=function(params,repeat,stop){
     test(params)
     .then(auth)
@@ -35,29 +75,31 @@ module.exports=function(params,repeat,stop){
     .done();
 };
 
-module.exports.cleanargs=function(args){
-    return {
-        db: {
-            host:validate.toValidHost(args.host)
-          , user:validate.toString(args.dbuser)
-          , pass:validate.toString(args.dbpass)
-          , name:validate.toString(args.dbname)
+module.exports.schema={
+    'type':'object'
+  , 'properties':{
+        'db':{
+            'type':'object'
+          , 'properties':{
+                'host':{
+                    'type':'string'
+                }
+              , 'name':{
+                    'type':'string'
+                }
+              , 'user':{
+                    'type':'string'
+                }
+              , 'pass':{
+                    'type':'string'
+                }
+            }
+          , 'required':['host','name','user','pass']
         }
-    };
-};
-
-module.exports.scheme={
-    host:{
-        type:'string'
+      , 'headers':{
+            'type':'array'
+        }
     }
-  , dbuser:{
-        type:'string'
-    }
-  , dbpass:{
-        type:'string'
-    }
-  , dbname:{
-        type:'string'
-    }
+  , 'required':['db']
 };
 

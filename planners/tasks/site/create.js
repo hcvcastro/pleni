@@ -46,41 +46,37 @@ module.exports=function(params,repeat,stop){
     .done();
 };
 
-module.exports.clean=function(args){
-    if(validate.validHost(args.host)
-        &&validate.validSlug(args.dbuser)
-        &&validate.validSlug(args.dbname)
-        &&validate.validHost(args.site_url)){
-
-        return {
-            db: {
-                host:validate.toValidHost(args.host)
-              , user:validate.toString(args.dbuser)
-              , pass:validate.toString(args.dbpass)
-              , name:validate.toString(args.dbname)
+module.exports.schema={
+    'type':'object'
+  , 'properties':{
+        'db':{
+            'type':'object'
+          , 'properties':{
+                'host':{
+                    'type':'string'
+                }
+              , 'name':{
+                    'type':'string'
+                }
+              , 'user':{
+                    'type':'string'
+                }
+              , 'pass':{
+                    'type':'string'
+                }
             }
-          , site: {
-                url: validate.toValidHost(args.site_url)
+          , 'required':['host','name','user','pass']
+        }
+      , 'site':{
+            'type':'object'
+          , 'properties':{
+                'url':{
+                    'type':'string'
+                }
             }
-        };
+          , 'required':['url']
+        }
     }
+  , 'required':['db','site']
 };
-
-/*module.exports.scheme={
-    'host':{
-        type:'string'
-    }
-  , 'dbuser':{
-        type:'string'
-    }
-  , 'dbpass':{
-        type:'string'
-    }
-  , 'dbname':{
-        type:'string'
-    }
-  , 'site_url':{
-        type:'string'
-    }
-};*/
 

@@ -11,7 +11,7 @@ SITE_URL=${3}
 
 REQUEST=$HOST/$TID/_run
 BODY=$(cat << EOF
-{"host":"$DBHOST","dbuser":"$DBUSER","dbpass":"$DBPASS","dbname":"$DBNAME","site_url":"$SITE_URL"}
+{"db":{"host":"$DBHOST","name":$DBNAME,"user":"$DBUSER","pass":"$DBPASS"},"site":{"url":"$SITE_URL"}}
 EOF
 )
 

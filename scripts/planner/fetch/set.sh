@@ -1,8 +1,8 @@
 #!/bin/bash
 
 HOST='http://localhost:3001'
-TASK='site_fetch'
-COUNT=-1
+TASK='site/fetch'
+COUNT=${1:-1}
 DELAY=1000
 
 REQUEST=$HOST

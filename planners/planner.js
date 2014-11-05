@@ -21,10 +21,7 @@ var planner=function(){
 
     this.api=function(request,response){
         var map=this.valid_tasks.map(function(element){
-            return {
-                name:element
-              , scheme:require('./tasks/'+element).scheme
-            };
+            return require('./tasks/'+element).schema;
         })
 
         response.status(200).json(map);
@@ -107,8 +104,11 @@ var planner=function(){
             &&this.name!==undefined
             &&this.tid===request.params.tid){
 
-            this.action=require('./tasks/'+this.name).clean(request.body)
-            if(this.action!==undefined){
+            var schema=require('./tasks/'+this.name).schema
+              , jayschema=require('jayschema')
+              , js=new jayschema()
+
+            if(js.validate(request.body,schema)){
                 this._run();
                 this.status(request,response);
             }else{

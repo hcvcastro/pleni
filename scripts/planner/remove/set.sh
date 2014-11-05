@@ -1,7 +1,7 @@
 #!/bin/bash
 
 HOST='http://localhost:3001'
-TASK='site_remove'
+TASK='site/remove'
 COUNT=${1:-1}
 DELAY=1000
 
