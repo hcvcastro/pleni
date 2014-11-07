@@ -31,7 +31,7 @@ h1, h2, h3, h4, h5, h6, ul, li {
 header {
     nav {
         max-width: 960px;
-        margin: 0 auto;
+        margin: 0 auto 0.25rem auto;
         ul {
             list-style: none;
             float: left;
@@ -131,6 +131,42 @@ footer {
                 font-size: 14pt;
             }
         }
+    }
+}
+
+div {
+    nav.menu {
+        float: left;
+        width: 260px;
+
+        ul {
+            list-style: none;
+            float: left;
+            width: 100%;
+            li {
+                float: left;
+                width: 100%;
+                background-color: @color5;
+                transition: all 0.8s ease-out 0s;
+                a {
+                    .font1;
+                    text-decoration: none;
+                    color: @color3;
+                    float: left;
+                    padding: 0.70rem 1.0rem;
+                }
+                &:hover {
+                    background-color: @color4;
+                    transform: skewX(15deg);
+                }
+            }
+        }
+    }
+
+    section.items {
+        width: 700px;
+        margin: 0 0 0 260px;
+        padding: 0 0.75rem;
     }
 }
 
