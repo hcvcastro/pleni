@@ -11,7 +11,7 @@ var http=require('http')
 
 // sync methods
 app.set('repositories',
-    loadconfig(join(__dirname,'config','repositories.json')));
+    loadconfig(join(__dirname,'config','dbservers.json')));
 app.set('planners',
     loadconfig(join(__dirname,'config','planners.json')));
 
