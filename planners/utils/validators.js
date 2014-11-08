@@ -39,7 +39,7 @@ exports.validPort=function(port){
 
 exports.validSlugSlash=function(slug){
     return notEmpty(slug)
-        && /^[a-z][a-z0-9_]*\/[a-z][a-z0-9_]*$/i.test(slug);
+        && /^[a-z][a-z0-9_]*\/?[a-z][a-z0-9_]*$/i.test(slug);
 };
 
 exports.validSlug=function(slug){

@@ -6,6 +6,19 @@ var validate=require('../../utils/validators')
   , auth=require(base+'/databases/auth')
   , remove=require(base+'/databases/remove')
 
+/*
+ * Task for remove repositories for a site
+ * args input
+ *      db
+ *          host
+ *          name
+ *          user
+ *          pass
+ *
+ * args output
+ *      auth
+ *          cookie
+ */
 module.exports=function(params,repeat,stop){
     test(params)
     .then(auth)
@@ -21,32 +34,28 @@ module.exports=function(params,repeat,stop){
     .done();
 };
 
-module.exports.cleanargs=function(args){
-    return {
-        db: {
-            host:validate.toValidHost(args.host)
-          , user:validate.toString(args.dbuser)
-          , pass:validate.toString(args.dbpass)
-          , name:validate.toString(args.dbname)
+module.exports.schema={
+    'type':'object'
+  , 'properties':{
+        'db':{
+            'type':'object'
+          , 'properties':{
+                'host':{
+                    'type':'string'
+                }
+              , 'name':{
+                    'type':'string'
+                }
+              , 'user':{
+                    'type':'string'
+                }
+              , 'pass':{
+                    'type':'string'
+                }
+            }
+          , 'required':['host','name','user','pass']
         }
-    };
+    }
+  , 'required':['db']
 };
-
-/*module.exports.scheme={
-    'host':{
-        type:'string'
-    }
-  , 'dbuser':{
-        type:'string'
-    }
-  , 'dbpass':{
-        type:'string'
-    }
-  , 'dbname':{
-        type:'string'
-    }
-  , 'site_url':{
-        type:'string'
-    }
-};*/
 
