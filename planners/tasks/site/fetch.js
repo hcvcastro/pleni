@@ -99,6 +99,9 @@ module.exports.schema={
       , 'headers':{
             'type':'array'
         }
+      , 'debug':{
+            'type':'boolean'
+        }
     }
   , 'required':['db']
 };

@@ -40,6 +40,9 @@ module.exports=function(args){
     if(!args.task.head.get){
         deferred.resolve(args);
     }else{
+        if(args.debug){
+            console.log('make a GET request ... '+url);
+        }
         request.get({url:url,headers:headers},function(error,response){
             if(!error){
                 var r_headers=response.headers

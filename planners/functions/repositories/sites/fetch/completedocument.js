@@ -67,6 +67,9 @@ module.exports=function(args){
         body.ref=args.task.ref;
     }
 
+    if(args.debug){
+        console.log('save the complete document');
+    }
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
             if(response.statusCode==201){

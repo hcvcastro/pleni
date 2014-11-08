@@ -13,6 +13,9 @@ module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host
 
+    if(args.debug){
+        console.log('testing couch db server ... '+args.db.host);
+    }
     request.get({url:url},function(error,response){
         if(!error){
             if(response.statusCode==200){

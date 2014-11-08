@@ -43,7 +43,7 @@ echo
 REQUEST=$HOST/$TID/_run
 
 BODY=$(cat << EOF
-{"db":{"host":"$DBHOST","name":"$DBNAME","user":"$DBUSER","pass":"$DBPASS"}}
+{"db":{"host":"$DBHOST","name":"$DBNAME","user":"$DBUSER","pass":"$DBPASS"},"debug":true}
 EOF
 )
 

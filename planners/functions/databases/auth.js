@@ -23,6 +23,9 @@ module.exports=function(args){
           , password:args.db.pass
         }
 
+    if(args.debug){
+        console.log('authentification in db server ... '+args.db.user);
+    }
     request.post({url:url,json:body},function(error,response){
         if(!error){
             if(response.statusCode==200){

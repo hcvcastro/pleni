@@ -22,7 +22,10 @@ module.exports=function(args){
       , url=args.db.host+'/'+args.db.name
       , documents=[]
 
-    if(args.task.ref.related){
+    if(args.task && args.task.ref && args.task.ref.related){
+        if(args.debug){
+            console.log('spread the founded links');
+        }
         args.task.ref.related.forEach(function(element){
             var doc='/page_'+encodeURIComponent(element)
               , document={
@@ -39,6 +42,8 @@ module.exports=function(args){
             });
         });
 
+        deferred.resolve(args);
+    }else{
         deferred.resolve(args);
     }
 

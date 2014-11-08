@@ -29,6 +29,9 @@ module.exports=function(args){
         headers=args.headers;
     }
 
+    if(args.debug){
+        console.log('make a HEAD request ... '+url);
+    }
     request.head({url:url,headers:headers},function(error,response){
         if(!error){
             var r_headers=response.headers

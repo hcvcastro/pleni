@@ -40,6 +40,9 @@ module.exports=function(args){
           , timestamp:Date.now()
         }
 
+    if(args.debug){
+        console.log('lock a wait document ... '+args.task.wait.id);
+    }
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
             if(response.statusCode==201){
