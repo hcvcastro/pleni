@@ -109,6 +109,7 @@ var planner=function(){
               , js=new jayschema()
 
             if(js.validate(request.body,schema)){
+                this.action=request.body;
                 this._run();
                 this.status(request,response);
             }else{
