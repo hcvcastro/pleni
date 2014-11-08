@@ -3,7 +3,7 @@
 HOST='http://localhost:3001'
 TASK='site/create'
 COUNT=${1:-1}
-DELAY=1000
+INTERVAL=1000
 
 REQUEST=$HOST/
 BODY=$(cat << EOF

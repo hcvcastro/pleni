@@ -29,7 +29,7 @@ var planner=function(){
 
     this.create=function(request,response){
         if(this.tid===undefined){
-            if(validate.validSlug(request.body.task)){
+            if(validate.validSlugSlash(request.body.task)){
                 var name=validate.toString(request.body.task)
                   , count=validate.toInt(request.body.count)
                   , interval=validate.toInt(request.body.interval)
