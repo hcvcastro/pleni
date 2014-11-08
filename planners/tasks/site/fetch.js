@@ -69,8 +69,12 @@ module.exports=function(params,repeat,stop){
         repeat();
     })
     .fail(function(error){
-        console.log(error);
-        stop();
+        if(error.error=='conflict'&&error.reason=='Document update conflict.'){
+            repeat();
+        }else{
+            console.log(error);
+            stop();
+        }
     })
     .done();
 };
