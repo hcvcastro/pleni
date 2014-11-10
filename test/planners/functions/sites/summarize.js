@@ -8,7 +8,10 @@ var should=require('should')
   , summary=require(base+'/repositories/sites/create/summary')
   , rootsite=require(base+'/repositories/sites/create/rootsite')
   , design=require(base+'/repositories/sites/create/designdocument')
-  , summarize=require(base+'/repositories/sites/summarize/designdocument')
+  , design2=require(base+'/repositories/sites/summarize/designdocument')
+  , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
+  , summary2=require(base+'/repositories/sites/summarize/getsummary')
+  , summarize=require(base+'/repositories/sites/summarize/summarize')
   , remove=require(base+'/databases/remove')
 
 var host='http://localhost:5984'
@@ -52,6 +55,9 @@ describe('site fetcher pages functions',function(){
                   , name:name
                 }
             })
+            .then(design2)
+            .then(timestamp)
+            .then(summary2)
             .then(summarize)
             .done(function(args){
                 args.site.should.have.property('design');

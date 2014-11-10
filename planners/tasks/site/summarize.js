@@ -4,6 +4,9 @@ var base='../../functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
   , design=require(base+'/repositories/sites/summarize/designdocument')
+  , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
+  , summary=require(base+'/repositories/sites/summarize/getsummary')
+  , summarize=require(base+'/repositories/sites/summarize/summarize')
 
 /*
  * Task for summarize a repository of site
@@ -19,11 +22,19 @@ var base='../../functions'
  *          cookie
  *      site
  *          design
+ *              timestamp
+ *      task
+ *          timestamp
+ *              min
+ *              max
+ *              count
  */
 module.exports=function(params,repeat,stop){
     test(params)
     .then(auth)
     .then(design)
+    .then(summary)
+    .then(summarize)
     .then(function(args){
         console.log('RUN summarize --> '+args.db.name);
         stop();
