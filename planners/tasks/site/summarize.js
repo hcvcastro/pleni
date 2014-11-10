@@ -3,10 +3,10 @@
 var base='../../functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
-  , remove=require(base+'/databases/remove')
+  , design=require(base+'/repositories/sites/summarize/designdocument')
 
 /*
- * Task for remove repositories for a site
+ * Task for creation of a repository of site
  * args input
  *      db
  *          host
@@ -17,14 +17,16 @@ var base='../../functions'
  * args output
  *      auth
  *          cookie
+ *      site
+ *          design
  */
 module.exports=function(params,repeat,stop){
     test(params)
     .then(auth)
-    .then(remove)
+    .then(design)
     .then(function(args){
-        console.log('RUN remove --> '+args.db.name);
-        repeat();
+        console.log('RUN create --> '+args.db.name);
+        stop();
     })
     .fail(function(error){
         console.log(error);

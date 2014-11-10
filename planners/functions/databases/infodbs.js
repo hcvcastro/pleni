@@ -2,6 +2,7 @@
 
 var request=require('request')
   , Q=require('q')
+  , infodb=require('./infodb')
 
 /*
  * Function for getting information of multiple databases
@@ -25,17 +26,21 @@ module.exports=function(args){
         })
 
     Q.all(filter.map(function(element){
-        return getdb({
-            host:args.db.host
-          , cookie:args.auth.cookie
-          , dbname:element
+        return infodb({
+            db:{
+                host:args.db.host
+              , name:element
+            }
+          , auth:{
+                cookie:args.auth.cookie
+            }
         });
     }))
     .spread(function(){
         var map=new Array()
 
         for(var i in arguments){
-            map.push(JSON.parse(arguments[i].getdb));
+            map.push(JSON.parse(arguments[i].db.info));
         }
         args.db.explist=map
         deferred.resolve(args);

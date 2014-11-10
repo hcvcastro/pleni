@@ -1,7 +1,6 @@
 'use strict';
 
-var validate=require('../../utils/validators')
-  , base='../../functions'
+var base='../../functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
   , create=require(base+'/databases/create')

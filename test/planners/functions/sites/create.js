@@ -14,7 +14,7 @@ var host='http://localhost:5984'
   , user='jacobian'
   , pass='asdf'
   , name='test'
-  , url='http://galao.main'
+  , url='http://galao.local'
 
 describe('site initial scaffolding functions',function(){
     var cookie;

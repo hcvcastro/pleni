@@ -15,7 +15,6 @@ var request=require('request')
  * args output
  *      site
  *          design
- *              wait
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -27,19 +26,25 @@ module.exports=function(args){
       , body={
             'language':'javascript'
           , 'views':{
-                'wait':{
-                    'map':'function(doc){if(doc.status&&doc.status'
-                         +'==\'wait\'){emit(doc.url,doc._rev)}}'
+                'timestamp':{
+                    'map':'function(doc){if(doc.timestamp){emit(null,'
+                         +'doc.timestamp)}}',
+                    'reduce':'function(keys,values,rereduce){if(rereduce){'
+                            +'return{\'min\':values.reduce(function(a,b){'
+                            +'return Math.min(a,b.min)},Infinity),\'max\':'
+                            +'values.reduce(function(a,b){return Math.max(a,'
+                            +'b.max)},-Infinity),\'count\':values.reduce('
+                            +'function(a,b){return a+b.count},0)}}else{return{'
+                            +'\'min\':Math.min.apply(null,values),\'max\':'
+                            +'Math.max.apply(null,values),\'count\':'
+                            +'values.length}}}'
                 }
             }
         };
 
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
-            if(!args.site.design){
-                args.site.design={};
-            }
-            args.site.design.wait=response.body.rev;
+            args.site.design=response.body.rev;
             deferred.resolve(args);
             return;
         }

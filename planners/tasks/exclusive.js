@@ -6,11 +6,8 @@ module.exports=function(params,repeat,stop){
 };
 
 
-module.exports.clean=function(args){
-    return {};
+module.exports.schema={
+    'type':'object'
+  , 'properties':{}
 };
-
-/*
-module.exports.scheme={};
-*/
 

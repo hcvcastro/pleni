@@ -134,12 +134,13 @@ describe('couchdb functions',function(){
             .done(function(args){
                 args.db.explist.should.be.an.Array;
                 for(var i in args.db.explist){
-                    args[i].should.have.property('db_name');
-                    args[i].should.have.property('doc_count');
-                    args[i].should.have.property('update_seq');
-                    args[i].should.have.property('disk_size');
-                    args[i].should.have.property('data_size');
-                    args[i].should.have.property('instance_start_time');
+                    args.db.explist[i].should.have.property('db_name');
+                    args.db.explist[i].should.have.property('doc_count');
+                    args.db.explist[i].should.have.property('update_seq');
+                    args.db.explist[i].should.have.property('disk_size');
+                    args.db.explist[i].should.have.property('data_size');
+                    args.db.explist[i].should.have.
+                        property('instance_start_time');
                 }
                 done();
             });
