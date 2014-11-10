@@ -34,6 +34,7 @@ module.exports=function(params,repeat,stop){
     .then(auth)
     .then(design)
     .then(summary)
+    .then(timestamp)
     .then(summarize)
     .then(function(args){
         console.log('RUN summarize --> '+args.db.name);

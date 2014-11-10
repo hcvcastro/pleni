@@ -29,6 +29,7 @@ var request=require('request')
  *              _rev
  */
 module.exports=function(args){
+    console.log(args);
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/summary'
       , headers={
@@ -36,7 +37,8 @@ module.exports=function(args){
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , body={
-            _rev:args.site.summary._rev
+            _id:args.site.summary._id
+          , _rev:args.site.summary._rev
           , type:args.site.summary.type
           , url:args.site.summary.url
           , starttime:args.task.timestamp.min
@@ -44,8 +46,12 @@ module.exports=function(args){
           , count:args.task.timestamp.count
         }
 
-    request.put({url:url,headers:headers},function(error,response){
+    request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
+            if(args.debug){
+                console.log('summarizing a site');
+            }
+            console.log(response);
             args.site.summary._rev=response.body.rev;
             deferred.resolve(args);
         }

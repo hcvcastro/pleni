@@ -30,10 +30,13 @@ module.exports=function(args){
 
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
+            if(args.debug){
+                console.log('getting a summary document');
+            }
             if(!args.site){
                 args.site={};
             }
-            args.site.summary=response.body;
+            args.site.summary=JSON.parse(response.body);
             deferred.resolve(args);
             return;
         }

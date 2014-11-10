@@ -45,13 +45,18 @@ module.exports=function(args){
 
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
+            if(args.debug){
+                console.log('put a design document timestamp');
+            }
             if(!args.site){
                 args.site={};
             }
             if(!args.site.design){
                 args.site.design={};
             }
-            args.site.design.timestamp=response.body.rev;
+            if(!response.body.error){
+                args.site.design.timestamp=response.body.rev;
+            }
             deferred.resolve(args);
             return;
         }

@@ -13,6 +13,7 @@ var planner=function(){
       , 'site/create'
       , 'site/fetch'
       , 'site/remove'
+      , 'site/summarize'
     ];
 
     this.tid;
