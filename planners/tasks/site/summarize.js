@@ -6,7 +6,7 @@ var base='../../functions'
   , design=require(base+'/repositories/sites/summarize/designdocument')
 
 /*
- * Task for creation of a repository of site
+ * Task for summarize a repository of site
  * args input
  *      db
  *          host
@@ -25,7 +25,7 @@ module.exports=function(params,repeat,stop){
     .then(auth)
     .then(design)
     .then(function(args){
-        console.log('RUN create --> '+args.db.name);
+        console.log('RUN summarize --> '+args.db.name);
         stop();
     })
     .fail(function(error){

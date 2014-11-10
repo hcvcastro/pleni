@@ -15,10 +15,11 @@ var request=require('request')
  * args output
  *      site
  *          design
+ *              timestamp
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/_design/default'
+      , url=args.db.host+'/'+args.db.name+'/_design/timestamp'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -44,7 +45,13 @@ module.exports=function(args){
 
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
-            args.site.design=response.body.rev;
+            if(!args.site){
+                args.site={};
+            }
+            if(!args.site.design){
+                args.site.design={};
+            }
+            args.site.design.timestamp=response.body.rev;
             deferred.resolve(args);
             return;
         }

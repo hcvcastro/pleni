@@ -21,7 +21,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , view='/_design/default/_view/wait'
+      , view='/_design/wait/_view/wait'
       , url=args.db.host+'/'+args.db.name+view+'?limit=1'
       , headers={
             'Cookie':args.auth.cookie
