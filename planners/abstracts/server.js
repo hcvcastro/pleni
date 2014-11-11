@@ -1,9 +1,8 @@
 'use strict';
 
-var http=require('http')
-  , express=require('express')
+var app=require('express')()
+  , http=require('http').Server(app)
   , bodyparser=require('body-parser')
-  , app=express()
 
 exports.set=function(port){
     app.set('port',port);
@@ -42,10 +41,11 @@ exports.listen=function(planner){
 };
 
 module.exports.run=function(){
-    return http.createServer(app).listen(app.get('port'),function(){
+    return http.listen(app.get('port'),function(){
         console.log('Express server listening on port '+app.get('port'));
     });
 };
 
+module.exports.http=http;
 module.exports.app=app;
 
