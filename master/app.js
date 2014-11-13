@@ -20,15 +20,15 @@ app.set('port',process.env.PORT||3000);
 app.set('views',join(__dirname,'views'));
 app.set('view engine','jade');
 app.disable('x-powered-by');
-app.use(favicon(join(__dirname,'..','public','img','favicon.ico')));
+app.use(favicon(join(__dirname,'public','img','favicon.ico')));
 app.use(bodyparser.json());
 
-app.use(lessmiddleware(join(__dirname,'..','public'),{
+app.use(lessmiddleware(join(__dirname,'public'),{
     dest:join(__dirname,'..','public')
   , compress:true
 }));
 
-app.use(express.static(join(__dirname,'..','public')));
+app.use(express.static(join(__dirname,'public')));
 app.use(express.static(join(__dirname,'..','bower_components')));
 app.locals.pretty=true;
 
