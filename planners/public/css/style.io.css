@@ -1,0 +1,14 @@
+* {
+    font-family: "Lucida Console","Lucida Sans Typewriter",monaco,"Bitstream Vera Sans Mono",monospace;
+    font-size: 14px;
+}
+
+body {
+    background-color: #006060;
+    color: #FFFFFF;
+}
+
+p {
+    line-height: 0.25rem;
+}
+
