@@ -2,7 +2,7 @@
 
 var planner=require('./abstracts/planner')
   , scheduler=require('./abstracts/scheduler')
-  , server=planner.server
+  , server=require('./abstracts/server')
   , notifier=new (function(){
         this.create=function(name,count,interval,tid){
             console.log('PUT TASK:'+name+'('+count+')('+interval
@@ -12,10 +12,10 @@ var planner=require('./abstracts/planner')
             console.log('DEL TASK:'+name);
         }
         this.run=function(name,params){
-            console.log('RUN TASK:'+name);
+            console.log('RUN TASK');
         }
         this.stop=function(name){
-            console.log('STOP TASK'+name);
+            console.log('STOP TASK');
         }
     })();
 

@@ -1,12 +1,11 @@
 'use strict';
 
-var server=require('./server')
-  , validate=require('../utils/validators')
+var validate=require('../utils/validators')
   , _success=require('../utils/json-response').success
   , _error=require('../utils/json-response').error
   , generator=require('../functions/utils/random').sync
 
-var planner=function(notifier){
+module.exports=function(notifier){
     this.valid_tasks=[
         'exclusive'
       , 'site/create'
@@ -137,7 +136,4 @@ var planner=function(notifier){
         require('../tasks/'+this.name)(this.action,repeat,stop);
     };
 };
-
-module.exports=planner;
-module.exports.server=server;
 
