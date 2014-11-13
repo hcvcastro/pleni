@@ -1,6 +1,7 @@
 'use strict';
 
-var app=require('express')()
+var express=require('express')
+  , app=express()
   , http=require('http').Server(app)
   , bodyparser=require('body-parser')
 
@@ -48,4 +49,5 @@ module.exports.run=function(){
 
 module.exports.http=http;
 module.exports.app=app;
+module.exports.express=express;
 
