@@ -29,7 +29,6 @@ var request=require('request')
  *              _rev
  */
 module.exports=function(args){
-    console.log(args);
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/summary'
       , headers={
@@ -51,7 +50,6 @@ module.exports=function(args){
             if(args.debug){
                 console.log('summarizing a site');
             }
-            console.log(response);
             args.site.summary._rev=response.body.rev;
             deferred.resolve(args);
         }

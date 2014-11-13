@@ -41,7 +41,6 @@ module.exports=function(args){
                 if(!args.task){
                     args.task={};
                 }
-                console.log(json);
                 args.task.timestamp=json.rows[0].value;
                 deferred.resolve(args);
                 return;
