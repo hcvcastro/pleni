@@ -12,34 +12,50 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
             templateUrl:'/resources/view',
             controller:'ResourcesController'
         })
+        .when('/tasks',{
+            templateUrl:'/tasks/view',
+            controller:'TasksController'
+        })
         .otherwise({
             redirectTo: '/home'
         });
 }])
 .controller('HomeController',['$scope',function($scope){
-    $('header nav ul li').removeClass('active');
+    $('header nav ul li:nth-child(1)').addClass('active')
+        .siblings().removeClass('active');
 }])
 .controller('ResourcesController',
     ['$scope','$sessionStorage',
     function($scope,$sessionStorage){
-    $('header nav ul li').removeClass('active');
-    $('header nav ul li:nth-child(1)').addClass('active');
+        $('header nav ul li:nth-child(2)').addClass('active')
+            .siblings().removeClass('active');
 
-    $scope.show_dbservers=function(){
-        $('section.dbservers').addClass('active')
+        $scope.show_dbservers=function(){
+            $('section.dbservers').addClass('active')
+                .siblings().removeClass('active');
+        }
+        $scope.show_repositories=function(){
+            $('section.repositories').addClass('active')
+                .siblings().removeClass('active');
+        }
+        $scope.show_planners=function(){
+            $('section.planners').addClass('active')
+                .siblings().removeClass('active');
+        }
+        $scope.show_iopipes=function(){
+            $('section.iopipes').addClass('active')
+                .siblings().removeClass('active');
+        }
+
+        $scope.show_dbservers();
+    }]
+)
+.controller('TasksController',
+    ['$scope','$sessionStorage',
+    function($scope,$sessionStorage){
+        $('header nav ul li:nth-child(3)').addClass('active')
             .siblings().removeClass('active');
-    }
-    $scope.show_repositories=function(){
-        $('section.repositories').addClass('active')
-            .siblings().removeClass('active');
-    }
-    $scope.show_planners=function(){
-        $('section.planners').addClass('active')
-            .siblings().removeClass('active');
-    }
-    $scope.show_iopipes=function(){
-        $('section.iopipes').addClass('active')
-            .siblings().removeClass('active');
-    }
-}])
+
+    }]
+)
 

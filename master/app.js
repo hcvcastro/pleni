@@ -34,6 +34,7 @@ app.locals.pretty=true;
 
 require('./controllers/home')(app);
 require('./controllers/resources')(app);
+require('./controllers/tasks')(app);
 
 app.use(function(req,res){
     res.status(404).render('404.jade',{
