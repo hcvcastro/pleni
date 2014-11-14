@@ -24,7 +24,7 @@ app.use(favicon(join(__dirname,'public','img','favicon.ico')));
 app.use(bodyparser.json());
 
 app.use(lessmiddleware(join(__dirname,'public'),{
-    dest:join(__dirname,'..','public')
+    dest:join(__dirname,'public')
   , compress:true
 }));
 

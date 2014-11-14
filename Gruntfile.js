@@ -39,11 +39,11 @@ module.exports=function(grunt){
               , options:{livereload:reloadPort}
             }
           , js:{
-                files:['public/js/{,*/}*.js']
+                files:['master/public/js/{,*/}*.js']
               , options:{livereload:reloadPort}
             }
           , less:{
-                files:['public/css/{,*/}*.less']
+                files:['master/public/css/{,*/}*.less']
               , options:{livereload:reloadPort}
             }
           , jade:{
