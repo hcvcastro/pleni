@@ -1,9 +1,221 @@
 nav.menu
     ul
-        li: a(href='/') DB Servers
-        li: a(href='/') Repositories
-        li: a(href='/') Planners
-        li: a(href='/') I/O Pipes
+        li: a(ng-click='show_dbservers()') DB Servers
+        li: a(ng-click='show_repositories()') Repositories
+        li: a(ng-click='show_planners()') Planners
+        li: a(ng-click='show_iopipes()') I/O pipes
 
-section.items
+section.main
+    section.dbservers
+        h1 DB Servers
+        div.tasks
+            a(href='') Add
+        table
+            tr
+                th Name
+                th Host
+                th Status
+                th &nbsp;
+            tr
+                td hiperborea
+                td 192.3.27.103:5894
+                td.status online
+                td.options
+                    a(href='') [Test]
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td localhost
+                td 127.0.0.1:5984
+                td.status online
+                td.options
+                    a(href='') [Test]
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td smith
+                td 167.157.28.33:5984
+                td.status online
+                td.options
+                    a(href='') [Test]
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td main
+                td 181.177.142.72:5984
+                td.status online
+                td.options
+                    a(href='') [Test]
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+    section.repositories
+        h1 Repositories
+        div.tasks
+            a(href='') Add
+        table
+            tr
+                th Name
+                th DB Server
+                th &nbsp;
+            tr
+                td pleni_site_atb
+                td hiperborea
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td pleni_site_reduno
+                td hiperborea
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td pleni_site_unitel
+                td hiperborea
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td pleni_site_entel
+                td main
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td pleni_site_google
+                td localhost
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+    section.planners
+        h1 Planners
+        div.tasks
+            a(href='') Add
+        table
+            tr
+                th Name
+                th Host
+                th Features
+                th Status
+                th &nbsp;
+            tr
+                td hiperborea1
+                td 192.3.27.103:3001
+                td.features &nbsp;
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td hiperborea2
+                td 192.3.27.103:3002
+                td.features io
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td hiperborea3
+                td 192.3.27.103:3003
+                td.features io
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td localhost
+                td 127.0.0.1:3001
+                td.features io
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td smith1
+                td 167.157.28.33:3001
+                td.features
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td smith2
+                td 167.157.28.33:3002
+                td.feaures io
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td main1
+                td 181.177.142.72:3002
+                td.feaures 
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td main2
+                td 181.177.142.72:3002
+                td.feaures io
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+    section.iopipes
+        h1 I/O pipes
+        div.tasks
+            a(href='') Add
+        table
+            tr
+                th Name
+                th Host
+                th Features
+                th Status
+                th &nbsp;
+            tr
+                td hiperborea
+                td 192.3.27.103:9000
+                td.features in/output
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+            tr
+                td localhost
+                td 127.0.0.1:9000
+                td.features in
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
+
+            tr
+                td smith
+                td 167.157.28.33:9000
+                td.features output
+                td.status online
+                td.options
+                    a(href='') [View]
+                    a(href='') [Edit]
+                    a(href='') [Remove]
 
