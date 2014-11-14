@@ -18,16 +18,24 @@ var base='../../functions'
  *      auth
  *          cookie
  */
-module.exports=function(params,repeat,stop){
+module.exports=function(params,repeat,stop,notifier){
     test(params)
     .then(auth)
     .then(remove)
     .then(function(args){
-        console.log('RUN remove --> '+args.db.name);
+        if(notifier){
+            notifier('run','remove',args.db.name);
+        }else{
+            console.log('RUN remove --> '+args.db.name);
+        }
         repeat();
     })
     .fail(function(error){
-        console.log(error);
+        if(notifier){
+            notifier('error','remove',error);
+        }else{
+            console.log(error);
+        }
         stop();
     })
     .done();

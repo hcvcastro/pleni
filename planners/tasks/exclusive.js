@@ -1,7 +1,11 @@
 'use strict';
 
-module.exports=function(params,repeat,stop){
-    console.log('exclusive task in: '+Date.now());
+module.exports=function(params,repeat,stop,notifier){
+    if(notifier){
+        notifier('notification','exclusive',{});
+    }else{
+        console.log('exclusive task in: '+Date.now());
+    }
     repeat();
 };
 

@@ -27,7 +27,7 @@ var base='../../functions'
  *          root
  *          design
  */
-module.exports=function(params,repeat,stop){
+module.exports=function(params,repeat,stop,notifier){
     test(params)
     .then(auth)
     .then(create)
@@ -35,11 +35,19 @@ module.exports=function(params,repeat,stop){
     .then(rootsite)
     .then(design)
     .then(function(args){
-        console.log('RUN create --> '+args.db.name);
+        if(notifier){
+            notifier('run','create',args.db.name);
+        }else{
+            console.log('RUN create --> '+args.db.name);
+        }
         stop();
     })
     .fail(function(error){
-        console.log(error);
+        if(notifier){
+            notifier('error','create',error);
+        }else{
+            console.log(error);
+        }
         stop();
     })
     .done();

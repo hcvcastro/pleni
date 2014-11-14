@@ -3,21 +3,16 @@
 var planner=require('./abstracts/planner')
   , scheduler=require('./abstracts/scheduler')
   , server=require('./abstracts/server')
-  , notifier=new (function(){
-        this.create=function(name,count,interval,tid){
-            console.log('PUT TASK:'+name+'('+count+')('+interval
-                        +') --> '+tid);
+  , notifier=function(action,name,params){
+        var string='['+action+']';
+        if(name){
+            string+=' '+name;
         }
-        this.remove=function(name){
-            console.log('DEL TASK:'+name);
+        if(params){
+            string+=' '+JSON.stringify(params);
         }
-        this.run=function(name,params){
-            console.log('RUN TASK');
-        }
-        this.stop=function(name){
-            console.log('STOP TASK');
-        }
-    })();
+        console.log(string);
+    }
 
 planner.prototype=new scheduler(notifier);
 

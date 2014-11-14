@@ -29,7 +29,7 @@ var base='../../functions'
  *              max
  *              count
  */
-module.exports=function(params,repeat,stop){
+module.exports=function(params,repeat,stop,notifier){
     test(params)
     .then(auth)
     .then(design)
@@ -37,11 +37,19 @@ module.exports=function(params,repeat,stop){
     .then(timestamp)
     .then(summarize)
     .then(function(args){
-        console.log('RUN summarize --> '+args.db.name);
+        if(notifier){
+            notifier('run','summarize',args.db.name);
+        }else{
+            console.log('RUN summarize --> '+args.db.name);
+        }
         stop();
     })
     .fail(function(error){
-        console.log(error);
+        if(notifier){
+            notifier('error','summarize',error);
+        }else{
+            console.log(error);
+        }
         stop();
     })
     .done();

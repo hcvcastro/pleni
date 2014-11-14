@@ -52,7 +52,8 @@ module.exports=function(notifier){
                     }
                     this.interval(interval);
 
-                    notifier.create(this.name,count,interval,this.tid);
+                    notifier('create',this.name,
+                        {count:count,interval:interval});
                     response.status(200).json({ok:true,tid:this.tid});
                     return;
                 }
@@ -72,7 +73,7 @@ module.exports=function(notifier){
     this.remove=function(request,response){
         if(this.tid!==undefined&&this.tid===request.params.tid){
             this._stop();
-            notifier.remove(this.name);
+            notifier('remove',this.name,{});
 
             this.tid=undefined;
             this.name=undefined;
@@ -133,7 +134,7 @@ module.exports=function(notifier){
     };
 
     this.task=function(repeat,stop){
-        require('../tasks/'+this.name)(this.action,repeat,stop);
+        require('../tasks/'+this.name)(this.action,repeat,stop,notifier);
     };
 };
 

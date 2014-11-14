@@ -5,21 +5,9 @@ var planner=require('./abstracts/planner')
   , express=require('express')
   , server=require('./abstracts/server')
   , io=require('socket.io')(server.http)
-  , notifier=new (function(){
-        this.create=function(name,count,interval,tid){
-            io.emit('created task',
-                {name:name,count:count,interval:interval,tid:tid});
-        }
-        this.remove=function(name){
-            io.emit('removed task',{name:name});
-        }
-        this.run=function(name,params){
-            io.emit('running task',{name:name,params:params});
-        }
-        this.stop=function(name){
-            io.emit('stopped task',{name:name});
-        }
-    })()
+  , notifier=function(action,name,params){
+        io.emit('notifier',{action:action,name:name,params:params});
+    }
   , join=require('path').join
 
 planner.prototype=new scheduler(notifier);
@@ -33,8 +21,8 @@ server.app.get('/io.html',function(request,response){
 server.set(process.env.PORT||3001);
 server.listen(new planner(notifier));
 
-io.sockets.on('notifier',function(socket){
-    console.log('client connected');
+io.on('connection',function(socket){
+    socket.emit('notifier',{action:'connection'});
 });
 
 server.run();

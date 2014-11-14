@@ -51,7 +51,7 @@ var base='../../functions'
  *              id
  *              rev
  */
-module.exports=function(params,repeat,stop){
+module.exports=function(params,repeat,stop,notifier){
     test(params)
     .then(auth)
     .then(wait)
@@ -63,7 +63,11 @@ module.exports=function(params,repeat,stop){
     .then(spread)
     .then(function(args){
         if(args.task.complete){
-            console.log('RUN fetch --> '+args.task.complete.id);
+            if(notifier){
+                notifier('run','fetch',{result:'ok'});
+            }else{
+                console.log('RUN fetch --> '+args.task.complete.id);
+            }
         }
         repeat();
     })
@@ -71,7 +75,11 @@ module.exports=function(params,repeat,stop){
         if(error.error=='conflict'&&error.reason=='Document update conflict.'){
             repeat();
         }else{
-            console.log(error);
+            if(notifier){
+                notifier('error','fetch',error);
+            }else{
+                console.log(error);
+            }
             stop();
         }
     })
