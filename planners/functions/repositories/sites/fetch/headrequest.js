@@ -43,11 +43,12 @@ module.exports=function(args){
               , r_body=valid_headers.some(function(element){
                     return element.test(r_headers['content-type']);
                 })
+              , s_body=(response.statusCode==200)
 
             args.task.head={
                 'status':response.statusCode
               , 'headers':r_headers
-              , 'get':r_body
+              , 'get':(r_body & s_body)
             }
             deferred.resolve(args);
             return;
