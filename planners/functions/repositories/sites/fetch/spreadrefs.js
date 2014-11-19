@@ -20,7 +20,6 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
-      , documents=[]
 
     if(args.task && args.task.ref && args.task.ref.related){
         if(args.debug){
@@ -36,9 +35,7 @@ module.exports=function(args){
             };
 
             request.put({url:url+doc,json:document},function(error,response){
-                if(!error){
-                    documents.push(element);
-                }
+                if(!error){}
             });
         });
 
