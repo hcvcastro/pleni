@@ -1,0 +1,70 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          pleni
+# Required-Start:    $network $syslog
+# Required-Stop:     $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Planner for Pleni
+# Description:       Planner: Daemon for planner execution
+### END INIT INFO
+
+NAME=planner1
+ROOT=/var/www/pleni
+USER=jacobian
+GROUP=jacobian
+DAEMON=/usr/local/bin/node
+ARGS="$ROOT/planners/planner.io.js"
+PIDFILE=/var/run/$NAME.pid
+
+export NODE_ENV=production
+export PORT=3001
+
+[ -x "$DAEMON" ] || exit 0
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+do_start() {
+    start-stop-daemon --start --quiet \
+        --chuid $USER:$GROUP --chdir $ROOT --background \
+        --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+    || return 1
+    start-stop-daemon --start --quiet \
+        --chuid $USER:$GROUP --chdir $ROOT --background \
+        --make-pidfile --pidfile $PIDFILE --exec $DAEMON -- $ARGS \
+    || return 2
+}
+
+do_stop() {
+    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 \
+        --pidfile $PIDFILE --exec $DAEMON
+    RETVAL="$?"
+    [ "$RETVAL" = 2 ] && return 2
+    start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 \
+        --exec $DAEMON
+    [ "$?" = 2 ] && return 2
+    rm -f $PIDFILE
+    return "$RETVAL"
+}
+
+do_reload() {
+    start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE \
+        --exec $DAEMON
+    return 0
+}
+
+case "$1" in
+start)
+    do_start
+    ;;
+stop)
+    do_stop
+    ;;
+reload)
+    do_reload
+    ;;
+esac
+
+:
