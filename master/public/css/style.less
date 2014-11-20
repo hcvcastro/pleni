@@ -106,7 +106,7 @@ footer {
                     &:focus, &:hover {
                         outline: none;
                         color: @color2;
-                        transform: scale(1.07);
+                        transform: scale(1.03);
                     }
                 }
             }
@@ -168,92 +168,100 @@ footer {
     }
 }
 
-div {
-    nav.menu {
-        float: left;
-        width: 260px;
+nav.menu {
+    float: right;
+    width: 260px;
 
-        ul {
-            list-style: none;
+    ul {
+        list-style: none;
+        float: left;
+        width: 100%;
+        li {
             float: left;
             width: 100%;
-            li {
+            background-color: @color5;
+            transition: 0.2s ease-in 0s;
+            a {
                 float: left;
                 width: 100%;
-                background-color: @color5;
-                transition: all 0.8s ease-out 0s;
+                .font2;
+                text-decoration: none;
+                color: @color1;
+                padding: 0.70rem 1.0rem;
+                transition: 0.4s ease-out 0s;
+            }
+            &:hover {
                 a {
-                    .font1;
-                    text-decoration: none;
-                    color: @color3;
-                    float: left;
-                    padding: 0.70rem 1.0rem;
+                    transform: translateX(1.0rem);
                 }
-                &:hover {
-                    background-color: @color4;
-                    transform: skewX(15deg);
-                }
+                background-color: @color4;
             }
         }
     }
+}
 
-    section.main {
-        width: 700px;
-        margin: 0 0 0 260px;
-        padding: 0 0.75rem;
+section.main {
+    width: 700px;
 
-        &>section {
-            display: none;
+    &>section {
+        display: none;
+    }
+
+    &>section.active {
+        display: block;
+
+        h1 {
+            .font1;
+            font-size: 2.1rem;
+            padding-top: 1.0rem;
         }
 
-        &>section.active {
-            display:block;
-
-            h1 {
-                .font1;
-            }
-
-            div.tasks {
-                margin: 0.25rem 0;
-                a {
-                    text-decoration: none;
-                    color: @color1;
+        div.tasks {
+            margin: 0.25rem 0;
+            ul {
+                list-style: none;
+                li {
+                    a {
+                        text-decoration: none;
+                        color: @color1;
+                    }
                 }
             }
+        }
 
-            table {
-                margin: 1.0rem 0;
-                width: 100%;
+        table {
+            margin: 1.0rem 0;
+            width: 98%;
+            border-collapse: collapse;
 
-                tr:nth-child(odd) {
-                    background-color: @color5;
+            tr {
+                th {
+                    .font1;
+                    font-weight: normal;
+                    padding: 0.4em 0rem;
+                    background-color: @color2;
+                    color: @color5;
                 }
 
-                tr {
-                    th {
-                        .font1;
-                        padding: 0.3em 0rem;
+                td {
+                    .font1;
+                    padding: 0.4em 0.2rem;
+                    border-bottom: 0.1rem solid @color3;
+
+                    a {
+                        text-decoration: none;
+                        color: @color1;
                     }
+                }
 
-                    td {
-                        .font1;
-                        padding: 0.3em 0.2rem;
+                .status {
+                    text-align: center;
+                }
 
-                        a {
-                            text-decoration: none;
-                            color: @color1;
-                        }
-                    }
-
-                    .status {
-                        text-align: center;
-                    }
-
-                    .options {
-                        text-align: center;
-                        a {
-                            margin: 0 0.1rem;
-                        }
+                .options {
+                    text-align: center;
+                    a {
+                        margin: 0 0.25rem;
                     }
                 }
             }
