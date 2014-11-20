@@ -11,14 +11,20 @@ html(lang='en')
                     li: a(href='/#/resources') Resources
                     li: a(href='/#/tasks') Tasks
                 .clearfix
-        block content
-            #wrapper(ng-view)
-                block main
-        footer
-            nav
-                ul
-                    li: a(target='_BLANK',href='http://hiperborea.com.bo') Hiperbórea
-                    li: a(target='_BLANK',href='http://github.com/hiperborea/pleni') Source code
+        #wrapper
+            section(ng-view)
+            footer
+                nav
+                    div.palette
+                        span &nbsp;
+                        span &nbsp;
+                        span &nbsp;
+                        span &nbsp;
+                        span &nbsp;
+                    ul
+                        li: a(target='_BLANK',href='http://hiperborea.com.bo') Hiperbórea
+                        li: a(target='_BLANK',href='http://github.com/hiperborea/pleni') Source code
+                    .clearfix
         script(src='/jquery/dist/jquery.min.js')
         script(src='/json-editor/dist/jsoneditor.min.js')
         script(src='/angular/angular.js')

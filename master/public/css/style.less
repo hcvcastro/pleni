@@ -14,14 +14,14 @@ h1, h2, h3, h4, h5, h6, ul, li {
 @color5: #F0F0D8;
 
 .font1 {
-    font-family: Century Gothic, sans-serif;
+    font-family: 'Century Gothic', sans-serif;
     font-size: 12pt;
 }
 
 .font2 {
-    font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+    font-family: Optima,Segoe,'Segoe UI',Candara,Calibri,Arial,sans-serif;
     font-size: 13pt;
-    font-weight: bold;
+    font-weight: normal;
 }
 
 .clearfix {
@@ -29,26 +29,85 @@ h1, h2, h3, h4, h5, h6, ul, li {
 }
 
 header {
+    background-color: @color1;
     nav {
         max-width: 960px;
-        margin: 0 auto 0.20rem auto;
+        margin: 0 auto;
         ul {
             list-style: none;
             float: left;
             li {
                 float: left;
+                transition: 0.5s ease-in 0s;
                 a {
                     float: left;
                     padding: 1.2rem 1.0rem;
                     text-decoration: none;
-                    color: @color1;
+                    color: @color5;
                     .font2;
                     &:focus, &:hover, &.active {
                         outline: none;
                     }
                 }
                 &:focus, &:hover, &.active {
-                    background-color: @color5;
+                    background-color: @color2;
+                    border-bottom: 0.25rem solid @color4;
+                }
+            }
+        }
+    }
+}
+
+footer {
+    position: fixed;
+    width: 960px;
+    bottom: 0;
+    background-color: @color5;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    nav {
+        div.palette {
+            float: left;
+            margin: 0.635em 0 0 1.0rem;
+            span {
+                float: left;
+                width: 1.0rem;
+                height: 1.0rem;
+                margin: 0.025rem;
+            }
+            span:nth-child(1) {
+                background-color: @color1;
+            }
+            span:nth-child(2) {
+                background-color: @color2;
+            }
+            span:nth-child(3) {
+                background-color: @color3;
+            }
+            span:nth-child(4) {
+                background-color: @color4;
+            }
+            span:nth-child(5) {
+                background-color: @color5;
+            }
+        }
+        ul {
+            list-style: none;
+            float: right;
+            li {
+                float: left;
+                a {
+                    float: left;
+                    padding: 0.5rem 1.0rem;
+                    text-decoration: none;
+                    color: @color1;
+                    .font2;
+                    transition: 0.5s ease-in 0s;
+                    &:focus, &:hover {
+                        outline: none;
+                        color: @color2;
+                        transform: scale(1.07);
+                    }
                 }
             }
         }
@@ -60,36 +119,10 @@ header {
     margin: 0 auto;
 }
 
-footer {
-    max-width: 960px;
-    margin: 0 auto;
-    nav {
-        ul {
-            list-style: none;
-            float: right;
-            li {
-                float: left;
-                a {
-                    float: left;
-                    padding: 0.5rem 1.0rem;
-                    text-decoration: none;
-                    color: @color3;
-                    .font2;
-                    &:focus, &:hover {
-                        outline: none;
-                        background-color: @color5;
-                    }
-                }
-            }
-        }
-    }
-}
-
 #front {
     &>div:nth-child(1) {
         width: 100%;
         height: 40vh;
-        min-height: 385px;
         background: @color4 url(/img/tile.svg);
         position: relative;
 
@@ -103,34 +136,33 @@ footer {
         }
         &>div:nth-child(2) {
             position: absolute;
-            left: 50%;
-            top: 50%;
+            right: 0%;
+            bottom: 10%;
             width: 45%;
-            h1 {
-                .font2;
-                color: @color1;
-                font-size: 52pt;
-                line-height: 1.6rem;
-            }
         }
     }
 
     &>div:nth-child(2) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-start;
+        align-content: stretch;
         &>div.block {
-            float: left;
+            margin: 1.0rem 0;
             width: 25%;
-            height: 11.0rem;
-            padding: 0.5rem;
-            box-sizing: border-box;
             h2 {
                 .font2;
                 color: @color2;
                 font-size: 24pt;
+                text-align: center;
+                margin-bottom: 0.5rem;
             }
             p {
                 .font1;
                 font-weight: lighter;
                 font-size: 14pt;
+                padding-left: 0.5rem;
             }
         }
     }
