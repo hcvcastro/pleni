@@ -38,7 +38,7 @@ module.exports=function(args){
                 var json=JSON.parse(response.body);
                 if(json.total_rows!=0){
                     var max=Math.min(json.total_rows,buffer)
-                      , index=Math.floor(Math.random()*(buffer);
+                      , index=Math.floor(Math.random()*(buffer));
 
                     if(!args.task){
                         args.task={};
