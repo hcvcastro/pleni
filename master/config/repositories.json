@@ -1,0 +1,24 @@
+[
+    {
+        "id":"atb"
+      , "_dbserver":"hiperborea"
+      , "db":{
+            "name":"pleni_site_atb"
+        }
+    }
+  , {
+        "id":"koala"
+      , "_dbserver":"hiperborea"
+      , "db":{
+            "name":"pleni_site_koala"
+        }
+    }
+  , {
+        "id":"reduno"
+      , "_dbserver":"hiperborea"
+      , "db":{
+            "name":"pleni_site_reduno"
+        }
+    }
+]
+

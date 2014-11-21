@@ -49,7 +49,11 @@ header {
                         outline: none;
                     }
                 }
-                &:focus, &:hover, &.active {
+                &:focus, &:hover {
+                    background-color: darken(@color2,10%);
+                    border-bottom: 0.25rem solid @color4;
+                }
+                &.active {
                     background-color: @color2;
                     border-bottom: 0.25rem solid @color4;
                 }
@@ -105,8 +109,7 @@ footer {
                     transition: 0.5s ease-in 0s;
                     &:focus, &:hover {
                         outline: none;
-                        color: @color2;
-                        transform: scale(1.03);
+                        color: @color4;
                     }
                 }
             }
@@ -194,6 +197,11 @@ nav.menu {
                 a {
                     transform: translateX(1.0rem);
                 }
+            }
+            &:hover {
+                background-color: darken(@color4,10%);
+            }
+            &.active {
                 background-color: @color4;
             }
         }

@@ -3,22 +3,22 @@
 var request=require('supertest')
   , should=require('should')
   , join=require('path').join
-  , app=require('../../master/app')
-  , _success=require('../../planners/utils/json-response').success
-  , _error=require('../../planners/utils/json-response').error
-  , loadconfig=require('../../master/utils/loadconfig')
+  , app=require('../../../master/app')
+  , _success=require('../../../planners/utils/json-response').success
+  , _error=require('../../../planners/utils/json-response').error
+  , loadconfig=require('../../../master/utils/loadconfig')
 
 describe('repositories controller functions',function(){
     describe('rest functions for collection',function(){
-        it('GET /repositories/view',function(done){
+        it('GET /resources/view',function(done){
             request(app)
-                .get('/repositories/view')
+                .get('/resources/view')
                 .expect(200,done);
         });
 
-        it('GET /repositories',function(done){
+        it('GET /resources/dbservers',function(done){
             request(app)
-                .get('/repositories')
+                .get('/resources/dbservers')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -27,25 +27,27 @@ describe('repositories controller functions',function(){
                     res.body.should.have.an.Array;
                     for(var i in res.body){
                         res.body[i].should.have.property('id');
-                        res.body[i].should.have.property('host');
-                        res.body[i].should.have.property('port');
-                        res.body[i].should.have.property('prefix');
+                        res.body[i].should.have.property('db');
+                        res.body[i].db.should.have.property('host');
+                        res.body[i].db.should.have.property('port');
+                        res.body[i].db.should.have.property('user');
+                        res.body[i].db.should.have.property('prefix');
                     }
                     done();
                 });
         });
 
         [
-            {test:'',expected:_success.ok,status:201}
-          , {test:{},expected:_success.ok,status:201}
-          , {test:{"":""},expected:_success.ok,status:201}
-          , {test:{"__":""},expected:_success.ok,status:201}
-          , {test:{"host":{}},expected:_success.ok,status:201}
-          , {test:{"host":{host:""}},expected:_success.ok,status:201}
-          , {test:{"host":
-              {host:"http://localhost"}},
-              expected:_success.ok,status:201}
-          , {test:[
+//            {test:'',expected:_error.json,status:400}
+//          , {test:{},expected:_success.ok,status:201}
+ //         , {test:{"":""},expected:_success.ok,status:201}
+  //        , {test:{"__":""},expected:_success.ok,status:201}
+   //       , {test:{"host":{}},expected:_success.ok,status:201}
+    //      , {test:{"host":{host:""}},expected:_success.ok,status:201}
+     //     , {test:{"host":
+//              {host:"http://localhost"}},
+ //             expected:_success.ok,status:201}
+            {test:[
               {
                   id:"localhost"
                 , host:"http://localhost"
@@ -57,9 +59,9 @@ describe('repositories controller functions',function(){
             ],expected:_success.ok,status:201}
         ]
         .forEach(function(element){
-            it('PUT /repositories',function(done){
+            it('PUT /resources/dbservers',function(done){
                 request(app)
-                    .put('/repositories')
+                    .put('/resources/dbservers')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -73,7 +75,7 @@ describe('repositories controller functions',function(){
             });
         });
 
-        [
+/*        [
             {test:'',expected:_error.validation,status:403}
           , {test:{},expected:_error.validation,status:403}
           , {test:{id:1},expected:_error.validation,status:403}
@@ -360,7 +362,7 @@ describe('repositories controller functions',function(){
                         done();
                     });
             });
-        });
+        });*/
     });
 });
 

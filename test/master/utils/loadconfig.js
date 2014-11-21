@@ -21,5 +21,19 @@ describe('loading the config files',function(){
         }
         done();
     });
+
+    it('loading repositories.js',function(done){
+        var config=loadconfig(path.join(
+            __dirname,'..','..','..','master','config','repositories.json'));
+
+        config.should.be.Array;
+        for(var a in config){
+            config[a].should.have.property('id').and.have.be.a.String;
+            config[a].should.have.property('_dbserver').and.have.be.a.String;
+            config[a].should.have.property('db').and.have.be.a.Object;
+            config[a].db.should.have.property('name').and.have.be.a.String;
+        }
+        done();
+    });
 });
 

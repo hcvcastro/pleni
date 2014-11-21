@@ -4,6 +4,7 @@ var validate=require('../utils/validators')
   , _success=require('../utils/json-response').success
   , _error=require('../utils/json-response').error
   , generator=require('../functions/utils/random').sync
+  , jayschema=require('jayschema')
 
 module.exports=function(notifier){
     this.valid_tasks=[
@@ -104,9 +105,7 @@ module.exports=function(notifier){
             &&this.tid===request.params.tid){
 
             var schema=require('../tasks/'+this.name).schema
-              , jayschema=require('jayschema')
               , js=new jayschema()
-
             if(js.validate(request.body,schema)){
                 this.action=request.body;
                 this._run();
