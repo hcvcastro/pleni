@@ -1,19 +1,33 @@
 [
     {
-        "id":"localhost"
-      , "host":"http://localhost"
-      , "port":"5984"
-      , "user":"jacobian"
-      , "pass":"asdf"
-      , "prefix":"pleni_"
+        "id":"main"
+      , "db":{
+            "host":"http://181.177.142.72"
+          , "port":"5984"
+          , "user":"jacobian"
+          , "pass":"asdf"
+          , "prefix":"pleni_"
+        }
     }
   , {
         "id":"hiperborea"
-      , "host":"http://hiperborea.com.bo"
-      , "port":"5984"
-      , "user":"jacobian"
-      , "pass":"asdf"
-      , "prefix":"pleni_"
+      , "db":{
+            "host":"http://hiperborea.com.bo"
+          , "port":"5984"
+          , "user":"jacobian"
+          , "pass":"asdf"
+          , "prefix":"pleni_"
+        }
+    }
+  , {
+        "id":"smith"
+      , "db":{
+            "host":"http://167.157.28.33"
+          , "port":"5984"
+          , "user":"jacobian"
+          , "pass":"asdf"
+          , "prefix":"pleni_"
+        }
     }
 ]
 

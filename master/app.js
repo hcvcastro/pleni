@@ -8,12 +8,14 @@ var http=require('http')
   , join=require('path').join
   , loadconfig=require('./utils/loadconfig')
   , app=express()
+  , resources={}
 
 // sync methods
-app.set('repositories',
-    loadconfig(join(__dirname,'config','dbservers.json')));
-app.set('planners',
-    loadconfig(join(__dirname,'config','planners.json')));
+resources.dbservers=loadconfig(join(__dirname,'config','dbservers.json'));
+//resources.repositories=loadconfig(join(__dirname,'config','dbservers.json')));
+//resources.planners=loadconfig(join(__dirname,'config','dbservers.json')));
+//resources.iopipes=loadconfig(join(__dirname,'config','dbservers.json')));
+//app.set('resources',resources);
 
 // async methods
 app.set('port',process.env.PORT||3000);
@@ -33,7 +35,7 @@ app.use(express.static(join(__dirname,'..','bower_components')));
 app.locals.pretty=true;
 
 require('./controllers/home')(app);
-require('./controllers/resources')(app);
+require('./controllers/resources')(app,resources);
 require('./controllers/tasks')(app);
 
 app.use(function(req,res){

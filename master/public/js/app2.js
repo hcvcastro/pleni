@@ -39,31 +39,7 @@ var build_jsoneditor=function(args){
 }
 // Angular functions
 var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
-.config(['$routeProvider',function($routeProvider){
-    $routeProvider
-        .when('/home',{
-            templateUrl:'/home',
-            controller:'HomeController'
-        })
-        .when('/resources',{
-            templateUrl:'/resources/view',
-            controller:'ResourcesController'
-        })
-        .when('/repositories',{
-            templateUrl:'/repositories/view',
-            controller:'RepositoriesController'
-        })
-        .when('/planners',{
-            templateUrl:'/planners/view',
-            controller:'PlannersController'
-        })
-        .otherwise({
-            redirectTo: '/home'
-        });
-}])
-.controller('HomeController',['$scope',function($scope){
-    $('header nav ul li').removeClass('active');
-}])
+
 .factory('Repositories',['$resource',function($resource){
     return $resource('/repositories/:repository/:action',{
         repository:'@repository'
@@ -77,8 +53,6 @@ var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
 .controller('RepositoriesController',
     ['$scope','$sessionStorage','Repositories',
     function($scope,$sessionStorage,Repositories){
-    $('header nav ul li').removeClass('active');
-    $('header nav ul li:nth-child(1)').addClass('active');
 
     $scope.sessionStorage=$sessionStorage;
     $scope.env={

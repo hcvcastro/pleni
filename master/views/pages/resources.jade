@@ -7,57 +7,7 @@ nav.menu
 
 section.main
     section.dbservers
-        h1 DB Servers
-        div.tasks
-            ul
-                li
-                    a.fa.fa-plus-circle(href='') &nbsp;Add
-        table
-            tr
-                th Name
-                th Host
-                th Status
-                th &nbsp;
-            tr
-                td
-                    a(href='') hiperborea
-                td 192.3.27.103:5894
-                td.status
-                    span.fa.fa-check
-                td.options
-                    a.fa.fa-refresh(title='Check connection',href='')
-                    a.fa.fa-edit(title='Edit properties',href='')
-                    a.fa.fa-trash(title='Remove element',href='')
-            tr
-                td
-                    a(href='') localhost
-                td 127.0.0.1:5984
-                td.status
-                    span.fa.fa-warning
-                td.options
-                    a.fa.fa-refresh(title='Check connection',href='')
-                    a.fa.fa-edit(title='Edit properties',href='')
-                    a.fa.fa-trash(title='Remove element',href='')
-            tr
-                td
-                    a(href='') smith
-                td 167.157.28.33:5984
-                td.status
-                    span
-                td.options
-                    a.fa.fa-refresh(title='Check connection',href='')
-                    a.fa.fa-edit(title='Edit properties',href='')
-                    a.fa.fa-trash(title='Remove element',href='')
-            tr
-                td
-                    a(href='') main
-                td 181.177.142.72:5984
-                td.status
-                    span
-                td.options
-                    a.fa.fa-refresh(title='Check connection',href='')
-                    a.fa.fa-edit(title='Edit properties',href='')
-                    a.fa.fa-trash(title='Remove element',href='')
+        include ../blocks/resources/list-dbservers
     section.repositories
         h1 Repositories
         div.tasks
