@@ -5,40 +5,40 @@ var validate=require('../../planners/utils/validators')
   , _error=require('../../planners/utils/json-response').error
   , schemas={
         dbservers:{
-            "$schema":"http://json-schema.org/draft-04/schema#"
-          , "type":"array"
-          , "items":{
-                "type":"object"
-              , "properties":{
-                    "id":{
-                        "type":"string"
+            '$schema':'http://json-schema.org/draft-04/schema#'
+          , 'type':'array'
+          , 'items':{
+                'type':'object'
+              , 'properties':{
+                    'id':{
+                        'type':'string'
                     }
-                  , "db":{
-                        "type":"object"
-                      , "properties":{
-                            "host":{
-                                "type":"string"
+                  , 'db':{
+                        'type':'object'
+                      , 'properties':{
+                            'host':{
+                                'type':'string'
                             }
-                          , "port":{
-                                "type":"string"
+                          , 'port':{
+                                'type':'string'
                             }
-                          , "user":{
-                                "type":"string"
+                          , 'user':{
+                                'type':'string'
                             }
-                          , "pass":{
-                                "type":"string"
+                          , 'pass':{
+                                'type':'string'
                             }
-                          , "prefix":{
-                                "type":"string"
+                          , 'prefix':{
+                                'type':'string'
                             }
                         }
-                      , "required":["host","port","user","pass","prefix"]
+                      , 'required':['host','port','user','pass','prefix']
                     }
                 }
-              , "required":["id","db"]
+              , 'required':['id','db']
             }
-          , "minItems":1
-          , "uniqueItems":true
+          , 'minItems':1
+          , 'uniqueItems':true
         }
     }
 
@@ -70,7 +70,7 @@ module.exports=function(app){
         var jayschema=require('jayschema')
           , js=new jayschema()
 
-        if(js.validate(request.body,schemas.dbservers)){
+        if(js.validate(request.body,schemas.dbservers).length==0){
             var resources=app.get('resources')
             var list=new Array()
 

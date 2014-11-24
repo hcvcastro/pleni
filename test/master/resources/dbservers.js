@@ -38,16 +38,13 @@ describe('repositories controller functions',function(){
         });
 
         [
-//            {test:'',expected:_error.json,status:400}
-//          , {test:{},expected:_success.ok,status:201}
- //         , {test:{"":""},expected:_success.ok,status:201}
-  //        , {test:{"__":""},expected:_success.ok,status:201}
-   //       , {test:{"host":{}},expected:_success.ok,status:201}
-    //      , {test:{"host":{host:""}},expected:_success.ok,status:201}
-     //     , {test:{"host":
-//              {host:"http://localhost"}},
- //             expected:_success.ok,status:201}
-            {test:[
+            {test:'',expected:_error.json,status:400}
+          , {test:{},expected:_error.json,status:400}
+          , {test:{"":""},expected:_error.json,status:400}
+          , {test:{"__":""},expected:_error.json,status:400}
+          , {test:{"host":{}},expected:_error.json,status:400}
+          , {test:{"host":{host:""}},expected:_error.json,status:400}
+          , {test:[
               {
                   id:"localhost"
                 , host:"http://localhost"
@@ -55,6 +52,18 @@ describe('repositories controller functions',function(){
                 , dbuser:'boo'
                 , dbpass:'boo.'
                 , prefix:'p_'
+              }
+            ],expected:_error.json,status:400}
+          , {test:[
+              {
+                  id:"localhost"
+                , db:{
+                      host:"http://localhost"
+                    , port:"8080"
+                    , user:'boo'
+                    , pass:'boo.'
+                    , prefix:'p_'
+                  }
               }
             ],expected:_success.ok,status:201}
         ]

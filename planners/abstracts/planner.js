@@ -106,7 +106,7 @@ module.exports=function(notifier){
 
             var schema=require('../tasks/'+this.name).schema
               , js=new jayschema()
-            if(js.validate(request.body,schema)){
+            if(js.validate(request.body,schema).length==0){
                 this.action=request.body;
                 this._run();
 
