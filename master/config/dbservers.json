@@ -12,7 +12,7 @@
   , {
         "id":"hiperborea"
       , "db":{
-            "host":"http://hiperborea.com.bo"
+            "host":"http://192.3.27.103"
           , "port":"5984"
           , "user":"jacobian"
           , "pass":"asdf"

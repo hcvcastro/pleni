@@ -23,15 +23,17 @@ module.exports=function(grunt){
                     'planners/planner.js'
                   , 'planners/abstracts/scheduler.js'
                   , 'planners/abstracts/server.js'
-                  , 'planners/functions/{,*/}*.js'
+                  , 'planners/functions/**/*.js'
                 ]
               , tasks:['develop:planner']
             }
 /* -------- master watching ------------------------------------------------- */
           , master:{
                 files:[
-                    'master/{,*/}*.js'
-                  , 'master/{,*/}*.json'
+                    'master/config/**/*.json'
+                  , 'master/controllers/**/*.js'
+                  , 'master/utils/**/*.js'
+                  , 'master/app.js'
                 ]
               , tasks:[
                     'develop:master'
@@ -39,15 +41,15 @@ module.exports=function(grunt){
               , options:{livereload:reloadPort}
             }
           , js:{
-                files:['master/public/js/{,*/}*.js']
+                files:['master/public/js/**/*.js']
               , options:{livereload:reloadPort}
             }
           , less:{
-                files:['master/public/css/{,*/}*.less']
+                files:['master/public/css/**/*.less']
               , options:{livereload:reloadPort}
             }
           , jade:{
-                files:['master/views/{,*/}*.jade']
+                files:['master/views/**/*.jade']
               , options:{livereload:reloadPort}
             }
 /* -------- testing watching ------------------------------------------------ */
@@ -56,15 +58,15 @@ module.exports=function(grunt){
               , tasks:['mochacli:dumb']
             }
           , test_functions:{
-                files:['test/planners/functions/{,*/}*.js']
+                files:['test/planners/functions/**/*.js']
               , tasks:['mochacli:functions']
             }
           , test_planner:{
-                files:['test/planners/planner/{,*/}*.js']
+                files:['test/planners/planner/**/*.js']
               , tasks:['mochacli:planner']
             }
           , test_master:{
-                files:['test/master/{,*/}*.js']
+                files:['test/master/**/*.js']
               , tasks:['mochacli:master']
             }
 /* -------- documentation watching ------------------------------------------ */
@@ -87,7 +89,9 @@ module.exports=function(grunt){
                     PORT:grunt.option('port')||3001
                 }
             }
-          , master:{file:'master/app.js'}
+          , master:{
+                file:'master/app.js'
+            }
         }
 
       , mochacli:{
@@ -96,15 +100,15 @@ module.exports=function(grunt){
               , bail:true
             }
           , functions:[
-                'test/planners/functions/{,*/}*.js'
-              , 'test/planners/utils/{,*/}*.js'
+                'test/planners/functions/**/*.js'
+              , 'test/planners/utils/**/*.js'
             ]
           , dumb:['test/planners/dumb/server.js']
           , planner:[
                 'test/planners/planner/server.js'
               , 'test/planners/planner/scheduler.js'
             ]
-          , master:['test/master/{,*/}*.js']
+          , master:['test/master/**/*.js']
         }
 
       , latex:{

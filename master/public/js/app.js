@@ -25,8 +25,8 @@ angular
             .siblings().removeClass('active');
     }])
     .factory('DBServers',['$resource',function($resource){
-        return $resource('/dbservers/:dbserver/:action',{
-            repository:'@repository'
+        return $resource('/resources/dbservers/:dbserver/:action',{
+            dbserver:'@dbserver'
           , action:'@action'
         },{
             update:{method:'PUT'}
@@ -35,8 +35,8 @@ angular
         });
     }])
     .controller('ResourcesController',
-        ['$scope','$sessionStorage',
-        function($scope,$sessionStorage){
+        ['$scope','$sessionStorage','DBServers',
+        function($scope,$sessionStorage,DBServers){
             $('header nav ul li:nth-child(2)').addClass('active')
                 .siblings().removeClass('active');
 
@@ -45,6 +45,24 @@ angular
                     .siblings().removeClass('active');
                 $('nav.menu>ul>li:nth-child(1)').addClass('active')
                     .siblings().removeClass('active');
+
+                $scope.refresh_dbservers=function(){
+                    DBServers.query(function(data){
+                        $scope.dbservers=new Array();
+                        for(var i=0;i<data.length;i++){
+                            $scope.dbservers.push({
+                                id:data[i].id
+                              , db:{
+                                    host:data[i].db.host
+                                  , port:data[i].db.port
+                                  , prefix:data[i].db.prefix
+                                }
+                              , status:'unknown'
+                            });
+                        }
+                    });
+                };
+                $scope.refresh_dbservers();
             }
             $scope.show_repositories=function(){
                 $('section.repositories').addClass('active')
