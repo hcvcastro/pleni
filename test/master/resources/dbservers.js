@@ -93,7 +93,7 @@ describe('repositories controller functions',function(){
           , {test:{repository:'/'},expected:_error.validation,status:403}
           , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
-                id:'main'
+                id:'localhost'
               , db:{
                     host:'http://localhost'
                   , port:'8080'
@@ -125,7 +125,7 @@ describe('repositories controller functions',function(){
                 id:'test'
               , db:{
                     host:'http://localhost'
-                  , port:8080
+                  , port:'8080'
                   , user:'boo'
                   , pass:'boo.'
                   , prefix:'p_'
@@ -149,9 +149,9 @@ describe('repositories controller functions',function(){
             });
         });
 
-/*        it('DELETE /repositories',function(done){
+        it('DELETE /resources/dbservers',function(done){
             request(app)
-                .delete('/repositories')
+                .delete('/resources/dbservers')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -206,7 +206,7 @@ describe('repositories controller functions',function(){
         });
     });
 
-    describe('rest function for resources',function(){
+/*    describe('rest function for resources',function(){
         before(function(done){
             request(app)
                 .put('/repositories')

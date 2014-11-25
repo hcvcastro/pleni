@@ -4,6 +4,14 @@ var validate=require('../../planners/utils/validators')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
   , schema=require('../utils/schema')
+  , get_element=function(needle,haystack){
+        for(var i in haystack){
+            if(haystack[i].id==needle){
+                return [i,haystack[i]];
+            }
+        }
+        return;
+    };
 
 module.exports=function(app){
     app.get('/resources/view',function(request,response){
@@ -59,7 +67,7 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
             var resources=app.get('resources')
               , dbservers=resources.dbservers
-              , dbserver=get_repository(request.body.id,dbservers)
+              , dbserver=get_element(request.body.id,dbservers)
 
             if(!dbserver){
                 var new_dbserver={
@@ -93,14 +101,12 @@ module.exports=function(app){
         }
     });
 
-    var get_repository=function(needle,haystack){
-        for(var i in haystack){
-            if(haystack[i].id==needle){
-                return [i,haystack[i]];
-            }
-        }
-        return null;
-    };
+    app.delete('/resources/dbservers',function(request,response){
+        var resources=app.get('resources')
 
+        resources.dbservers=[];
+        app.set('resources',resources);
+        response.status(200).json(_success.ok);
+    });
 };
 
