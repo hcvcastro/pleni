@@ -4,39 +4,40 @@ var validate=require('../../planners/utils/validators')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
   , schemas={
-        dbservers:{
+        dbserver:{
+            'type':'object'
+          , 'properties':{
+                'id':{
+                    'type':'string'
+                }
+              , 'db':{
+                    'type':'object'
+                  , 'properties':{
+                        'host':{
+                            'type':'string'
+                        }
+                      , 'port':{
+                            'type':'string'
+                        }
+                      , 'user':{
+                            'type':'string'
+                        }
+                      , 'pass':{
+                            'type':'string'
+                        }
+                      , 'prefix':{
+                            'type':'string'
+                        }
+                    }
+                  , 'required':['host','port','user','pass','prefix']
+                }
+            }
+          , 'required':['id','db']
+        }
+      , dbservers:{
             '$schema':'http://json-schema.org/draft-04/schema#'
           , 'type':'array'
-          , 'items':{
-                'type':'object'
-              , 'properties':{
-                    'id':{
-                        'type':'string'
-                    }
-                  , 'db':{
-                        'type':'object'
-                      , 'properties':{
-                            'host':{
-                                'type':'string'
-                            }
-                          , 'port':{
-                                'type':'string'
-                            }
-                          , 'user':{
-                                'type':'string'
-                            }
-                          , 'pass':{
-                                'type':'string'
-                            }
-                          , 'prefix':{
-                                'type':'string'
-                            }
-                        }
-                      , 'required':['host','port','user','pass','prefix']
-                    }
-                }
-              , 'required':['id','db']
-            }
+          , 'items':schemas.dbserver
           , 'minItems':1
           , 'uniqueItems':true
         }
@@ -72,21 +73,23 @@ module.exports=function(app){
 
         if(js.validate(request.body,schemas.dbservers).length==0){
             var resources=app.get('resources')
-            var list=new Array()
+              , list=new Array()
 
             for(var i in request.body){
                 if(validate.validSlug(request.body[i].id)
-                    &validate.validHost(request.body[i].host)
-                    &validate.validPort(request.body[i].port)
-                    &validate.validSlug(request.body[i].dbuser)
-                    &validate.validSlug(request.body[i].prefix)){
+                    &validate.validHost(request.body[i].db.host)
+                    &validate.validPort(request.body[i].db.port)
+                    &validate.validSlug(request.body[i].db.user)
+                    &validate.validSlug(request.body[i].db.prefix)){
                     list.push({
-                        id:     validate.toString(request.body[i].id)
-                      , host:   validate.toValidHost(request.body[i].host)
-                      , port:   validate.toInt(request.body[i].port)
-                      , dbuser: validate.toString(request.body[i].dbuser)
-                      , dbpass: validate.toString(request.body[i].dbpass)
-                      , prefix: validate.toString(request.body[i].prefix)
+                        id:validate.toString(request.body[i].id)
+                      , db:{
+                            host:validate.toValidHost(request.body[i].db.host)
+                          , port:validate.toInt(request.body[i].db.port)
+                          , user:validate.toString(request.body[i].db.user)
+                          , pass:validate.toString(request.body[i].db.pass)
+                          , prefix:validate.toString(request.body[i].db.prefix)
+                        }
                     });
                 }
             }
@@ -96,6 +99,41 @@ module.exports=function(app){
             response.status(201).json(_success.ok);
         }else{
             response.status(400).json(_error.json);
+        }
+    });
+
+    app.post('/resources/dbservers',function(request,response){
+        var jayschema=require('jayschema')
+          , js=new jayschema()
+
+        if(js.validate(request.body,schemas.dbserver).length==0){
+            var resources=app.get('resources')
+              , id=validate.toString(request.body.id)
+              , repositories=app.get('repositories')
+              , repository=get_repository(id,repositories)
+              , new_repository={
+                    id:     id
+                  , host:   validate.toValidHost(request.body.host)
+                  , port:   validate.toInt(request.body.port)
+                  , dbuser: validate.toString(request.body.dbuser)
+                  , dbpass: validate.toString(request.body.dbpass)
+                  , prefix: validate.toString(request.body.prefix)
+                }
+
+            if(!repository){
+                repositories.push(new_repository);
+                app.set('repositories',repositories);
+                response.status(201).json({
+                    id:     new_repository.id
+                  , host:   new_repository.host
+                  , port:   new_repository.port
+                  , prefix: new_repository.prefix
+                });
+            }else{
+                response.status(403).json(_error.notoverride);
+            }
+        }else{
+            response.status(403).json(_error.validation);
         }
     });
 };
