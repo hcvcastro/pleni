@@ -1,5 +1,28 @@
 article
     h2 Add a DB Server
-    form(method='post')
-        input(type='text')
+    form(ng-submit='save_dbserver()')
+        p
+            label Name
+            input(type='text',placeholder='The name for the new connection',required,ng-model='repository.id')
+        p
+            label Host
+            input(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='repository.host')
+        p
+            label Port
+            input(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='repository.port')
+        p
+            label User
+            input(type='text',placeholder='The host without scheme or a IP',required,ng-model='repository.dbuser')
+        p
+            label Password
+            input(type='password',placeholder='The host without scheme or a IP',required,ng-model='repository.dbpass')
+        p
+            label Prefix
+            input(type='text',placeholder='The prefix used in the database server',required,ng-model='repository.prefix')
+        p
+            button(type='submit') Save
+            button(type='button',ng-click='check()') Test connection
+            div#test
+                span.loader.hide
+                span.result.hide
 

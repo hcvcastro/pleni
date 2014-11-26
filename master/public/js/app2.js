@@ -1,4 +1,3 @@
-'use strict';
 // jQuery functions
 var show_alert=function(type,message){
         $('.message').html(message)
@@ -21,35 +20,8 @@ var show_alert=function(type,message){
   , focus=function(element){
         $(element).focus();
     }
-// JSONEditor settings
-JSONEditor.defaults.options.theme='bootstrap3'
-JSONEditor.defaults.options.iconlib='bootstrap3'
-JSONEditor.defaults.options.disable_collapse=true
-JSONEditor.defaults.options.disable_edit_json=true
-JSONEditor.defaults.options.disable_properties=true
-var build_jsoneditor=function(args){
-    var editor=new JSONEditor(document.getElementById('editor'),{
-        schema:{
-            type:'object'
-          , title:args.name
-          , properties:args.scheme
-        }
-    })
-    return editor;
-}
+//
 // Angular functions
-var pleniApp=angular.module('PleniApp',['ngRoute','ngResource','ngStorage'])
-
-.factory('Repositories',['$resource',function($resource){
-    return $resource('/repositories/:repository/:action',{
-        repository:'@repository'
-      , action:'@action'
-    },{
-        update:{method:'PUT'}
-      , check:{method:'POST',params:{action:'_check'}}
-      , scan:{method:'POST',params:{action:'_databases'},isArray:true}
-    });
-}])
 .controller('RepositoriesController',
     ['$scope','$sessionStorage','Repositories',
     function($scope,$sessionStorage,Repositories){

@@ -37,16 +37,18 @@ angular
     .controller('ResourcesController',
         ['$scope','$sessionStorage','DBServers',
         function($scope,$sessionStorage,DBServers){
+            $scope.session.Storage=$sessionStorage;
             $('header nav ul li:nth-child(2)').addClass('active')
                 .siblings().removeClass('active');
 
-            $scope.show_dbservers=function(){
-                $('section.dbservers').addClass('active')
-                    .siblings().removeClass('active');
-                $('nav.menu>ul>li:nth-child(1)').addClass('active')
-                    .siblings().removeClass('active');
-
-                $scope.refresh_dbservers=function(){
+            $scope.dbservers={
+                show:function(){
+                    $('section.dbservers').addClass('active')
+                        .siblings().removeClass('active');
+                    $('nav.menu>ul>li:nth-child(1)').addClass('active')
+                        .siblings().removeClass('active');
+                }
+              , refresh:function(){
                     DBServers.query(function(data){
                         $scope.dbservers=new Array();
                         for(var i=0;i<data.length;i++){
@@ -61,29 +63,37 @@ angular
                             });
                         }
                     });
-                };
-                $scope.refresh_dbservers();
-            }
-            $scope.show_repositories=function(){
-                $('section.repositories').addClass('active')
-                    .siblings().removeClass('active');
-                $('nav.menu>ul>li:nth-child(2)').addClass('active')
-                    .siblings().removeClass('active');
-            }
-            $scope.show_planners=function(){
-                $('section.planners').addClass('active')
-                    .siblings().removeClass('active');
-                $('nav.menu>ul>li:nth-child(3)').addClass('active')
-                    .siblings().removeClass('active');
-            }
-            $scope.show_iopipes=function(){
-                $('section.iopipes').addClass('active')
-                    .siblings().removeClass('active');
-                $('nav.menu>ul>li:nth-child(4)').addClass('active')
-                    .siblings().removeClass('active');
-            }
+                }
+            };
 
-            $scope.show_dbservers();
+            $scope.repositories={
+                show:function(){
+                    $('section.repositories').addClass('active')
+                        .siblings().removeClass('active');
+                    $('nav.menu>ul>li:nth-child(2)').addClass('active')
+                        .siblings().removeClass('active');
+                }
+            };
+
+            $scope.planners={
+                show:function(){
+                    $('section.planners').addClass('active')
+                        .siblings().removeClass('active');
+                    $('nav.menu>ul>li:nth-child(3)').addClass('active')
+                        .siblings().removeClass('active');
+                }
+            };
+
+            $scope.iopipes={
+                show:function(){
+                    $('section.iopipes').addClass('active')
+                        .siblings().removeClass('active');
+                    $('nav.menu>ul>li:nth-child(4)').addClass('active')
+                        .siblings().removeClass('active');
+                }
+            };
+
+            $scope.dbservers.show();
         }]
     )
     .controller('TasksController',

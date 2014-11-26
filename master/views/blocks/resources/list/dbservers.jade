@@ -14,7 +14,8 @@ article
             th Status
             th &nbsp;
         tr(ng-repeat='dbserver in dbservers')
-            td: span {{dbserver.id}}
+            td
+                a(href='') {{dbserver.id}}
             td {{dbserver.db.host}}:{{dbserver.db.port}}
             td.status
                 span.fa(ng-class='{\'fa-check\':dbserver.status==\'online\',\'fa-question\':dbserver.status==\'unknown\',\'fa-close\':dbserver.status==\'offline\'}')
