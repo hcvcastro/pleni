@@ -48,14 +48,14 @@ angular
                     $('nav.menu>ul>li:nth-child(1)').addClass('active')
                         .siblings().removeClass('active');
                     if(!$scope.storage.dbservers){
-                        
+                        $scope.dbservers.refresh();
                     }
                 }
               , refresh:function(){
                     DBServers.query(function(data){
-                        $scope.dbservers=new Array();
+                        $scope.storage.dbservers=new Array();
                         for(var i=0;i<data.length;i++){
-                            $scope.dbservers.push({
+                            $scope.storage.dbservers.push({
                                 id:data[i].id
                               , db:{
                                     host:data[i].db.host

@@ -229,6 +229,12 @@ section.main {
             padding-top: 1.0rem;
         }
 
+        h2 {
+            .font1;
+            font-size: 1.8rem;
+            padding-top: 0.75rem;
+        }
+
         div.tasks {
             height: 2.0rem;
             ul {
@@ -271,8 +277,12 @@ section.main {
                     }
                 }
 
-                .status {
+                .center {
                     text-align: center;
+                }
+
+                .right {
+                    text-align: right;
                 }
 
                 .options {
@@ -284,6 +294,40 @@ section.main {
             }
             tr:hover {
                 background-color: lighten(@color4,20%);
+            }
+        }
+
+        form {
+            padding-top: 0.85rem;
+
+            p {
+                padding: 0.3rem 0;
+                label {
+                    float: left;
+                    text-align: right;
+                    margin-right: 1.0rem;
+                    padding: 0.35rem;
+                    width: 10.0rem;
+                }
+
+                input {
+                    width: 18.0rem;
+                    padding: 0.35rem 0.5rem;
+                    border: 1px solid @color1;
+                    border-radius: 0.25rem;
+                }
+
+                button {
+                    padding: 0.5rem;
+                    border: none;
+                    background-color: @color2;
+                    color: #ffffff;
+                    border-radius: 0.25rem;
+                }
+            }
+            .offset {
+                padding: 0.5rem 0;
+                margin-left: 11.4rem;
             }
         }
     }

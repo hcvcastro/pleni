@@ -1,6 +1,6 @@
 article
     h2 Add a DB Server
-    form(ng-submit='save_dbserver()')
+    form(ng-submit='dbservers.save()')
         p
             label Name
             input(type='text',placeholder='The name for the new connection',required,ng-model='repository.id')
@@ -19,10 +19,10 @@ article
         p
             label Prefix
             input(type='text',placeholder='The prefix used in the database server',required,ng-model='repository.prefix')
-        p
+        p.offset
             button(type='submit') Save
             button(type='button',ng-click='check()') Test connection
-            div#test
+            div.test
                 span.loader.hide
                 span.result.hide
 
