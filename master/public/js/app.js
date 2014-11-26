@@ -37,7 +37,7 @@ angular
     .controller('ResourcesController',
         ['$scope','$sessionStorage','DBServers',
         function($scope,$sessionStorage,DBServers){
-            $scope.session.Storage=$sessionStorage;
+            $scope.storage=$sessionStorage;
             $('header nav ul li:nth-child(2)').addClass('active')
                 .siblings().removeClass('active');
 
@@ -47,6 +47,9 @@ angular
                         .siblings().removeClass('active');
                     $('nav.menu>ul>li:nth-child(1)').addClass('active')
                         .siblings().removeClass('active');
+                    if(!$scope.storage.dbservers){
+                        
+                    }
                 }
               , refresh:function(){
                     DBServers.query(function(data){
