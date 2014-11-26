@@ -10,6 +10,16 @@
         }
     }
   , {
+        "id":"localhost"
+      , "db":{
+            "host":"http://127.0.0.1"
+          , "port":"5984"
+          , "user":"jacobian"
+          , "pass":"asdf"
+          , "prefix":"pleni_"
+        }
+    }
+  , {
         "id":"hiperborea"
       , "db":{
             "host":"http://192.3.27.103"

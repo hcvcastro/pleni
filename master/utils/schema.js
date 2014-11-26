@@ -78,7 +78,7 @@ var dbserver={
                   , 'format':'slug'
                 }
             }
-          , 'required':['host','port','user','pass','prefix']
+          , 'required':['host','port','user','pass']
         }
     }
   , 'required':['id','db']
