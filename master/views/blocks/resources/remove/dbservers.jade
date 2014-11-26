@@ -1,4 +1,4 @@
-article
+article(ng-show='dbservers.env.view==\'remove\'')
     h2 Remove a DB Server
     form(ng-submit='dbservers.remove()')
         p Press the button if you want remove the registry for the database server.

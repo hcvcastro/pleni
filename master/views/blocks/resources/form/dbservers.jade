@@ -1,4 +1,9 @@
-article
+article(ng-show='dbservers.env.view==\'form\'')
+    div.tasks
+        ul
+            li
+                a.fa.fa-arrow-circle-o-left(ng-click='dbservers.list()') &nbsp;Back
+        .clearfix
     h2 Add a DB Server
     form(ng-submit='dbservers.save()')
         p

@@ -1,8 +1,8 @@
-article
+article.list
     div.tasks
         ul
             li
-                a.fa.fa-plus-circle(href='') &nbsp;Add
+                a.fa.fa-plus(ng-click='dbservers.add()') &nbsp;Add
             li
                 a.fa.fa-refresh(ng-click='dbservers.refresh()') &nbsp;Refresh
         .clearfix
@@ -14,7 +14,7 @@ article
             th &nbsp;
         tr(ng-repeat='dbserver in storage.dbservers')
             td
-                a(href='') {{dbserver.id}}
+                a(ng-click='dbservers.view()') {{dbserver.id}}
             td {{dbserver.db.host}}:{{dbserver.db.port}}
             td.center
                 span.fa(ng-class='{\'fa-check\':dbserver.status==\'online\',\'fa-question\':dbserver.status==\'unknown\',\'fa-close\':dbserver.status==\'offline\'}')

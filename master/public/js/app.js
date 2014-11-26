@@ -42,7 +42,9 @@ angular
                 .siblings().removeClass('active');
 
             $scope.dbservers={
-                show:function(){
+                env:{view:'list'}
+              , show:function(){
+                    $scope.dbservers.env.view='list';
                     $('section.dbservers').addClass('active')
                         .siblings().removeClass('active');
                     $('nav.menu>ul>li:nth-child(1)').addClass('active')
@@ -52,6 +54,7 @@ angular
                     }
                 }
               , refresh:function(){
+                    $('article.list table').fadeOut();
                     DBServers.query(function(data){
                         $scope.storage.dbservers=new Array();
                         for(var i=0;i<data.length;i++){
@@ -65,7 +68,20 @@ angular
                               , status:'unknown'
                             });
                         }
+                        $('article.list table').fadeIn();
                     });
+                }
+              , list:function(){
+                    $scope.dbservers.env.view='list';
+                }
+              , add:function(){
+                    $scope.dbservers.env.view='form';
+                }
+              , view:function(){
+                    $scope.dbservers.env.view='view';
+                }
+              , remove:function(){
+                    $scope.dbservers.env.view='remove';
                 }
             };
 
