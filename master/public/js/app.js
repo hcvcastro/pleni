@@ -23,7 +23,7 @@ var utils={
 };
 
 angular
-    .module('PleniApp',['ngRoute','ngResource','ngStorage'])
+    .module('PleniApp',['ngRoute','ngResource','ngAnimate','ngStorage'])
     .config(['$routeProvider',function($routeProvider){
         $routeProvider
             .when('/home',{

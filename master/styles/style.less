@@ -1,10 +1,5 @@
 @import 'keyframes';
-
-html, body, header, footer, section, article, div, p,
-h1, h2, h3, h4, h5, h6, ul, li {
-    margin: 0;
-    padding: 0;
-}
+@import 'base';
 
 /* PALETTE: http://www.colourlovers.com/palette/279354/Peacock */
 @color1: #184848;
@@ -12,10 +7,6 @@ h1, h2, h3, h4, h5, h6, ul, li {
 @color3: #007878;
 @color4: #A8C030;
 @color5: #F0F0D8;
-
-a {
-    cursor: pointer;
-}
 
 .font1 {
     font-family: 'Century Gothic', sans-serif;
@@ -32,95 +23,16 @@ a {
     clear: both;
 }
 
-header {
-    background-color: @color1;
-    nav {
-        max-width: 960px;
-        margin: 0 auto;
-        ul {
-            list-style: none;
-            float: left;
-            li {
-                float: left;
-                transition: 0.5s ease-in 0s;
-                a {
-                    float: left;
-                    padding: 1.2rem 1.0rem;
-                    text-decoration: none;
-                    color: @color5;
-                    .font2;
-                    &:focus, &:hover, &.active {
-                        outline: none;
-                    }
-                }
-                &:focus, &:hover {
-                    background-color: darken(@color2,10%);
-                    border-bottom: 0.25rem solid @color4;
-                }
-                &.active {
-                    background-color: @color2;
-                    border-bottom: 0.25rem solid @color4;
-                }
-            }
-        }
-    }
+.animate-show {
+    transition: all linear 1.5s;
+    opacity: 1;
+}
+.animate-show.ng-hide {
+    opacity: 0;
 }
 
-footer {
-    position: fixed;
-    width: 960px;
-    bottom: 0;
-    background-color: @color5;
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
-    nav {
-        div.palette {
-            float: left;
-            margin: 0.635em 0 0 1.0rem;
-            span {
-                float: left;
-                width: 1.0rem;
-                height: 1.0rem;
-                margin: 0.025rem;
-            }
-            span:nth-child(1) {
-                background-color: @color1;
-            }
-            span:nth-child(2) {
-                background-color: @color2;
-            }
-            span:nth-child(3) {
-                background-color: @color3;
-            }
-            span:nth-child(4) {
-                background-color: @color4;
-            }
-            span:nth-child(5) {
-                background-color: @color5;
-            }
-        }
-        ul {
-            list-style: none;
-            float: right;
-            li {
-                float: left;
-                a {
-                    float: left;
-                    padding: 0.5rem 1.0rem;
-                    text-decoration: none;
-                    color: @color1;
-                    .font2;
-                    font-size: 0.85rem;
-                    transition: 0.5s ease-in 0s;
-                    &:focus, &:hover {
-                        outline: none;
-                        color: @color4;
-                    }
-                }
-            }
-        }
-    }
-}
+@import 'header';
+@import 'footer';
 
 #wrapper {
     max-width: 960px;

@@ -1,0 +1,56 @@
+footer {
+    position: fixed;
+    width: 960px;
+    bottom: 0;
+    background-color: @color5;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    nav {
+        div.palette {
+            float: left;
+            margin: 0.635em 0 0 1.0rem;
+            span {
+                float: left;
+                width: 1.0rem;
+                height: 1.0rem;
+                margin: 0.025rem;
+            }
+            span:nth-child(1) {
+                background-color: @color1;
+            }
+            span:nth-child(2) {
+                background-color: @color2;
+            }
+            span:nth-child(3) {
+                background-color: @color3;
+            }
+            span:nth-child(4) {
+                background-color: @color4;
+            }
+            span:nth-child(5) {
+                background-color: @color5;
+            }
+        }
+        ul {
+            list-style: none;
+            float: right;
+            li {
+                float: left;
+                a {
+                    float: left;
+                    padding: 0.5rem 1.0rem;
+                    text-decoration: none;
+                    color: @color1;
+                    .font2;
+                    font-size: 0.85rem;
+                    transition: 0.5s ease-in 0s;
+                    &:focus, &:hover {
+                        outline: none;
+                        color: @color4;
+                    }
+                }
+            }
+        }
+    }
+}
+

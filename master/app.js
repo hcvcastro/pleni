@@ -22,7 +22,7 @@ app.disable('x-powered-by');
 app.use(favicon(join(__dirname,'public','img','favicon.ico')));
 app.use(bodyparser.json());
 
-app.use(lessmiddleware(join(__dirname,'public'),{
+app.use(lessmiddleware(join(__dirname,'styles'),{
     dest:join(__dirname,'public')
   , compress:true
 }));

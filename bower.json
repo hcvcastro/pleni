@@ -8,13 +8,14 @@
     "components"
   ],
   "dependencies": {
-    "angular": "~1.2.21",
-    "angular-route": "~1.2.21",
+    "angular": "~1.2.22",
+    "angular-animate": "~1.2.22",
     "angular-resource": "~1.2.22",
-    "ngstorage": "~0.3.0",
-    "json-editor": "~0.7.7",
+    "angular-route": "~1.2.21",
+    "font-awesome": "~4.2.0",
     "jquery": "~2.1.1",
-    "socket.io-client": "~1.1.0",
-    "font-awesome": "~4.2.0"
+    "json-editor": "~0.7.7",
+    "ngstorage": "~0.3.0",
+    "socket.io-client": "~1.1.0"
   }
 }
