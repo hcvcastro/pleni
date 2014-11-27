@@ -98,6 +98,7 @@ angular
                               , db:{
                                     host:data[i].db.host
                                   , port:data[i].db.port
+                                  , user:data[i].db.user
                                   , prefix:data[i].db.prefix
                                 }
                               , status:'unknown'
@@ -121,19 +122,32 @@ angular
                             utils.receive();
                             utils.show('error',error.data.message);
                         });
+                    }else if($scope.dbservers.env.type=='element'){
+                        utils.send('Updating DB server settings ...');
+                        dbserver.$update({dbserver:$scope.dbserver.id},
+                        function(data){
+                            utils.receive();
+                            utils.show('success','DB server updated');
+                        },function(error){
+                            utils.receive();
+                            utils.show('error',error.data.message);
+                        });
                     }
                 }
-              , check:function(){
-                    if(!$scope.dbserver.id){
-                        $scope.dbserver.id='test';
+              , check:function(index){
+                    if(index){
+                        $scope.dbservers.list();
                     }
-                    if(!$scope.dbserver.db.prefix){
-                        $scope.dbserver.db.prefix='pleni_';
-                    }
-                    var dbserver=new DBServers($scope.dbserver);
+                    if($scope.dbservers.env.view=='form'){
+                        if(!$scope.dbserver.id){
+                            $scope.dbserver.id='test';
+                        }
+                        if(!$scope.dbserver.db.prefix){
+                            $scope.dbserver.db.prefix='pleni_';
+                        }
+                        var dbserver=new DBServers($scope.dbserver);
 
-                    utils.clean();
-                    if($scope.dbservers.env.type=='collection'){
+                        utils.clean();
                         utils.send('Checking connection ...');
                         dbserver.$check({},function(data){
                             utils.receive();
@@ -141,6 +155,13 @@ angular
                         },function(error){
                             utils.receive();
                             utils.show('error','DB Server cannot be founded');
+                        });
+                    }else if($scope.dbservers.env.view=='list'){
+                        var dbserver=$scope.storage.dbservers[index];
+                        DBServers.check({dbserver:dbserver.id},function(data){
+                            dbserver.status='online';
+                        },function(error){
+                            dbserver.status='offline';
                         });
                     }
                 }
@@ -174,11 +195,33 @@ angular
                         });
                     }
                 }
-              , edit:function(){
+              , edit:function(index){
                     $scope.dbservers.env.view='form';
+                    $scope.dbservers.env.type='element';
+                    $scope.dbserver=$scope.storage.dbservers[index];
                 }
-              , remove:function(){
+              , remove:function(index){
                     $scope.dbservers.env.view='remove';
+                    $scope.dbservers.env.type='element';
+                    $scope.dbserver=$scope.storage.dbservers[index];
+                }
+              , delete:function(){
+                    utils.clean();
+                    if($scope.dbservers.env.type='element'){
+                        utils.send('Sending delete request ...');
+                        console.log($scope.dbserver);
+                        DBServers.delete({dbserver:$scope.dbserver.id},
+                        function(data){
+                            $scope.dbservers.refresh();
+                            $scope.dbservers.list();
+                            utils.receive();
+                            utils.show('success',
+                                'DB server removed to the list');
+                        },function(error){
+                            utils.receive();
+                            utils.show('error',error.data.message);
+                        });
+                    }
                 }
             };
 

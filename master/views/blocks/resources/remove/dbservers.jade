@@ -1,15 +1,11 @@
 article.remove(ng-show='dbservers.env.view==\'remove\'')
-    h2 Remove a DB Server
-    div.tasks
-        ul
-            li
-                a.fa.fa-arrow-circle-o-left(ng-click='dbservers.list()') &nbsp;Close
-        .clearfix
-    form(ng-submit='dbservers.remove()')
+    h2 Remove DB Server
+    div.close
+        a.fa.fa-close(ng-click='dbservers.list()')
+    form(ng-submit='dbservers.delete()')
         p Press the button if you want remove the registry for the database server.
         p.offset
-            button.btn.btn-danger(type='submit') Remove connection
-            div.test
-                span.loader.hide
-                span.result.hide
+            button(type='submit') Remove connection
+            span.hide.loader.fa.fa-spinner
+            span.hide.message
 
