@@ -42,7 +42,10 @@ angular
                 .siblings().removeClass('active');
 
             $scope.dbservers={
-                env:{view:'list'}
+                env:{
+                    view:'list'
+                  , title:''
+                }
               , show:function(){
                     $scope.dbservers.env.view='list';
                     $('section.dbservers').addClass('active')
@@ -77,7 +80,7 @@ angular
               , add:function(){
                     $scope.dbservers.env.view='form';
                 }
-              , view:function(){
+              , view:function(id){
                     $scope.dbservers.env.view='view';
                 }
               , edit:function(){
