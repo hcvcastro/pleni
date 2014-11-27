@@ -1,43 +1,21 @@
-h1 Repositories
-div.tasks
-    a(href='') Add
-table
-    tr
-        th Name
-        th DB Server
-        th &nbsp;
-    tr
-        td pleni_site_atb
-        td hiperborea
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td pleni_site_reduno
-        td hiperborea
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td pleni_site_unitel
-        td hiperborea
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td pleni_site_entel
-        td main
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td pleni_site_google
-        td localhost
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
+article.list
+    div.tasks
+        ul
+            li
+                a.fa.fa-plus(ng-click='repositories.add()') &nbsp;Add
+            li
+                a.fa.fa-refresh(ng-click='repositories.refresh()') &nbsp;Refresh
+        .clearfix
+    table
+        tr
+            th Name
+            th DB Server
+            th &nbsp;
+        tr
+            td pleni_site_atb
+            td hiperborea
+            td.options
+                a(href='') [View]
+                a(href='') [Edit]
+                a(href='') [Remove]
+

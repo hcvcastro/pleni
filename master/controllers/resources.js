@@ -312,5 +312,22 @@ module.exports=function(app){
             response.status(404).json(_error.notfound)
         }
     });
+
+    app.get('/resources/repositories',function(request,response){
+        var repositories=app.get('resources').repositories
+          , filtered=new Array()
+
+        for(var i in repositories){
+            filtered.push({
+                id:repositories[i].id
+              , _dbserver:repositories[i]._dbserver
+              , db:{
+                    name:repositories[i].db.name
+                }
+            });
+        }
+
+        response.json(filtered);
+    });
 };
 

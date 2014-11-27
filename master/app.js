@@ -12,6 +12,7 @@ var http=require('http')
 
 // sync methods
 resources.dbservers=loadconfig(join(__dirname,'config','dbservers.json'));
+resources.repositories=loadconfig(join(__dirname,'config','repositories.json'));
 app.set('resources',resources);
 
 // async methods

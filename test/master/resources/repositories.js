@@ -8,7 +8,7 @@ var request=require('supertest')
   , _error=require('../../../planners/utils/json-response').error
   , loadconfig=require('../../../master/utils/loadconfig')
 
-describe('dbservers controller functions',function(){
+describe('repositories controller functions',function(){
     describe('rest functions for collection',function(){
         it('GET /resources/view',function(done){
             request(app)
@@ -16,9 +16,9 @@ describe('dbservers controller functions',function(){
                 .expect(200,done);
         });
 
-        it('GET /resources/dbservers',function(done){
+        it('GET /resources/repositories',function(done){
             request(app)
-                .get('/resources/dbservers')
+                .get('/resources/repositories')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -27,11 +27,9 @@ describe('dbservers controller functions',function(){
                     res.body.should.have.an.Array;
                     for(var i in res.body){
                         res.body[i].should.have.property('id');
+                        res.body[i].should.have.property('_dbserver');
                         res.body[i].should.have.property('db');
-                        res.body[i].db.should.have.property('host');
-                        res.body[i].db.should.have.property('port');
-                        res.body[i].db.should.have.property('user');
-                        res.body[i].db.should.have.property('prefix');
+                        res.body[i].db.should.have.property('name');
                     }
                     done();
                 });
@@ -88,10 +86,10 @@ describe('dbservers controller functions',function(){
             {test:'',expected:_error.validation,status:403}
           , {test:{},expected:_error.validation,status:403}
           , {test:{id:1},expected:_error.validation,status:403}
-          , {test:{db:''},expected:_error.validation,status:403}
-          , {test:{db:'1'},expected:_error.validation,status:403}
-          , {test:{db:'/'},expected:_error.validation,status:403}
-          , {test:{db:'...'},expected:_error.validation,status:403}
+          , {test:{repository:''},expected:_error.validation,status:403}
+          , {test:{repository:'1'},expected:_error.validation,status:403}
+          , {test:{repository:'/'},expected:_error.validation,status:403}
+          , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                 id:'localhost'
               , db:{
@@ -176,10 +174,10 @@ describe('dbservers controller functions',function(){
             {test:'',expected:_error.validation,status:403}
           , {test:{},expected:_error.validation,status:403}
           , {test:{id:1},expected:_error.validation,status:403}
-          , {test:{db:''},expected:_error.validation,status:403}
-          , {test:{db:'1'},expected:_error.validation,status:403}
-          , {test:{db:'/'},expected:_error.validation,status:403}
-          , {test:{db:'...'},expected:_error.validation,status:403}
+          , {test:{repository:''},expected:_error.validation,status:403}
+          , {test:{repository:'1'},expected:_error.validation,status:403}
+          , {test:{repository:'/'},expected:_error.validation,status:403}
+          , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                 id:'test'
               , db:{
