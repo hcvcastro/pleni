@@ -77,7 +77,6 @@ angular
                 env:{
                     view:'list'
                   , type:'collection'
-                  , title:''
                 }
               , show:function(){
                     $scope.dbservers.env.view='list';
@@ -152,8 +151,28 @@ angular
                     $scope.dbservers.env.view='form';
                     $scope.dbservers.env.type='collection';
                 }
-              , view:function(id){
+              , view:function(index){
                     $scope.dbservers.env.view='view';
+                    $scope.dbservers.env.type='element';
+                    $scope.dbserver=$scope.storage.dbservers[index];
+                }
+              , scan:function(){
+                    utils.clean();
+                    if($scope.dbservers.env.type=='element'){
+                        utils.send('Scanning repositories ...');
+                        DBServers.scan({dbserver:$scope.dbserver.id},
+                        function(data){
+                            $scope.dbserver.status='online';
+                            $scope.dbserver.repositories=data;
+                            utils.receive();
+                            if(data.length==0){
+                                utils.show('warning','Repositories not found');
+                            }
+                        },function(error){
+                            $scope.dbserver.status='offline';
+                            utils.receive();
+                        });
+                    }
                 }
               , edit:function(){
                     $scope.dbservers.env.view='form';

@@ -1,28 +1,32 @@
 article.view(ng-show='dbservers.env.view==\'view\'')
-    h2 View a DB Server
+    h2 {{dbserver.id}} ({{dbserver.db.prefix}})
+    div.close
+        a.fa.fa-close(ng-click='dbservers.list()')
     div.tasks
         ul
             li
-                a.fa.fa-arrow-circle-o-left(ng-click='dbservers.list()') &nbsp;Close
-            li
-                a.fa.fa-refresh(ng-click='dbservers.refresh()') &nbsp;Refresh
+                a.fa.fa-database(ng-click='dbservers.scan()') &nbsp;Scan repositories
         .clearfix
-    table
+    table(ng-show='dbserver.repositories')
         tr
-            td &nbsp;
+            th &nbsp;
             th Name
             th Type
             th Documents
             th Disk Size
             th Data Size
             th Sequence
-        tr
+        tr(ng-repeat='repositories in dbserver.repositories')
             td.options
                 a.fa.fa-plus-circle(title='Add database to repositories list',href='')
-            td reduno
-            td site
-            td.right 100
-            td.right 100
-            td.right 100
-            td.right 100
+            td {{repositories.name}}
+            td {{repositories.type}}
+            td.right {{repositories.params.doc_count}}
+            td.right {{repositories.params.disk_size}}
+            td.right {{repositories.params.data_size}}
+            td.right {{repositories.params.update_seq}}
+    p.offset
+        span.hide.loader.fa.fa-spinner
+        span.hide.message
+    br
 

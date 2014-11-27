@@ -1,10 +1,7 @@
 article.form(ng-show='dbservers.env.view==\'form\'')
     h2 Add a DB Server
-    div.tasks
-        ul
-            li
-                a.fa.fa-arrow-circle-o-left(ng-click='dbservers.list()') &nbsp;Close
-        .clearfix
+    div.close
+        a.fa.fa-close(ng-click='dbservers.list()')
     form(ng-submit='dbservers.save()')
         p
             label Name
@@ -28,5 +25,5 @@ article.form(ng-show='dbservers.env.view==\'form\'')
             button(type='submit') Save
             button(type='button',ng-click='dbservers.check()') Test connection
             span.hide.loader.fa.fa-spinner
-            span.hide.message sending request ...
+            span.hide.message
 

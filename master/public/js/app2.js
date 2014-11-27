@@ -162,11 +162,6 @@
             $scope.prepare('view','delete');
         }
     };
-    $scope.prepare=function(panel,type){
-        to_hide('fail','');
-        hide_alert();
-        $scope.env={panel:panel,type:type};
-    };
 }])
 .factory('Planners',['$resource',function($resource){
     return $resource('/planners/:planner/:action',{

@@ -14,7 +14,7 @@ article.list
             th &nbsp;
         tr(ng-repeat='dbserver in storage.dbservers')
             td
-                a(ng-click='dbservers.view(dbserver.id)') {{dbserver.id}}
+                a(ng-click='dbservers.view($index)') {{dbserver.id}}
             td {{dbserver.db.host}}:{{dbserver.db.port}}
             td.center
                 span.fa(ng-class='{\'fa-check\':dbserver.status==\'online\',\'fa-question\':dbserver.status==\'unknown\',\'fa-close\':dbserver.status==\'offline\'}')

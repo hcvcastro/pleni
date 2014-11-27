@@ -263,6 +263,7 @@ section.main {
             border-radius: 0.5rem;
             margin: 0 1.0rem;
             padding: 0 1.0rem;
+            position: relative;
         }
 
         h1 {
@@ -275,6 +276,14 @@ section.main {
             .font1;
             font-size: 1.2rem;
             padding-top: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        div.close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            color: @color1;
         }
 
         div.tasks {
@@ -370,21 +379,22 @@ section.main {
                     border-radius: 0.25rem;
                 }
             }
-            .offset {
-                padding: 1.0rem 0 0.5rem 0;
-                margin-left: 11.65rem;
+        }
 
-                .loader {
-                    margin-left: 1.0rem;
-                    animation: spin1 3s linear infinite;
-                }
-                .message {
-                    .font2;
-                    margin-left: 0.5rem;
-                }
-                .hide {
-                    display: none;
-                }
+        .offset {
+            padding: 1.0rem 0 0.5rem 0;
+            margin-left: 11.65rem;
+
+            .loader {
+                margin-left: 1.0rem;
+                animation: spin1 3s linear infinite;
+            }
+            .message {
+                .font2;
+                margin-left: 0.5rem;
+            }
+            .hide {
+                display: none;
             }
         }
     }
