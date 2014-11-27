@@ -8,26 +8,25 @@ article.form(ng-show='dbservers.env.view==\'form\'')
     form(ng-submit='dbservers.save()')
         p
             label Name
-            input(type='text',placeholder='The name for the new connection',required,ng-model='repository.id')
+            input(type='text',placeholder='The name for the new connection',required,ng-model='dbserver.id')
         p
             label Host
-            input(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='repository.host')
+            input(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='dbserver.db.host')
         p
             label Port
-            input(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='repository.port')
+            input(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='dbserver.db.port')
         p
             label User
-            input(type='text',placeholder='The host without scheme or a IP',required,ng-model='repository.dbuser')
+            input(type='text',placeholder='The host without scheme or a IP',required,ng-model='dbserver.db.user')
         p
             label Password
-            input(type='password',placeholder='The host without scheme or a IP',required,ng-model='repository.dbpass')
+            input(type='password',placeholder='The host without scheme or a IP',required,ng-model='dbserver.db.pass')
         p
             label Prefix
-            input(type='text',placeholder='The prefix used in the database server',required,ng-model='repository.prefix')
+            input(type='text',placeholder='The prefix used in the database server',required,ng-model='dbserver.db.prefix')
         p.offset
             button(type='submit') Save
-            button(type='button',ng-click='check()') Test connection
-            div.test
-                span.loader.hide
-                span.result.hide
+            button(type='button',ng-click='dbservers.check()') Test connection
+            span.hide.loader.fa.fa-spinner
+            span.hide.message sending request ...
 

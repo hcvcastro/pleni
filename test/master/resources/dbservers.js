@@ -59,7 +59,7 @@ describe('repositories controller functions',function(){
                   id:'localhost'
                 , db:{
                       host:'http://localhost'
-                    , port:'8080'
+                    , port:8080
                     , user:'boo'
                     , pass:'boo.'
                     , prefix:'p_'
@@ -96,7 +96,7 @@ describe('repositories controller functions',function(){
                 id:'localhost'
               , db:{
                     host:'http://localhost'
-                  , port:'8080'
+                  , port:8080
                   , user:'boo'
                   , pass:'boo.'
                   , prefix:'p_'
@@ -125,7 +125,17 @@ describe('repositories controller functions',function(){
                 id:'test'
               , db:{
                     host:'http://localhost'
-                  , port:'8080'
+                  , port:8080
+                  , user:'boo'
+                  , pass:'boo.'
+                  , prefix:'p_'
+                }
+            },expected:_success.ok,status:201}
+          , {test:{
+                id:'test2'
+              , db:{
+                    host:'localhost'
+                  , port:8080
                   , user:'boo'
                   , pass:'boo.'
                   , prefix:'p_'
@@ -174,7 +184,7 @@ describe('repositories controller functions',function(){
                 id:'test'
               , db:{
                     host:'http://localhost'
-                  , port:'8080'
+                  , port:8080
                   , user:'boo'
                   , pass:'boo.'
                 }
@@ -183,7 +193,7 @@ describe('repositories controller functions',function(){
                 id:'test'
               , db:{
                     host:'http://localhost'
-                  , port:'5984'
+                  , port:5984
                   , user:'boo'
                   , pass:'boo.'
                 }
@@ -192,7 +202,7 @@ describe('repositories controller functions',function(){
                 id:'test'
               , db:{
                     host:'http://localhost'
-                  , port:'5984'
+                  , port:5984
                   , user:'jacobian'
                   , pass:'asdf'
                 }
@@ -269,7 +279,7 @@ describe('repositories controller functions',function(){
                 id:'test'
               , db:{
                     host:'http://localhost'
-                  , port:'8080'
+                  , port:8080
                   , user:'boo'
                   , pass:'boo.'
                   , prefix:'p_'
@@ -279,7 +289,7 @@ describe('repositories controller functions',function(){
                 id:'test'
               , db:{
                     host:'http://localhost'
-                  , port:'5984'
+                  , port:5984
                   , user:'admin'
                   , pass:'asdf'
                   , prefix:'p_'

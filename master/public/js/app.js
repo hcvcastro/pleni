@@ -1,5 +1,27 @@
 'use strict';
 
+var utils={
+    show:function(type,message){
+        var message='<div class="'+type+'"><div class="close">'
+            +'<a onclick=\'utils.hide(this)\' class="fa fa-close"></a>'
+            +'</div><p>'+message+'</p></div>';
+        $('section.messages').append(message);
+    }
+  , hide:function(element){
+        $(element).parent().parent().remove();
+    }
+  , clean:function(){
+        $('section.messages').empty();
+    }
+  , send:function(message){
+        $('p.offset>.message').html(message);
+        $('p.offset>.hide').removeClass('hide');
+    }
+  , receive:function(){
+        $('p.offset>span').addClass('hide');
+    }
+};
+
 angular
     .module('PleniApp',['ngRoute','ngResource','ngStorage'])
     .config(['$routeProvider',function($routeProvider){
@@ -41,9 +63,20 @@ angular
             $('header nav ul li:nth-child(2)').addClass('active')
                 .siblings().removeClass('active');
 
+            $scope.dbserver={
+                id:''
+              , db:{
+                    host:''
+                  , port:''
+                  , user:''
+                  , pass:''
+                  , prefix:''
+                }
+            };
             $scope.dbservers={
                 env:{
                     view:'list'
+                  , type:'collection'
                   , title:''
                 }
               , show:function(){
@@ -74,11 +107,50 @@ angular
                         $('article.list table').fadeIn();
                     });
                 }
+              , save:function(){
+                    var dbserver=new DBServers($scope.dbserver);
+
+                    utils.clean();
+                    if($scope.dbservers.env.type=='collection'){
+                        utils.send('Saving DB server settings ...');
+                        dbserver.$save(function(data){
+                            $scope.dbservers.refresh();
+                            $scope.dbservers.list();
+                            utils.receive();
+                            utils.show('success','DB server added to the list');
+                        },function(error){
+                            utils.receive();
+                            utils.show('error',error.data.message);
+                        });
+                    }
+                }
+              , check:function(){
+                    if(!$scope.dbserver.id){
+                        $scope.dbserver.id='test';
+                    }
+                    if(!$scope.dbserver.db.prefix){
+                        $scope.dbserver.db.prefix='pleni_';
+                    }
+                    var dbserver=new DBServers($scope.dbserver);
+
+                    utils.clean();
+                    if($scope.dbservers.env.type=='collection'){
+                        utils.send('Checking connection ...');
+                        dbserver.$check({},function(data){
+                            utils.receive();
+                            utils.show('info','DB Server in online');
+                        },function(error){
+                            utils.receive();
+                            utils.show('error','DB Server cannot be founded');
+                        });
+                    }
+                }
               , list:function(){
                     $scope.dbservers.env.view='list';
                 }
               , add:function(){
                     $scope.dbservers.env.view='form';
+                    $scope.dbservers.env.type='collection';
                 }
               , view:function(id){
                     $scope.dbservers.env.view='view';

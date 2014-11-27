@@ -212,6 +212,40 @@ nav.menu {
     }
 }
 
+section.messages {
+    width: 700px;
+    &>div {
+        margin: 0 2.0rem;
+        padding: 0.5rem 0.75rem;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+        div.close {
+            float: right;
+        }
+        p {
+            margin-top: 0.25rem;
+            .font2;
+            color: #000000;
+        }
+    }
+    div.error {
+        color: #D8000C;
+        background-color: #FFBABA;
+    }
+    div.info {
+        color: #00529B;
+        background-color: #BDE5F8;
+    }
+    div.success {
+        color: #4F8A10;
+        background-color: #DFF2BF;
+    }
+    div.warning {
+        color: #9F6000;
+        background-color: #FEEFB3;
+    }
+}
+
 section.main {
     width: 700px;
     margin-bottom: 3.0rem;
@@ -266,6 +300,9 @@ section.main {
             border-collapse: collapse;
 
             tr {
+                border-left: 0.1rem solid @color2;
+                border-right: 0.1rem solid @color2;
+
                 th {
                     .font1;
                     font-weight: normal;
@@ -336,6 +373,18 @@ section.main {
             .offset {
                 padding: 1.0rem 0 0.5rem 0;
                 margin-left: 11.65rem;
+
+                .loader {
+                    margin-left: 1.0rem;
+                    animation: spin1 3s linear infinite;
+                }
+                .message {
+                    .font2;
+                    margin-left: 0.5rem;
+                }
+                .hide {
+                    display: none;
+                }
             }
         }
     }

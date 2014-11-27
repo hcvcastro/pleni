@@ -63,7 +63,7 @@ var dbserver={
                   , 'format':'host'
                 }
               , 'port':{
-                    'type':'string'
+                    'type':'integer'
                   , 'format':'port'
                 }
               , 'user':{

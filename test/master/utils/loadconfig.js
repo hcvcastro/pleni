@@ -14,7 +14,7 @@ describe('loading the config files',function(){
             config[a].should.have.property('id').and.have.be.a.String;
             config[a].should.have.property('db').and.have.be.a.Object;
             config[a].db.should.have.property('host').and.have.be.a.String;
-            config[a].db.should.have.property('port').and.have.be.a.String;
+            config[a].db.should.have.property('port').and.have.be.a.Integer;
             config[a].db.should.have.property('user').and.have.be.a.String;
             config[a].db.should.have.property('pass').and.have.be.a.String;
             config[a].db.should.have.property('prefix').and.have.be.a.String;

@@ -102,6 +102,8 @@ module.exports=function(app){
                 response.status(403).json(_error.notoverride);
             }
         }else{
+            var a=schema.js.validate(request.body,schema.dbserver);
+            console.log(a);
             response.status(403).json(_error.validation);
         }
     });

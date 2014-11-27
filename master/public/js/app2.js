@@ -1,26 +1,3 @@
-// jQuery functions
-var show_alert=function(type,message){
-        $('.message').html(message)
-        .parent().removeClass('hide')
-                 .removeClass('alert-success alert-danger')
-                 .addClass('alert-'+type);
-    }
-  , hide_alert=function(){
-        $('div.alert').addClass('hide')
-    }
-  , to_waiting=function(){
-        $('#test>span.loader').removeClass('hide');
-        $('#test>span.result').removeClass('hide').html('');
-    }
-  , to_hide=function(mes1,mes2){
-        $('#test>span.loader').addClass('hide');
-        $('#test>span.result').removeClass('ok fail')
-                              .addClass(mes1).html(mes2);
-    }
-  , focus=function(element){
-        $(element).focus();
-    }
-//
 // Angular functions
 .controller('RepositoriesController',
     ['$scope','$sessionStorage','Repositories',
