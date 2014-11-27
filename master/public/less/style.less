@@ -23,14 +23,6 @@
     clear: both;
 }
 
-.animate-show {
-    transition: all linear 1.5s;
-    opacity: 1;
-}
-.animate-show.ng-hide {
-    opacity: 0;
-}
-
 @import 'header';
 @import 'footer';
 
@@ -177,6 +169,29 @@ section.main {
             padding: 0 1.0rem;
             position: relative;
         }
+
+        article.animate {
+            padding:10px;
+            border:1px solid black;
+            background:white;
+        }
+
+        article.animate.ng-hide-add,
+        article.animate.ng-hide-remove {
+            transition:all linear 0.75s;
+            display:block!important;
+        }
+
+        article.animate.ng-hide-add.ng-hide-add-active,
+        article.animate.ng-hide-remove {
+            opacity:0;
+        }
+
+        article.animate.ng-hide-add,
+        article.animate.ng-hide-remove.ng-hide-remove-active {
+            opacity:1;
+        }
+
 
         h1 {
             .font1;

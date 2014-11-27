@@ -45,7 +45,7 @@ module.exports=function(grunt){
               , options:{livereload:reloadPort}
             }
           , less:{
-                files:['master/styles/**/*.less']
+                files:['master/public/less/**/*.less']
               , options:{livereload:reloadPort}
             }
           , jade:{

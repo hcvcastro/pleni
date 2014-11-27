@@ -1,4 +1,4 @@
-article.view(ng-show='dbservers.env.view==\'view\'')
+article.view.animate(ng-show='dbservers.env.view==\'view\'')
     h2 {{dbserver.id}} ({{dbserver.db.prefix}})
     div.close
         a.fa.fa-close(ng-click='dbservers.list()')
