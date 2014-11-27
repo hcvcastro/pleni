@@ -1,10 +1,10 @@
-article(ng-show='dbservers.env.view==\'form\'')
+article.form(ng-show='dbservers.env.view==\'form\'')
+    h2 Add a DB Server
     div.tasks
         ul
             li
-                a.fa.fa-arrow-circle-o-left(ng-click='dbservers.list()') &nbsp;Back
+                a.fa.fa-arrow-circle-o-left(ng-click='dbservers.list()') &nbsp;Close
         .clearfix
-    h2 Add a DB Server
     form(ng-submit='dbservers.save()')
         p
             label Name

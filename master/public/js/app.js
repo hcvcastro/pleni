@@ -80,6 +80,9 @@ angular
               , view:function(){
                     $scope.dbservers.env.view='view';
                 }
+              , edit:function(){
+                    $scope.dbservers.env.view='form';
+                }
               , remove:function(){
                     $scope.dbservers.env.view='remove';
                 }

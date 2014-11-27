@@ -1,26 +1,28 @@
-article(ng-show='dbservers.env.view==\'view\'')
+article.view(ng-show='dbservers.env.view==\'view\'')
     h2 View a DB Server
     div.tasks
         ul
+            li
+                a.fa.fa-arrow-circle-o-left(ng-click='dbservers.list()') &nbsp;Close
             li
                 a.fa.fa-refresh(ng-click='dbservers.refresh()') &nbsp;Refresh
         .clearfix
     table
         tr
+            td &nbsp;
             th Name
             th Type
             th Documents
             th Disk Size
             th Data Size
             th Sequence
-            th &nbsp;
         tr
+            td.options
+                a.fa.fa-plus-circle(title='Add database to repositories list',href='')
             td reduno
             td site
             td.right 100
             td.right 100
             td.right 100
             td.right 100
-            td.options
-                a.fa.fa-plus-circle(title='Add database to repositories list',href='')
 

@@ -1,5 +1,10 @@
-article(ng-show='dbservers.env.view==\'remove\'')
+article.remove(ng-show='dbservers.env.view==\'remove\'')
     h2 Remove a DB Server
+    div.tasks
+        ul
+            li
+                a.fa.fa-arrow-circle-o-left(ng-click='dbservers.list()') &nbsp;Close
+        .clearfix
     form(ng-submit='dbservers.remove()')
         p Press the button if you want remove the registry for the database server.
         p.offset
