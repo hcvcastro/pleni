@@ -45,30 +45,24 @@ describe('repositories controller functions',function(){
           , {test:[
               {
                   id:'localhost'
-                , host:'http://localhost'
-                , port:8080
-                , dbuser:'boo'
-                , dbpass:'boo.'
-                , prefix:'p_'
+                , dbserver:'localhost'
+                , name:'pleni_site_test'
               }
             ],expected:_error.json,status:400}
           , {test:[
               {
                   id:'localhost'
+                , _dbserver:'main'
                 , db:{
-                      host:'http://localhost'
-                    , port:8080
-                    , user:'boo'
-                    , pass:'boo.'
-                    , prefix:'p_'
+                      name:'pleni_site_test'
                   }
               }
             ],expected:_success.ok,status:201}
         ]
         .forEach(function(element){
-            it('PUT /resources/dbservers',function(done){
+            it('PUT /resources/repositories',function(done){
                 request(app)
-                    .put('/resources/dbservers')
+                    .put('/resources/repositories')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -92,19 +86,16 @@ describe('repositories controller functions',function(){
           , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                 id:'localhost'
+              , _dbserver:'localhost'
               , db:{
-                    host:'http://localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:'p_'
+                    name:'pleni_test'
                 }
             },expected:_error.notoverride,status:403}
         ]
         .forEach(function(element){
-            it('POST /resources/dbservers',function(done){
+            it('POST /resources/repositories',function(done){
                 request(app)
-                    .post('/resources/dbservers')
+                    .post('/resources/repositories')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -121,29 +112,23 @@ describe('repositories controller functions',function(){
         [
             {test:{
                 id:'test'
+              , _dbserver:'localhost'
               , db:{
-                    host:'http://localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:'p_'
+                    name:'pleni_test'
                 }
             },expected:_success.ok,status:201}
           , {test:{
                 id:'test2'
+              , _dbserver:'localhost'
               , db:{
-                    host:'localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:'p_'
+                    name:'pleni_test'
                 }
             },expected:_success.ok,status:201}
         ]
         .forEach(function(element){
-            it('POST /resources/dbservers',function(done){
+            it('POST /resources/repositories',function(done){
                 request(app)
-                    .post('/resources/dbservers')
+                    .post('/resources/repositories')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -157,9 +142,9 @@ describe('repositories controller functions',function(){
             });
         });
 
-        it('DELETE /resources/dbservers',function(done){
+        it('DELETE /resources/repositories',function(done){
             request(app)
-                .delete('/resources/dbservers')
+                .delete('/resources/repositories')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){

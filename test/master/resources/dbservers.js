@@ -49,8 +49,8 @@ describe('dbservers controller functions',function(){
                   id:'localhost'
                 , host:'http://localhost'
                 , port:8080
-                , dbuser:'boo'
-                , dbpass:'boo.'
+                , user:'boo'
+                , pass:'boo.'
                 , prefix:'p_'
               }
             ],expected:_error.json,status:400}

@@ -35,6 +35,8 @@ app.locals.pretty=true;
 
 require('./controllers/home')(app);
 require('./controllers/resources')(app);
+require('./controllers/resources/dbservers')(app);
+require('./controllers/resources/repositories')(app);
 require('./controllers/tasks')(app);
 
 app.use(function(req,res){

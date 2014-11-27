@@ -93,3 +93,37 @@ var dbservers={
 };
 exports.dbservers=dbservers;
 
+var repository={
+    'type':'object'
+  , 'properties':{
+        'id':{
+            'type':'string'
+          , 'format':'id'
+        }
+      , '_dbserver':{
+            'type':'string'
+          , 'format':'id'
+        }
+      , 'db':{
+            'type':'object'
+          , 'properties':{
+                'name':{
+                    'type':'string'
+                  , 'format':'slug'
+                }
+            }
+          , 'required':['name']
+        }
+    }
+  , 'required':['id','_dbserver','db']
+};
+exports.repository=repository;
+
+var repositories={
+    'type':'array'
+  , 'items':repository
+  , 'minItems':1
+  , 'uniqueItems':true
+};
+exports.repositories=repositories;
+
