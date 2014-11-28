@@ -18,7 +18,7 @@ article.view.animate(ng-show='dbservers.env.view==\'view\'')
             th Sequence
         tr(ng-repeat='repositories in dbserver.repositories')
             td.options
-                a.fa.fa-plus-circle(title='Add database to repositories list',href='')
+                a.fa.fa-plus-circle(title='Add database to repositories list',ng-click='dbservers.add_repo($index)')
             td {{repositories.name}}
             td {{repositories.type}}
             td.right {{repositories.params.doc_count}}

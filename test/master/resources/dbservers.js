@@ -350,6 +350,27 @@ describe('dbservers controller functions',function(){
                 });
         });
 
+        it('GET /resources/dbservers',function(done){
+            request(app)
+                .get('/resources/dbservers')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.should.be.json;
+                    res.body.should.have.an.Array;
+                    for(var i in res.body){
+                        res.body[i].should.have.property('id');
+                        res.body[i].should.have.property('db');
+                        res.body[i].db.should.have.property('host');
+                        res.body[i].db.should.have.property('port');
+                        res.body[i].db.should.have.property('user');
+                        res.body[i].db.should.have.property('prefix');
+                    }
+                    done();
+                });
+        });
+
         [
             {test:'test',expected:_error.notfound,status:404}
           , {test:'localhost',expected:_success.ok,status:200}

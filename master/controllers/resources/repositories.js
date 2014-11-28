@@ -181,7 +181,7 @@ module.exports=function(app){
           , repository=get_element(id,repositories)
 
         if(repository){
-            delete repositories[repository[0]];
+            repositories.splice(repository[0],1);
             resources.repositories=repositories;
             app.set('resources',resources);
             response.status(200).json(_success.ok);

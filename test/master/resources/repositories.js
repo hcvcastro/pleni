@@ -313,6 +313,25 @@ describe('repositories controller functions',function(){
                 });
         });
 
+        it('GET /resources/repositories',function(done){
+            request(app)
+                .get('/resources/repositories')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.should.be.json;
+                    res.body.should.have.an.Array;
+                    for(var i in res.body){
+                        res.body[i].should.have.property('id');
+                        res.body[i].should.have.property('_dbserver');
+                        res.body[i].should.have.property('db');
+                        res.body[i].db.should.have.property('name');
+                    }
+                    done();
+                });
+        });
+
         [
             {test:'test2',expected:_error.notfound,status:404}
           , {test:'test',expected:_success.ok,status:200}

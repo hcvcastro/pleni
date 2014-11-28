@@ -142,6 +142,28 @@ pleni.controller('ResourcesController',
                     });
                 }
             }
+          , add_repo:function(index){
+                utils.clean();
+                if($scope.dbservers.env.type=='element'){
+                    utils.send('Sending add repository request');
+
+                    var _repository=$scope.dbserver.repositories[index]
+                      , repository=new Repositories({
+                            id:_repository.name
+                          , _dbserver:$scope.dbserver.id
+                          , db:{
+                                name:_repository.params.db_name
+                            }
+                        });
+                    repository.$save(function(data){
+                        utils.receive();
+                        utils.show('success','Repository added to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
+            }
           , edit:function(index){
                 $scope.dbservers.env.view='form';
                 $scope.dbservers.env.type='element';
@@ -329,7 +351,7 @@ pleni.controller('ResourcesController',
         };
 
         //$scope.dbservers.show();
-        $scope.repositories.show();
+        $scope.planners.show();
     }]
 );
 

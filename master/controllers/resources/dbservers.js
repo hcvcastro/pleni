@@ -205,7 +205,7 @@ module.exports=function(app){
           , dbserver=get_element(id,dbservers)
 
         if(dbserver){
-            delete dbservers[dbserver[0]];
+            dbservers.splice(dbserver[0],1);
             resources.dbservers=dbservers;
             app.set('resources',resources);
             response.status(200).json(_success.ok);
