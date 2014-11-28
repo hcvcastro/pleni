@@ -104,6 +104,7 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.dbservers.env.view=='list'){
                     var dbserver=$scope.storage.dbservers[index];
+                    dbserver.status='checking';
                     DBServers.check({dbserver:dbserver.id},function(data){
                         dbserver.status='online';
                     },function(error){
@@ -259,11 +260,13 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.repositories.env.view=='list'){
                     var repository=$scope.storage.repositories[index];
+                    repository.status='checking';
                     Repositories.check({repository:repository.id},
                     function(data){
                         repository.status='online';
                     },function(error){
                         repository.status='offline';
+                        utils.show('error','Repository cannot be founded');
                     });
                 }
             }

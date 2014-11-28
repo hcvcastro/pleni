@@ -23,7 +23,7 @@ article.list
             td.center
                 span.fa(ng-class='{\'fa-check\':repository.status==\'online\',\'fa-question\':repository.status==\'unknown\',\'fa-close\':repository.status==\'offline\'}')
             td.options
-                a.fa.fa-refresh(title='Check connection',ng-click='repositories.check($index)')
+                a.fa.fa-refresh(title='Check connection',ng-click='repositories.check($index)',ng-class='{\'fa-spin\':repository.status==\'checking\'}')
                 a.fa.fa-edit(title='Edit properties',ng-click='repositories.edit($index)')
                 a.fa.fa-trash(title='Remove element',ng-click='repositories.remove($index)')
 
