@@ -23,6 +23,28 @@
     clear: both;
 }
 
+.animate {
+    padding:10px;
+    border:1px solid black;
+    background:white;
+}
+
+.animate.ng-hide-add,
+.animate.ng-hide-remove {
+    transition:all linear 0.75s;
+    display:block!important;
+}
+
+.animate.ng-hide-add.ng-hide-add-active,
+.animate.ng-hide-remove {
+    opacity:0;
+}
+
+.animate.ng-hide-add,
+.animate.ng-hide-remove.ng-hide-remove-active {
+    opacity:1;
+}
+
 @import 'header';
 @import 'footer';
 
@@ -170,29 +192,6 @@ section.main {
             position: relative;
         }
 
-        article.animate {
-            padding:10px;
-            border:1px solid black;
-            background:white;
-        }
-
-        article.animate.ng-hide-add,
-        article.animate.ng-hide-remove {
-            transition:all linear 0.75s;
-            display:block!important;
-        }
-
-        article.animate.ng-hide-add.ng-hide-add-active,
-        article.animate.ng-hide-remove {
-            opacity:0;
-        }
-
-        article.animate.ng-hide-add,
-        article.animate.ng-hide-remove.ng-hide-remove-active {
-            opacity:1;
-        }
-
-
         h1 {
             .font1;
             font-size: 2.1rem;
@@ -297,6 +296,16 @@ section.main {
                     padding: 0.35rem 0.5rem;
                     border: 1px solid @color1;
                     border-radius: 0.25rem;
+                }
+
+                select {
+                    width: 19.20rem;
+                    border: 1px solid @color1;
+                    border-radius: 0.25rem;
+
+                    option {
+                        padding: 0.35rem 0.5rem;
+                    }
                 }
 
                 button {

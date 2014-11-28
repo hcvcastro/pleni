@@ -1,9 +1,9 @@
-article.remove.animate(ng-show='dbservers.env.view==\'remove\'')
-    h2 Remove DB Server
+article.remove.animate(ng-show='repositories.env.view==\'remove\'')
+    h2 Remove Repository
     div.close
-        a.fa.fa-close(ng-click='dbservers.list()')
-    form(ng-submit='dbservers.delete()')
-        p Press the button if you want remove the registry for the database server.
+        a.fa.fa-close(ng-click='repositories.list()')
+    form(ng-submit='repositories.delete()')
+        p Press the button if you want remove the registry for the repository.
         p.offset
             button(type='submit') Remove connection
             span.hide.loader.fa.fa-spinner

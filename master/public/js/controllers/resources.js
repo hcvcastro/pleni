@@ -213,6 +213,74 @@ pleni.controller('ResourcesController',
                     $('article.list table').fadeIn();
                 });
             }
+          , save:function(){
+                var repository=new Repositories($scope.repository);
+
+                utils.clean();
+                if($scope.repositories.env.type=='collection'){
+                    utils.send('Saving Repository settings ...');
+                    repository.$save(function(data){
+                        $scope.repositories.refresh();
+                        $scope.repositories.list();
+                        utils.receive();
+                        utils.show('success','Repository added to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }else if($scope.repositories.env.type=='element'){
+                    utils.send('Updating Repository settings ...');
+                    repository.$update({repository:$scope.repository.id},
+                    function(data){
+                        utils.receive();
+                        utils.show('success','Repository updated');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
+            }
+          , check:function(index){
+                if(index){
+                    $scope.repositories.list();
+                }
+                if($scope.repositories.env.view=='form'){
+                    if(!$scope.repository.id){
+                        $scope.repository.id='test';
+                    }
+                    var repository=new Repositories($scope.repository);
+
+                    utils.clean();
+                    utils.send('Checking connection ...');
+                    repository.$check({},function(data){
+                        utils.receive();
+                        utils.show('info','Repository is online');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error','Repository cannot be founded');
+                    });
+                }else if($scope.repositories.env.view=='list'){
+                    var repository=$scope.storage.repositories[index];
+                    Repositories.check({repository:repository.id},
+                    function(data){
+                        repository.status='online';
+                    },function(error){
+                        repository.status='offline';
+                    });
+                }
+            }
+          , list:function(){
+                $scope.repositories.env.view='list';
+            }
+          , add:function(){
+                $scope.repositories.env.view='form';
+                $scope.repositories.env.type='collection';
+            }
+          , view:function(index){
+                $scope.repositories.env.view='view';
+                $scope.repositories.env.type='element';
+                $scope.repository=$scope.storage.repositories[index];
+            }
         };
 
         $scope.planners={
