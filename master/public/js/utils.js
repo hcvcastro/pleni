@@ -5,7 +5,7 @@ var utils={
         var message='<div class="'+type+'"><div class="close">'
             +'<a onclick=\'utils.hide(this)\' class="fa fa-close"></a>'
             +'</div><p>'+message+'</p></div>';
-        $('section.messages').append(message).slideDown();
+        $('section.messages').append(message);
     }
   , hide:function(element){
         $(element).parent().parent().slideUp('slow',

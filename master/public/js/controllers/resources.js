@@ -155,14 +155,12 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.dbservers.env.type='element'){
                     utils.send('Sending delete request ...');
-                    console.log($scope.dbserver);
                     DBServers.delete({dbserver:$scope.dbserver.id},
                     function(data){
                         $scope.dbservers.refresh();
                         $scope.dbservers.list();
                         utils.receive();
-                        utils.show('success',
-                            'DB server removed to the list');
+                        utils.show('success', 'DB server removed to the list');
                     },function(error){
                         utils.receive();
                         utils.show('error',error.data.message);
@@ -280,6 +278,32 @@ pleni.controller('ResourcesController',
                 $scope.repositories.env.view='view';
                 $scope.repositories.env.type='element';
                 $scope.repository=$scope.storage.repositories[index];
+            }
+          , edit:function(index){
+                $scope.repositories.env.view='form';
+                $scope.repositories.env.type='element';
+                $scope.repository=$scope.storage.repositories[index];
+            }
+          , remove:function(index){
+                $scope.repositories.env.view='remove';
+                $scope.repositories.env.type='element';
+                $scope.repository=$scope.storage.repositories[index];
+            }
+          , delete:function(){
+                utils.clean();
+                if($scope.repositories.env.type='element'){
+                    utils.send('Sending delete request ...');
+                    Repositories.delete({repository:$scope.repository.id},
+                    function(data){
+                        $scope.repositories.refresh();
+                        $scope.repositories.list();
+                        utils.receive();
+                        utils.show('success','Repository removed to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
             }
         };
 
