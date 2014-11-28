@@ -31,7 +31,7 @@ module.exports=function(args){
                 deferred.resolve(args);
                 return;
             }
-            deferred.reject(response.body);
+            deferred.reject(JSON.parse(response.body));
             return;
         }
         deferred.reject(error);

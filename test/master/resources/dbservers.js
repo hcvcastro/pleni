@@ -245,6 +245,8 @@ describe('dbservers controller functions',function(){
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200);
                     res.should.be.json;
+                    res.body.should.have.property('id');
+                    res.body.should.have.property('db');
                     res.body.db.should.have.property('host');
                     res.body.db.should.have.property('port');
                     res.body.db.should.have.property('prefix');

@@ -3,7 +3,7 @@
         "id":"test"
       , "_dbserver":"localhost"
       , "db":{
-            "name":"pleni_test"
+            "name":"db_test"
         }
     }
   , {

@@ -174,7 +174,7 @@ describe('repositories controller functions',function(){
                 id:'test'
               , _dbserver:'main'
               , db:{
-                    name:'test_suite_db'
+                    name:'db_test'
                 }
             },expected:_success.ok,status:200}
         ]
@@ -195,36 +195,37 @@ describe('repositories controller functions',function(){
         });
     });
 
-/*    describe('rest function for resources',function(){
+    describe('rest function for resources',function(){
         before(function(done){
             request(app)
-                .put('/resources/dbservers')
+                .put('/resources/repositories')
                 .send(loadconfig(
                     join(__dirname,'..','..','..','master','config',
-                        'dbservers.json')))
+                        'repositories.json')))
                 .end(function(err,res){
                     done();
                 });
         });
 
-        it('GET /resources/dbservers/:dbserver',function(done){
+        it('GET /resources/repositories/:repository',function(done){
             request(app)
-                .get('/resources/dbservers/main')
+                .get('/resources/repositories/test')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200);
                     res.should.be.json;
-                    res.body.db.should.have.property('host');
-                    res.body.db.should.have.property('port');
-                    res.body.db.should.have.property('prefix');
+                    res.body.should.have.property('id');
+                    res.body.should.have.property('_dbserver');
+                    res.body.should.have.property('db');
+                    res.body.db.should.have.property('name');
                     done();
                 });
         });
 
-        it('GET /resources/dbservers/:dbserver',function(done){
+        it('GET /resources/repositories/:repository',function(done){
             request(app)
-                .get('/resources/dbservers/nonexistent')
+                .get('/resources/repositories/nonexistent')
                 .expect('Content-Type',/json/)
                 .expect(404)
                 .end(function(err,res){
@@ -246,30 +247,24 @@ describe('repositories controller functions',function(){
               {host:'http://localhost'}},id:'asdf',
               expected:_error.validation,status:403}
           , {test:{
-                id:'test'
+                id:'test2'
+              , _dbserver:'localhost'
               , db:{
-                    host:'http://localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:'p_'
+                    name:'db_test'
                 }
-            },id:'test',status:201}
+            },id:'test2',status:201}
           , {test:{
-                id:'test'
+                id:'test2'
+              , _dbserver:'localhost'
               , db:{
-                    host:'http://localhost'
-                  , port:5984
-                  , user:'admin'
-                  , pass:'asdf'
-                  , prefix:'p_'
+                    name:'db_test'
                 }
-            },id:'test',status:200}
+            },id:'test2',status:200}
         ]
         .forEach(function(element){
-            it('PUT /resources/dbservers/:dbserver',function(done){
+            it('PUT /resources/repositories/:repository',function(done){
                 request(app)
-                    .put('/resources/dbservers/'+element.id)
+                    .put('/resources/repositories/'+element.id)
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -293,9 +288,9 @@ describe('repositories controller functions',function(){
             });
         });
 
-        it('DELETE /resources/dbservers/:dbserver',function(done){
+        it('DELETE /resources/repositories/:repository',function(done){
             request(app)
-                .delete('/resources/dbservers/test')
+                .delete('/resources/repositories/test2')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -306,9 +301,9 @@ describe('repositories controller functions',function(){
                 });
         });
 
-        it('DELETE /resources/dbservers/:dbserver',function(done){
+        it('DELETE /resources/repositories/:repository',function(done){
             request(app)
-                .delete('/resources/dbservers/test')
+                .delete('/resources/repositories/test2')
                 .expect('Content-Type',/json/)
                 .expect(404)
                 .end(function(err,res){
@@ -319,13 +314,13 @@ describe('repositories controller functions',function(){
         });
 
         [
-            {test:'test',expected:_error.notfound,status:404}
-          , {test:'localhost',expected:_success.ok,status:200}
+            {test:'test2',expected:_error.notfound,status:404}
+          , {test:'test',expected:_success.ok,status:200}
         ]
         .forEach(function(element){
-            it('POST /resources/dbservers/:dbserver/_check',function(done){
+            it('POST /resources/repositories/:repository/_check',function(done){
                 request(app)
-                    .post('/resources/dbservers/'+element.test+'/_check')
+                    .post('/resources/repositories/'+element.test+'/_check')
                     .expect('Content-Type',/json/)
                     .expect(element.status)
                     .end(function(err,res){
@@ -336,48 +331,6 @@ describe('repositories controller functions',function(){
                     });
             });
         });
-
-        [
-            {test:'test',expected:_error.notfound,status:404}
-          , {test:'localhost',status:200}
-        ]
-        .forEach(function(element){
-            it('POST /resources/dbservers/:dbserver/_databases',function(done){
-                request(app)
-                    .post('/resources/dbservers/'+element.test+'/_databases')
-                    .expect('Content-Type',/json/)
-                    .expect(element.status)
-                    .end(function(err,res){
-                        res.statusCode.should.be.eql(element.status);
-                        switch(res.statusCode){
-                            case 401:
-                            case 404:
-                                res.body.should.have.property('ok');
-                                res.body.should.eql(element.expected);
-                                break;
-                            case 200:
-                                res.body.should.have.an.Array;
-                                for(var i in res.body){
-                                    res.body[i].should.be.property('name');
-                                    res.body[i].should.be.property('type');
-                                    res.body[i].should.be.property('params');
-                                    res.body[i].params.should.be.
-                                        property('db_name');
-                                    res.body[i].params.should.be.
-                                        property('doc_count');
-                                    res.body[i].params.should.be.
-                                        property('disk_size');
-                                    res.body[i].params.should.be.
-                                        property('data_size');
-                                    res.body[i].params.should.be.
-                                        property('update_seq')
-                                }
-                                break;
-                        }
-                        done();
-                    });
-            });
-        });
-    });*/
+    });
 });
 

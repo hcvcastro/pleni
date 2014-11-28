@@ -108,12 +108,11 @@ module.exports=function(app){
                     response.status(200).json(_success.ok);
                 })
                 .fail(function(error){
-                    var e=JSON.parse(error);
-                    if(e.code=='ECONNREFUSED'){
+                    if(error.code=='ECONNREFUSED'){
                         response.status(404).json(_error.network);
-                    }else if(e.error=='not_found'){
+                    }else if(error.error=='not_found'){
                         response.status(404).json(_error.network);
-                    }else if(e.error=='unauthorized'){
+                    }else if(error.error=='unauthorized'){
                         response.status(401).json(_error.auth);
                     }
                 })
@@ -123,6 +122,115 @@ module.exports=function(app){
             }
         }else{
             response.status(403).json(_error.validation);
+        }
+    });
+
+    app.get('/resources/repositories/:repository',function(request,response){
+        var id=validate.toString(request.params.repository)
+          , repositories=app.get('resources').repositories
+          , repository=get_element(id,repositories)
+
+        if(repository){
+            response.status(200).json({
+                id:repository[1].id
+              , _dbserver:repository[1]._dbserver
+              , db:{
+                    name:repository[1].db.name
+                }
+            });
+            return;
+        }
+
+        response.status(404).json(_error.notfound);
+    });
+
+    app.put('/resources/repositories/:repository',function(request,response){
+        var id=validate.toString(request.params.repository)
+          , resources=app.get('resources')
+          , repositories=resources.repositories
+          , repository=get_element(id,repositories)
+
+        if(schema.js.validate(request.body,schema.repository).length==0){
+            var new_repository={
+                id:id
+              , _dbserver:validate.toString(request.body._dbserver)
+              , db:{
+                    name:validate.toString(request.body.db.name)
+                }
+            };
+
+            if(repository){
+                repositories[repository[0]]=new_repository;
+                response.status(200).json(new_repository);
+            }else{
+                repositories.push(new_repository);
+                response.status(201).json(new_repository);
+            }
+
+            resources.repositories=repositories;
+            app.set('resources',resources);
+        }else{
+            response.status(403).json(_error.validation);
+        }
+    });
+
+    app.delete('/resources/repositories/:repository',function(request,response){
+        var id=validate.toString(request.params.repository)
+          , resources=app.get('resources')
+          , repositories=resources.repositories
+          , repository=get_element(id,repositories)
+
+        if(repository){
+            delete repositories[repository[0]];
+            resources.repositories=repositories;
+            app.set('resources',resources);
+            response.status(200).json(_success.ok);
+        }else{
+            response.status(404).json(_error.notfound);
+        }
+    });
+
+    app.post('/resources/repositories/:repository/_check',
+        function(request,response){
+        var id=validate.toString(request.params.repository)
+          , resources=app.get('resources')
+          , repositories=resources.repositories
+          , repository=get_element(id,repositories)
+
+        if(repository){
+            var dbserver=get_element(
+                repository[1]._dbserver,resources.dbservers);
+
+            if(dbserver){
+                test({
+                    db:{
+                        host:dbserver[1].db.host+':'+
+                             dbserver[1].db.port
+                      , user:dbserver[1].db.user
+                      , pass:dbserver[1].db.pass
+                      , name:repository[1].db.name
+                    }
+                })
+                .then(auth)
+                .then(infodb)
+                .then(function(args){
+                    response.status(200).json(_success.ok);
+                })
+                .fail(function(error){
+                    if(error.code=='ECONNREFUSED'){
+                        response.status(404).json(_error.network);
+                    }else if(error.error=='not_found'){
+                        response.status(404).json(_error.network);
+                    }else if(error.error=='unauthorized'){
+                        response.status(401).json(_error.auth);
+                    }
+                })
+                .done();
+            }else{
+                response.status(404).json(_error.notfound)
+            }
+        }else{
+            response.status(404).json(_error.notfound)
         }
     });
 };
