@@ -3,6 +3,9 @@
 var validate=require('../../../planners/utils/validators')
   , _success=require('../../../planners/utils/json-response').success
   , _error=require('../../../planners/utils/json-response').error
+  , test=require('../../../planners/functions/databases/test')
+  , auth=require('../../../planners/functions/databases/auth')
+  , infodb=require('../../../planners/functions/databases/infodb')
   , schema=require('../../utils/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
@@ -82,6 +85,45 @@ module.exports=function(app){
         resources.repositories=[];
         app.set('resources',resources);
         response.status(200).json(_success.ok);
+    });
+
+    app.post('/resources/repositories/_check',function(request,response){
+        if(schema.js.validate(request.body,schema.repository).length==0){
+            var dbserver=get_element(
+                request.body._dbserver,app.get('resources').dbservers);
+
+            if(dbserver){
+                test({
+                    db:{
+                        host:validate.toValidHost(dbserver[1].db.host)+':'+
+                             validate.toInt(dbserver[1].db.port)
+                      , user:validate.toString(dbserver[1].db.user)
+                      , pass:validate.toString(dbserver[1].db.pass)
+                      , name:validate.toString(request.body.db.name)
+                    }
+                })
+                .then(auth)
+                .then(infodb)
+                .then(function(args){
+                    response.status(200).json(_success.ok);
+                })
+                .fail(function(error){
+                    var e=JSON.parse(error);
+                    if(e.code=='ECONNREFUSED'){
+                        response.status(404).json(_error.network);
+                    }else if(e.error=='not_found'){
+                        response.status(404).json(_error.network);
+                    }else if(e.error=='unauthorized'){
+                        response.status(401).json(_error.auth);
+                    }
+                })
+                .done();
+            }else{
+                response.status(404).json(_error.network);
+            }
+        }else{
+            response.status(403).json(_error.validation);
+        }
     });
 };
 

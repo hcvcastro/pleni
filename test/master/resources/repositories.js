@@ -165,36 +165,23 @@ describe('repositories controller functions',function(){
           , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                 id:'test'
+              , _dbserver:'main'
               , db:{
-                    host:'http://localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
+                    name:'pleni_test'
                 }
             },expected:_error.network,status:404}
-          , {test:{
-                id:'test'
-              , db:{
-                    host:'http://localhost'
-                  , port:5984
-                  , user:'boo'
-                  , pass:'boo.'
-                }
-            },expected:_error.auth,status:401}
           , {test :{
                 id:'test'
+              , _dbserver:'main'
               , db:{
-                    host:'http://localhost'
-                  , port:5984
-                  , user:'jacobian'
-                  , pass:'asdf'
+                    name:'test_suite_db'
                 }
             },expected:_success.ok,status:200}
         ]
         .forEach(function(element){
-            it('POST /resources/dbservers/_check',function(done){
+            it('POST /resources/repositories/_check',function(done){
                 request(app)
-                    .post('/resources/dbservers/_check')
+                    .post('/resources/repositories/_check')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -208,7 +195,7 @@ describe('repositories controller functions',function(){
         });
     });
 
-    describe('rest function for resources',function(){
+/*    describe('rest function for resources',function(){
         before(function(done){
             request(app)
                 .put('/resources/dbservers')
@@ -391,6 +378,6 @@ describe('repositories controller functions',function(){
                     });
             });
         });
-    });
+    });*/
 });
 
