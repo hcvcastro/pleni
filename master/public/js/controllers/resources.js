@@ -1,8 +1,8 @@
 'use strict';
 
 pleni.controller('ResourcesController',
-    ['$scope','$sessionStorage','DBServers',
-    function($scope,$sessionStorage,DBServers){
+    ['$scope','$sessionStorage','DBServers','Repositories',
+    function($scope,$sessionStorage,DBServers,Repositories){
         $scope.storage=$sessionStorage;
         $('header nav ul li:nth-child(2)').addClass('active')
             .siblings().removeClass('active');
@@ -24,6 +24,8 @@ pleni.controller('ResourcesController',
             }
           , show:function(){
                 $scope.dbservers.env.view='list';
+                $scope.repositories.env.view='list';
+
                 $('section.dbservers').addClass('active')
                     .siblings().removeClass('active');
                 $('nav.menu>ul>li:nth-child(1)').addClass('active')
@@ -169,12 +171,47 @@ pleni.controller('ResourcesController',
             }
         };
 
+        $scope.repository={
+            id:''
+          , _dbserver:''
+          , db:{
+                name:''
+            }
+        };
         $scope.repositories={
-            show:function(){
+            env:{
+                view:'list'
+              , type:'collection'
+            }
+          , show:function(){
+                $scope.dbservers.env.view='list';
+                $scope.repositories.env.view='list';
+
                 $('section.repositories').addClass('active')
                     .siblings().removeClass('active');
                 $('nav.menu>ul>li:nth-child(2)').addClass('active')
                     .siblings().removeClass('active');
+                if(!$scope.storage.repositories){
+                    $scope.repositories.refresh();
+                }
+            }
+          , refresh:function(){
+                $('article.list table').fadeOut();
+                Repositories.query(function(data){
+                    $scope.storage.repositories=new Array();
+                    for(var i=0;i<data.length;i++){
+                        $scope.storage.repositories.push({
+                            id:data[i].id
+                          , _dbserver:data[i]._dbserver
+                          , db:{
+                                name:data[i].db.name
+                            }
+                          , status:'unknown'
+                          , type:'site'
+                        });
+                    }
+                    $('article.list table').fadeIn();
+                });
             }
         };
 
@@ -196,7 +233,8 @@ pleni.controller('ResourcesController',
             }
         };
 
-        $scope.dbservers.show();
+        //$scope.dbservers.show();
+        $scope.repositories.show();
     }]
 );
 
