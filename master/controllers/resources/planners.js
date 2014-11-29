@@ -1,10 +1,16 @@
 'use strict';
 
-var validate=require('../../../planners/utils/validators')
+var extend=require('underscore').extend
+  , validate=require('../../../planners/utils/validators')
   , _success=require('../../../planners/utils/json-response').success
   , _error=require('../../../planners/utils/json-response').error
   , test=require('../../../planners/functions/planners/test')
   , status=require('../../../planners/functions/planners/status')
+  , api=require('../../../planners/functions/planners/api')
+  , set=require('../../../planners/functions/planners/set')
+  , run=require('../../../planners/functions/planners/run')
+  , stop=require('../../../planners/functions/planners/stop')
+  , remove=require('../../../planners/functions/planners/remove')
   , schema=require('../../utils/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
@@ -188,21 +194,35 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/planners/:planner/_check',function(request,response){
+    var generic_action=function(request,response,json,sequence,done){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
           , planners=resources.planners
           , planner=get_element(id,planners)
 
+        if(json){
+            if(schema.js.validate(request.body,json).length!=0){
+                response.status(403).json(_error.validation);
+                return;
+            }
+        }
+
         if(planner){
-            test({
+            var args={
                 planner:{
                     host:planner[1].planner.host+':'+
                          planner[1].planner.port
                 }
-            })
+            };
+            if(json){
+                args=extend(request.body,args);
+            }
+
+            sequence.reduce(function(previous,current){
+                return previous.then(current);
+            },test(args))
             .then(function(args){
-                response.status(200).json(_success.ok);
+                done(planners,planner,args);
             })
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){
@@ -211,74 +231,6 @@ module.exports=function(app){
                     response.status(401).json(_error.auth);
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
-                }
-            })
-            .done();
-        }else{
-            response.status(404).json(_error.notfound)
-        }
-    });
-
-    app.post('/resources/planners/:planner/_status',function(request,response){
-        var id=validate.toString(request.params.planner)
-          , resources=app.get('resources')
-          , planners=resources.planners
-          , planner=get_element(id,planners)
-
-        if(planner){
-            test({
-                planner:{
-                    host:planner[1].planner.host+':'+
-                         planner[1].planner.port
-                }
-            })
-            .then(status)
-            .then(function(args){
-                planners[planner[0]].status=args.status;
-                response.status(200).json(_success.ok);
-            })
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
-                }else if(error.error=='response_malformed'){
-                    response.status(400).json(_error.json);
-                }
-            })
-            .done();
-        }else{
-            response.status(404).json(_error.notfound)
-        }
-    });
-};
-
-/*
-            .then(function(args){
-                planners[planner[0]].status=args.status
-                response.status(200).json(args);
-            })
-
-    app.post('/planners/:planner/_api',function(request,response){
-        var id=validate.toString(request.params.planner)
-          , planners=app.get('planners')
-          , planner=get_planner(id,planners)
-
-        if(planner){
-            f.testplanner({
-                host: planner[1].host+':'+
-                      planner[1].port
-            })
-            .then(f.api)
-            .then(function(args){
-                planners[planner[0]].all_tasks=args.all_tasks;
-                response.status(200).json(args.all_tasks);
-            })
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
                 }else{
                     response.status(403).json(error);
                 }
@@ -287,8 +239,45 @@ module.exports=function(app){
         }else{
             response.status(404).json(_error.notfound)
         }
+    };
+
+    app.post('/resources/planners/:planner/_check',function(request,response){
+        return generic_action(request,response,null,[],function(){
+            response.status(200).json(_success.ok);
+        });
     });
 
+    app.post('/resources/planners/:planner/_status',function(request,response){
+        return generic_action(request,response,null,[status],
+            function(planners,planner,args){
+                planners[planner[0]].status=args.status;
+                response.status(200).json(args);
+        });
+    });
+
+    app.post('/resources/planners/:planner/_api',function(request,response){
+        return generic_action(request,response,null,[api],
+            function(planners,planner,args){
+                planners[planner[0]].tasks=args.tasks;
+                response.status(200).json(args);
+        });
+    });
+
+    app.post('/resources/planners/:planner/_set',function(request,response){
+        return generic_action(request,response,schema.task,[set],
+            function(planners,planner,args){
+                planners[planner[0]].tid=args.tid;
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , tid:args.planner.tid
+                    }
+                });
+        });
+    });
+};
+
+/*
     app.post('/planners/:planner/_set',function(request,response){
         var id=validate.toString(request.params.planner)
           , planners=app.get('planners')
@@ -319,7 +308,6 @@ module.exports=function(app){
             response.status(404).json(_error.notfound)
         }
     });
-
     app.post('/planners/:planner/_run',function(request,response){
         var id=validate.toString(request.params.planner)
           , planners=app.get('planners')

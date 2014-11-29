@@ -161,3 +161,27 @@ var planners={
 };
 exports.planners=planners;
 
+var task={
+    'type':'object'
+  , 'properties':{
+        'task':{
+            'type':'object'
+          , 'properties':{
+                'name':{
+                    'type':'string'
+                  , 'format':'id'
+                }
+              , 'count':{
+                    'type':'integer'
+                }
+              , 'interval':{
+                    'type':'integer'
+                }
+            }
+          , 'required':['name','count','interval']
+        }
+    }
+  , 'required':['task']
+};
+exports.task=task;
+

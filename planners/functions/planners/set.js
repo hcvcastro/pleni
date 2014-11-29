@@ -2,6 +2,7 @@
 
 var request=require('request')
   , Q=require('q')
+  , validator=require('validator')
 
 /*
  * Function for set tasks to a planner
@@ -26,10 +27,13 @@ module.exports=function(args){
           , interval:args.task.interval
         }
 
+    if(args.debug){
+        console.log('post request for setting task ... '+args.planner.host);
+    }
     request.post({url:url,json:body},function(error,response){
         if(!error){
             if(response.statusCode==200){
-                args.planner.tid=response.body.tid
+                args.planner.tid=response.body.tid;
                 deferred.resolve(args);
                 return;
             }
@@ -37,6 +41,7 @@ module.exports=function(args){
             return;
         }
         deferred.reject(error);
+        return;
     });
 
     return deferred.promise;

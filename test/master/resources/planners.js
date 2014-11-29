@@ -359,7 +359,45 @@ describe('planners controller functions',function(){
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200);
-                    console.log(res.body);
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('status');
+                    done();
+                });
+        });
+
+        it('POST /resources/planners/:planner/_api',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_api')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('tasks');
+                    res.body.planner.tasks.should.have.an.Array;
+                    done();
+                });
+        });
+
+        it('POST /resources/planners/:planner/_set',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_set')
+                .send({
+                    task:{
+                        name:'exclusive'
+                      , count:1
+                      , interval:1
+                    }
+                })
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('tid');
                     done();
                 });
         });
