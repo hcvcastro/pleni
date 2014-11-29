@@ -74,7 +74,6 @@ module.exports=function(app){
                 response.status(403).json(_error.notoverride);
             }
         }else{
-            var a=schema.js.validate(request.body,schema.repository);
             response.status(403).json(_error.validation);
         }
     });

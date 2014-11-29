@@ -127,3 +127,37 @@ var repositories={
 };
 exports.repositories=repositories;
 
+var planner={
+    'type':'object'
+  , 'properties':{
+        'id':{
+            'type':'string'
+          , 'format':'id'
+        }
+      , 'planner':{
+            'type':'object'
+          , 'properties':{
+                'host':{
+                    'type':'string'
+                  , 'format':'host'
+                }
+              , 'port':{
+                    'type':'integer'
+                  , 'format':'port'
+                }
+            }
+          , 'required':['host','port']
+        }
+    }
+  , 'required':['id','planner']
+};
+exports.planner=planner;
+
+var planners={
+    'type':'array'
+  , 'items':planner
+  , 'minItems':1
+  , 'uniqueItems':true
+};
+exports.planners=planners;
+

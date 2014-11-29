@@ -16,7 +16,7 @@ article.list
             th &nbsp;
         tr(ng-repeat='repository in storage.repositories')
             td
-                a(ng-click='repositories.view($index)') {{repository.id}}
+                span {{repository.id}}
             td {{repository._dbserver}}
             td {{repository.db.name}}
             td.center {{repository.type}}

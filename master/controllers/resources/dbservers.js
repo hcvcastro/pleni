@@ -42,7 +42,7 @@ module.exports=function(app){
                     id:validate.toString(dbserver.id)
                   , db:{
                         host:validate.toValidHost(dbserver.db.host)
-                      , port:validate.toInt(dbserver.db.port)+''
+                      , port:validate.toInt(dbserver.db.port)
                       , user:validate.toString(dbserver.db.user)
                       , pass:validate.toString(dbserver.db.pass)
                       , prefix:validate.toString(dbserver.db.prefix)
@@ -91,7 +91,6 @@ module.exports=function(app){
                 response.status(403).json(_error.notoverride);
             }
         }else{
-            var a=schema.js.validate(request.body,schema.dbserver);
             response.status(403).json(_error.validation);
         }
     });
