@@ -26,13 +26,14 @@ module.exports=function(args){
                         return;
                     }
                 }
-                deferred.reject(JSON.parse(response.body));
+                deferred.reject(response.body);
                 return;
             }
             deferred.reject({error:'response_malformed'});
             return;
         }
         deferred.reject(error);
+        return;
     });
 
     return deferred.promise;

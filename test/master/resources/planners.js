@@ -351,6 +351,18 @@ describe('planners controller functions',function(){
                     });
             });
         });
+
+        it('POST /resources/planners/:planner/_status',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_status')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    console.log(res.body);
+                    done();
+                });
+        });
     });
 });
 

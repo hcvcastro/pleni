@@ -4,6 +4,7 @@ var validate=require('../../../planners/utils/validators')
   , _success=require('../../../planners/utils/json-response').success
   , _error=require('../../../planners/utils/json-response').error
   , test=require('../../../planners/functions/planners/test')
+  , status=require('../../../planners/functions/planners/status')
   , schema=require('../../utils/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
@@ -217,5 +218,201 @@ module.exports=function(app){
             response.status(404).json(_error.notfound)
         }
     });
+
+    app.post('/resources/planners/:planner/_status',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , resources=app.get('resources')
+          , planners=resources.planners
+          , planner=get_element(id,planners)
+
+        if(planner){
+            test({
+                planner:{
+                    host:planner[1].planner.host+':'+
+                         planner[1].planner.port
+                }
+            })
+            .then(status)
+            .then(function(args){
+                planners[planner[0]].status=args.status;
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }else if(error.error=='response_malformed'){
+                    response.status(400).json(_error.json);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
 };
+
+/*
+            .then(function(args){
+                planners[planner[0]].status=args.status
+                response.status(200).json(args);
+            })
+
+    app.post('/planners/:planner/_api',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host: planner[1].host+':'+
+                      planner[1].port
+            })
+            .then(f.api)
+            .then(function(args){
+                planners[planner[0]].all_tasks=args.all_tasks;
+                response.status(200).json(args.all_tasks);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+
+    app.post('/planners/:planner/_set',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host: planner[1].host+':'+
+                      planner[1].port
+              , task: request.body
+            })
+            .then(f.set)
+            .then(function(args){
+                planners[planner[0]].tid=args.tid;
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+
+    app.post('/planners/:planner/_run',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host:  planner[1].host+':'+
+                       planner[1].port
+              , tid:   planner[1].tid
+              , targs: request.body
+            })
+            .then(f.run)
+            .then(function(args){
+                planners[planner[0]].tid=args.tid;
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+
+    app.post('/planners/:planner/_stop',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host:  planner[1].host+':'+
+                       planner[1].port
+              , tid:   planner[1].tid
+              , targs: request.body
+            })
+            .then(f.stop)
+            .then(function(args){
+                planners[planner[0]].tid=args.tid;
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+
+    app.delete('/planners/:planner/_remove',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , planners=app.get('planners')
+          , planner=get_planner(id,planners)
+
+        if(planner){
+            f.testplanner({
+                host:  planner[1].host+':'+
+                       planner[1].port
+              , tid:   planner[1].tid
+            })
+            .then(f.remove)
+            .then(function(args){
+                delete planners[planner[0]].tid;
+                response.status(200).json(_success.ok);
+            })
+            .fail(function(error){
+                if(error.code=='ECONNREFUSED'){
+                    response.status(404).json(_error.network);
+                }else if(error.error=='unauthorized'){
+                    response.status(401).json(_error.auth);
+                }else{
+                    response.status(403).json(error);
+                }
+            })
+            .done();
+        }else{
+            response.status(404).json(_error.notfound)
+        }
+    });
+*/
 
