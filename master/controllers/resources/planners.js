@@ -194,7 +194,7 @@ module.exports=function(app){
         }
     });
 
-    var generic_action=function(request,response,json,sequence,done){
+    var generic_action=function(request,response,json,sequence,next){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
           , planners=resources.planners
@@ -214,6 +214,9 @@ module.exports=function(app){
                          planner[1].planner.port
                 }
             };
+            if(planner[1].planner.tid){
+                args.planner.tid=planner[1].planner.tid;
+            }
             if(json){
                 args=extend(request.body,args);
             }
@@ -222,7 +225,7 @@ module.exports=function(app){
                 return previous.then(current);
             },test(args))
             .then(function(args){
-                done(planners,planner,args);
+                next(resources,planners,planner,args);
             })
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){
@@ -232,6 +235,7 @@ module.exports=function(app){
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
                 }else{
+                    console.log(error);
                     response.status(403).json(error);
                 }
             })
@@ -249,24 +253,33 @@ module.exports=function(app){
 
     app.post('/resources/planners/:planner/_status',function(request,response){
         return generic_action(request,response,null,[status],
-            function(planners,planner,args){
-                planners[planner[0]].status=args.status;
+            function(resources,planners,planner,args){
+                planners[planner[0]].planner.status=args.planner.status;
+                resources.planners=planners;
+
+                app.set('resources',resources);
                 response.status(200).json(args);
         });
     });
 
     app.post('/resources/planners/:planner/_api',function(request,response){
         return generic_action(request,response,null,[api],
-            function(planners,planner,args){
-                planners[planner[0]].tasks=args.tasks;
+            function(resources,planners,planner,args){
+                planners[planner[0]].planner.tasks=args.planner.tasks;
+                resources.planners=planners;
+
+                app.set('resources',resources);
                 response.status(200).json(args);
         });
     });
 
     app.post('/resources/planners/:planner/_set',function(request,response){
         return generic_action(request,response,schema.task,[set],
-            function(planners,planner,args){
-                planners[planner[0]].tid=args.tid;
+            function(resources,planners,planner,args){
+                planners[planner[0]].planner.tid=args.planner.tid;
+                resources.planners=planners;
+
+                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
@@ -275,132 +288,52 @@ module.exports=function(app){
                 });
         });
     });
+
+    app.post('/resources/planners/:planner/_run',function(request,response){
+        return generic_action(request,response,schema.runner,[run],
+            function(resources,planners,planner,args){
+                planners[planner[0]].planner.status='running';
+                resources.planners=planners;
+
+                app.set('resources',resources);
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , status:'running'
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_stop',function(request,response){
+        return generic_action(request,response,null,[stop],
+            function(resources,planners,planner,args){
+                planners[planner[0]].planner.status='stopped';
+                resources.planners=planners;
+
+                app.set('resources',resources);
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , status:'stopped'
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_remove',function(request,response){
+        return generic_action(request,response,null,[remove],
+            function(resources,planners,planner,args){
+                delete planners[planner[0]].planner.tid;
+                resources.planners=planners;
+
+                app.set('resources',resources);
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                    }
+                });
+        });
+    });
 };
-
-/*
-    app.post('/planners/:planner/_set',function(request,response){
-        var id=validate.toString(request.params.planner)
-          , planners=app.get('planners')
-          , planner=get_planner(id,planners)
-
-        if(planner){
-            f.testplanner({
-                host: planner[1].host+':'+
-                      planner[1].port
-              , task: request.body
-            })
-            .then(f.set)
-            .then(function(args){
-                planners[planner[0]].tid=args.tid;
-                response.status(200).json(_success.ok);
-            })
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
-                }else{
-                    response.status(403).json(error);
-                }
-            })
-            .done();
-        }else{
-            response.status(404).json(_error.notfound)
-        }
-    });
-    app.post('/planners/:planner/_run',function(request,response){
-        var id=validate.toString(request.params.planner)
-          , planners=app.get('planners')
-          , planner=get_planner(id,planners)
-
-        if(planner){
-            f.testplanner({
-                host:  planner[1].host+':'+
-                       planner[1].port
-              , tid:   planner[1].tid
-              , targs: request.body
-            })
-            .then(f.run)
-            .then(function(args){
-                planners[planner[0]].tid=args.tid;
-                response.status(200).json(_success.ok);
-            })
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
-                }else{
-                    response.status(403).json(error);
-                }
-            })
-            .done();
-        }else{
-            response.status(404).json(_error.notfound)
-        }
-    });
-
-    app.post('/planners/:planner/_stop',function(request,response){
-        var id=validate.toString(request.params.planner)
-          , planners=app.get('planners')
-          , planner=get_planner(id,planners)
-
-        if(planner){
-            f.testplanner({
-                host:  planner[1].host+':'+
-                       planner[1].port
-              , tid:   planner[1].tid
-              , targs: request.body
-            })
-            .then(f.stop)
-            .then(function(args){
-                planners[planner[0]].tid=args.tid;
-                response.status(200).json(_success.ok);
-            })
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
-                }else{
-                    response.status(403).json(error);
-                }
-            })
-            .done();
-        }else{
-            response.status(404).json(_error.notfound)
-        }
-    });
-
-    app.delete('/planners/:planner/_remove',function(request,response){
-        var id=validate.toString(request.params.planner)
-          , planners=app.get('planners')
-          , planner=get_planner(id,planners)
-
-        if(planner){
-            f.testplanner({
-                host:  planner[1].host+':'+
-                       planner[1].port
-              , tid:   planner[1].tid
-            })
-            .then(f.remove)
-            .then(function(args){
-                delete planners[planner[0]].tid;
-                response.status(200).json(_success.ok);
-            })
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
-                }else{
-                    response.status(403).json(error);
-                }
-            })
-            .done();
-        }else{
-            response.status(404).json(_error.notfound)
-        }
-    });
-*/
 

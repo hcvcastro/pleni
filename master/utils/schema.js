@@ -185,3 +185,20 @@ var task={
 };
 exports.task=task;
 
+var runner={
+    'type':'object'
+  , 'properties':{
+        'planner':{
+            'type':'object'
+          , 'properties':{
+                'targs':{
+                    'type':'object'
+                }
+            }
+          , 'required':['targs']
+        }
+    }
+  , 'required':['planner']
+};
+exports.runner=runner;
+
