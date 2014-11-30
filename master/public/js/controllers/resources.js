@@ -48,7 +48,7 @@ pleni.controller('ResourcesController',
                               , user:data[i].db.user
                               , prefix:data[i].db.prefix
                             }
-                          , status:'unknown'
+                          , check:'unknown'
                         });
                     }
                     $('article.list table').fadeIn();
@@ -107,11 +107,11 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.dbservers.env.view=='list'){
                     var dbserver=$scope.storage.dbservers[index];
-                    dbserver.status='checking';
+                    dbserver.check='checking';
                     DBServers.check({dbserver:dbserver.id},function(data){
-                        dbserver.status='online';
+                        dbserver.check='online';
                     },function(error){
-                        dbserver.status='offline';
+                        dbserver.check='offline';
                     });
                 }
             }
@@ -133,14 +133,14 @@ pleni.controller('ResourcesController',
                     utils.send('Scanning repositories ...');
                     DBServers.scan({dbserver:$scope.dbserver.id},
                     function(data){
-                        $scope.dbserver.status='online';
+                        $scope.dbserver.check='online';
                         $scope.dbserver.repositories=data;
                         utils.receive();
                         if(data.length==0){
                             utils.show('warning','Repositories not found');
                         }
                     },function(error){
-                        $scope.dbserver.status='offline';
+                        $scope.dbserver.check='offline';
                         utils.receive();
                     });
                 }
@@ -231,7 +231,7 @@ pleni.controller('ResourcesController',
                           , db:{
                                 name:data[i].db.name
                             }
-                          , status:'unknown'
+                          , check:'unknown'
                           , type:'site'
                         });
                     }
@@ -288,12 +288,12 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.repositories.env.view=='list'){
                     var repository=$scope.storage.repositories[index];
-                    repository.status='checking';
+                    repository.check='checking';
                     Repositories.check({repository:repository.id},
                     function(data){
-                        repository.status='online';
+                        repository.check='online';
                     },function(error){
-                        repository.status='offline';
+                        repository.check='offline';
                         utils.show('error','Repository cannot be founded');
                     });
                 }
@@ -374,6 +374,7 @@ pleni.controller('ResourcesController',
                                 host:data[i].planner.host
                               , port:data[i].planner.port
                             }
+                          , check:'unknown'
                           , status:'unknown'
                         });
                     }
@@ -430,11 +431,17 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.planners.env.view=='list'){
                     var planner=$scope.storage.planners[index];
-                    planner.status='checking';
+                    planner.check='checking';
                     Planners.check({server:planner.id},function(data){
-                        planner.status='online';
+                        planner.check='online';
+                        
+                        Planners.status({server:planner.id},function(data){
+                            planner.status=data.planner.status;
+                        },function(error){
+                            planner.status='unknown';
+                        });
                     },function(error){
-                        planner.status='offline';
+                        planner.check='offline';
                     });
                 }
             }
