@@ -376,6 +376,7 @@ pleni.controller('ResourcesController',
                             }
                           , check:'unknown'
                           , status:'unknown'
+                          , set:'unknown'
                         });
                     }
                     $('article.list table').fadeIn();
@@ -440,6 +441,16 @@ pleni.controller('ResourcesController',
                         },function(error){
                             planner.status='unknown';
                         });
+
+                        Planners.isset({server:planner.id},function(data){
+                            if(data.planner.result){
+                                planner.set='set';
+                            }else{
+                                planner.set='unset';
+                            }
+                        },function(error){
+                            planner.set='unknown';
+                        });
                     },function(error){
                         planner.check='offline';
                     });
@@ -456,6 +467,26 @@ pleni.controller('ResourcesController',
                 $scope.planners.env.view='view';
                 $scope.planners.env.type='element';
                 $scope.planner=$scope.storage.planners[index];
+            }
+          , api:function(){
+                utils.clean();
+                if($scope.planners.env.type=='element'){
+                    utils.send('Getting available tasks ...');
+                    Planners.api({server:$scope.planner.id},
+                    function(data){
+                        $scope.planner.check='online';
+                        $scope.planner.api=data.planner.tasks;
+                        utils.receive();
+                        if(data.length==0){
+                            utils.show('warning','Planner has no Tasks!!');
+                        }
+                    },function(error){
+                        $scope.planner.check='offline';
+                        $scope.planner.status='unknown';
+                        $scope.planner.set='unknown';
+                        utils.receive();
+                    });
+                }
             }
           , edit:function(index){
                 $scope.planners.env.view='form';

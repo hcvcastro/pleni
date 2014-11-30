@@ -5,8 +5,10 @@ article.view.animate(ng-show='planners.env.view==\'view\'')
     div.tasks
         ul
             li
-                a.fa.fa-database(ng-click='planners.status()') &nbsp;Condition
+                a.fa.fa-cubes(ng-click='planners.api()') &nbsp;Scan services
         .clearfix
+    div(ng-repeat='task in planner.api')
+        span {{task}}
     p.offset
         span.hide.loader.fa.fa-spinner
         span.hide.message

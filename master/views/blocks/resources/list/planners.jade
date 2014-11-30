@@ -13,6 +13,7 @@ article.list
             th Type
             th Available
             th Status
+            th Set
             th &nbsp;
         tr(ng-repeat='planner in storage.planners')
             td
@@ -24,6 +25,8 @@ article.list
                 span.fa(ng-class='{\'fa-check\':planner.check==\'online\',\'fa-question\':planner.check==\'unknown\',\'fa-close\':planner.check==\'offline\'}')
             td.center
                 span.fa(ng-class='{\'fa-play\':planner.status==\'running\',\'fa-question\':planner.status==\'unknown\',\'fa-stop\':planner.status==\'stopped\'}')
+            td.center
+                span.fa(ng-class='{\'fa-circle\':planner.set==\'set\',\'fa-question\':planner.set==\'unknown\',\'fa-circle-o\':planner.set==\'unset\'}')
             td.options
                 a.fa.fa-refresh(title='Check connection',ng-click='planners.check($index)',ng-class='{\'fa-spin\':planner.check==\'checking\'}')
                 a.fa.fa-edit(title='Edit properties',ng-click='planners.edit($index)')

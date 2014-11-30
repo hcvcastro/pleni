@@ -21,7 +21,7 @@ module.exports=function(notifier){
 
     this.api=function(request,response){
         var map=this.valid_tasks.map(function(element){
-            return require('../tasks/'+element).schema;
+            return {name:element,schema:require('../tasks/'+element).schema};
         })
 
         response.status(200).json(map);

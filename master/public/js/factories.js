@@ -29,9 +29,10 @@ pleni.factory('Planners',['$resource',function($resource){
         update:{method:'PUT'}
       , check:{method:'POST',params:{action:'_check'}}
       , status:{method:'POST',params:{action:'_status'}}
-      , api:{method:'POST',params:{action:'_api'},isArray:true}
+      , api:{method:'POST',params:{action:'_api'}}
       , set:{method:'POST',params:{action:'_set'}}
-      , remove:{method:'DELETE',params:{action:'_remove'}}
+      , isset:{method:'POST',params:{action:'_isset'}}
+      , unset:{method:'DELETE',params:{action:'_unset'}}
       , run:{method:'POST',params:{action:'_run'}}
       , stop:{method:'POST',params:{action:'_stop'}}
     });
