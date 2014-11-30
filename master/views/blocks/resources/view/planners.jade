@@ -1,0 +1,32 @@
+article.view.animate(ng-show='planners.env.view==\'view\'')
+    h2 {{planner.id}} ({{planner.db.prefix}})
+    div.close
+        a.fa.fa-close(ng-click='planners.list()')
+    div.tasks
+        ul
+            li
+                a.fa.fa-database(ng-click='planners.scan()') &nbsp;Scan repositories
+        .clearfix
+    table(ng-show='planner.repositories')
+        tr
+            th &nbsp;
+            th Name
+            th Type
+            th Documents
+            th Disk Size
+            th Data Size
+            th Sequence
+        tr(ng-repeat='repositories in planner.repositories')
+            td.options
+                a.fa.fa-plus-circle(title='Add database to repositories list',ng-click='planners.add_repo($index)')
+            td {{repositories.name}}
+            td {{repositories.type}}
+            td.right {{repositories.params.doc_count}}
+            td.right {{repositories.params.disk_size}}
+            td.right {{repositories.params.data_size}}
+            td.right {{repositories.params.update_seq}}
+    p.offset
+        span.hide.loader.fa.fa-spinner
+        span.hide.message
+    br
+

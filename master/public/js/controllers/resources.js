@@ -1,8 +1,8 @@
 'use strict';
 
 pleni.controller('ResourcesController',
-    ['$scope','$sessionStorage','DBServers','Repositories',
-    function($scope,$sessionStorage,DBServers,Repositories){
+    ['$scope','$sessionStorage','DBServers','Repositories','Planners',
+    function($scope,$sessionStorage,DBServers,Repositories,Planners){
         $scope.storage=$sessionStorage;
         $('header nav ul li:nth-child(2)').addClass('active')
             .siblings().removeClass('active');
@@ -25,6 +25,7 @@ pleni.controller('ResourcesController',
           , show:function(){
                 $scope.dbservers.env.view='list';
                 $scope.repositories.env.view='list';
+                $scope.planners.env.view='list';
 
                 $('section.dbservers').addClass('active')
                     .siblings().removeClass('active');
@@ -207,6 +208,7 @@ pleni.controller('ResourcesController',
           , show:function(){
                 $scope.dbservers.env.view='list';
                 $scope.repositories.env.view='list';
+                $scope.planners.env.view='list';
 
                 $('section.repositories').addClass('active')
                     .siblings().removeClass('active');
@@ -332,12 +334,115 @@ pleni.controller('ResourcesController',
             }
         };
 
+        $scope.planner={
+            id:''
+          , planner:{
+                host:''
+              , port:''
+            }
+        };
         $scope.planners={
-            show:function(){
+            env:{
+                view:'list'
+              , type:'collection'
+            }
+          , show:function(){
+                $scope.dbservers.env.view='list';
+                $scope.repositories.env.view='list';
+                $scope.planners.env.view='list';
+
                 $('section.planners').addClass('active')
                     .siblings().removeClass('active');
                 $('nav.menu>ul>li:nth-child(3)').addClass('active')
                     .siblings().removeClass('active');
+                if(!$scope.storage.planners){
+                    $scope.planners.refresh();
+                }
+            }
+          , refresh:function(){
+                $('article.list table').fadeOut();
+                Planners.query(function(data){
+                    $scope.storage.planners=new Array();
+                    for(var i=0;i<data.length;i++){
+                        $scope.storage.planners.push({
+                            id:data[i].id
+                          , planner:{
+                                host:data[i].planner.host
+                              , port:data[i].planner.port
+                            }
+                          , status:'unknown'
+                        });
+                    }
+                    $('article.list table').fadeIn();
+                });
+            }
+          , save:function(){
+                var planner=new Planners($scope.planner);
+
+                utils.clean();
+                if($scope.planners.env.type=='collection'){
+                    utils.send('Saving planner settings ...');
+                    planner.$save(function(data){
+                        $scope.planners.refresh();
+                        $scope.planners.list();
+                        utils.receive();
+                        utils.show('success','Planner added to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }else if($scope.planners.env.type=='element'){
+                    utils.send('Updating planner settings ...');
+                    planner.$update({planner:$scope.planner.id},
+                    function(data){
+                        utils.receive();
+                        utils.show('success','Planner updated');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
+            }
+          , check:function(index){
+                if(index){
+                    $scope.planners.list();
+                }
+                if($scope.planners.env.view=='form'){
+                    if(!$scope.planner.id){
+                        $scope.planner.id='test';
+                    }
+                    var planner=new Planners($scope.planner);
+
+                    utils.clean();
+                    utils.send('Checking connection ...');
+                    planner.$check({},function(data){
+                        utils.receive();
+                        utils.show('info','Planner in online');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error','Planner cannot be founded');
+                    });
+                }else if($scope.planners.env.view=='list'){
+                    var planner=$scope.storage.planners[index];
+                    planner.status='checking';
+                    Planners.check({planner:planner.id},function(data){
+                        planner.status='online';
+                    },function(error){
+                        planner.status='offline';
+                    });
+                }
+            }
+          , list:function(){
+                $scope.planners.env.view='list';
+            }
+          , add:function(){
+                $scope.planners.env.view='form';
+                $scope.planners.env.type='collection';
+            }
+          , view:function(index){
+                $scope.planners.env.view='view';
+                $scope.planners.env.type='element';
+                $scope.planner=$scope.storage.planners[index];
             }
         };
 

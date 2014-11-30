@@ -1,36 +1,3 @@
-// Angular functions
-.factory('Planners',['$resource',function($resource){
-    return $resource('/planners/:planner/:action',{
-        planner:'@planner'
-      , action:'@action'
-    },{
-        update:{method:'PUT'}
-      , check: {method:'POST',  params:{action:'_check'}}
-      , status:{method:'POST',  params:{action:'_status'}}
-      , api:   {method:'POST',  params:{action:'_api'},    isArray:true}
-      , set:   {method:'POST',  params:{action:'_set'}}
-      , remove:{method:'DELETE',params:{action:'_remove'}}
-      , run:   {method:'POST',  params:{action:'_run'}}
-      , stop:  {method:'POST',  params:{action:'_stop'}}
-    });
-}])
-.controller('PlannersController',
-    ['$scope','$sessionStorage','Planners',
-    function($scope,$sessionStorage,Planners){
-    $('header nav ul li').removeClass('active');
-    $('header nav ul li:nth-child(2)').addClass('active');
-
-    $scope.sessionStorage=$sessionStorage;
-    $scope.env={
-        panel:'index'
-      , type:'index'
-    };
-    $scope.planner={
-        id:''
-      , host:''
-      , port:''
-    };
-    $scope.current='';
     $scope.task={
         name:'exclusive'
       , count:1

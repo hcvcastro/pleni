@@ -1,82 +1,28 @@
-h1 Planners
-div.tasks
-    a(href='') Add
-table
-    tr
-        th Name
-        th Host
-        th Features
-        th Status
-        th &nbsp;
-    tr
-        td hiperborea1
-        td 192.3.27.103:3001
-        td.features &nbsp;
-        td.status online
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td hiperborea2
-        td 192.3.27.103:3002
-        td.features io
-        td.status online
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td hiperborea3
-        td 192.3.27.103:3003
-        td.features io
-        td.status online
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td localhost
-        td 127.0.0.1:3001
-        td.features io
-        td.status online
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td smith1
-        td 167.157.28.33:3001
-        td.features
-        td.status online
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td smith2
-        td 167.157.28.33:3002
-        td.feaures io
-        td.status online
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td main1
-        td 181.177.142.72:3002
-        td.feaures 
-        td.status online
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
-    tr
-        td main2
-        td 181.177.142.72:3002
-        td.feaures io
-        td.status online
-        td.options
-            a(href='') [View]
-            a(href='') [Edit]
-            a(href='') [Remove]
+article.list
+    div.tasks
+        ul
+            li
+                a.fa.fa-plus(ng-click='planners.add()') &nbsp;Add
+            li
+                a.fa.fa-refresh(ng-click='planners.refresh()') &nbsp;Refresh
+        .clearfix
+    table
+        tr
+            th Name
+            th Host
+            th Features
+            th Status
+            th &nbsp;
+        tr(ng-repeat='planner in storage.planners')
+            td
+                a(ng-click='planners.view($index)') {{planner.id}}
+            td {{planner.planner.host}}:{{planner.planner.port}}
+            td.center
+                span ???
+            td.center
+                span.fa(ng-class='{\'fa-check\':planner.status==\'online\',\'fa-question\':planner.status==\'unknown\',\'fa-close\':planner.status==\'offline\'}')
+            td.options
+                a.fa.fa-refresh(title='Check connection',ng-click='planners.check($index)',ng-class='{\'fa-spin\':planner.status==\'checking\'}')
+                a.fa.fa-edit(title='Edit properties',ng-click='planners.edit($index)')
+                a.fa.fa-trash(title='Remove element',ng-click='planners.remove($index)')
+

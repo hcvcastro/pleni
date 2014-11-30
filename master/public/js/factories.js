@@ -21,3 +21,19 @@ pleni.factory('Repositories',['$resource',function($resource){
     });
 }]);
 
+pleni.factory('Planners',['$resource',function($resource){
+    return $resource('/resources/planners/:planner/:action',{
+        planner:'@planner'
+      , action:'@action'
+    },{
+        update:{method:'PUT'}
+      , check:{method:'POST',params:{action:'_check'}}
+      , status:{method:'POST',params:{action:'_status'}}
+      , api:{method:'POST',params:{action:'_api'},isArray:true}
+      , set:{method:'POST',params:{action:'_set'}}
+      , remove:{method:'DELETE',params:{action:'_remove'}}
+      , run:{method:'POST',params:{action:'_run'}}
+      , stop:{method:'POST',params:{action:'_stop'}}
+    });
+}]);
+
