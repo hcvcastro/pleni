@@ -367,6 +367,21 @@ describe('planners controller functions',function(){
                 });
         });
 
+        it('POST /resources/planners/:planner/_isset',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_isset')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('result')
+                        .and.be.false;
+                    done();
+                });
+        });
+
         it('POST /resources/planners/:planner/_api',function(done){
             request(app)
                 .post('/resources/planners/localhost/_api')
@@ -398,8 +413,23 @@ describe('planners controller functions',function(){
                     res.statusCode.should.be.eql(200);
                     res.body.should.have.property('planner');
                     res.body.planner.should.have.property('host');
-                    res.body.planner.should.have.property('tid')
-                        .and.be.String;
+                    res.body.planner.should.have.property('result')
+                        .and.be.true;
+                    done();
+                });
+        });
+
+        it('POST /resources/planners/:planner/_isset',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_isset')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('result')
+                        .and.be.true;
                     done();
                 });
         });
@@ -435,17 +465,34 @@ describe('planners controller functions',function(){
                });
         });
 
-        it('POST /resources/planners/:planner/_remove',function(done){
+        it('POST /resources/planners/:planner/_unset',function(done){
             request(app)
-                .post('/resources/planners/localhost/_remove')
+                .post('/resources/planners/localhost/_unset')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200);
                     res.body.should.have.property('planner');
                     res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('result')
+                        .and.be.true;
                     done();
                });
+        });
+
+        it('POST /resources/planners/:planner/_isset',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_isset')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('result')
+                        .and.be.false;
+                    done();
+                });
         });
     });
 });

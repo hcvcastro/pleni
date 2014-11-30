@@ -8,9 +8,9 @@ var extend=require('underscore').extend
   , status=require('../../../planners/functions/planners/status')
   , api=require('../../../planners/functions/planners/api')
   , set=require('../../../planners/functions/planners/set')
+  , unset=require('../../../planners/functions/planners/unset')
   , run=require('../../../planners/functions/planners/run')
   , stop=require('../../../planners/functions/planners/stop')
-  , remove=require('../../../planners/functions/planners/remove')
   , schema=require('../../utils/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
@@ -283,7 +283,35 @@ module.exports=function(app){
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
-                      , tid:args.planner.tid
+                      , result:true
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_isset',function(request,response){
+        return generic_action(request,response,null,[],
+            function(resources,planners,planner,args){
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , result:'tid' in args.planner
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_unset',function(request,response){
+        return generic_action(request,response,null,[unset],
+            function(resources,planners,planner,args){
+                delete planners[planner[0]].planner.tid;
+                resources.planners=planners;
+
+                app.set('resources',resources);
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , result:true
                     }
                 });
         });
@@ -316,21 +344,6 @@ module.exports=function(app){
                     planner:{
                         host:args.planner.host
                       , status:'stopped'
-                    }
-                });
-        });
-    });
-
-    app.post('/resources/planners/:planner/_remove',function(request,response){
-        return generic_action(request,response,null,[remove],
-            function(resources,planners,planner,args){
-                delete planners[planner[0]].planner.tid;
-                resources.planners=planners;
-
-                app.set('resources',resources);
-                response.status(200).json({
-                    planner:{
-                        host:args.planner.host
                     }
                 });
         });

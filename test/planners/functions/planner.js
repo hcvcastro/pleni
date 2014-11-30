@@ -5,9 +5,9 @@ var should=require('should')
   , api=require('../../../planners/functions/planners/api')
   , status=require('../../../planners/functions/planners/status')
   , set=require('../../../planners/functions/planners/set')
+  , unset=require('../../../planners/functions/planners/unset')
   , run=require('../../../planners/functions/planners/run')
   , stop=require('../../../planners/functions/planners/stop')
-  , remove=require('../../../planners/functions/planners/remove')
 
 var host='http://localhost'
   , port=3001
@@ -146,8 +146,8 @@ describe('planner functions',function(){
             })
         });
 
-        it('remove task in planner server',function(done){
-            remove({
+        it('unset task in planner server',function(done){
+            unset({
                 planner:{
                     host:url
                   , tid:tid

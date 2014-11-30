@@ -4,7 +4,7 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for remove a task from planner
+ * Function for unset a task from planner
  * args definition
  *      planner
  *          host
