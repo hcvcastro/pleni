@@ -23,7 +23,7 @@ pleni.factory('Repositories',['$resource',function($resource){
 
 pleni.factory('Planners',['$resource',function($resource){
     return $resource('/resources/planners/:planner/:action',{
-        planner:'@planner'
+        planner:'@server'
       , action:'@action'
     },{
         update:{method:'PUT'}

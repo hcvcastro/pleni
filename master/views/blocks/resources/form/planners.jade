@@ -9,10 +9,10 @@ article.form.animate(ng-show='planners.env.view==\'form\'')
             input(type='text',placeholder='The name for the planner',required,ng-model='planner.id')
         p
             label Host
-            input(type='text',placeholder='The host or a IP of your planner',required,ng-model='planner.host')
+            input(type='text',placeholder='The host or a IP of your planner',required,ng-model='planner.planner.host')
         p
             label Port
-            input(type='number',placeholder='The port for the planner',min=1,max=65535,required,ng-model='planner.port')
+            input(type='number',placeholder='The port for the planner',min=1,max=65535,required,ng-model='planner.planner.port')
         p.offset
             button(type='submit') Save
             button(type='button',ng-click='planners.check()') Test connection

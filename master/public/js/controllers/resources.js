@@ -73,6 +73,8 @@ pleni.controller('ResourcesController',
                     utils.send('Updating DB server settings ...');
                     dbserver.$update({dbserver:$scope.dbserver.id},
                     function(data){
+                        $scope.dbservers.refresh();
+                        $scope.dbservers.list();
                         utils.receive();
                         utils.show('success','DB server updated');
                     },function(error){
@@ -255,6 +257,8 @@ pleni.controller('ResourcesController',
                     utils.send('Updating Repository settings ...');
                     repository.$update({repository:$scope.repository.id},
                     function(data){
+                        $scope.repositories.refresh();
+                        $scope.repositories.list();
                         utils.receive();
                         utils.show('success','Repository updated');
                     },function(error){
@@ -395,6 +399,8 @@ pleni.controller('ResourcesController',
                     utils.send('Updating planner settings ...');
                     planner.$update({planner:$scope.planner.id},
                     function(data){
+                        $scope.planners.refresh();
+                        $scope.planners.list();
                         utils.receive();
                         utils.show('success','Planner updated');
                     },function(error){
@@ -425,7 +431,7 @@ pleni.controller('ResourcesController',
                 }else if($scope.planners.env.view=='list'){
                     var planner=$scope.storage.planners[index];
                     planner.status='checking';
-                    Planners.check({planner:planner.id},function(data){
+                    Planners.check({server:planner.id},function(data){
                         planner.status='online';
                     },function(error){
                         planner.status='offline';
@@ -443,6 +449,32 @@ pleni.controller('ResourcesController',
                 $scope.planners.env.view='view';
                 $scope.planners.env.type='element';
                 $scope.planner=$scope.storage.planners[index];
+            }
+          , edit:function(index){
+                $scope.planners.env.view='form';
+                $scope.planners.env.type='element';
+                $scope.planner=$scope.storage.planners[index];
+            }
+          , remove:function(index){
+                $scope.planners.env.view='remove';
+                $scope.planners.env.type='element';
+                $scope.planner=$scope.storage.planners[index];
+            }
+          , delete:function(){
+                utils.clean();
+                if($scope.planners.env.type='element'){
+                    utils.send('Sending delete request ...');
+                    Planners.delete({planner:$scope.planner.id},
+                    function(data){
+                        $scope.planners.refresh();
+                        $scope.planners.list();
+                        utils.receive();
+                        utils.show('success', 'Planner removed to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
             }
         };
 
