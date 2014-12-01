@@ -1,6 +1,7 @@
 # pleni tool
 
-Fullstack application for deploy a servers for automatic activities.
+Fullstack application for deploy a servers for automatic activities related with
+security and http things.
 
 ## How run
 
@@ -14,14 +15,15 @@ PORT=3001 node master/app.js
 ```
 
 ## How test
-If you want to run the tests, you need mocha.
+If you want to run the tests, you need mocha, the test needed a couchdb instance
+in localhost, and webserver.
 
 ```sh
 cd pleni
 grunt test:dumb
 PORT=3001 node planners/planner.js
-grunt test:planner
-grunt test:master
+grunt test:planner # for testing the planner
+grunt test:master  # for testing the master control
 ```
 
 # more details
@@ -31,10 +33,16 @@ Pleni consists of two separate servers:
 - Master server.
 
 ## How use the planner
-For use the planner server, you should start the server:
+For use the planner server, you should start the server, there are a two
+differents planners.
 
 ```sh
 PORT=3001 node planners/planner.js
+```
+or
+
+```
+PORT=3001 node planners/planner.io.js
 ```
 
 to make sure the server is started, you can make the REST request:
@@ -59,8 +67,8 @@ curl -X GET http://localhost:3001/_status
 {"status":"stopped"}
 ```
 
-### Planner api
-Gives a definition of the tasks available in the planner.
+### Planner API
+Gives a definition of the available tasks in the planner.
 
 ```sh
 curl -X GET http://localhost:3001/_api
@@ -69,6 +77,14 @@ curl -X GET http://localhost:3001/_api
 "dbname":{"type":"string"},"site_url":{"type":"string"}}},{"name":
 "site_fetcher","scheme":{"host":{"type":"string"},"dbuser":{"type":"string"},
 "dbpass":{"type":"string"},"dbname":{"type":"string"}}}]
+```
+
+### Planner get
+Gives a set task in the planner.
+
+```sh
+# 596 is the tid in planner
+curl -X GET http://localhost:3001/596
 ```
 
 ## Available tasks
@@ -80,18 +96,20 @@ For hegemonize the planner, can be used as shown in the example:
 ```sh
 cd pleni
 # set the task in planner
-sh planner/exclusive/set.sh
+sh planner/exclusive/set.sh -p http://localhost:3001 -c 1 -i 1000
 {"ok":true,"tid":"604"}
 # run the task in planner
-sh planner/exclusive/run.sh 604
+sh planner/exclusive/run.sh -p http://localhost:3001 -t 604
 {"status":"running"}
 # stop the task in planner
-sh planner/exclusive/stop.sh 604
+sh planner/exclusive/stop.sh -p http://localhost:3001 -t 604
 {"status":"stopped"}
 # release control of the planner
-sh planner/exclusive/delete.sh 604
+sh planner/exclusive/delete.sh -p http://localhost:3001 -t 604
 {"ok":true}
 ```
+
+For more settings can use -h option in scripts.
 
 ### site_create
 For creation of repository in couchdb server, can be used as shown in the
@@ -100,15 +118,17 @@ example:
 ```sh
 cd pleni
 # set the task in planner
-sh planner/create/set.sh
+sh planner/create/set.sh -p http://localhost:3001
 {"ok":true,"tid":"672"}
 # run the task in planner
-sh planner/create/run.sh 672 google http://www.google.com.bo
+sh planner/create/run.sh -p http://localhost:3001 -t 672 -s http://localhost:5984 -n google -u http://www.google.com.bo
 {"status":"running"}
 # release control of the planner
-sh planner/create/delete.sh 604
+sh planner/create/delete.sh -p http://localhost:3001 -t 604
 {"ok":true}
 ```
+
+For more settings can use -h option in scripts.
 
 ### site_fetch
 For fetch the pages to couchdb repository, can be used as shown in the example:
@@ -116,16 +136,19 @@ For fetch the pages to couchdb repository, can be used as shown in the example:
 ```sh
 cd pleni
 # set the task in planner
-sh planner/fetch/set.sh
+sh planner/fetch/set.sh -p http://localhost:3001
 {"ok":true,"tid":"198"}
 # run the task in planner
-sh planner/fetch/run.sh 198 google
+sh planner/fetch/run.sh -p http://localhost:3001 -t 198 -s http://localhost:5984
+-n google
 {"status":"running"}
 # stop the task in planner
-sh planner/fetch/stop.sh 198
+sh planner/fetch/stop.sh -p http://localhost:3001 -t 198
 {"status":"stopped"}
 # release control of the planner
-sh planner/fetch/delete.sh 198
+sh planner/fetch/delete.sh -p http://localhost:301 -t 198
 {"ok":true}
 ```
+
+For more settings can use -h option in scripts.
 
