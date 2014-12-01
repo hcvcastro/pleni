@@ -185,7 +185,22 @@ var task={
 };
 exports.task=task;
 
-var runner={
+var planner_set={
+    'type':'object'
+  , 'properties':{
+        'server':{
+            'type':'string'
+          , 'format':'id'
+        }
+      , 'tid':{
+            'type':'integer'
+        }
+    }
+  , 'required':['server','tid']
+};
+exports.planner_set=planner_set;
+
+var planner_runner={
     'type':'object'
   , 'properties':{
         'planner':{
@@ -200,5 +215,5 @@ var runner={
     }
   , 'required':['planner']
 };
-exports.runner=runner;
+exports.planner_runner=planner_runner;
 

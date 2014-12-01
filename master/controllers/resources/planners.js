@@ -194,6 +194,32 @@ module.exports=function(app){
         }
     });
 
+    app.post('/resources/planners/:planner/_tid',function(request,response){
+        var id=validate.toString(request.params.planner)
+          , resources=app.get('resources')
+          , planners=resources.planners
+          , planner=get_element(id,planners)
+
+        if(schema.js.validate(request.body,schema.planner_set).length==0){
+            if(planner){
+                planners[planner[0]].planner.tid=request.body.tid;
+                resources.planners=planners;
+
+                app.set('resources',resources);
+                response.status(200).json({
+                    planner:{
+                        host:planner[1].planner.host
+                      , result:true
+                    }
+                });
+            }else{
+                response.status(404).json(_error.notfound);
+            }
+        }else{
+            response.status(403).json(_error.validation);
+        }
+    });
+
     var generic_action=function(request,response,json,sequence,next){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
@@ -235,7 +261,6 @@ module.exports=function(app){
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
                 }else{
-                    console.log(error);
                     response.status(403).json(error);
                 }
             })

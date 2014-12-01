@@ -401,10 +401,11 @@ describe('planners controller functions',function(){
             request(app)
                 .post('/resources/planners/localhost/_set')
                 .send({
-                    task:{
+                    server:'localhost'
+                  , task:{
                         name:'exclusive'
                       , count:-1
-                      , interval:250
+                      , interval:280
                     }
                 })
                 .expect('Content-Type',/json/)
@@ -491,6 +492,25 @@ describe('planners controller functions',function(){
                     res.body.planner.should.have.property('host');
                     res.body.planner.should.have.property('result')
                         .and.be.false;
+                    done();
+                });
+        });
+
+        it('POST /resources/planners/:planner/_tid',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_tid')
+                .send({
+                    server:'localhost'
+                  , tid:1024
+                })
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('result')
+                        .and.be.true;
                     done();
                 });
         });

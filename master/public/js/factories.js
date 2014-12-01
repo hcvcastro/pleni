@@ -30,6 +30,7 @@ pleni.factory('Planners',['$resource',function($resource){
       , check:{method:'POST',params:{action:'_check'}}
       , status:{method:'POST',params:{action:'_status'}}
       , api:{method:'POST',params:{action:'_api'}}
+      , tid:{method:'POST',params:{action:'_tid'}}
       , set:{method:'POST',params:{action:'_set'}}
       , isset:{method:'POST',params:{action:'_isset'}}
       , unset:{method:'DELETE',params:{action:'_unset'}}

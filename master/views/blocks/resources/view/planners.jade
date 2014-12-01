@@ -6,7 +6,7 @@ article.view.animate(ng-show='planners.env.view==\'view\'')
         form(ng-submit='planners.set()')
             p
                 label Task
-                select(required,ng-model='planner.set.task',ng-options='task.name as task.name for task in planner.api')
+                select(required,ng-model='planner.set.name',ng-options='task.name as task.name for task in planner.api')
                     option(value='',selected='selected',disabled='disabled') Select a Task
                 a.fa.fa-refresh(title='Refresh available tasks',ng-click='planners.api()')
             p
@@ -20,7 +20,7 @@ article.view.animate(ng-show='planners.env.view==\'view\'')
         form(ng-submit='planners.tid()')
             p
                 label TID
-                input(type='number',placeholder='Number for task repetitions',min=1,max=1000000,required)
+                input(type='number',placeholder='Number for task repetitions',min=1,max=1000000,required,ng-model='planner.set.tid')
             p.offset
                 button(type='submit') Set TID
     p.offset

@@ -379,9 +379,10 @@ pleni.controller('ResourcesController',
                           , status:'unknown'
                           , set:{
                                 status:'unknown'
-                              , task:''
+                              , name:''
                               , count:undefined
                               , interval:undefined
+                              , tid:0
                             }
                         });
                     }
@@ -501,7 +502,29 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.planners.env.type=='element'){
                     utils.send('Send a set request ...');
-
+                    Planners.set({
+                        server:$scope.planner.id
+                      , task:$scope.planner.set
+                    },function(data){
+                        utils.receive();
+                        $scope.planner.set.status='set';
+                    },function(error){
+                        utils.receive();
+                    });
+                }
+            }
+          , tid:function(){
+                utils.clean();
+                if($scope.planners.env.type=='element'){
+                    utils.send('Send a tid request ...');
+                    Planners.tid({
+                        server:$scope.planner.id
+                      , tid:$scope.planner.set.tid
+                    },function(data){
+                        utils.receive();
+                    },function(error){
+                        utils.receive();
+                    });
                 }
             }
           , edit:function(index){
