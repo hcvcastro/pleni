@@ -105,7 +105,7 @@ pleni.controller('ResourcesController',
                         utils.receive();
                         utils.show('error','DB Server cannot be founded');
                     });
-                }else if($scope.dbservers.env.view=='list'){
+                }else{
                     var dbserver=$scope.storage.dbservers[index];
                     dbserver.check='checking';
                     DBServers.check({dbserver:dbserver.id},function(data){
@@ -286,7 +286,7 @@ pleni.controller('ResourcesController',
                         utils.receive();
                         utils.show('error','Repository cannot be founded');
                     });
-                }else if($scope.repositories.env.view=='list'){
+                }else{
                     var repository=$scope.storage.repositories[index];
                     repository.check='checking';
                     Repositories.check({repository:repository.id},
@@ -430,7 +430,7 @@ pleni.controller('ResourcesController',
                         utils.receive();
                         utils.show('error','Planner cannot be founded');
                     });
-                }else if($scope.planners.env.view=='list'){
+                }else{
                     var planner=$scope.storage.planners[index];
                     planner.check='checking';
                     Planners.check({server:planner.id},function(data){
