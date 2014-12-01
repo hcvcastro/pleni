@@ -377,7 +377,12 @@ pleni.controller('ResourcesController',
                             }
                           , check:'unknown'
                           , status:'unknown'
-                          , set:'unknown'
+                          , set:{
+                                status:'unknown'
+                              , task:''
+                              , count:undefined
+                              , interval:undefined
+                            }
                         });
                     }
                     $('article.list table').fadeIn();
@@ -445,12 +450,12 @@ pleni.controller('ResourcesController',
 
                         Planners.isset({server:planner.id},function(data){
                             if(data.planner.result){
-                                planner.set='set';
+                                planner.set.status='set';
                             }else{
-                                planner.set='unset';
+                                planner.set.status='unset';
                             }
                         },function(error){
-                            planner.set='unknown';
+                            planner.set.status='unknown';
                         });
                     },function(error){
                         planner.check='offline';
@@ -468,6 +473,9 @@ pleni.controller('ResourcesController',
                 $scope.planners.env.view='view';
                 $scope.planners.env.type='element';
                 $scope.planner=$scope.storage.planners[index];
+                if(!$scope.planner.api){
+                    $scope.planners.api();
+                }
             }
           , api:function(){
                 utils.clean();
@@ -484,9 +492,16 @@ pleni.controller('ResourcesController',
                     },function(error){
                         $scope.planner.check='offline';
                         $scope.planner.status='unknown';
-                        $scope.planner.set='unknown';
+                        $scope.planner.set.status='unknown';
                         utils.receive();
                     });
+                }
+            }
+          , set:function(){
+                utils.clean();
+                if($scope.planners.env.type=='element'){
+                    utils.send('Send a set request ...');
+
                 }
             }
           , edit:function(index){

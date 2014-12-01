@@ -2,47 +2,27 @@ article.view.animate(ng-show='planners.env.view==\'view\'')
     h2 {{planner.id}} ({{planner.planner.host}}:{{planner.planner.port}})
     div.close
         a.fa.fa-close(ng-click='planners.list()')
-    div
-
-    div.tasks
-        ul
-            li
-                a.fa.fa-cubes(ng-click='planners.api()') &nbsp;Scan services
-            li
-                a.fa.fa-key(ng-click='planners.tid()') &nbsp;Set TID
-            li
-                a.fa.fa-cube(ng-click='planners.set()') &nbsp;Set task
-        .clearfix
     div.dashboard
-        div
-            ul
-                li(ng-repeat='task in planner.api')
-                    a {{task.name}}
-        div
-            form(ng-submit='planners.set()')
-                p
-                    label Task
-                    select(required,ng-options='task.name for task in planner.api')
-                        option(value='',selected='selected',disabled='disabled') Select a Task
-                p
-                    label Count
-                    input(type='number',placeholder='Number for task repetitions',min=-1,max=1000000,required)
-                p
-                    label Interval
-                    input(type='number',placeholder='Miliseconds between each repetition',min=0,max=1000000,step=500,required)
-                p.offset
-                    button(type='submit') Set task
-                    span.hide.loader.fa.fa-spinner
-                    span.hide.message
-            form(ng-submit='planners.tid()')
-                p
-                    label TID
-                    input(type='number',placeholder='Number for task repetitions',min=1,max=1000000,required)
-                p.offset
-                    button(type='submit') Set TID
-                    span.hide.loader.fa.fa-spinner
-                    span.hide.message
-        .clearfix
+        form(ng-submit='planners.set()')
+            p
+                label Task
+                select(required,ng-model='planner.set.task',ng-options='task.name as task.name for task in planner.api')
+                    option(value='',selected='selected',disabled='disabled') Select a Task
+                a.fa.fa-refresh(title='Refresh available tasks',ng-click='planners.api()')
+            p
+                label Count
+                input(type='number',placeholder='Number for task repetitions',min=-1,max=1000000,required,ng-model='planner.set.count')
+            p
+                label Interval
+                input(type='number',placeholder='Miliseconds between each repetition',min=0,max=1000000,step=500,required,ng-model='planner.set.interval')
+            p.offset
+                button(type='submit') Set task
+        form(ng-submit='planners.tid()')
+            p
+                label TID
+                input(type='number',placeholder='Number for task repetitions',min=1,max=1000000,required)
+            p.offset
+                button(type='submit') Set TID
     p.offset
         span.hide.loader.fa.fa-spinner
         span.hide.message
