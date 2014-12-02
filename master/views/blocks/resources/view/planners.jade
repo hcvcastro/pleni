@@ -2,7 +2,7 @@ article.view.animate(ng-show='planners.env.view==\'view\'')
     h2 {{planner.id}} ({{planner.planner.host}}:{{planner.planner.port}})
     div.close
         a.fa.fa-close(ng-click='planners.list()')
-    div.set(ng-show='planner.set.name==\'\'')
+    div.set(ng-show='planner.set.status!=\'set\'')
         form(ng-submit='planners.set()')
             p
                 label Task
@@ -23,8 +23,10 @@ article.view.animate(ng-show='planners.env.view==\'view\'')
                 input(type='number',placeholder='Number for task repetitions',min=1,max=1000000,required,ng-model='planner.set.tid')
             p.offset
                 button(type='submit') Set TID
-    div.run(ng-show='planner.set.name!=\'\'')
-        h3 {{planner.set.name}} (count:{{planner.set.count}},interval:{{planner.set.interval}}
+    div.run(ng-show='planner.set.status==\'set\'')
+        h3 {{planner.set.name}} ({{planner.set.count}}:{{planner.set.interval}})
+        form(ng-submit='planners.run()')
+            div#editor
     p.offset
         span.hide.loader.fa.fa-spinner
         span.hide.message

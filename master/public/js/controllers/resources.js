@@ -383,6 +383,7 @@ pleni.controller('ResourcesController',
                               , count:undefined
                               , interval:undefined
                               , tid:0
+                              , schema:{}
                             }
                         });
                     }
@@ -452,6 +453,7 @@ pleni.controller('ResourcesController',
                         Planners.isset({server:planner.id},function(data){
                             if(data.planner.result){
                                 planner.set.status='set';
+                                $scope.planners.get();
                             }else{
                                 planner.set.status='unset';
                             }
@@ -523,6 +525,7 @@ pleni.controller('ResourcesController',
                       , tid:$scope.planner.set.tid
                     },function(data){
                         utils.receive();
+                        $scope.planner.set.tid=0;
                         $scope.planners.get();
                     },function(error){
                         utils.receive();
@@ -534,9 +537,18 @@ pleni.controller('ResourcesController',
                     Planners.get({
                         server:$scope.planner.id
                     },function(data){
-                        $scope.planner.set.name=data.planner.task.name
-                        $scope.planner.set.count=data.planner.task.count
-                        $scope.planner.set.interval=data.planner.task.interval
+                        $scope.planner.set.name=data.planner.task.name;
+                        $scope.planner.set.count=data.planner.task.count;
+                        $scope.planner.set.interval=data.planner.task.interval;
+                        for(var i=0;i<$scope.planner.api.length;i++){
+                            if($scope.planner.set.name==
+                                $scope.planner.api[i].name){
+                                $scope.planner.set.schema=
+                                    $scope.planner.api[i].schema;
+                                break;
+                            }
+                        }
+                        $scope.jsoneditor=jsoneditor($scope.planner.set.schema);
                     },function(error){
                         utils.show('error','Planner cannot get the task');
                     });
