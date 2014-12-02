@@ -8,6 +8,7 @@ var extend=require('underscore').extend
   , status=require('../../../planners/functions/planners/status')
   , api=require('../../../planners/functions/planners/api')
   , set=require('../../../planners/functions/planners/set')
+  , get=require('../../../planners/functions/planners/get')
   , unset=require('../../../planners/functions/planners/unset')
   , run=require('../../../planners/functions/planners/run')
   , stop=require('../../../planners/functions/planners/stop')
@@ -261,7 +262,7 @@ module.exports=function(app){
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
                 }else{
-                    response.status(403).json(error);
+                    response.status(403).json(_error.badrequest);
                 }
             })
             .done();
@@ -309,6 +310,26 @@ module.exports=function(app){
                     planner:{
                         host:args.planner.host
                       , result:true
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_get',function(request,response){
+        return generic_action(request,response,null,[get],
+            function(resources,planners,planner,args){
+                planners[planner[0]].planner.task=args.planner.task;
+                resources.planners=planners;
+
+                app.set('resources',resources);
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , task:{
+                            name:args.planner.task.name
+                          , count:args.planner.task.count
+                          , interval:args.planner.task.interval
+                        }
                     }
                 });
         });

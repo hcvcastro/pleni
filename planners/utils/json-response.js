@@ -8,6 +8,7 @@ exports.error = {
   , notoverride:    {ok:false,message:'Resource cannot overridden'}
   , auth:           {ok:false,message:'Authorization error'}
   , json:           {ok:false,message:'JSON error'}
+  , badrequest:     {ok:false,message:'Bad request'}
   , notimplemented: {ok:false,message:'Not implemented service'}
 };
 

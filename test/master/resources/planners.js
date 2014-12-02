@@ -397,6 +397,19 @@ describe('planners controller functions',function(){
                 });
         });
 
+        it('GET /resources/planners/:planner/_get',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_get')
+                .expect('Content-Type',/json/)
+                .expect(403)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(403);
+                    res.body.should.have.property('ok').and.be.false;
+                    res.body.should.have.property('message');
+                    done();
+                });
+        });
+
         it('POST /resources/planners/:planner/_set',function(done){
             request(app)
                 .post('/resources/planners/localhost/_set')
@@ -431,6 +444,23 @@ describe('planners controller functions',function(){
                     res.body.planner.should.have.property('host');
                     res.body.planner.should.have.property('result')
                         .and.be.true;
+                    done();
+                });
+        });
+
+        it('GET /resources/planners/:planner/_get',function(done){
+            request(app)
+                .post('/resources/planners/localhost/_get')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('task');
+                    res.body.planner.task.should.have.property('name');
+                    res.body.planner.task.should.have.property('count');
+                    res.body.planner.task.should.have.property('interval');
                     done();
                 });
         });
