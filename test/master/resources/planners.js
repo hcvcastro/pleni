@@ -448,7 +448,7 @@ describe('planners controller functions',function(){
                 });
         });
 
-        it('GET /resources/planners/:planner/_get',function(done){
+        it('POST /resources/planners/:planner/_get',function(done){
             request(app)
                 .post('/resources/planners/localhost/_get')
                 .expect('Content-Type',/json/)

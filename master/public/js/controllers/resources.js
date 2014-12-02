@@ -508,6 +508,7 @@ pleni.controller('ResourcesController',
                     },function(data){
                         utils.receive();
                         $scope.planner.set.status='set';
+                        $scope.planners.get();
                     },function(error){
                         utils.receive();
                     });
@@ -522,8 +523,22 @@ pleni.controller('ResourcesController',
                       , tid:$scope.planner.set.tid
                     },function(data){
                         utils.receive();
+                        $scope.planners.get();
                     },function(error){
                         utils.receive();
+                    });
+                }
+            }
+          , get:function(){
+                if($scope.planners.env.type=='element'){
+                    Planners.get({
+                        server:$scope.planner.id
+                    },function(data){
+                        $scope.planner.set.name=data.planner.task.name
+                        $scope.planner.set.count=data.planner.task.count
+                        $scope.planner.set.interval=data.planner.task.interval
+                    },function(error){
+                        utils.show('error','Planner cannot get the task');
                     });
                 }
             }
