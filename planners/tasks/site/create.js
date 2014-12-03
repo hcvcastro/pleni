@@ -71,9 +71,12 @@ module.exports.schema={
                 }
               , 'user':{
                     'type':'string'
+                  , 'format':'text'
+                  , 'minLength':3
                 }
               , 'pass':{
                     'type':'string'
+                  , 'format':'password'
                 }
             }
           , 'required':['host','name','user','pass']
@@ -83,6 +86,8 @@ module.exports.schema={
           , 'properties':{
                 'url':{
                     'type':'string'
+                  , 'format':'url'
+                  , 'minLength':7
                 }
             }
           , 'required':['url']

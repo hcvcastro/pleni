@@ -12,6 +12,7 @@ var jsoneditor=function(title,args){
 
     schema.title=title;
     var editor=new JSONEditor(document.getElementById('editor'),{schema:schema});
+    editor.validate();
 
     return editor;
 }
