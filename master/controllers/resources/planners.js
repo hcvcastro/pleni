@@ -284,7 +284,12 @@ module.exports=function(app){
                 resources.planners=planners;
 
                 app.set('resources',resources);
-                response.status(200).json(args);
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , status:args.planner.status
+                    }
+                });
         });
     });
 

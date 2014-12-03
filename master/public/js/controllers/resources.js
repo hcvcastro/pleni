@@ -452,7 +452,6 @@ pleni.controller('ResourcesController',
 
                         Planners.isset({server:planner.id},function(data){
                             if(data.planner.result){
-                                planner.set.status='set';
                                 $scope.planners.get();
                             }else{
                                 planner.set.status='unset';
@@ -478,6 +477,9 @@ pleni.controller('ResourcesController',
                 $scope.planner=$scope.storage.planners[index];
                 if(!$scope.planner.api){
                     $scope.planners.api();
+                }
+                if($scope.planner.set.status=='set'){
+                    $scope.planners.editor();
                 }
             }
           , api:function(){
@@ -506,10 +508,13 @@ pleni.controller('ResourcesController',
                     utils.send('Send a set request ...');
                     Planners.set({
                         server:$scope.planner.id
-                      , task:$scope.planner.set
+                      , task:{
+                            name:$scope.planner.set.name
+                          , count:$scope.planner.set.count
+                          , interval:$scope.planner.set.interval
+                        }
                     },function(data){
                         utils.receive();
-                        $scope.planner.set.status='set';
                         $scope.planners.get();
                     },function(error){
                         utils.receive();
@@ -537,6 +542,7 @@ pleni.controller('ResourcesController',
                     Planners.get({
                         server:$scope.planner.id
                     },function(data){
+                        $scope.planner.set.status='set';
                         $scope.planner.set.name=data.planner.task.name;
                         $scope.planner.set.count=data.planner.task.count;
                         $scope.planner.set.interval=data.planner.task.interval;
@@ -548,9 +554,38 @@ pleni.controller('ResourcesController',
                                 break;
                             }
                         }
-                        $scope.jsoneditor=jsoneditor($scope.planner.set.schema);
+                        $scope.planners.editor();
                     },function(error){
                         utils.show('error','Planner cannot get the task');
+                    });
+                }
+            }
+          , editor:function(){
+                if($scope.jsoneditor){
+                    $scope.jsoneditor.destroy();
+                }
+                $scope.jsoneditor=jsoneditor(
+                    $scope.planner.set.name+' ('
+                        +$scope.planner.set.count+':'
+                        +$scope.planner.set.interval+')'
+                  , $scope.planner.set.schema
+                );
+            }
+          , unset:function(){
+                utils.clean();
+                if($scope.planners.env.type=='element'){
+                    utils.send('Sending a remove request ...');
+                    Planners.unset({server:$scope.planner.id},
+                    function(data){
+                        utils.receive();
+                        $scope.planner.set.status='unset';
+                        $scope.planner.set.name='';
+                        $scope.planner.set.count=undefined;
+                        $scope.planner.set.interval=undefined;
+                        $scope.planner.set.schema={};
+                    },function(error){
+                        utils.receive();
+                        utils.show('error','Planner cannot unset the task');
                     });
                 }
             }

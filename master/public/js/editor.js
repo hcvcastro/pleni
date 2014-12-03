@@ -7,8 +7,12 @@ JSONEditor.defaults.options.disable_collapse=true
 JSONEditor.defaults.options.disable_edit_json=true
 JSONEditor.defaults.options.disable_properties=true
 
-var jsoneditor=function(args){
-    var editor=new JSONEditor(document.getElementById('editor'),{schema:args});
+var jsoneditor=function(title,args){
+    var schema=args;
+
+    schema.title=title;
+    var editor=new JSONEditor(document.getElementById('editor'),{schema:schema});
+
     return editor;
 }
 

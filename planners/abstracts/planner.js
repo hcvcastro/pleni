@@ -44,7 +44,7 @@ module.exports=function(notifier){
                         count=1
                     }
                     if(count<0){
-                        count=Number.POSITIVE_INFINITY;
+                        count=-1;
                     }
                     this.count(count);
 

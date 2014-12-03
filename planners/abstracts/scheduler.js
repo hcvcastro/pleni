@@ -9,9 +9,9 @@ module.exports=function(notifier,task,count,interval){
 
     this.count=function(count){
         if(count!=undefined){
-            if(count==Number.POSITIVE_INFINITY){
+            if(count==-1){
                 this._infinite=true;
-                this._count=0;
+                this._count=-1;
             }else{
                 this._infinite=false;
                 this._count=parseInt(count);
@@ -46,7 +46,9 @@ module.exports=function(notifier,task,count,interval){
         var self=this;
         this._timeout=setTimeout(function(){
             if(self._infinite||self._count>0){
-                self._count--;
+                if(!self._infinite){
+                    self._count--;
+                }
                 self.task(
                     function(){self._schedule();},
                     function(){self._stop();}
