@@ -31,7 +31,7 @@ article.view.animate(ng-show='planners.env.view==\'view\'')
             div#editor
             p.offset
                 button(type='submit') Run
-                button(type='submit',ng-click='planners.stop()') Stop
+                button(type='button',ng-click='planners.stop()') Stop
                 button(type='button',ng-click='planners.unset()') Unset
                 span.hide.loader.fa.fa-spinner
                 span.hide.message

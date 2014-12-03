@@ -468,7 +468,10 @@ describe('planners controller functions',function(){
         it('POST /resources/planners/:planner/_run',function(done){
             request(app)
                 .post('/resources/planners/localhost/_run')
-                .send({planner:{targs:{}}})
+                .send({
+                    server:'localhost'
+                  , targs:{}
+                })
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){

@@ -203,17 +203,11 @@ exports.planner_set=planner_set;
 var planner_runner={
     'type':'object'
   , 'properties':{
-        'planner':{
+        'targs':{
             'type':'object'
-          , 'properties':{
-                'targs':{
-                    'type':'object'
-                }
-            }
-          , 'required':['targs']
         }
     }
-  , 'required':['planner']
+  , 'required':['targs']
 };
 exports.planner_runner=planner_runner;
 

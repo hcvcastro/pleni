@@ -226,9 +226,11 @@ module.exports=function(app){
           , resources=app.get('resources')
           , planners=resources.planners
           , planner=get_element(id,planners)
+          , body=request.body
 
+        delete body.server;
         if(json){
-            if(schema.js.validate(request.body,json).length!=0){
+            if(schema.js.validate(body,json).length!=0){
                 response.status(403).json(_error.validation);
                 return;
             }
@@ -245,7 +247,7 @@ module.exports=function(app){
                 args.planner.tid=planner[1].planner.tid;
             }
             if(json){
-                args=extend(request.body,args);
+                args=extend(body,args);
             }
 
             sequence.reduce(function(previous,current){
@@ -262,6 +264,7 @@ module.exports=function(app){
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
                 }else{
+                    console.log(error);
                     response.status(403).json(_error.badrequest);
                 }
             })
@@ -300,7 +303,12 @@ module.exports=function(app){
                 resources.planners=planners;
 
                 app.set('resources',resources);
-                response.status(200).json(args);
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , tasks:args.planner.tasks
+                    }
+                });
         });
     });
 
@@ -369,7 +377,7 @@ module.exports=function(app){
     });
 
     app.post('/resources/planners/:planner/_run',function(request,response){
-        return generic_action(request,response,schema.runner,[run],
+        return generic_action(request,response,schema.planner_runner,[run],
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.status='running';
                 resources.planners=planners;

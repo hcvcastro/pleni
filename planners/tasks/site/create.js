@@ -61,9 +61,13 @@ module.exports.schema={
           , 'properties':{
                 'host':{
                     'type':'string'
+                  , 'format':'url'
+                  , 'minLength':7
                 }
               , 'name':{
                     'type':'string'
+                  , 'format':'text'
+                  , 'minLength':3
                 }
               , 'user':{
                     'type':'string'

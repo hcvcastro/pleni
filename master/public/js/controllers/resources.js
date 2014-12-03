@@ -585,7 +585,41 @@ pleni.controller('ResourcesController',
                         $scope.planner.set.schema={};
                     },function(error){
                         utils.receive();
-                        utils.show('error','Planner cannot unset the task');
+                        utils.show('error',error);
+                    });
+                }
+            }
+          , run:function(){
+                utils.clean();
+                if($scope.planners.env.type=='element'){
+                    utils.send('Sending a run request ...');
+                    var error=$scope.jsoneditor.validate();
+                    if(error.length==0){
+                        Planners.run({
+                            server:$scope.planner.id
+                          , targs:$scope.jsoneditor.getValue()
+                        },function(data){
+                            utils.receive();
+                            $scope.planner.status='running';
+                        },function(error){
+                            utils.receive();
+                            utils.show('error',error.data.message);
+                        });
+                    }else{
+                        utils.show('error','Some parameters are invalids');
+                    }
+                }
+            }
+          , stop:function(){
+                utils.clean();
+                if($scope.planners.env.type=='element'){
+                    utils.send('Sending a stop request ...');
+                    Planners.stop({server:$scope.planner.id},function(data){
+                        utils.receive();
+                        $scope.planner.status='stopped';
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error);
                     });
                 }
             }
