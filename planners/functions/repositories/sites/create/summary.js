@@ -2,6 +2,7 @@
 
 var request=require('request')
   , Q=require('q')
+  , validator=require('../../../../utils/validators')
 
 /*
  * Function for creation of summary document in fetch sites
@@ -27,7 +28,7 @@ module.exports=function(args){
         }
       , body={
             type:'site'
-          , url:args.site.url
+          , url:validator.toValidHost(args.site.url)
         }
 
     request.put({url:url,headers:headers,json:body},function(error,response){
