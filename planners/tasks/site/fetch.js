@@ -86,7 +86,52 @@ module.exports=function(params,repeat,stop,notifier){
     .done();
 };
 
-module.exports.schema={
+var headers=[
+    'Accept'
+  , 'Accept-Charset'
+  , 'Accept-Encoding'
+  , 'Accept-Language'
+  , 'Accept-Datetime'
+  , 'Authorization'
+  , 'Cache-Control'
+  , 'Connection'
+  , 'Cookie'
+  , 'Content-Length'
+  , 'Content-MD5'
+  , 'Content-Type'
+  , 'Date'
+  , 'Expect'
+  , 'From'
+  , 'Host'
+  , 'If-Match'
+  , 'If-Modified-Since'
+  , 'If-None-Match'
+  , 'If-Range'
+  , 'If-Unmodified-Since'
+  , 'Max-Forwards'
+  , 'Origin'
+  , 'Pragma'
+  , 'Proxy-Authorization'
+  , 'Range'
+  , 'Referer'
+  , 'TE'
+  , 'User-Agent'
+  , 'Upgrade'
+  , 'Via'
+  , 'Warning'
+  , 'X-Requested-With'
+  , 'DNT'
+  , 'X-Forwarded-For'
+  , 'X-Forwarded-Host'
+  , 'X-Forwarded-Proto'
+  , 'Front-End-Https'
+  , 'X-Http-Method-Override'
+  , 'X-ATT-DeviceId'
+  , 'X-Wap-Profile'
+  , 'Proxy-Connection'
+];
+
+module.exports.schema=[{
     'type':'object'
   , 'properties':{
         'db':{
@@ -109,11 +154,45 @@ module.exports.schema={
         }
       , 'headers':{
             'type':'array'
-        }
-      , 'debug':{
-            'type':'boolean'
+          , 'items': {
+                'type':'object'
+              , 'properties':{
+                    'name':{
+                        'type':'string'
+                      , 'enum':headers
+                    }
+                  , 'value':{
+                        'type':'string'
+                    }
+                }
+            }
         }
     }
   , 'required':['db']
-};
+},{
+    'type':'object'
+  , 'properties':{
+        '_repository':{
+            'type':'string'
+          , 'format':'text'
+          , 'minLength':3
+        }
+      , 'headers':{
+            'type':'array'
+          , 'items': {
+                'type':'object'
+              , 'properties':{
+                    'name':{
+                        'type':'string'
+                      , 'enum':headers
+                    }
+                  , 'value':{
+                        'type':'string'
+                    }
+                }
+            }
+        }
+    }
+  , 'required':['_repository']
+}];
 

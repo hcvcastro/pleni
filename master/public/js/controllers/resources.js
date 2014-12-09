@@ -571,6 +571,12 @@ pleni.controller('ResourcesController',
                             return dbserver.id;
                         });
                 }
+                if(schema.properties._repository){
+                    schema.properties._repository.enum=
+                        $scope.storage.repositories.map(function(repository){
+                            return repository.id;
+                        });
+                }
 
                 $scope.jsoneditor=jsoneditor(
                     $scope.planner.set.name+' ('
