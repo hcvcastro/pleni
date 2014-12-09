@@ -388,6 +388,40 @@ module.exports=function(app){
     });
 
     app.post('/resources/planners/:planner/_run',function(request,response){
+        var targs=request.body.targs;
+        if(targs._repository){
+            var repository=get_element(
+                targs._repository,app.get('resources').repositories);
+            if(repository){
+                delete targs._repository;
+                targs.db={};
+                targs.db.name=repository[1].db.name;
+                targs._dbserver=repository[1]._dbserver;
+                request.body.targs=targs;
+            }else{
+                response.status(403).json(_error.badrequest);
+                return;
+            }
+        }
+        if(targs._dbserver){
+            var dbserver=get_element(
+                targs._dbserver,app.get('resources').dbservers);
+            if(dbserver){
+                delete targs._dbserver;
+                if(targs.db){
+                    targs.db.host=dbserver[1].db.host+':'+
+                                  dbserver[1].db.port;
+                    targs.db.user=dbserver[1].db.user;
+                    targs.db.pass=dbserver[1].db.pass;
+                    targs.db.prefix=dbserver[1].db.prefix;
+                }
+                request.body.targs=targs;
+            }else{
+                response.status(403).json(_error.badrequest);
+                return;
+            }
+        }
+
         return generic_action(request,response,schema.planner_runner,[run],
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.status='running';
