@@ -53,7 +53,7 @@ module.exports=function(params,repeat,stop,notifier){
     .done();
 };
 
-module.exports.schema={
+module.exports.schema=[{
     'type':'object'
   , 'properties':{
         'db':{
@@ -94,5 +94,37 @@ module.exports.schema={
         }
     }
   , 'required':['db','site']
-};
+},{
+    'type':'object'
+  , 'properties':{
+        '_dbserver':{
+            'type':'string'
+          , 'format':'text'
+          , 'minLength:3
+        }
+      , 'db':{
+            'properties':{
+                'name':{
+                    'type':'string'
+                  , 'format':'text'
+                  , 'minLength':3
+                }
+            }
+          , 'required':['name']
+        }
+      , 'site':{
+            'type':'object'
+          , 'properties':{
+                'url':{
+                    'type':'string'
+                  , 'format':'url'
+                  , 'minLength':7
+                }
+            }
+          , 'required':['url']
+        }
+    }
+  , 'required':['_dbserver','db','site']
+    }
+}];
 

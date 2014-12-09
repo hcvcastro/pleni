@@ -362,7 +362,6 @@ pleni.controller('ResourcesController',
                 if(!$scope.storage.planners){
                     $scope.planners.refresh();
                 }
-                $scope.planners.view(0);
             }
           , refresh:function(){
                 $('article.list table').fadeOut();
@@ -661,8 +660,7 @@ pleni.controller('ResourcesController',
             }
         };
 
-        //$scope.dbservers.show();
-        $scope.planners.show();
+        $scope.dbservers.show();
     }]
 );
 
