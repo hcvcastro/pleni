@@ -563,11 +563,20 @@ pleni.controller('ResourcesController',
                 if($scope.jsoneditor){
                     $scope.jsoneditor.destroy();
                 }
+
+                var schema=$scope.planner.set.schema;
+                if(schema.properties._dbserver){
+                    schema.properties._dbserver.enum=
+                        $scope.storage.dbservers.map(function(dbserver){
+                            return dbserver.id;
+                        });
+                }
+
                 $scope.jsoneditor=jsoneditor(
                     $scope.planner.set.name+' ('
                         +$scope.planner.set.count+':'
                         +$scope.planner.set.interval+')'
-                  , $scope.planner.set.schema
+                  , schema
                 );
             }
           , unset:function(){

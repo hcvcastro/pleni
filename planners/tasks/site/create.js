@@ -100,10 +100,11 @@ module.exports.schema=[{
         '_dbserver':{
             'type':'string'
           , 'format':'text'
-          , 'minLength:3
+          , 'minLength':3
         }
       , 'db':{
-            'properties':{
+            'type':'object'
+          , 'properties':{
                 'name':{
                     'type':'string'
                   , 'format':'text'
@@ -125,6 +126,5 @@ module.exports.schema=[{
         }
     }
   , 'required':['_dbserver','db','site']
-    }
 }];
 

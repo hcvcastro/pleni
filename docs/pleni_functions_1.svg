@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="functions.svg">
+   sodipodi:docname="pleni_functions_1.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="1003.4288"
-     inkscape:cy="247.01054"
+     inkscape:zoom="0.7"
+     inkscape:cx="363.85573"
+     inkscape:cy="331.36308"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -312,11 +312,11 @@
          id="tspan3070"
          y="162.26218"
          x="5"
-         sodipodi:role="line">db.user</tspan><tspan
+         sodipodi:role="line">db.name</tspan><tspan
          id="tspan3072"
          y="172.16219"
          x="5"
-         sodipodi:role="line">db.pass</tspan></text>
+         sodipodi:role="line">auth.cookie</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
@@ -575,7 +575,7 @@
          y="407.36218"
          x="135"
          id="tspan3199"
-         sodipodi:role="line">remove</tspan></text>
+         sodipodi:role="line">unset</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3201"
@@ -601,7 +601,7 @@
          y="417.36218"
          x="130"
          id="tspan3215"
-         sodipodi:role="line">planners/remove.js</tspan></text>
+         sodipodi:role="line">planners/unset.js</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3217"

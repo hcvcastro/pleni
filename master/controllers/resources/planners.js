@@ -264,7 +264,7 @@ module.exports=function(app){
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
                 }else{
-                    console.log(error);
+                    //console.log(error);
                     response.status(403).json(_error.badrequest);
                 }
             })
@@ -306,7 +306,18 @@ module.exports=function(app){
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
-                      , tasks:args.planner.tasks
+                      , tasks:args.planner.tasks.map(function(task){
+                            var schema;
+                            if(Array.isArray(task.schema)){
+                                schema=task.schema[1];
+                            }else{
+                                schema=task.schema;
+                            }
+                            return {
+                                name:task.name
+                              , schema:schema
+                            }
+                        })
                     }
                 });
         });
