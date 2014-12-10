@@ -48,13 +48,14 @@ module.exports=function(args){
               , register_link=function(link,haystack){
                     if(link==undefined){return}
 
-                    var parse=_url.parse(_url.resolve(base,link));
+                    var url=_url.resolve(base,link)
+                      , parse=_url.parse(url)
+
                     if(parse.host===base.host){
                         samedomain.push(parse.path);
                     }
 
-                    parse.href=link;
-                    haystack.push(parse);
+                    haystack.push(url);
                 }
 
             // body analysis (TODO)

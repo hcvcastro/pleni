@@ -2,6 +2,7 @@
 
 var request=require('request')
   , Q=require('q')
+  , validator=require('../../../../utils/validators')
 
 /*
  * Function for creation of rootsite document for site fetching
@@ -28,7 +29,7 @@ module.exports=function(args){
       , body={
             status:'wait'
           , type:'page'
-          , url:args.site.url
+          , url:validator.toValidHost(args.site.url)
           , timestamp:Date.now()
         }
 
