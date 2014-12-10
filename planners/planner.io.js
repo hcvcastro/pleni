@@ -18,7 +18,7 @@ server.app.get('/io.html',function(request,response){
     response.sendFile(join(__dirname,'public','io.html'));
 });
 
-server.set(process.env.PORT||3001);
+server.set(process.env.PORT||3001,'io');
 server.listen(new planner(notifier));
 
 io.on('connection',function(socket){

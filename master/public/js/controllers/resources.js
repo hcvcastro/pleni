@@ -374,6 +374,7 @@ pleni.controller('ResourcesController',
                                 host:data[i].planner.host
                               , port:data[i].planner.port
                             }
+                          , type:'?'
                           , check:'unknown'
                           , status:'unknown'
                           , set:{
@@ -442,6 +443,7 @@ pleni.controller('ResourcesController',
                     planner.check='checking';
                     Planners.check({server:planner.id},function(data){
                         planner.check='online';
+                        planner.type=data.planner.type;
                         
                         Planners.status({server:planner.id},function(data){
                             planner.status=data.planner.status;

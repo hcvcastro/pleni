@@ -16,7 +16,7 @@ var planner=require('./abstracts/planner')
 
 planner.prototype=new scheduler(notifier);
 
-server.set(process.env.PORT||3001);
+server.set(process.env.PORT||3001,'none');
 server.listen(new planner(notifier));
 server.run();
 

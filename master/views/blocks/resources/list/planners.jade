@@ -20,7 +20,7 @@ article.list
                 a(ng-click='planners.view($index)') {{planner.id}}
             td {{planner.planner.host}}:{{planner.planner.port}}
             td.center
-                span ?
+                span {{planner.type}}
             td.center
                 span.fa(ng-class='{\'fa-check\':planner.check==\'online\',\'fa-question\':planner.check==\'unknown\',\'fa-close\':planner.check==\'offline\'}')
             td.center

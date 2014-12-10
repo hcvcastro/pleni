@@ -345,8 +345,14 @@ describe('planners controller functions',function(){
                     .expect(element.status)
                     .end(function(err,res){
                         res.statusCode.should.be.eql(element.status);
-                        res.body.should.have.property('ok');
-                        res.body.should.eql(element.expected);
+                        if(element==404){
+                            res.body.should.have.property('ok');
+                            res.body.should.eql(element.expected);
+                        }else if(element==200){
+                            res.body.should.have.property('planner');
+                            res.body.planner.should.have.property('host');
+                            res.body.planner.should.have.property('type');
+                        }
                         done();
                     });
             });

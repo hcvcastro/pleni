@@ -9,6 +9,10 @@ var request=require('request')
  * args input
  *      planner
  *          host
+ *
+ * args output
+ *      planner
+ *          type
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -20,8 +24,11 @@ module.exports=function(args){
     request.get({url:url},function(error,response){
         if(!error){
             if(validator.isJSON(response.body)){
+                var parse=JSON.parse(response.body);
+
                 if(response.statusCode==200){
-                    if(JSON.parse(response.body).planner){
+                    if(parse.planner){
+                        args.planner.type=parse.type;
                         deferred.resolve(args);
                         return;
                     }

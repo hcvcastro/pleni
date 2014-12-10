@@ -4,13 +4,16 @@ var app=require('express')()
   , http=require('http').Server(app)
   , bodyparser=require('body-parser')
 
-exports.set=function(port){
+exports.set=function(port,signature){
     app.set('port',port);
     app.disable('x-powered-by');
     app.use(bodyparser.json());
 
     app.get('/',function(request,response){
-        response.json({planner:'ready for action'});
+        response.json({
+            planner:'ready for action'
+          , type:signature
+        });
     });
 };
 

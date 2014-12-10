@@ -275,8 +275,9 @@ module.exports=function(app){
     };
 
     app.post('/resources/planners/:planner/_check',function(request,response){
-        return generic_action(request,response,null,[],function(){
-            response.status(200).json(_success.ok);
+        return generic_action(request,response,null,[],
+            function(resources,planners,planner,args){
+                response.status(200).json(args);
         });
     });
 
