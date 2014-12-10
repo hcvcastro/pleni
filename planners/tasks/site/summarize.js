@@ -55,7 +55,7 @@ module.exports=function(params,repeat,stop,notifier){
     .done();
 };
 
-module.exports.schema={
+module.exports.schema=[{
     'type':'object'
   , 'properties':{
         'db':{
@@ -78,5 +78,15 @@ module.exports.schema={
         }
     }
   , 'required':['db']
-};
+},{
+    'type':'object'
+  , 'properties':{
+        '_repository':{
+            'type':'string'
+          , 'format':'text'
+          , 'minLength':3
+        }
+    }
+  , 'required':['_repository']
+}];
 
