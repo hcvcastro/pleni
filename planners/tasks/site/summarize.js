@@ -37,19 +37,18 @@ module.exports=function(params,repeat,stop,notifier){
     .then(timestamp)
     .then(summarize)
     .then(function(args){
-        if(notifier){
-            notifier('run','summarize',args.db.name);
-        }else{
-            console.log('RUN summarize --> '+args.db.name);
-        }
+        notifier({
+            task:{
+                action:'summarize'
+              , name:args.db.name
+            }
+        });
         stop();
     })
     .fail(function(error){
-        if(notifier){
-            notifier('error','summarize',error);
-        }else{
-            console.log(error);
-        }
+        notifier({
+            error:error
+        });
         stop();
     })
     .done();

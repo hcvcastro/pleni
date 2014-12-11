@@ -23,19 +23,18 @@ module.exports=function(params,repeat,stop,notifier){
     .then(auth)
     .then(remove)
     .then(function(args){
-        if(notifier){
-            notifier('run','remove',args.db.name);
-        }else{
-            console.log('RUN remove --> '+args.db.name);
-        }
+        notifier({
+            task:{
+                action:'remove'
+              , name:args.db.name
+            }
+        });
         repeat();
     })
     .fail(function(error){
-        if(notifier){
-            notifier('error','remove',error);
-        }else{
-            console.log(error);
-        }
+        notifier({
+            error:error
+        });
         stop();
     })
     .done();

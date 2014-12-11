@@ -63,7 +63,11 @@ module.exports=function(notifier,task,count,interval){
             this._schedule();
             this._status='running';
             if(notifier){
-                notifier('run');
+                notifier({
+                    planner:{
+                        action:'run'
+                    }
+                });
             }
         }
     };
@@ -73,7 +77,11 @@ module.exports=function(notifier,task,count,interval){
             delete this._timeout;
             this._status='stopped'
             if(notifier){
-                notifier('stop');
+                notifier({
+                    planner:{
+                        action:'stop'
+                    }
+                });
             }
         }
     };

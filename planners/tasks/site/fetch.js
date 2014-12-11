@@ -63,11 +63,12 @@ module.exports=function(params,repeat,stop,notifier){
     .then(spread)
     .then(function(args){
         if(args.task.complete){
-            if(notifier){
-                notifier('run','fetch',{result:'ok'});
-            }else{
-                console.log('RUN fetch --> '+args.task.complete.id);
-            }
+            notifier({
+                task:{
+                    action:'fetch'
+                  , complete:true
+                }
+            });
         }
         repeat();
     })
@@ -75,11 +76,9 @@ module.exports=function(params,repeat,stop,notifier){
         if(error.error=='conflict'&&error.reason=='Document update conflict.'){
             repeat();
         }else{
-            if(notifier){
-                notifier('error','fetch',error);
-            }else{
-                console.log(error);
-            }
+            notifier({
+                error:error
+            });
             stop();
         }
     })

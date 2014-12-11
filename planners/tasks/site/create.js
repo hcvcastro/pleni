@@ -35,19 +35,18 @@ module.exports=function(params,repeat,stop,notifier){
     .then(rootsite)
     .then(design)
     .then(function(args){
-        if(notifier){
-            notifier('run','create',args.db.name);
-        }else{
-            console.log('RUN create --> '+args.db.name);
-        }
+        notifier({
+            task:{
+                action:'create'
+                name:args.db.name
+            }
+        });
         stop();
     })
     .fail(function(error){
-        if(notifier){
-            notifier('error','create',error);
-        }else{
-            console.log(error);
-        }
+        notifier({
+            error:error
+        });
         stop();
     })
     .done();

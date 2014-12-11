@@ -53,8 +53,14 @@ module.exports=function(notifier){
                     }
                     this.interval(interval);
 
-                    notifier('create',this.name,
-                        {count:count,interval:interval});
+                    notifier({
+                        task:{
+                            action:'create'
+                          , name:this.name
+                          , count:count
+                          , interval:interval
+                        }
+                    });
                     response.status(200).json({ok:true,tid:this.tid});
                     return;
                 }
@@ -74,7 +80,12 @@ module.exports=function(notifier){
     this.remove=function(request,response){
         if(this.tid!==undefined&&this.tid===request.params.tid){
             this._stop();
-            notifier('remove',this.name,{});
+            notifier({
+                task:{
+                    action:'remove'
+                  , name:this.name
+                }
+            });
 
             this.tid=undefined;
             this.name=undefined;

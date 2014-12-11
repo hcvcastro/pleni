@@ -3,15 +3,8 @@
 var planner=require('./abstracts/planner')
   , scheduler=require('./abstracts/scheduler')
   , server=require('./abstracts/server')
-  , notifier=function(action,name,params){
-        var string='['+action+']';
-        if(name){
-            string+=' '+name;
-        }
-        if(params){
-            string+=' '+JSON.stringify(params);
-        }
-        console.log(string);
+  , notifier=function(msg){
+        console.log(JSON.stringify(msg);
     }
 
 planner.prototype=new scheduler(notifier);
