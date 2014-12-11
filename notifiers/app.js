@@ -6,7 +6,8 @@ var http=require('http')
   , bodyparser=require('body-parser')
   , app=express()
   , server=http.Server(app)
-  , io=require('socket.io')(server)
+  , ios=require('socket.io')(server)
+  , ioc=require('socket.io-client')
 
 app.set('port',process.env.PORT||3002);
 app.set('views',join(__dirname,'views'));
@@ -19,12 +20,20 @@ app.get('/',function(request,response){
     response.sendFile(join(__dirname,'public','msg.html'));
 });
 
-io.sockets.on('connection',function(socket){
+ios.sockets.on('connection',function(socket){
     socket.emit('notifier',{
         notifier:{
             action:'connection'
         }
     });
+});
+
+var socket=ioc.connect('http://localhost:3001',{reconnect:true});
+socket.on('connection',function(msg){
+    ios.emit('notifier',msg);
+});
+socket.on('notifier',function(msg){
+    ios.emit('notifier',msg);
 });
 
 server.listen(app.get('port'),function(){
