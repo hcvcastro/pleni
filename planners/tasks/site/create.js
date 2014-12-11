@@ -38,7 +38,7 @@ module.exports=function(params,repeat,stop,notifier){
         notifier({
             task:{
                 action:'create'
-                name:args.db.name
+              , name:args.db.name
             }
         });
         stop();

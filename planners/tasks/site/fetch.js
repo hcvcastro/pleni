@@ -66,7 +66,7 @@ module.exports=function(params,repeat,stop,notifier){
             notifier({
                 task:{
                     action:'fetch'
-                  , complete:true
+                  , url:args.task.wait.id.substr(5)
                 }
             });
         }
@@ -76,9 +76,18 @@ module.exports=function(params,repeat,stop,notifier){
         if(error.error=='conflict'&&error.reason=='Document update conflict.'){
             repeat();
         }else{
-            notifier({
-                error:error
-            });
+            if(error.complete){
+                notifier({
+                    task:{
+                        action:'fetch'
+                      , complete:true
+                    }
+                });
+            }else{
+                notifier({
+                    error:error
+                });
+            }
             stop();
         }
     })
