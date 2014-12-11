@@ -41,8 +41,8 @@ require('./controllers/resources/repositories')(app);
 require('./controllers/resources/planners')(app);
 require('./controllers/tasks')(app);
 
-app.use(function(req,res){
-    res.status(404).render('404.jade',{
+app.use(function(request,response){
+    response.status(404).render('404.jade',{
         title:'404',
         message:'I\'m so sorry, but file not found!!'
     });

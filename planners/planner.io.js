@@ -14,8 +14,8 @@ planner.prototype=new scheduler(notifier);
 
 server.app.use(express.static(join(__dirname,'public')));
 server.app.use(express.static(join(__dirname,'..','bower_components')));
-server.app.get('/io.html',function(request,response){
-    response.sendFile(join(__dirname,'public','io.html'));
+server.app.get('/msg.html',function(request,response){
+    response.sendFile(join(__dirname,'public','msg.html'));
 });
 
 server.set(process.env.PORT||3001,'io');
