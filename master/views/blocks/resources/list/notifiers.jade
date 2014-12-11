@@ -1,0 +1,34 @@
+article.list
+    div.tasks
+        ul
+            li
+                a.fa.fa-plus(ng-click='planners.add()') &nbsp;Add
+            li
+                a.fa.fa-refresh(ng-click='planners.refresh()') &nbsp;Refresh
+        .clearfix
+    table
+        tr
+            th Name
+            th Host
+            th Type
+            th Available
+            th Status
+            th Set
+            th &nbsp;
+        tr(ng-repeat='planner in storage.planners')
+            td
+                a(ng-click='planners.view($index)') {{planner.id}}
+            td {{planner.planner.host}}:{{planner.planner.port}}
+            td.center
+                span {{planner.type}}
+            td.center
+                span.fa(ng-class='{\'fa-check\':planner.check==\'online\',\'fa-question\':planner.check==\'unknown\',\'fa-close\':planner.check==\'offline\'}')
+            td.center
+                span.fa(ng-class='{\'fa-play\':planner.status==\'running\',\'fa-question\':planner.status==\'unknown\',\'fa-stop\':planner.status==\'stopped\'}')
+            td.center
+                span.fa(ng-class='{\'fa-circle\':planner.set.status==\'set\',\'fa-question\':planner.set.status==\'unknown\',\'fa-circle-o\':planner.set.status==\'unset\'}')
+            td.options
+                a.fa.fa-refresh(title='Check connection',ng-click='planners.check($index)',ng-class='{\'fa-spin\':planner.check==\'checking\'}')
+                a.fa.fa-edit(title='Edit properties',ng-click='planners.edit($index)')
+                a.fa.fa-trash(title='Remove element',ng-click='planners.remove($index)')
+

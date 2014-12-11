@@ -668,9 +668,9 @@ pleni.controller('ResourcesController',
             }
         };
 
-        $scope.iopipes={
+        $scope.notifiers={
             show:function(){
-                $('section.iopipes').addClass('active')
+                $('section.notifiers').addClass('active')
                     .siblings().removeClass('active');
                 $('nav.menu>ul>li:nth-child(4)').addClass('active')
                     .siblings().removeClass('active');

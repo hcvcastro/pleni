@@ -12,7 +12,13 @@ var planner=require('./abstracts/planner')
 
 planner.prototype=new scheduler(notifier);
 
-server.set(process.env.PORT||3001,'io');
+server.app.use(express.static(join(__dirname,'public')));
+server.app.use(express.static(join(__dirname,'..','bower_components')));
+server.app.get('/msg.html',function(request,response){
+    response.sendFile(join(__dirname,'public','msg.html'));
+});
+
+server.set(process.env.PORT||3001,'ion');
 server.listen(new planner(notifier));
 
 io.on('connection',function(socket){

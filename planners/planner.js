@@ -4,7 +4,7 @@ var planner=require('./abstracts/planner')
   , scheduler=require('./abstracts/scheduler')
   , server=require('./abstracts/server')
   , notifier=function(msg){
-        console.log(JSON.stringify(msg);
+        console.log(JSON.stringify(msg));
     }
 
 planner.prototype=new scheduler(notifier);

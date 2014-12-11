@@ -3,7 +3,7 @@ nav.menu
         li: a(ng-click='dbservers.show()') DB Servers
         li: a(ng-click='repositories.show()') Repositories
         li: a(ng-click='planners.show()') Planners
-        li: a(ng-click='iopipes.show()') I/O pipes
+        li: a(ng-click='notifiers.show()') Notifiers
 
 section.messages
 section.main
@@ -26,5 +26,9 @@ section.main
         include ../blocks/resources/form/planners
         include ../blocks/resources/remove/planners
     section.iopipes
-        include ../blocks/resources/list/iopipes
+        h1 Notifiers
+        include ../blocks/resources/list/notifiers
+        include ../blocks/resources/view/notifiers
+        include ../blocks/resources/form/notifiers
+        include ../blocks/resources/remove/notifiers
 

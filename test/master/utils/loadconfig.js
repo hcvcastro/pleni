@@ -35,5 +35,36 @@ describe('loading the config files',function(){
         }
         done();
     });
+
+    it('loading planners.js',function(done){
+        var config=loadconfig(path.join(
+            __dirname,'..','..','..','master','config','planners.json'));
+
+        config.should.be.Array;
+        for(var a in config){
+            config[a].should.have.property('id').and.have.be.a.String;
+            config[a].should.have.property('planner').and.have.be.a.Object;
+            config[a].planner.should.have.property('host').and.have.be.a.String;
+            config[a].planner.should.have.property('port')
+                .and.have.be.a.Integer;
+        }
+        done();
+    });
+
+    it('loading notifiers.js',function(done){
+        var config=loadconfig(path.join(
+            __dirname,'..','..','..','master','config','notifiers.json'));
+
+        config.should.be.Array;
+        for(var a in config){
+            config[a].should.have.property('id').and.have.be.a.String;
+            config[a].should.have.property('notifier').and.have.be.a.Object;
+            config[a].notifier.should.have.property('host')
+                .and.have.be.a.String;
+            config[a].notifier.should.have.property('port')
+                .and.have.be.a.Integer;
+        }
+        done();
+    });
 });
 
