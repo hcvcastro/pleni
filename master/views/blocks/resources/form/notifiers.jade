@@ -1,21 +1,21 @@
-article.form.animate(ng-show='planners.env.view==\'form\'')
-    h2(ng-show='planners.env.type==\'collection\'') Add a Planner
-    h2(ng-show='planners.env.type==\'element\'') Edit: {{planner.id}}
+article.form.animate(ng-show='notifiers.env.view==\'form\'')
+    h2(ng-show='notifiers.env.type==\'collection\'') Add a notifier
+    h2(ng-show='notifiers.env.type==\'element\'') Edit: {{notifier.id}}
     div.close
-        a.fa.fa-close(ng-click='planners.list()')
-    form(ng-submit='planners.save()')
+        a.fa.fa-close(ng-click='notifiers.list()')
+    form(ng-submit='notifiers.save()')
         p
             label Name
-            input(type='text',placeholder='The name for the planner',required,ng-model='planner.id')
+            input(type='text',placeholder='The name for the notifier',required,ng-model='notifier.id')
         p
             label Host
-            input(type='text',placeholder='The host or a IP of your planner',required,ng-model='planner.planner.host')
+            input(type='text',placeholder='The host or a IP of your notifier',required,ng-model='notifier.notifier.host')
         p
             label Port
-            input(type='number',placeholder='The port for the planner',min=1,max=65535,required,ng-model='planner.planner.port')
+            input(type='number',placeholder='The port for the notifier',min=1,max=65535,required,ng-model='notifier.notifier.port')
         p.offset
             button(type='submit') Save
-            button(type='button',ng-click='planners.check()') Test connection
+            button(type='button',ng-click='notifiers.check()') Test connection
             span.hide.loader.fa.fa-spinner
             span.hide.message
 

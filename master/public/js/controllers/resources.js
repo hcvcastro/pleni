@@ -1,8 +1,10 @@
 'use strict';
 
 pleni.controller('ResourcesController',
-    ['$scope','$sessionStorage','DBServers','Repositories','Planners',
-    function($scope,$sessionStorage,DBServers,Repositories,Planners){
+    ['$scope','$sessionStorage',
+    'DBServers','Repositories','Planners','Notifiers',
+    function($scope,$sessionStorage,
+        DBServers,Repositories,Planners,Notifiers){
         $scope.storage=$sessionStorage;
         $('header nav ul li:nth-child(2)').addClass('active')
             .siblings().removeClass('active');
@@ -11,7 +13,7 @@ pleni.controller('ResourcesController',
             id:''
           , db:{
                 host:''
-              , port:''
+              , port:0
               , user:''
               , pass:''
               , prefix:''
@@ -26,6 +28,7 @@ pleni.controller('ResourcesController',
                 $scope.dbservers.env.view='list';
                 $scope.repositories.env.view='list';
                 $scope.planners.env.view='list';
+                $scope.notifiers.env.view='list';
 
                 $('section.dbservers').addClass('active')
                     .siblings().removeClass('active');
@@ -100,7 +103,7 @@ pleni.controller('ResourcesController',
                     utils.send('Checking connection ...');
                     dbserver.$check({},function(data){
                         utils.receive();
-                        utils.show('info','DB Server in online');
+                        utils.show('info','DB Server is online');
                     },function(error){
                         utils.receive();
                         utils.show('error','DB Server cannot be founded');
@@ -211,6 +214,7 @@ pleni.controller('ResourcesController',
                 $scope.dbservers.env.view='list';
                 $scope.repositories.env.view='list';
                 $scope.planners.env.view='list';
+                $scope.notifiers.env.view='list';
 
                 $('section.repositories').addClass('active')
                     .siblings().removeClass('active');
@@ -342,7 +346,7 @@ pleni.controller('ResourcesController',
             id:''
           , planner:{
                 host:''
-              , port:''
+              , port:0
             }
         };
         $scope.planners={
@@ -354,6 +358,7 @@ pleni.controller('ResourcesController',
                 $scope.dbservers.env.view='list';
                 $scope.repositories.env.view='list';
                 $scope.planners.env.view='list';
+                $scope.notifiers.env.view='list';
 
                 $('section.planners').addClass('active')
                     .siblings().removeClass('active');
@@ -433,7 +438,7 @@ pleni.controller('ResourcesController',
                     utils.send('Checking connection ...');
                     planner.$check({},function(data){
                         utils.receive();
-                        utils.show('info','Planner in online');
+                        utils.show('info','Planner is online');
                     },function(error){
                         utils.receive();
                         utils.show('error','Planner cannot be founded');
@@ -462,6 +467,7 @@ pleni.controller('ResourcesController',
                         });
                     },function(error){
                         planner.check='offline';
+                        utils.show('error','Planner cannot be founded');
                     });
                 }
             }
@@ -668,12 +674,145 @@ pleni.controller('ResourcesController',
             }
         };
 
+        $scope.notifier={
+            id:''
+          , notifier:{
+                host:''
+              , port:0
+            }
+        };
         $scope.notifiers={
-            show:function(){
+            env:{
+                view:'list'
+              , type:'collection'
+            }
+          , show:function(){
+                $scope.dbservers.env.view='list';
+                $scope.repositories.env.view='list';
+                $scope.planners.env.view='list';
+                $scope.notifiers.env.view='list';
+
                 $('section.notifiers').addClass('active')
                     .siblings().removeClass('active');
                 $('nav.menu>ul>li:nth-child(4)').addClass('active')
                     .siblings().removeClass('active');
+                if(!$scope.storage.notifiers){
+                    $scope.notifiers.refresh();
+                }
+            }
+          , refresh:function(){
+                $('article.list table').fadeOut();
+                Notifiers.query(function(data){
+                    $scope.storage.notifiers=new Array();
+                    for(var i=0;i<data.length;i++){
+                        $scope.storage.notifiers.push({
+                            id:data[i].id
+                          , notifier:{
+                                host:data[i].notifier.host
+                              , port:data[i].notifier.port
+                            }
+                          , check:'unknown'
+                        });
+                    }
+                    $('article.list table').fadeIn();
+                });
+            }
+          , save:function(){
+                var notifier=new Notifiers($scope.notifier);
+
+                utils.clean();
+                if($scope.notifiers.env.type=='collection'){
+                    utils.send('Saving notifier settings ...');
+                    notifier.$save(function(data){
+                        $scope.notifiers.refresh();
+                        $scope.notifiers.list();
+                        utils.receive();
+                        utils.show('success','Notifier added to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }else if($scope.notifiers.env.type=='element'){
+                    utils.send('Updating notifier settings ...');
+                    notifier.$update({notifier:$scope.notifier.id},
+                    function(data){
+                        $scope.notifiers.refresh();
+                        $scope.notifiers.list();
+                        utils.receive();
+                        utils.show('success','Notifier updated');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
+            }
+          , check:function(index){
+                if(index){
+                    $scope.notifiers.list();
+                }
+                if($scope.notifiers.env.view=='form'){
+                    if(!$scope.notifier.id){
+                        $scope.notifier.id='test';
+                    }
+                    var notifier=new Notifiers($scope.notifier);
+
+                    utils.clean();
+                    utils.send('Checking connection ...');
+                    notifier.$check({},function(data){
+                        utils.receive();
+                        utils.show('info','Notifier is online');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error','Notifier cannot be founded');
+                    });
+                }else{
+                    var notifier=$scope.storage.notifiers[index];
+                    notifier.check='checking';
+                    Notifiers.check({server:notifier.id},function(data){
+                        notifier.check='online';
+                    },function(error){
+                        notifier.check='offline';
+                        utils.show('error','Notifier cannot be founded');
+                    });
+                }
+            }
+          , list:function(){
+                $scope.notifiers.env.view='list';
+            }
+          , add:function(){
+                $scope.notifiers.env.view='form';
+                $scope.notifiers.env.type='collection';
+            }
+          , view:function(index){
+                $scope.notifiers.env.view='view';
+                $scope.notifiers.env.type='element';
+                $scope.notifier=$scope.storage.notifiers[index];
+            }
+          , edit:function(index){
+                $scope.notifiers.env.view='form';
+                $scope.notifiers.env.type='element';
+                $scope.notifier=$scope.storage.notifiers[index];
+            }
+          , remove:function(index){
+                $scope.notifiers.env.view='remove';
+                $scope.notifiers.env.type='element';
+                $scope.notifier=$scope.storage.notifiers[index];
+            }
+          , delete:function(){
+                utils.clean();
+                if($scope.notifiers.env.type='element'){
+                    utils.send('Sending delete request ...');
+                    Notifiers.delete({notifier:$scope.notifier.id},
+                    function(data){
+                        $scope.notifiers.refresh();
+                        $scope.notifiers.list();
+                        utils.receive();
+                        utils.show('success', 'Notifier removed to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
             }
         };
 

@@ -40,3 +40,13 @@ pleni.factory('Planners',['$resource',function($resource){
     });
 }]);
 
+pleni.factory('Notifiers',['$resource',function($resource){
+    return $resource('/resources/notifiers/:notifier/:action',{
+        notifier:'@server'
+      , action:'@action'
+    },{
+        update:{method:'PUT'}
+      , check:{method:'POST',params:{action:'_check'}}
+    });
+}]);
+
