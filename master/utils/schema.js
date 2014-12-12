@@ -211,3 +211,37 @@ var planner_runner={
 };
 exports.planner_runner=planner_runner;
 
+var notifier={
+    'type':'object'
+  , 'properties':{
+        'id':{
+            'type':'string'
+          , 'format':'id'
+        }
+      , 'notifier':{
+            'type':'object'
+          , 'properties':{
+                'host':{
+                    'type':'string'
+                  , 'format':'host'
+                }
+              , 'port':{
+                    'type':'integer'
+                  , 'format':'port'
+                }
+            }
+          , 'required':['host','port']
+        }
+    }
+  , 'required':['id','notifier']
+};
+exports.notifier=notifier;
+
+var notifiers={
+    'type':'array'
+  , 'items':notifier
+  , 'minItems':1
+  , 'uniqueItems':true
+};
+exports.notifiers=notifiers;
+

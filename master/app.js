@@ -14,6 +14,7 @@ var http=require('http')
 resources.dbservers=loadconfig(join(__dirname,'config','dbservers.json'));
 resources.repositories=loadconfig(join(__dirname,'config','repositories.json'));
 resources.planners=loadconfig(join(__dirname,'config','planners.json'));
+resources.notifiers=loadconfig(join(__dirname,'config','notifiers.json'));
 app.set('resources',resources);
 
 // async methods
@@ -39,6 +40,7 @@ require('./controllers/resources')(app);
 require('./controllers/resources/dbservers')(app);
 require('./controllers/resources/repositories')(app);
 require('./controllers/resources/planners')(app);
+require('./controllers/resources/notifiers')(app);
 require('./controllers/tasks')(app);
 
 app.use(function(request,response){

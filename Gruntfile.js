@@ -27,6 +27,13 @@ module.exports=function(grunt){
                 ]
               , tasks:['develop:planner']
             }
+/* -------- notifier watching ----------------------------------------------- */
+          , notifier:{
+                files:[
+                    'notifiers/notifier.js'
+                ]
+              , tasks:['develop:notifier']
+            }
 /* -------- master watching ------------------------------------------------- */
           , master:{
                 files:[
@@ -87,6 +94,12 @@ module.exports=function(grunt){
                 file:'planners/planner.js'
               , env:{
                     PORT:grunt.option('port')||3001
+                }
+            }
+          , notifier:{
+                file:'notifiers/notifier.js'
+              , env:{
+                    PORT:grunt.option('port')||3002
                 }
             }
           , master:{
@@ -161,6 +174,10 @@ module.exports=function(grunt){
       , 'watch:planner'
       , 'watch:test_functions'
       , 'watch:test_planner'
+    ]);
+    grunt.registerTask('serve:notifier',[
+        'develop:notifier'
+      , 'watch:notifier'
     ]);
     grunt.registerTask('serve:master',[
         'develop:master'

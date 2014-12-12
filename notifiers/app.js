@@ -16,7 +16,13 @@ app.disable('x-powered-by');
 app.use(bodyparser.json());
 app.use(express.static(join(__dirname,'public')));
 app.use(express.static(join(__dirname,'..','bower_components')));
+
 app.get('/',function(request,response){
+    response.json({
+        notifier:'ready for action'
+    });
+});
+app.get('/msg.html',function(request,response){
     response.sendFile(join(__dirname,'public','msg.html'));
 });
 

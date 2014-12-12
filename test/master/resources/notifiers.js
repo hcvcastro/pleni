@@ -8,7 +8,7 @@ var request=require('supertest')
   , _error=require('../../../planners/utils/json-response').error
   , loadconfig=require('../../../master/utils/loadconfig')
 
-describe('planners controller functions',function(){
+describe('notifiers controller functions',function(){
     describe('rest functions for collection',function(){
         it('GET /resources/view',function(done){
             request(app)
@@ -16,9 +16,9 @@ describe('planners controller functions',function(){
                 .expect(200,done);
         });
 
-        it('GET /resources/planners',function(done){
+        it('GET /resources/notifiers',function(done){
             request(app)
-                .get('/resources/planners')
+                .get('/resources/notifiers')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -27,9 +27,9 @@ describe('planners controller functions',function(){
                     res.body.should.have.an.Array;
                     for(var i in res.body){
                         res.body[i].should.have.property('id');
-                        res.body[i].should.have.property('planner');
-                        res.body[i].planner.should.have.property('host');
-                        res.body[i].planner.should.have.property('port');
+                        res.body[i].should.have.property('notifier');
+                        res.body[i].notifier.should.have.property('host');
+                        res.body[i].notifier.should.have.property('port');
                     }
                     done();
                 });
@@ -45,7 +45,7 @@ describe('planners controller functions',function(){
           , {test:[
               {
                   id:'localhost'
-                , planner:{
+                , notifier:{
                       host:'localhost'
                   }
               }
@@ -53,7 +53,7 @@ describe('planners controller functions',function(){
           , {test:[
               {
                   id:'localhost'
-                , planner:{
+                , notifier:{
                       host:'http://127.0.0.1'
                     , port:8080
                   }
@@ -61,9 +61,9 @@ describe('planners controller functions',function(){
             ],expected:_success.ok,status:201}
         ]
         .forEach(function(element){
-            it('PUT /resources/planners',function(done){
+            it('PUT /resources/notifiers',function(done){
                 request(app)
-                    .put('/resources/planners')
+                    .put('/resources/notifiers')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -87,16 +87,16 @@ describe('planners controller functions',function(){
           , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                 id:'localhost'
-              , planner:{
+              , notifier:{
                     host:'http://127.0.0.1'
                   , port:8080
                 }
             },expected:_error.notoverride,status:403}
         ]
         .forEach(function(element){
-            it('POST /resources/planners',function(done){
+            it('POST /resources/notifiers',function(done){
                 request(app)
-                    .post('/resources/planners')
+                    .post('/resources/notifiers')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -113,23 +113,23 @@ describe('planners controller functions',function(){
         [
             {test:{
                 id:'test'
-              , planner:{
+              , notifier:{
                     host:'http://127.0.0.1'
                   , port:8081
                 }
             },expected:_success.ok,status:201}
           , {test:{
                 id:'test2'
-              , planner:{
+              , notifier:{
                     host:'http://127.0.0.1'
                   , port:8082
                 }
             },expected:_success.ok,status:201}
         ]
         .forEach(function(element){
-            it('POST /resources/planners',function(done){
+            it('POST /resources/notifiers',function(done){
                 request(app)
-                    .post('/resources/planners')
+                    .post('/resources/notifiers')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -143,9 +143,9 @@ describe('planners controller functions',function(){
             });
         });
 
-        it('DELETE /resources/planners',function(done){
+        it('DELETE /resources/notifiers',function(done){
             request(app)
-                .delete('/resources/planners')
+                .delete('/resources/notifiers')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -166,23 +166,23 @@ describe('planners controller functions',function(){
           , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                 id:'test'
-              , planner:{
+              , notifier:{
                     host:'http://localhost'
                   , port:3009
                 }
             },expected:_error.network,status:404}
           , {test :{
                 id:'test'
-              , planner:{
+              , notifier:{
                     host:'http://localhost'
-                  , port:3001
+                  , port:3002
                 }
             },expected:_success.ok,status:200}
         ]
         .forEach(function(element){
-            it('POST /resources/planners/_check',function(done){
+            it('POST /resources/notifiers/_check',function(done){
                 request(app)
-                    .post('/resources/planners/_check')
+                    .post('/resources/notifiers/_check')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -199,34 +199,34 @@ describe('planners controller functions',function(){
     describe('rest function for resources',function(){
         before(function(done){
             request(app)
-                .put('/resources/planners')
+                .put('/resources/notifiers')
                 .send(loadconfig(
                     join(__dirname,'..','..','..','master','config',
-                        'planners.json')))
+                        'notifiers.json')))
                 .end(function(err,res){
                     done();
                 });
         });
 
-        it('GET /resources/planners/:planner',function(done){
+        it('GET /resources/notifiers/:notifier',function(done){
             request(app)
-                .get('/resources/planners/localhost')
+                .get('/resources/notifiers/localhost')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200);
                     res.should.be.json;
                     res.body.should.have.property('id');
-                    res.body.should.have.property('planner');
-                    res.body.planner.should.have.property('host');
-                    res.body.planner.should.have.property('port');
+                    res.body.should.have.property('notifier');
+                    res.body.notifier.should.have.property('host');
+                    res.body.notifier.should.have.property('port');
                     done();
                 });
         });
 
-        it('GET /resources/planners/:planner',function(done){
+        it('GET /resources/notifiers/:notifier',function(done){
             request(app)
-                .get('/resources/planners/nonexistent')
+                .get('/resources/notifiers/nonexistent')
                 .expect('Content-Type',/json/)
                 .expect(404)
                 .end(function(err,res){
@@ -249,23 +249,23 @@ describe('planners controller functions',function(){
               expected:_error.validation,status:403}
           , {test:{
                 id:'test'
-              , planner:{
+              , notifier:{
                     host:'http://127.0.0.1'
                   , port:3001
                 }
             },id:'test',status:201}
           , {test:{
                 id:'test'
-              , planner:{
+              , notifier:{
                     host:'http://127.0.0.1'
                   , port:3001
                 }
             },id:'test',status:200}
         ]
         .forEach(function(element){
-            it('PUT /resources/planners/:planner',function(done){
+            it('PUT /resources/notifiers/:notifier',function(done){
                 request(app)
-                    .put('/resources/planners/'+element.id)
+                    .put('/resources/notifiers/'+element.id)
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -289,9 +289,9 @@ describe('planners controller functions',function(){
             });
         });
 
-        it('DELETE /resources/planners/:planner',function(done){
+        it('DELETE /resources/notifiers/:notifier',function(done){
             request(app)
-                .delete('/resources/planners/test')
+                .delete('/resources/notifiers/test')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -302,9 +302,9 @@ describe('planners controller functions',function(){
                 });
         });
 
-        it('DELETE /resources/planners/:planner',function(done){
+        it('DELETE /resources/notifiers/:notifier',function(done){
             request(app)
-                .delete('/resources/planners/test')
+                .delete('/resources/notifiers/test')
                 .expect('Content-Type',/json/)
                 .expect(404)
                 .end(function(err,res){
@@ -314,9 +314,9 @@ describe('planners controller functions',function(){
                 });
         });
 
-        it('GET /resources/planners',function(done){
+        it('GET /resources/notifiers',function(done){
             request(app)
-                .get('/resources/planners')
+                .get('/resources/notifiers')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -325,9 +325,9 @@ describe('planners controller functions',function(){
                     res.body.should.have.an.Array;
                     for(var i in res.body){
                         res.body[i].should.have.property('id');
-                        res.body[i].should.have.property('planner');
-                        res.body[i].planner.should.have.property('host');
-                        res.body[i].planner.should.have.property('port');
+                        res.body[i].should.have.property('notifier');
+                        res.body[i].notifier.should.have.property('host');
+                        res.body[i].notifier.should.have.property('port');
                     }
                     done();
                 });
@@ -338,9 +338,9 @@ describe('planners controller functions',function(){
           , {test:'localhost',expected:_success.ok,status:200}
         ]
         .forEach(function(element){
-            it('POST /resources/planners/:planner/_check',function(done){
+            it('POST /resources/notifiers/:notifier/_check',function(done){
                 request(app)
-                    .post('/resources/planners/'+element.test+'/_check')
+                    .post('/resources/notifiers/'+element.test+'/_check')
                     .expect('Content-Type',/json/)
                     .expect(element.status)
                     .end(function(err,res){
@@ -349,16 +349,16 @@ describe('planners controller functions',function(){
                             res.body.should.have.property('ok');
                             res.body.should.eql(element.expected);
                         }else if(element==200){
-                            res.body.should.have.property('planner');
-                            res.body.planner.should.have.property('host');
-                            res.body.planner.should.have.property('type');
+                            res.body.should.have.property('notifier');
+                            res.body.notifier.should.have.property('host');
+                            res.body.notifier.should.have.property('type');
                         }
                         done();
                     });
             });
         });
 
-        it('POST /resources/planners/:planner/_status',function(done){
+/*        it('POST /resources/planners/:planner/_status',function(done){
             request(app)
                 .post('/resources/planners/localhost/_status')
                 .expect('Content-Type',/json/)
@@ -552,7 +552,7 @@ describe('planners controller functions',function(){
                         .and.be.true;
                     done();
                 });
-        });
+        });*/
     });
 });
 
