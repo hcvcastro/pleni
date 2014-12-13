@@ -42,7 +42,7 @@ module.exports=function(args){
         for(var i in arguments){
             map.push(JSON.parse(arguments[i].db.info));
         }
-        args.db.explist=map
+        args.db.explist=map;
         deferred.resolve(args);
     })
     .done(function(args){

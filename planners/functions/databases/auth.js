@@ -23,27 +23,31 @@ module.exports=function(args){
           , password:args.db.pass
         }
 
-    if(args.debug){
-        console.log('authentification in db server ... '+args.db.user);
-    }
-    request.post({url:url,json:body},function(error,response){
-        if(!error){
-            if(response.statusCode==200){
-                var regex=/^(.*); Version=1;.*$/i
-                  , exec=regex.exec(response.headers['set-cookie'])
-                
-                if(!args.auth){
-                    args.auth={}
+    if(!args.auth || !args.auth.cookie){
+        if(args.debug){
+            console.log('authentification in db server ... '+args.db.user);
+        }
+        request.post({url:url,json:body},function(error,response){
+            if(!error){
+                if(response.statusCode==200){
+                    var regex=/^(.*); Version=1;.*$/i
+                      , exec=regex.exec(response.headers['set-cookie'])
+                    
+                    if(!args.auth){
+                        args.auth={}
+                    }
+                    args.auth.cookie=exec[1];
+                    deferred.resolve(args);
+                    return;
                 }
-                args.auth.cookie=exec[1];
-                deferred.resolve(args);
+                deferred.reject(response.body);
                 return;
             }
-            deferred.reject(response.body);
-            return;
-        }
-        deferred.reject(error);
-    });
+            deferred.reject(error);
+        });
+    }else{
+        deferred.resolve(args);
+    }
 
     return deferred.promise;
 };

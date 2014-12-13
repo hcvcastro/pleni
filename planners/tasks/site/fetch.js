@@ -3,6 +3,7 @@
 var base='../../functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
+  , init=require(base+'/repositories/sites/fetch/init')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , lock=require(base+'/repositories/sites/fetch/lockdocument')
   , head=require(base+'/repositories/sites/fetch/headrequest')
@@ -20,6 +21,7 @@ var base='../../functions'
  *          user
  *          pass
  *      headers(*)
+ *      debug(*)
  *
  * args output
  *      auth
@@ -52,7 +54,8 @@ var base='../../functions'
  *              rev
  */
 module.exports=function(params,repeat,stop,notifier){
-    test(params)
+    init(params)
+    .then(test)
     .then(auth)
     .then(wait)
     .then(lock)
@@ -67,9 +70,14 @@ module.exports=function(params,repeat,stop,notifier){
                 task:{
                     action:'fetch'
                   , url:args.task.wait.id.substr(5)
+                  , spread:args.task.spread
                 }
             });
         }
+
+//        console.log('finally');
+//        console.log(args);
+
         repeat();
     })
     .fail(function(error){

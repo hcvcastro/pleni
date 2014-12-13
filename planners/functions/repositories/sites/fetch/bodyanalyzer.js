@@ -36,11 +36,12 @@ module.exports=function(args){
     if(!args.task.head.get){
         deferred.resolve(args);
     }else{
-        if(args.debug){
-            console.log('analyzing the body for request');
-        }
         // HTML analyzer
         if(/text\/html/i.test(args.task.head.headers['content-type'])){
+            if(args.debug){
+                console.log('analyzing the body for request');
+            }
+
             var $=cheerio.load(args.task.get.body)
               , links={script:[],link:[],a:[],img:[],form:[]}
               , samedomain=[]

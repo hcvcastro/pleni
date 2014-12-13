@@ -124,6 +124,7 @@ describe('site fetcher pages functions',function(){
         it('spread the links extracted',function(done){
             spread(packet)
             .done(function(args){
+                args.task.should.have.property('spread').and.be.Array;
                 packet=args;
                 done();
             });
