@@ -16,7 +16,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.planner.host
+      , url=args.planner.host+'/planner'
 
     if(args.debug){
         console.log('testing planner server ... '+args.planner.host);

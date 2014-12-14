@@ -72,6 +72,10 @@ module.exports=function(grunt){
                 files:['test/planners/planner/**/*.js']
               , tasks:['mochacli:planner']
             }
+          , test_notifier:{
+                files:['test/notifiers/**/*.js']
+              , tasks:['mochacli:notifier']
+            }
           , test_master:{
                 files:['test/master/**/*.js']
               , tasks:['mochacli:master']
@@ -121,6 +125,9 @@ module.exports=function(grunt){
                 'test/planners/planner/server.js'
               , 'test/planners/planner/scheduler.js'
             ]
+          , notifier:[
+                'test/notifiers/server.js'
+            ]
           , master:['test/master/**/*.js']
         }
 
@@ -138,6 +145,7 @@ module.exports=function(grunt){
         'mochacli:functions'
       , 'mochacli:planner'
     ]);
+    grunt.registerTask('test:notifier',['mochacli:notifier']);
     grunt.registerTask('test:master',['mochacli:master']);
 
     grunt.config.requires('watch.master.files');

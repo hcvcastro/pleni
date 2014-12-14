@@ -8,9 +8,9 @@ var request=require('supertest')
 describe('rest functions for planner server',function(){
     var tid;
 
-    it('GET /',function(done){
+    it('GET /planner',function(done){
         request(app)
-            .get('/')
+            .get('/planner')
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){

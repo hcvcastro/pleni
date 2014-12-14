@@ -9,7 +9,7 @@ exports.set=function(port,signature){
     app.disable('x-powered-by');
     app.use(bodyparser.json());
 
-    app.get('/',function(request,response){
+    app.get('/planner',function(request,response){
         response.json({
             planner:'ready for action'
           , type:signature
