@@ -14,7 +14,7 @@ article.list
             th &nbsp;
         tr(ng-repeat='notifier in storage.notifiers')
             td
-                span {{notifier.id}}
+                a(ng-click='notifiers.view($index)') {{notifier.id}}
             td {{notifier.notifier.host}}:{{notifier.notifier.port}}
             td.center
                 span.fa(ng-class='{\'fa-check\':notifier.check==\'online\',\'fa-question\':notifier.check==\'unknown\',\'fa-close\':notifier.check==\'offline\'}')

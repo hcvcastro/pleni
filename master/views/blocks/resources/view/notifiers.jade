@@ -26,14 +26,5 @@ article.view.animate(ng-show='notifiers.env.view==\'view\'')
         p.offset
             span.hide.loader.fa.fa-spinner
             span.hide.message
-    div.run(ng-show='notifier.set.status==\'set\'')
-        form(ng-submit='notifiers.run()')
-            div#editor
-            p.offset
-                button(type='submit') Run
-                button(type='button',ng-click='notifiers.stop()') Stop
-                button(type='button',ng-click='notifiers.unset()') Unset
-                span.hide.loader.fa.fa-spinner
-                span.hide.message
     br
 
