@@ -64,7 +64,7 @@ module.exports=function(app){
 
             if(!planner){
                 var new_planner={
-                    id:request.body.id
+                    id:validate.toString(request.body.id)
                   , planner:{
                         host:validate.toValidHost(request.body.planner.host)
                       , port:validate.toInt(request.body.planner.port)

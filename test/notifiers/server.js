@@ -3,51 +3,269 @@
 var request=require('supertest')
   , should=require('should')
   , app=require('../../notifiers/notifier')
+  , _success=require('../../planners/utils/json-response').success
+  , _error=require('../../planners/utils/json-response').error
 
-describe('rest functions for notifier server',function(){
-    it('GET /notifier',function(done){
-        request(app)
-            .get('/notifier')
-            .expect('Content-Type',/json/)
-            .expect(200)
-            .end(function(err,res){
-                res.statusCode.should.be.eql(200);
-                res.body.should.be.json;
-                res.body.should.have.property('notifier');
-                res.body.notifier.should.have.be.eql('ready for action');
-                done();
+describe('notifiers controller functions',function(){
+    describe('rest functions for notifier server',function(){
+        it('GET /notifier',function(done){
+            request(app)
+                .get('/notifier')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.be.json;
+                    res.body.should.have.property('notifier');
+                    res.body.notifier.should.have.be.eql('ready for action');
+                    done();
+                });
+        });
+
+        it('GET /msg.html',function(done){
+            request(app)
+                .get('/msg.html')
+                .expect('Content-Type',/text\/html/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    done();
+                });
+        });
+
+        [
+            {test:'',expected:_error.json,status:400}
+          , {test:{},expected:_error.json,status:400}
+          , {test:{'':''},expected:_error.json,status:400}
+          , {test:{'__':''},expected:_error.json,status:400}
+          , {test:{'host':{}},expected:_error.json,status:400}
+          , {test:{'host':{host:''}},expected:_error.json,status:400}
+          , {test:[
+              {
+                  id:'localhost'
+                , planner:{
+                      host:'localhost'
+                  }
+              }
+            ],expected:_error.json,status:400}
+          , {test:[
+              {
+                  id:'localhost'
+                , planner:{
+                      host:'http://127.0.0.1'
+                    , port:3001
+                  }
+              }
+            ],expected:_success.ok,status:201}
+        ]
+        .forEach(function(element){
+            it('PUT /notifier',function(done){
+                request(app)
+                    .put('/notifier')
+                    .send(element.test)
+                    .expect('Content-Type',/json/)
+                    .expect(element.status)
+                    .end(function(err,res){
+                        res.statusCode.should.be.eql(element.status);
+                        res.body.should.be.json;
+                        res.body.should.have.property('ok');
+                        res.body.should.eql(element.expected);
+                        done();
+                    });
             });
-    });
+        });
 
-    it('GET /msg.html',function(done){
-        request(app)
-            .get('/msg.html')
-            .expect('Content-Type',/text\/html/)
-            .expect(200)
-            .end(function(err,res){
-                res.statusCode.should.be.eql(200);
-                done();
-            });
-    });
-
-    it('PORT /notifier',function(done){
-        request(app)
-            .post('/notifier')
-            .send({
+        [
+            {test:'',expected:_error.validation,status:403}
+          , {test:{},expected:_error.validation,status:403}
+          , {test:{id:1},expected:_error.validation,status:403}
+          , {test:{repository:''},expected:_error.validation,status:403}
+          , {test:{repository:'1'},expected:_error.validation,status:403}
+          , {test:{repository:'/'},expected:_error.validation,status:403}
+          , {test:{repository:'...'},expected:_error.validation,status:403}
+          , {test:{
                 id:'localhost'
               , planner:{
-                    host:'http://localhost'
+                    host:'http://127.0.0.1'
                   , port:3001
                 }
-            })
-            .expect('Content-Type',/json/)
-            .expect(201)
-            .end(function(err,res){
-                res.statusCode.should.be.eql(201);
-                res.body.should.be.json;
-                res.body.should.have.property('ok').and.eql(true);
-                done();
+            },expected:_error.notoverride,status:403}
+        ]
+        .forEach(function(element){
+            it('POST /notifier',function(done){
+                request(app)
+                    .post('/notifier')
+                    .send(element.test)
+                    .expect('Content-Type',/json/)
+                    .expect(element.status)
+                    .end(function(err,res){
+                        res.statusCode.should.be.eql(element.status);
+                        res.should.be.json;
+                        res.body.should.have.property('ok');
+                        res.body.should.eql(element.expected);
+                        done();
+                    });
             });
+        });
+
+        [
+            {test:{
+                id:'test'
+              , planner:{
+                    host:'http://127.0.0.1'
+                  , port:8081
+                }
+            },expected:_success.ok,status:201}
+          , {test:{
+                id:'test2'
+              , planner:{
+                    host:'http://127.0.0.1'
+                  , port:8082
+                }
+            },expected:_success.ok,status:201}
+        ]
+        .forEach(function(element){
+            it('POST /notifier',function(done){
+                request(app)
+                    .post('/notifier')
+                    .send(element.test)
+                    .expect('Content-Type',/json/)
+                    .expect(element.status)
+                    .end(function(err,res){
+                        res.statusCode.should.be.eql(element.status);
+                        res.should.be.json;
+                        res.body.should.have.property('ok')
+                        res.body.should.eql(element.expected);
+                        done();
+                    });
+            });
+        });
+
+        it('DELETE /notifier',function(done){
+            request(app)
+                .delete('/notifier')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(_success.ok);
+                    done();
+                });
+        });
+    });
+
+    describe('rest function for socket planners',function(){
+        before(function(done){
+            request(app)
+                .put('/notifier')
+                .send([{
+                    id:'localhost'
+                  , planner:{
+                        host:'http://127.0.0.1'
+                      , port:3001
+                    }
+                }])
+                .end(function(err,res){
+                    done();
+                });
+        });
+
+        it('GET /notifier/:planner',function(done){
+            request(app)
+                .get('/notifier/localhost')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.be.json;
+                    res.body.should.have.property('id');
+                    res.body.should.have.property('planner');
+                    res.body.planner.should.have.property('host');
+                    res.body.planner.should.have.property('port');
+                    done();
+                });
+        });
+
+        it('GET /notifier/:planner',function(done){
+            request(app)
+                .get('/notifier/nonexistent')
+                .expect('Content-Type',/json/)
+                .expect(404)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(404);
+                    res.body.should.be.json;
+                    res.body.should.eql(_error.notfound);
+                    done();
+                });
+        });
+
+        [
+          , {test:{},id:{},expected:_error.validation,status:403}
+          , {test:{'':''},id:'asdf',expected:_error.validation,status:403}
+          , {test:{'__':''},id:250,expected:_error.validation,status:403}
+          , {test:{'host':{}},id:'asdf',expected:_error.validation,status:403}
+          , {test:{'host':{host:''}},id:'asdf',
+              expected:_error.validation,status:403}
+          , {test:{'host':
+              {host:'http://localhost'}},id:'asdf',
+              expected:_error.validation,status:403}
+          , {test:{
+                id:'test'
+              , planner:{
+                    host:'http://127.0.0.1'
+                  , port:3001
+                }
+            },id:'test',expected:_success.ok,status:201}
+          , {test:{
+                id:'test'
+              , planner:{
+                    host:'http://127.0.0.1'
+                  , port:3001
+                }
+            },id:'test',expected:_success.ok,status:200}
+        ]
+        .forEach(function(element){
+            it('PUT /notifier/:planner',function(done){
+                request(app)
+                    .put('/notifier/'+element.id)
+                    .send(element.test)
+                    .expect('Content-Type',/json/)
+                    .expect(element.status)
+                    .end(function(err,res){
+                        res.statusCode.should.be.eql(element.status);
+                        res.body.should.be.json;
+                        res.body.should.have.property('ok');
+                        res.body.should.eql(element.expected);
+                        done();
+                    });
+            });
+        });
+
+        it('DELETE /notifier/:planner',function(done){
+            request(app)
+                .delete('/notifier/test')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(_success.ok);
+                    done();
+                });
+        });
+
+        it('DELETE /notifier/:planner',function(done){
+            request(app)
+                .delete('/notifier/test')
+                .expect('Content-Type',/json/)
+                .expect(404)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(404);
+                    res.body.should.eql(_error.notfound);
+                    done();
+                });
+        });
     });
 });
 
