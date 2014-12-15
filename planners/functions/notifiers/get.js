@@ -5,25 +5,21 @@ var request=require('request')
   , validator=require('validator')
 
 /*
- * Function for set tasks to a planner
+ * Function for get planners in a notifier
  * args input
- *      planner
+ *      notifier
  *          host
- *      task <-- the task for planner
- *          tid
  *
  * args output
- *      task
- *          name
- *          count
- *          interval
+ *      notifier
+ *          planners
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.planner.host+'/'+args.planner.tid
+      , url=args.notifier.host+'/notifiers'
 
     if(args.debug){
-        console.log('get a task for planner ... '+args.planner.host);
+        console.log('get a clients for notifier ... '+args.notifier.host);
     }
     request.get({url:url},function(error,response){
         if(!error){
@@ -31,11 +27,7 @@ module.exports=function(args){
                 var parse=JSON.parse(response.body);
 
                 if(response.statusCode==200){
-                    args.planner.task={
-                        name:parse.task
-                      , count:parse.count
-                      , interval:parse.interval
-                    };
+                    args.notifier.planners=parse;
                     deferred.resolve(args);
                     return;
                 }
