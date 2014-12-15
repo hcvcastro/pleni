@@ -10,6 +10,8 @@ var request=require('request')
  *      db
  *          host
  *          name
+ *      auth
+ *          cookie
  *      task
  *          wait
  *              id

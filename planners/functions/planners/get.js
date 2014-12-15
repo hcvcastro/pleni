@@ -9,7 +9,6 @@ var request=require('request')
  * args input
  *      planner
  *          host
- *      task <-- the task for planner
  *          tid
  *
  * args output
