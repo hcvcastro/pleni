@@ -245,3 +245,33 @@ var notifiers={
 };
 exports.notifiers=notifiers;
 
+var notifier_planner={
+    'type':'object'
+  , 'properties':{
+      , 'planner':{
+            'type':'object'
+          , 'properties':{
+                'host':{
+                    'type':'string'
+                  , 'format':'host'
+                }
+              , 'port':{
+                    'type':'integer'
+                  , 'format':'port'
+                }
+            }
+          , 'required':['host','port']
+        }
+    }
+  , 'required':['planner']
+};
+exports.notifier_planner=notifier_planner;
+
+var notifier_planners={
+    'type':'array'
+  , 'items':notifier_planner
+  , 'minItems':0
+  , 'uniqueItems':true
+};
+exports.notifier_planners=notifier_planners;
+

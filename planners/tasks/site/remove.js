@@ -15,6 +15,8 @@ var base='../../functions'
  *          pass
  *
  * args output
+ *      db
+ *          check
  *      auth
  *          cookie
  */

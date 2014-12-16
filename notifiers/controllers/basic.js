@@ -6,6 +6,7 @@ module.exports=function(app){
     app.get('/id',function(request,response){
         response.json({
             notifier:'ready for action'
+            type:'io'
         });
     });
 

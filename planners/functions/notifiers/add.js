@@ -5,9 +5,9 @@ var request=require('request')
   , validator=require('validator')
 
 /*
- * Function for get planners in a notifier
+ * Function for add planner in a notifier
  * args input
- *      notifier
+ *      planner
  *          host
  *
  * args output

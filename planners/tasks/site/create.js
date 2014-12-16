@@ -20,12 +20,15 @@ var base='../../functions'
  *          url
  *
  * args output
+ *      db
+ *          check
  *      auth
  *          cookie
  *      site
  *          summary
  *          root
  *          design
+ *              wait
  */
 module.exports=function(params,repeat,stop,notifier){
     test(params)

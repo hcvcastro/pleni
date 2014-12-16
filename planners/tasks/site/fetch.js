@@ -24,6 +24,8 @@ var base='../../functions'
  *      debug(*)
  *
  * args output
+ *      db
+ *          check
  *      auth
  *          cookie
  *      task
@@ -32,9 +34,9 @@ var base='../../functions'
  *              key
  *              value
  *          lock
+ *              ok
  *              id
- *              key
- *              value
+ *              rev
  *          head
  *              status
  *              headers
@@ -52,6 +54,7 @@ var base='../../functions'
  *              ok
  *              id
  *              rev
+ *          spread
  */
 module.exports=function(params,repeat,stop,notifier){
     init(params)

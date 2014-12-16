@@ -9,6 +9,10 @@ var request=require('request')
  * args input
  *      notifier
  *          host
+ *
+ * args output
+ *      notifier
+ *          type
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -24,6 +28,7 @@ module.exports=function(args){
 
                 if(response.statusCode==200){
                     if(parse.notifier){
+                        args.notifier.type=parse.type;
                         deferred.resolve(args);
                         return;
                     }

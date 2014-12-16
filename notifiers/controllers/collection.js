@@ -29,8 +29,7 @@ module.exports=function(app,ios,ioc){
         response.json(app.get('notifiers').map(
             function(notifier){
                 return {
-                    id:notifier.id
-                  , planner:{
+                    planner:{
                         host:notifier.planner.host
                       , port:notifier.planner.port
                     }
@@ -39,21 +38,18 @@ module.exports=function(app,ios,ioc){
     });
 
     app.put('/notifiers',function(request,response){
-        if(schema.js.validate(request.body,schema.planners).length==0){
+        if(schema.js.validate(request.body,schema.notifier_planners).length==0){
             app.get('notifiers').forEach(function(notifier){
                 notifier.socket.disconnect();
             });
 
-            app.set('notifiers',request.body.map(function(socket){
-                var host=validate.toValidHost(socket.planner.host)
-                  , port=validate.toInt(socket.planner.port)
+            app.set('notifiers',request.body.map(function(element){
+                var host=validate.toValidHost(element.planner.host)
+                  , port=validate.toInt(element.planner.port)
 
                 return {
-                    id:validate.toString(socket.id)
-                  , planner:{
-                        host:host
-                      , port:port
-                    }
+                    host:host
+                  , port:port
                   , socket:socket_connect(host+':'+port)
                 }
             }));
@@ -72,11 +68,8 @@ module.exports=function(app,ios,ioc){
                   , port=validate.toInt(request.body.planner.port)
 
                 app.get('notifiers').push({
-                    id:validate.toString(request.body.id)
-                  , planner:{
-                        host:host
-                      , port:port
-                    }
+                    host:host
+                  , port:port
                   , socket:socket_connect(host+':'+port)
                 })
                 response.status(201).json(_success.ok);

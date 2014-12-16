@@ -10,7 +10,7 @@ exports.set=function(port,signature){
     app.use(bodyparser.json());
 
     app.get('/planner',function(request,response){
-        response.json({
+        response.status(200).json({
             planner:'ready for action'
           , type:signature
         });

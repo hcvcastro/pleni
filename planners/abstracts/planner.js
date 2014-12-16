@@ -65,7 +65,7 @@ module.exports=function(notifier){
                     return;
                 }
 
-                response.status(403).json(_error.notfound);
+                response.status(404).json(_error.notfound);
                 return;
             }
 
