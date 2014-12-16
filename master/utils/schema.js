@@ -248,7 +248,7 @@ exports.notifiers=notifiers;
 var notifier_planner={
     'type':'object'
   , 'properties':{
-      , 'planner':{
+        'planner':{
             'type':'object'
           , 'properties':{
                 'host':{

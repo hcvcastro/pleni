@@ -277,7 +277,12 @@ module.exports=function(app){
     app.post('/resources/planners/:planner/_check',function(request,response){
         return generic_action(request,response,null,[],
             function(resources,planners,planner,args){
-                response.status(200).json(args);
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , type:args.planner.type
+                    }
+                });
         });
     });
 

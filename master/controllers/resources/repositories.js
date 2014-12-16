@@ -117,7 +117,7 @@ module.exports=function(app){
                 })
                 .done();
             }else{
-                response.status(404).json(_error.network);
+                response.status(404).json(_error.notfound);
             }
         }else{
             response.status(403).json(_error.validation);

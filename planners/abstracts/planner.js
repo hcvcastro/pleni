@@ -28,8 +28,8 @@ module.exports=function(notifier){
     }
 
     this.create=function(request,response){
-        if(this.tid===undefined){
-            if(validate.validSlugSlash(request.body.task)){
+        if(validate.validSlugSlash(request.body.task)){
+            if(this.tid===undefined){
                 var name=validate.toString(request.body.task)
                   , count=validate.toInt(request.body.count)
                   , interval=validate.toInt(request.body.interval)
@@ -69,11 +69,11 @@ module.exports=function(notifier){
                 return;
             }
 
-            response.status(403).json(_error.validation);
+            response.status(403).json(_error.notoverride);
             return;
         }
 
-        response.status(403).json(_error.notoverride);
+        response.status(403).json(_error.validation);
         return;
     };
 

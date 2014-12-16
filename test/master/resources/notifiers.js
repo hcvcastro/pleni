@@ -358,7 +358,7 @@ describe('notifiers controller functions',function(){
             });
         });
 
-        it('POST /resources/notifiers/:notifier/planners',function(done){
+/*        it('POST /resources/notifiers/:notifier/planners',function(done){
             request(app)
                 .post('/resources/notifiers/localhost/planners')
                 .expect('Content-Type',/json/)
@@ -371,7 +371,7 @@ describe('notifiers controller functions',function(){
                         .and.eql('stopped');
                     done();
                 });
-        });
+        });*/
     });
 });
 
