@@ -2,7 +2,7 @@
 
 var request=require('supertest')
   , should=require('should')
-  , app=require('../../notifiers/notifier')
+  , app=require('../../notifiers/notifier.io')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
 
@@ -44,16 +44,14 @@ describe('notifiers controller functions',function(){
           , {test:{'host':{host:''}},expected:_error.json,status:400}
           , {test:[
               {
-                  id:'localhost'
-                , planner:{
+                  planner:{
                       host:'localhost'
                   }
               }
             ],expected:_error.json,status:400}
           , {test:[
               {
-                  id:'localhost'
-                , planner:{
+                  planner:{
                       host:'http://127.0.0.1'
                     , port:3001
                   }
@@ -61,9 +59,9 @@ describe('notifiers controller functions',function(){
             ],expected:_success.ok,status:201}
         ]
         .forEach(function(element){
-            it('PUT /notifiers',function(done){
+            it('PUT /notifier',function(done){
                 request(app)
-                    .put('/notifiers')
+                    .put('/notifier')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -77,9 +75,9 @@ describe('notifiers controller functions',function(){
             });
         });
 
-        it('GET /notifiers',function(done){
+        it('GET /notifier',function(done){
             request(app)
-                .get('/notifiers')
+                .get('/notifier')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -87,7 +85,6 @@ describe('notifiers controller functions',function(){
                     res.should.be.json;
                     res.body.should.have.an.Array;
                     for(var i in res.body){
-                        res.body[i].should.have.property('id');
                         res.body[i].should.have.property('planner');
                         res.body[i].planner.should.have.property('host');
                         res.body[i].planner.should.have.property('port');
@@ -105,17 +102,16 @@ describe('notifiers controller functions',function(){
           , {test:{repository:'/'},expected:_error.validation,status:403}
           , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
-                id:'localhost'
-              , planner:{
+                planner:{
                     host:'http://127.0.0.1'
                   , port:3001
                 }
             },expected:_error.notoverride,status:403}
         ]
         .forEach(function(element){
-            it('POST /notifiers',function(done){
+            it('POST /notifier',function(done){
                 request(app)
-                    .post('/notifiers')
+                    .post('/notifier')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -131,24 +127,22 @@ describe('notifiers controller functions',function(){
 
         [
             {test:{
-                id:'test'
-              , planner:{
+                planner:{
                     host:'http://127.0.0.1'
                   , port:8081
                 }
             },expected:_success.ok,status:201}
           , {test:{
-                id:'test2'
-              , planner:{
+                planner:{
                     host:'http://127.0.0.1'
                   , port:8082
                 }
             },expected:_success.ok,status:201}
         ]
         .forEach(function(element){
-            it('POST /notifiers',function(done){
+            it('POST /notifier',function(done){
                 request(app)
-                    .post('/notifiers')
+                    .post('/notifier')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -162,9 +156,9 @@ describe('notifiers controller functions',function(){
             });
         });
 
-        it('DELETE /notifiers',function(done){
+        it('DELETE /notifier',function(done){
             request(app)
-                .delete('/notifiers')
+                .delete('/notifier')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -176,10 +170,10 @@ describe('notifiers controller functions',function(){
         });
     });
 
-    describe('rest functions for notifier server elements',function(){
+    describe('functions for notifier server elements',function(){
         before(function(done){
             request(app)
-                .put('/notifiers')
+                .put('/notifier')
                 .send([{
                     id:'localhost'
                   , planner:{
@@ -188,35 +182,6 @@ describe('notifiers controller functions',function(){
                     }
                 }])
                 .end(function(err,res){
-                    done();
-                });
-        });
-
-        it('GET /notifiers/:planner',function(done){
-            request(app)
-                .get('/notifiers/localhost')
-                .expect('Content-Type',/json/)
-                .expect(200)
-                .end(function(err,res){
-                    res.statusCode.should.be.eql(200);
-                    res.body.should.be.json;
-                    res.body.should.have.property('id');
-                    res.body.should.have.property('planner');
-                    res.body.planner.should.have.property('host');
-                    res.body.planner.should.have.property('port');
-                    done();
-                });
-        });
-
-        it('GET /notifiers/:planner',function(done){
-            request(app)
-                .get('/notifiers/nonexistent')
-                .expect('Content-Type',/json/)
-                .expect(404)
-                .end(function(err,res){
-                    res.statusCode.should.be.eql(404);
-                    res.body.should.be.json;
-                    res.body.should.eql(_error.notfound);
                     done();
                 });
         });
@@ -232,24 +197,22 @@ describe('notifiers controller functions',function(){
               {host:'http://localhost'}},id:'asdf',
               expected:_error.validation,status:403}
           , {test:{
-                id:'test'
-              , planner:{
+                planner:{
                     host:'http://127.0.0.1'
-                  , port:3001
+                  , port:3002
                 }
             },id:'test',expected:_success.ok,status:201}
           , {test:{
-                id:'test'
-              , planner:{
+                planner:{
                     host:'http://127.0.0.1'
-                  , port:3001
+                  , port:3002
                 }
             },id:'test',expected:_success.ok,status:200}
         ]
         .forEach(function(element){
-            it('PUT /notifiers/:planner',function(done){
+            it('POST /notifier/_add',function(done){
                 request(app)
-                    .put('/notifiers/'+element.id)
+                    .post('/notifier/_add')
                     .send(element.test)
                     .expect('Content-Type',/json/)
                     .expect(element.status)
@@ -263,9 +226,15 @@ describe('notifiers controller functions',function(){
             });
         });
 
-        it('DELETE /notifiers/:planner',function(done){
+        it('POST /notifier/_remove',function(done){
             request(app)
-                .delete('/notifiers/test')
+                .post('/notifier/_remove')
+                .send({
+                    planner:{
+                        host:'http://127.0.0.1'
+                      , port:3002
+                    }
+                })
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -276,9 +245,15 @@ describe('notifiers controller functions',function(){
                 });
         });
 
-        it('DELETE /notifiers/:planner',function(done){
+        it('POST /notifier/_remove',function(done){
             request(app)
-                .delete('/notifiers/test')
+                .post('/notifier/_remove')
+                .send({
+                    planner:{
+                        host:'http://127.0.0.1'
+                      , port:3002
+                    }
+                })
                 .expect('Content-Type',/json/)
                 .expect(404)
                 .end(function(err,res){

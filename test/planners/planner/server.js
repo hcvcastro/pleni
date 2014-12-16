@@ -2,15 +2,15 @@
 
 var request=require('supertest')
   , should=require('should')
-  , server=require('../../../planners/planner')
+  , server=require('../../../planners/planner.io')
   , app=server.app
 
 describe('rest functions for planner server',function(){
     var tid;
 
-    it('GET /planner',function(done){
+    it('GET /id',function(done){
         request(app)
-            .get('/planner')
+            .get('/id')
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){

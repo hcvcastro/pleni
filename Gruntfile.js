@@ -21,8 +21,9 @@ module.exports=function(grunt){
           , planner:{
                 files:[
                     'planners/planner.js'
-                  , 'planners/abstracts/scheduler.js'
-                  , 'planners/abstracts/server.js'
+                  , 'planners/planner.io.js'
+                  , 'planners/planner.ion.js'
+                  , 'planners/abstracts/*.js'
                   , 'planners/functions/**/*.js'
                 ]
               , tasks:['develop:planner']
@@ -30,7 +31,7 @@ module.exports=function(grunt){
 /* -------- notifier watching ----------------------------------------------- */
           , notifier:{
                 files:[
-                    'notifiers/notifier.js'
+                    'notifiers/notifier.io.js'
                 ]
               , tasks:['develop:notifier']
             }
@@ -95,13 +96,13 @@ module.exports=function(grunt){
                 }
             }
           , planner:{
-                file:'planners/planner.js'
+                file:'planners/planner.io.js'
               , env:{
                     PORT:grunt.option('port')||3001
                 }
             }
           , notifier:{
-                file:'notifiers/notifier.js'
+                file:'notifiers/notifier.io.js'
               , env:{
                     PORT:grunt.option('port')||3002
                 }
@@ -126,7 +127,7 @@ module.exports=function(grunt){
               , 'test/planners/planner/scheduler.js'
             ]
           , notifier:[
-                'test/notifiers/server.js'
+                'test/notifiers/**/*.js'
             ]
           , master:['test/master/**/*.js']
         }
