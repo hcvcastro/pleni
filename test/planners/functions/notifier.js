@@ -3,6 +3,9 @@
 var should=require('should')
   , test=require('../../../planners/functions/notifiers/test')
   , get=require('../../../planners/functions/notifiers/get')
+  , add=require('../../../planners/functions/notifiers/add')
+  , remove=require('../../../planners/functions/notifiers/remove')
+  , clean=require('../../../planners/functions/notifiers/clean')
 
 var host='http://localhost'
   , port=3002
@@ -36,6 +39,20 @@ describe('notifier functions',function(){
         });
     });
 
+    it('clean in notifier server',function(done){
+        clean({
+            notifier:{
+                host:url
+            }
+        })
+        .done(function(args){
+            args.should.be.an.Object;
+            args.should.have.property('notifier');
+            args.notifier.should.have.property('host');
+            done();
+        });
+    });
+
     it('get planners in notifier server',function(done){
         get({
             notifier:{
@@ -46,9 +63,90 @@ describe('notifier functions',function(){
             args.should.be.an.Object;
             args.notifier.should.be.an.Object;
             args.notifier.should.have.property('planners');
-            args.notifier.planners.should.be.an.Array;
+            args.notifier.planners.should.be.an.Array.and.be.empty;
             done();
         })
+    });
+
+    it('add planner in notifier server',function(done){
+        add({
+            notifier:{
+                host:url
+              , planner:{
+                    host:'http://localhost'
+                  , port:3001
+                }
+            }
+        })
+        .done(function(args){
+            args.should.be.an.Object;
+            args.notifier.should.be.an.Object;
+            done();
+        })
+    });
+
+    it('get planners in notifier server',function(done){
+        get({
+            notifier:{
+                host:url
+            }
+        })
+        .done(function(args){
+            args.should.be.an.Object;
+            args.notifier.should.be.an.Object;
+            args.notifier.should.have.property('planners');
+            args.notifier.planners.should.be.an.Array.and.have.length(1);
+            args.notifier.planners[0].should.have.property('planner');
+            args.notifier.planners[0].planner.should.have.property('host');
+            args.notifier.planners[0].planner.should.have.property('port');
+            done();
+        })
+    });
+
+    it('remove planner in notifier server',function(done){
+        remove({
+            notifier:{
+                host:url
+              , planner:{
+                    host:'http://localhost'
+                  , port:3001
+                }
+            }
+        })
+        .done(function(args){
+            args.should.be.an.Object;
+            args.notifier.should.be.an.Object;
+            done();
+        })
+    });
+
+    it('get planners in notifier server',function(done){
+        get({
+            notifier:{
+                host:url
+            }
+        })
+        .done(function(args){
+            args.should.be.an.Object;
+            args.notifier.should.be.an.Object;
+            args.notifier.should.have.property('planners');
+            args.notifier.planners.should.be.an.Array.and.be.empty;
+            done();
+        })
+    });
+
+    it('clean in notifier server',function(done){
+        clean({
+            notifier:{
+                host:url
+            }
+        })
+        .done(function(args){
+            args.should.be.an.Object;
+            args.should.have.property('notifier');
+            args.notifier.should.have.property('host');
+            done();
+        });
     });
 });
 

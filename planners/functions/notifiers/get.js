@@ -16,7 +16,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.notifier.host+'/notifiers'
+      , url=args.notifier.host+'/notifier'
 
     if(args.debug){
         console.log('get a clients for notifier ... '+args.notifier.host);

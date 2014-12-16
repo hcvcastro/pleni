@@ -4,28 +4,22 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for add planner in a notifier
+ * Function for clean planners in a notifier
  * args input
  *      notifier
  *          host
- *          planner
- *              host
- *              port
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.notifier.host+'/notifier/_add'
-      , body={
-            planner:args.notifier.planner
-        }
+      , url=args.notifier.host+'/notifier'
 
     if(args.debug){
-        console.log('add client for notifier ... '
+        console.log('remove client for notifier ... '
             +args.notifier.planner.host+':'+args.notifier.planner.port);
     }
-    request.post({url:url,json:body},function(error,response){
+    request.del({url:url},function(error,response){
         if(!error){
-            if(response.statusCode==200||response.statusCode==201){
+            if(response.statusCode==200){
                 deferred.resolve(args);
                 return;
             }
