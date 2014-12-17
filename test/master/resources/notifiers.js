@@ -360,7 +360,7 @@ describe('notifiers controller functions',function(){
 
         it('POST /resources/notifiers/:notifier/_get',function(done){
             request(app)
-                .get('/resources/notifiers/localhost/_get')
+                .post('/resources/notifiers/localhost/_get')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){

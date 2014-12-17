@@ -2,27 +2,15 @@ article.view.animate(ng-show='notifiers.env.view==\'view\'')
     h2 {{notifier.id}} ({{notifier.notifier.host}}:{{notifier.notifier.port}})
     div.close
         a.fa.fa-close(ng-click='notifiers.list()')
-    div.set(ng-show='notifier.set.status!=\'set\'')
+    div
         form(ng-submit='notifiers.set()')
             p
                 label Task
                 select(required,ng-model='notifier.set.name',ng-options='task.name as task.name for task in notifier.api')
                     option(value='',selected='selected',disabled='disabled') Select a Task
                 a.fa.fa-refresh(title='Refresh available tasks',ng-click='notifiers.api()')
-            p
-                label Count
-                input(type='number',placeholder='Number for task repetitions',min=-1,max=1000000,required,ng-model='notifier.set.count')
-            p
-                label Interval
-                input(type='number',placeholder='Miliseconds between each repetition',min=0,max=1000000,step=500,required,ng-model='notifier.set.interval')
             p.offset
-                button(type='submit') Set task
-        form(ng-submit='notifiers.tid()')
-            p
-                label TID
-                input(type='number',placeholder='Number for task repetitions',min=1,max=1000000,required,ng-model='notifier.set.tid')
-            p.offset
-                button(type='submit') Set TID
+                button(type='submit') Save Settings
         p.offset
             span.hide.loader.fa.fa-spinner
             span.hide.message

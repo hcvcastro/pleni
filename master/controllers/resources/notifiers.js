@@ -254,7 +254,7 @@ module.exports=function(app){
         });
     });
 
-    app.get('/resources/notifiers/:notifier/_get',function(request,response){
+    app.post('/resources/notifiers/:notifier/_get',function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,notifiers,notifier,args){
                 notifiers[notifier[0]].notifier.planners=args.notifier.planners;

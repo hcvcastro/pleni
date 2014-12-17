@@ -790,18 +790,17 @@ pleni.controller('ResourcesController',
                 $scope.notifiers.env.view='view';
                 $scope.notifiers.env.type='element';
                 $scope.notifier=$scope.storage.notifiers[index];
-                $scope.notifier.get();
+                $scope.notifiers.get();
             }
           , get:function(){
                 if($scope.notifiers.env.type=='element'){
-                    console.log('get '+$scope.notifier.id);
-//                  Notifiers.get({
-//                      server:$scope.notifier.id
-//                  },function(data){
-//                      //$scope.notifier.planners
-//                  },function(error){
-//                      utils.show('error','Notifier cannot get the planners');
-//                  });
+                    Notifiers.get({
+                        server:$scope.notifier.id
+                    },function(data){
+                        $scope.notifier.planners=data.notifier._planners;
+                    },function(error){
+                        utils.show('error','Notifier cannot get the planners');
+                    });
                 }
             }
           , edit:function(index){
