@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="137.90253"
-     inkscape:cy="179.48316"
+     inkscape:zoom="1.979899"
+     inkscape:cx="307.29015"
+     inkscape:cy="240.52315"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -38,7 +38,7 @@
      inkscape:guide-bbox="true"
      inkscape:window-width="954"
      inkscape:window-height="1055"
-     inkscape:window-x="960"
+     inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
      showborder="false">
@@ -3050,7 +3050,7 @@
          sodipodi:role="line"
          x="370"
          y="802.36218"
-         id="tspan3541">notifiers.planners</tspan></text>
+         id="tspan8210">notifier.planners</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3535"

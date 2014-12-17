@@ -28,7 +28,7 @@ module.exports=function(args){
 
                 if(response.statusCode==200){
                     if(parse.notifier){
-                        args.notifier.type=parse.type;
+                        args.notifier.type=parse.signature;
                         deferred.resolve(args);
                         return;
                     }

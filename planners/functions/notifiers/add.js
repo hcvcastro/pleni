@@ -8,20 +8,20 @@ var request=require('request')
  * args input
  *      notifier
  *          host
- *          planner
- *              host
- *              port
+ *      planner
+ *          host
+ *          port
  */
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.notifier.host+'/notifier/_add'
       , body={
-            planner:args.notifier.planner
+            planner:args.planner
         }
 
     if(args.debug){
         console.log('add client for notifier ... '
-            +args.notifier.planner.host+':'+args.notifier.planner.port);
+            +args.planner.host+':'+args.planner.port);
     }
     request.post({url:url,json:body},function(error,response){
         if(!error){

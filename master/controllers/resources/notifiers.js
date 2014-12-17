@@ -5,6 +5,10 @@ var extend=require('underscore').extend
   , _success=require('../../../planners/utils/json-response').success
   , _error=require('../../../planners/utils/json-response').error
   , test=require('../../../planners/functions/notifiers/test')
+  , get=require('../../../planners/functions/notifiers/get')
+  , add=require('../../../planners/functions/notifiers/add')
+  , remove=require('../../../planners/functions/notifiers/remove')
+  , clean=require('../../../planners/functions/notifiers/clean')
   , schema=require('../../utils/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
@@ -28,7 +32,7 @@ module.exports=function(app){
                 };
             }));
     });
-    
+
     app.put('/resources/notifiers',function(request,response){
         if(schema.js.validate(request.body,schema.notifiers).length==0){
             var resources=app.get('resources')
@@ -241,60 +245,66 @@ module.exports=function(app){
     app.post('/resources/notifiers/:notifier/_check',function(request,response){
         return generic_action(request,response,null,[],
             function(resources,notifiers,notifier,args){
-                response.status(200).json(args);
+                response.status(200).json({
+                    notifier:{
+                        host:args.notifier.host
+                      , type:args.notifier.type
+                    }
+                });
         });
     });
 
     app.get('/resources/notifiers/:notifier/_get',function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,notifiers,notifier,args){
-                notifiers[notifier[0]].planner.status=args.planner.status;
-                resources.planners=planners;
+                notifiers[notifier[0]].notifier.planners=args.notifier.planners;
+                resources.notifiers=notifiers;
 
                 app.set('resources',resources);
                 response.status(200).json({
-                    planner:{
-                        host:args.planner.host
-                      , status:args.planner.status
+                    notifier:{
+                        host:args.notifier.host
+                      , _planners:new Array()
                     }
                 });
         });
     });
 
-/*    app.post('/resources/planners/:planner/_set',function(request,response){
-        return generic_action(request,response,schema.task,[set],
+    app.post('/resources/notifiers/:notifier/_add',function(request,response){
+        return generic_action(request,response,schema.notifier_planner,[add],
             function(resources,planners,planner,args){
-                planners[planner[0]].planner.tid=args.planner.tid;
-                resources.planners=planners;
-
-                app.set('resources',resources);
                 response.status(200).json({
-                    planner:{
-                        host:args.planner.host
+                    notifier:{
+                        host:args.notifier.host
                       , result:true
                     }
                 });
         });
     });
 
-    app.post('/resources/planners/:planner/_get',function(request,response){
-        return generic_action(request,response,null,[get],
+    app.post('/resources/notifiers/:notifier/_remove',
+        function(request,response){
+        return generic_action(request,response,schema.notifier_planner,[remove],
             function(resources,planners,planner,args){
-                planners[planner[0]].planner.task=args.planner.task;
-                resources.planners=planners;
-
-                app.set('resources',resources);
                 response.status(200).json({
-                    planner:{
-                        host:args.planner.host
-                      , task:{
-                            name:args.planner.task.name
-                          , count:args.planner.task.count
-                          , interval:args.planner.task.interval
-                        }
+                    notifier:{
+                        host:args.notifier.host
+                      , result:true
                     }
                 });
         });
-    });*/
+    });
+
+    app.post('/resources/notifiers/:notifier/_clean',function(request,response){
+        return generic_action(request,response,null,[clean],
+            function(resources,planners,planner,args){
+                response.status(200).json({
+                    notifier:{
+                        host:args.notifier.host
+                      , result:true
+                    }
+                });
+        });
+    });
 };
 

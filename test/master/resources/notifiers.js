@@ -358,20 +358,63 @@ describe('notifiers controller functions',function(){
             });
         });
 
-/*        it('POST /resources/notifiers/:notifier/planners',function(done){
+        it('POST /resources/notifiers/:notifier/_get',function(done){
             request(app)
-                .post('/resources/notifiers/localhost/planners')
+                .get('/resources/notifiers/localhost/_get')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200);
-                    res.body.should.have.property('planner');
-                    res.body.planner.should.have.property('host');
-                    res.body.planner.should.have.property('status')
-                        .and.eql('stopped');
+                    res.body.should.have.property('notifier');
+                    res.body.notifier.should.have.property('host');
+                    res.body.notifier.should.have.property('_planners');
                     done();
                 });
-        });*/
+        });
+
+        it('POST /resources/notifiers/:notifier/_add',function(done){
+            request(app)
+                .post('/resources/notifiers/localhost/_add')
+                .send({planner:{host:'http://localhost',port:3005}})
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('notifier');
+                    res.body.notifier.should.have.property('host');
+                    res.body.notifier.should.have.property('result');
+                    done();
+                });
+        });
+
+        it('POST /resources/notifiers/:notifier/_remove',function(done){
+            request(app)
+                .post('/resources/notifiers/localhost/_remove')
+                .send({planner:{host:'http://localhost',port:3005}})
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('notifier');
+                    res.body.notifier.should.have.property('host');
+                    res.body.notifier.should.have.property('result');
+                    done();
+                });
+        });
+
+        it('POST /resources/notifiers/:notifier/_clean',function(done){
+            request(app)
+                .post('/resources/notifiers/localhost/_clean')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.have.property('notifier');
+                    res.body.notifier.should.have.property('host');
+                    res.body.notifier.should.have.property('result');
+                    done();
+                });
+        });
     });
 });
 
