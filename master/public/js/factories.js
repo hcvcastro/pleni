@@ -47,6 +47,10 @@ pleni.factory('Notifiers',['$resource',function($resource){
     },{
         update:{method:'PUT'}
       , check:{method:'POST',params:{action:'_check'}}
+      , get:{method:'GET',params:{action:'_get'}}
+      , add:{method:'POST',params:{action:'_add'}}
+      , remove:{method:'POST',params:{action:'_remove'}}
+      , clean:{method:'POST',params:{action:'_clean'}}
     });
 }]);
 

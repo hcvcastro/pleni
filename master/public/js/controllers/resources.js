@@ -711,7 +711,9 @@ pleni.controller('ResourcesController',
                                 host:data[i].notifier.host
                               , port:data[i].notifier.port
                             }
+                          , type:'?'
                           , check:'unknown'
+                          , planners:new Array()
                         });
                     }
                     $('article.list table').fadeIn();
@@ -770,6 +772,7 @@ pleni.controller('ResourcesController',
                     notifier.check='checking';
                     Notifiers.check({server:notifier.id},function(data){
                         notifier.check='online';
+                        notifier.type=data.notifier.type;
                     },function(error){
                         notifier.check='offline';
                         utils.show('error','Notifier cannot be founded');
@@ -787,6 +790,19 @@ pleni.controller('ResourcesController',
                 $scope.notifiers.env.view='view';
                 $scope.notifiers.env.type='element';
                 $scope.notifier=$scope.storage.notifiers[index];
+                $scope.notifier.get();
+            }
+          , get:function(){
+                if($scope.notifiers.env.type=='element'){
+                    console.log('get '+$scope.notifier.id);
+//                  Notifiers.get({
+//                      server:$scope.notifier.id
+//                  },function(data){
+//                      //$scope.notifier.planners
+//                  },function(error){
+//                      utils.show('error','Notifier cannot get the planners');
+//                  });
+                }
             }
           , edit:function(index){
                 $scope.notifiers.env.view='form';
@@ -816,7 +832,8 @@ pleni.controller('ResourcesController',
             }
         };
 
-        $scope.dbservers.show();
+//        $scope.dbservers.show();
+        $scope.notifiers.show();
     }]
 );
 
