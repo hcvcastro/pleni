@@ -21,6 +21,7 @@ $(function(){
         message+=JSON.stringify(msg);
         message+='</p>';
         $('body>section').append(message);
+        $(document).scrollTop($(document).height());
     });
 });
 
