@@ -680,6 +680,7 @@ pleni.controller('ResourcesController',
                 host:''
               , port:0
             }
+          , planner:''
         };
         $scope.notifiers={
             env:{
@@ -809,7 +810,13 @@ pleni.controller('ResourcesController',
                     utils.send('Send add request ...');
                     Notifiers.add({
                         server:$scope.notifier.id
-                      , planner
+                      , planner:$scope.notifier.planner
+                    },function(data){
+                        utils.receive();
+                        $scope.notifier.planners=data._planners;
+                    },function(error){
+                        utils.receive();
+                    });
                 }
             }
           , edit:function(index){

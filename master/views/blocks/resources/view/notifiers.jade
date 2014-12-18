@@ -4,9 +4,17 @@ article.view.animate(ng-show='notifiers.env.view==\'view\'')
         a.fa.fa-close(ng-click='notifiers.list()')
     div
         form(ng-submit='notifiers.addplanner()')
+            h3 Connected planners
+            .item(ng-repeat='planner in notifier.planners')
+                .body {{planner}}
+                .close
+                    a.fa.fa-trash
+                .clearfix
+            br
+            h3 Connect a new planner
             p
-                label Planner
-                select(required,ng-model='notifier_planner.planner',ng-options='planner.id as planner.id for planner in storage.planners')
+                label &nbsp;
+                select(required,ng-model='notifier.planner',ng-options='planner.id as planner.id for planner in storage.planners')
                     option(value='',selected='selected',disabled='disabled') Select a Planner
             p.offset
                 button(type='submit') Add Planner

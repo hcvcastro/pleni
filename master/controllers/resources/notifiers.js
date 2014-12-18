@@ -261,17 +261,40 @@ module.exports=function(app){
                 resources.notifiers=notifiers;
 
                 app.set('resources',resources);
+
                 response.status(200).json({
                     notifier:{
                         host:args.notifier.host
-                      , _planners:new Array()
+                      , _planners:args.notifier.planners.map(function(planner){
+                            for(var i in resources.planners){
+                                if(resources.planners[i].planner.host==
+                                        planner.planner.host&&
+                                    resources.planners[i].planner.port==
+                                        planner.planner.port){
+                                    return resources.planners[i].id;
+                                }
+                            }
+                            return '';
+                        })
                     }
                 });
         });
     });
 
     app.post('/resources/notifiers/:notifier/_add',function(request,response){
-        return generic_action(request,response,schema.notifier_planner2,[add],
+        var id=request.body.planner
+          , resources=app.get('resources')
+          , planners=resources.planners
+          , planner=get_element(id,planners)
+
+        if(planner){
+            request.body.planner=planner[1].planner;
+        }else{
+            response.status(404).json(_error.notfound);
+            return;
+        }
+
+        return generic_action(request,response,schema.notifier_planner,[add],
             function(resources,planners,planner,args){
                 response.status(200).json({
                     notifier:{
@@ -282,9 +305,21 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_remove',
-        function(request,response){
-        return generic_action(request,response,schema.notifier_planner2,[remove],
+    app.post('/resources/notifiers/:notifier/_remove',function(
+            request,response){
+        var id=request.body.planner
+          , resources=app.get('resources')
+          , planners=resources.planners
+          , planner=get_element(id,planners)
+
+        if(planner){
+            request.body.planner=planner[1].planner;
+        }else{
+            response.status(404).json(_error.notfound);
+            return;
+        }
+
+        return generic_action(request,response,schema.notifier_planner,[remove],
             function(resources,planners,planner,args){
                 response.status(200).json({
                     notifier:{

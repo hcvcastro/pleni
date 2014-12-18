@@ -72,10 +72,10 @@ describe('notifier functions',function(){
         add({
             notifier:{
                 host:url
-              , planner:{
-                    host:'http://localhost'
-                  , port:3001
-                }
+            }
+          , planner:{
+                host:'http://localhost'
+              , port:3001
             }
         })
         .done(function(args){
@@ -107,10 +107,10 @@ describe('notifier functions',function(){
         remove({
             notifier:{
                 host:url
-              , planner:{
-                    host:'http://localhost'
-                  , port:3001
-                }
+              }
+            , planner:{
+                host:'http://localhost'
+              , port:3001
             }
         })
         .done(function(args){
