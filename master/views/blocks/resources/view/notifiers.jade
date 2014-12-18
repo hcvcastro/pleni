@@ -8,7 +8,7 @@ article.view.animate(ng-show='notifiers.env.view==\'view\'')
             .item(ng-repeat='planner in notifier.planners')
                 .body {{planner}}
                 .close
-                    a.fa.fa-trash
+                    a.fa.fa-trash(ng-click='notifiers.removeplanner($index)')
                 .clearfix
             br
             h3 Connect a new planner
