@@ -803,6 +803,15 @@ pleni.controller('ResourcesController',
                     });
                 }
             }
+          , addplanner:function(){
+                utils.clean();
+                if($scope.notifiers.env.type=='element'){
+                    utils.send('Send add request ...');
+                    Notifiers.add({
+                        server:$scope.notifier.id
+                      , planner
+                }
+            }
           , edit:function(index){
                 $scope.notifiers.env.view='form';
                 $scope.notifiers.env.type='element';

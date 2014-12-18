@@ -271,7 +271,7 @@ module.exports=function(app){
     });
 
     app.post('/resources/notifiers/:notifier/_add',function(request,response){
-        return generic_action(request,response,schema.notifier_planner,[add],
+        return generic_action(request,response,schema.notifier_planner2,[add],
             function(resources,planners,planner,args){
                 response.status(200).json({
                     notifier:{
@@ -284,7 +284,7 @@ module.exports=function(app){
 
     app.post('/resources/notifiers/:notifier/_remove',
         function(request,response){
-        return generic_action(request,response,schema.notifier_planner,[remove],
+        return generic_action(request,response,schema.notifier_planner2,[remove],
             function(resources,planners,planner,args){
                 response.status(200).json({
                     notifier:{

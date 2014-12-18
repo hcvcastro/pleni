@@ -245,6 +245,18 @@ var notifiers={
 };
 exports.notifiers=notifiers;
 
+var notifier_planner2={
+    'type':'object'
+  , 'properties':{
+        'planner':{
+            'type':'string'
+          , 'format':'id'
+        }
+    }
+  , 'required':['planner']
+};
+exports.notifier_planner2=notififer_planner2;
+
 var notifier_planner={
     'type':'object'
   , 'properties':{

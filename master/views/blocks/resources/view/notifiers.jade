@@ -3,14 +3,13 @@ article.view.animate(ng-show='notifiers.env.view==\'view\'')
     div.close
         a.fa.fa-close(ng-click='notifiers.list()')
     div
-        form(ng-submit='notifiers.set()')
+        form(ng-submit='notifiers.addplanner()')
             p
-                label Task
-                select(required,ng-model='notifier.set.name',ng-options='task.name as task.name for task in notifier.api')
-                    option(value='',selected='selected',disabled='disabled') Select a Task
-                a.fa.fa-refresh(title='Refresh available tasks',ng-click='notifiers.api()')
+                label Planner
+                select(required,ng-model='notifier_planner.planner',ng-options='planner.id as planner.id for planner in storage.planners')
+                    option(value='',selected='selected',disabled='disabled') Select a Planner
             p.offset
-                button(type='submit') Save Settings
+                button(type='submit') Add Planner
         p.offset
             span.hide.loader.fa.fa-spinner
             span.hide.message

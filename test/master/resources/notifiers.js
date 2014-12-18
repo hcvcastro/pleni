@@ -375,7 +375,7 @@ describe('notifiers controller functions',function(){
         it('POST /resources/notifiers/:notifier/_add',function(done){
             request(app)
                 .post('/resources/notifiers/localhost/_add')
-                .send({planner:{host:'http://localhost',port:3005}})
+                .send({planner:'localhost'})
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -390,7 +390,7 @@ describe('notifiers controller functions',function(){
         it('POST /resources/notifiers/:notifier/_remove',function(done){
             request(app)
                 .post('/resources/notifiers/localhost/_remove')
-                .send({planner:{host:'http://localhost',port:3005}})
+                .send({planner:'localhost'})
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
