@@ -13,12 +13,21 @@ var validate=require('../../planners/utils/validators')
         }
         return;
     }
-  , socket_connect=function(ios,ioc,host){
-        var socket=ioc.connect(host,{reconnect:true})
-        socket.on('connection',function(msg){
-            ios.emit('notifier',msg);
-        });
+  , get_planner=function(host,port,app){
+        var planners=app.get('resources').planners
+
+        for(var i in planners){
+            if(planners[i].planner.host==host&&
+               planners[i].planner.port==port){
+                return planners[i].id;
+            }
+        }
+        return null;
+    }
+  , socket_connect=function(ios,ioc,host,port,id){
+        var socket=ioc.connect(host+':'+port,{reconnect:true})
         socket.on('notifier',function(msg){
+            msg.id=id;
             ios.emit('notifier',msg);
         });
         return socket;
@@ -62,7 +71,8 @@ module.exports=function(app,ios,ioc){
                         host:host
                       , port:port
                     }
-                  , socket:socket_connect(ios,ioc,host+':'+port)
+                  , socket:socket_connect(
+                        ios,ioc,host,port,get_planner(host,port,app))
                 }
             }));
 
@@ -85,7 +95,8 @@ module.exports=function(app,ios,ioc){
                         host:host
                       , port:port
                     }
-                  , socket:socket_connect(ios,ioc,host+':'+port)
+                  , socket:socket_connect(
+                        ios,ioc,host,port.get_planner(host,port,app))
                 });
                 response.status(201).json(_success.ok);
             }else{
@@ -118,7 +129,8 @@ module.exports=function(app,ios,ioc){
                         host:host
                       , port:port
                     }
-                  , socket:socket_connect(ios,ioc,host+':'+port)
+                  , socket:socket_connect(
+                        ios,ioc,host,port,get_planner(host,port,app))
                 });
 
                 app.set('notifier',notifier);
@@ -129,7 +141,7 @@ module.exports=function(app,ios,ioc){
                 notifier[planner[0]].planner.host=host;
                 notifier[planner[0]].planner.port=port;
                 notifier[planner[0]].socket=socket_connect(
-                    ios,ioc,host+':'+port);
+                    ios,ioc,host,port,get_planner(host,port,app));
 
                 app.set('notifier',notifier);
                 response.status(200).json(_success.ok);
