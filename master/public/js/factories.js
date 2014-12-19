@@ -54,3 +54,7 @@ pleni.factory('Notifiers',['$resource',function($resource){
     });
 }]);
 
+pleni.factory('Socket',['socketFactory',function(socketFactory){
+    return socketFactory();
+}]);
+

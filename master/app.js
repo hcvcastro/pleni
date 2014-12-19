@@ -8,6 +8,9 @@ var http=require('http')
   , join=require('path').join
   , loadconfig=require('./utils/loadconfig')
   , app=express()
+  , server=http.Server(app)
+  , ios=require('socket.io')(server)
+  , ioc=require('socket.io-client')
   , resources={}
 
 // sync methods
@@ -41,6 +44,7 @@ require('./controllers/resources/dbservers')(app);
 require('./controllers/resources/repositories')(app);
 require('./controllers/resources/planners')(app);
 require('./controllers/resources/notifiers')(app);
+require('./controllers/notifier')(app,ios,ioc);
 require('./controllers/tasks')(app);
 
 app.use(function(request,response){
@@ -50,7 +54,15 @@ app.use(function(request,response){
     });
 });
 
-http.createServer(app).listen(app.get('port'),function(){
+ios.sockets.on('connection',function(socket){
+    socket.emit('notifier',{
+        notifier:{
+            action:'connection'
+        }
+    });
+});
+
+server.listen(app.get('port'),function(){
     console.log('Master APP listening on port '+app.get('port'));
 });
 

@@ -14,7 +14,7 @@ html(lang='en')
                 .clearfix
         #wrapper
             section(ng-view)
-            footer
+            footer(ng-controller='SocketController')
                 nav
                     div.palette
                         span &nbsp;
@@ -27,11 +27,13 @@ html(lang='en')
                         li: a(target='_BLANK',href='http://github.com/hiperborea/pleni') Source code
                     .clearfix
         script(src='/jquery/dist/jquery.min.js')
+        script(src='/socket.io-client/socket.io.js')
         script(src='/json-editor/dist/jsoneditor.min.js')
         script(src='/angular/angular.js')
         script(src='/angular-route/angular-route.js')
         script(src='/angular-resource/angular-resource.js')
         script(src='/angular-animate/angular-animate.js')
+        script(src='/angular-socket-io/socket.min.js')
         script(src='/ngstorage/ngStorage.js')
         script(src='/js/utils.js')
         script(src='/js/editor.js')
@@ -39,6 +41,7 @@ html(lang='en')
         script(src='/js/factories.js')
         script(src='/js/controllers/home.js')
         script(src='/js/controllers/resources.js')
+        script(src='/js/controllers/notifier.js')
         script(src='/js/controllers/tasks.js')
         script(src='http://localhost:35729/livereload.js')
 
