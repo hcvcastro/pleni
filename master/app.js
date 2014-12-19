@@ -12,13 +12,16 @@ var http=require('http')
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , resources={}
+  , notifier=new Array()
 
 // sync methods
 resources.dbservers=loadconfig(join(__dirname,'config','dbservers.json'));
 resources.repositories=loadconfig(join(__dirname,'config','repositories.json'));
 resources.planners=loadconfig(join(__dirname,'config','planners.json'));
 resources.notifiers=loadconfig(join(__dirname,'config','notifiers.json'));
+
 app.set('resources',resources);
+app.set('notifier',notifier);
 
 // async methods
 app.set('port',process.env.PORT||3000);
