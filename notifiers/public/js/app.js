@@ -14,7 +14,7 @@ Date.prototype.print=function(){
 }
 
 $(function(){
-    var socket=io()
+    var socket=io();
 
     socket.on('notifier',function(msg){
         var message='<p><strong>'+new Date().print()+':</strong> ';

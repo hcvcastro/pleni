@@ -14,18 +14,7 @@ html(lang='en')
                 .clearfix
         #wrapper
             section(ng-view)
-            footer(ng-controller='SocketController')
-                nav
-                    div.palette
-                        span &nbsp;
-                        span &nbsp;
-                        span &nbsp;
-                        span &nbsp;
-                        span &nbsp;
-                    ul
-                        li: a(target='_BLANK',href='http://hiperborea.com.bo') Hiperbórea
-                        li: a(target='_BLANK',href='http://github.com/hiperborea/pleni') Source code
-                    .clearfix
+            include ./blocks/footer
         script(src='/jquery/dist/jquery.min.js')
         script(src='/socket.io-client/socket.io.js')
         script(src='/json-editor/dist/jsoneditor.min.js')
