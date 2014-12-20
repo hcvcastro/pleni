@@ -1,6 +1,10 @@
 footer(ng-controller='SocketController')
     nav
         div.notifier
+            div {{storage.dbservers.length}}
+            div {{storage.repositories.length}}
+            div {{storage.planners.length}}
+            div {{storage.notifiers.length}}
         ul
             li: a(target='_BLANK',href='http://hiperborea.com.bo') Hiperbórea
             li: a(target='_BLANK',href='http://github.com/hiperborea/pleni') Source code

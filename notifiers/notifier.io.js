@@ -24,10 +24,8 @@ var http=require('http')
     }
   , socket_connect=function(host){
         var socket=ioc.connect(host,{reconnect:true})
-        socket.on('connection',function(msg){
-            ios.emit('notifier',msg);
-        });
         socket.on('notifier',function(msg){
+            msg.id=host;
             ios.emit('notifier',msg);
         });
         return socket;

@@ -861,8 +861,7 @@ pleni.controller('ResourcesController',
             }
         };
 
-//        $scope.dbservers.show();
-        $scope.notifiers.show();
+        $scope.dbservers.show();
     }]
 );
 
