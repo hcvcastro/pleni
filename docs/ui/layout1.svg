@@ -68,11 +68,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="885.51839"
-     inkscape:cy="743.99515"
+     inkscape:zoom="0.67543429"
+     inkscape:cx="1048.0118"
+     inkscape:cy="535.92329"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer4"
      showgrid="false"
      inkscape:showpageshadow="false"
      showborder="true"
@@ -141,6 +141,14 @@
        orientation="0,1"
        position="1411.5,550"
        id="guide4642" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="500,500"
+       id="guide3087" />
+    <sodipodi:guide
+       orientation="0,1"
+       position="479.194,310"
+       id="guide3174" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -219,7 +227,8 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="letras"
-     style="display:inline">
+     style="display:inline"
+     sodipodi:insensitive="true">
     <path
        inkscape:connector-curvature="0"
        id="path3816"
@@ -343,16 +352,17 @@
   <g
      inkscape:groupmode="layer"
      id="layer1"
-     inkscape:label="jumbotron">
+     inkscape:label="jumbotron"
+     sodipodi:insensitive="true">
     <rect
-       style="fill:#aec1b9;stroke:none;fill-opacity:1"
+       style="fill:#aec1b9;fill-opacity:1;stroke:none"
        id="rect4640"
        width="960"
        height="480"
        x="480"
        y="50" />
     <rect
-       style="fill:url(#pattern4638);stroke:none;opacity:0.25"
+       style="opacity:0.25;fill:url(#pattern4638);stroke:none"
        width="960"
        height="480"
        x="480"
@@ -508,7 +518,7 @@
       <path
          id="path4646"
          d="m 665.3125,185.28125 c -33.13708,0 -60,26.86292 -60,60 0,33.13708 26.86292,60 60,60 33.13708,0 60,-26.86292 60,-60 0,-33.13708 -26.86292,-60 -60,-60 z"
-         style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#658068;stroke-opacity:1;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:none;stroke:#658068;stroke-width:4;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="sssss" />
       <path
@@ -522,5 +532,180 @@
          d="m 764,246 c 0,44.18278 -35.81722,80 -80,80 -44.18278,0 -80,-35.81722 -80,-80 0,-44.18278 35.81722,-80 80,-80 44.18278,0 80,35.81722 80,80 z"
          transform="matrix(0.625,0,0,0.625,237.8125,91.53125)" />
     </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="frontpage">
+    <rect
+       style="fill:#658068;fill-opacity:1;stroke:none"
+       id="rect3074"
+       width="240"
+       height="240"
+       x="480"
+       y="530" />
+    <rect
+       y="530"
+       x="720"
+       height="240"
+       width="240"
+       id="rect3076"
+       style="fill:#658068;fill-opacity:1;stroke:none" />
+    <rect
+       style="fill:#658068;fill-opacity:1;stroke:none"
+       id="rect3078"
+       width="240"
+       height="240"
+       x="960"
+       y="530" />
+    <rect
+       y="530"
+       x="1200"
+       height="240"
+       width="240"
+       id="rect3080"
+       style="fill:#658068;fill-opacity:1;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-size:42px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#b5c9ab;fill-opacity:1;stroke:none;font-family:Segoe Condensed;-inkscape-font-specification:'Segoe Condensed, Condensed'"
+       x="548.57812"
+       y="580"
+       id="text3850"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3852"
+         x="548.57812"
+         y="580">Fetch</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe Condensed;-inkscape-font-specification:'Segoe Condensed, Condensed'"
+       x="492.40485"
+       y="624.13275"
+       id="text3070"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3072"
+         x="492.40485"
+         y="624.13275">Set repositories, planners,</tspan><tspan
+         sodipodi:role="line"
+         x="492.40485"
+         y="651.63275"
+         id="tspan3083">fetching, and get ready for</tspan><tspan
+         sodipodi:role="line"
+         x="492.40485"
+         y="679.13275"
+         id="tspan3085">capture of information.</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3074"
+       style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Bodoni;font-style:normal;font-weight:normal;font-size:48px;line-height:125%;letter-spacing:0px;word-spacing:0px;-inkscape-font-specification:Bodoni;font-stretch:normal;font-variant:normal"><flowRegion
+         id="flowRegion3076"><rect
+           id="rect3079"
+           width="63"
+           height="61"
+           x="417"
+           y="659" /></flowRegion><flowPara
+         id="flowPara3081"></flowPara></flowRoot>    <text
+       sodipodi:linespacing="125%"
+       id="text3089"
+       y="580"
+       x="778.93359"
+       style="font-size:42px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#b5c9ab;fill-opacity:1;stroke:none;font-family:Segoe Condensed;-inkscape-font-specification:'Segoe Condensed, Condensed'"
+       xml:space="preserve"><tspan
+         y="580"
+         x="778.93359"
+         id="tspan3091"
+         sodipodi:role="line">Analize</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:42px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#b5c9ab;fill-opacity:1;stroke:none;font-family:Segoe Condensed;-inkscape-font-specification:'Segoe Condensed, Condensed'"
+       x="1005.2578"
+       y="580"
+       id="text3093"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3095"
+         x="1005.2578"
+         y="580">Visualize</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3097"
+       y="580"
+       x="1238.0273"
+       style="font-size:42px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr;text-anchor:start;fill:#b5c9ab;fill-opacity:1;stroke:none;font-family:Segoe Condensed;-inkscape-font-specification:'Segoe Condensed, Condensed'"
+       xml:space="preserve"><tspan
+         y="580"
+         x="1238.0273"
+         id="tspan3099"
+         sodipodi:role="line">Automate</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3101"
+       y="624.30463"
+       x="732.25006"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe Condensed;-inkscape-font-specification:'Segoe Condensed, Condensed'"
+       xml:space="preserve"><tspan
+         id="tspan3107"
+         y="624.30463"
+         x="732.25006"
+         sodipodi:role="line">Replicate the information</tspan><tspan
+         y="651.80463"
+         x="732.25006"
+         sodipodi:role="line"
+         id="tspan3114">and apply heuristics for</tspan><tspan
+         y="679.30463"
+         x="732.25006"
+         sodipodi:role="line"
+         id="tspan3116">find vulnerabilities and</tspan><tspan
+         y="706.80463"
+         x="732.25006"
+         sodipodi:role="line"
+         id="tspan3118">security holes.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe Condensed;-inkscape-font-specification:'Segoe Condensed, Condensed'"
+       x="970.61523"
+       y="624.13275"
+       id="text3120"
+       sodipodi:linespacing="125%"><tspan
+         id="tspan3128"
+         sodipodi:role="line"
+         x="970.61523"
+         y="624.13275">Make data visualizations,</tspan><tspan
+         sodipodi:role="line"
+         x="970.61523"
+         y="651.63275"
+         id="tspan3149">for facilitate the analysis,</tspan><tspan
+         sodipodi:role="line"
+         x="970.61523"
+         y="679.13275"
+         id="tspan3155">the take of decisions and</tspan><tspan
+         sodipodi:role="line"
+         x="970.61523"
+         y="706.63275"
+         id="tspan3157">data mining.</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3130"
+       y="624.13275"
+       x="1212.6816"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:condensed;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe Condensed;-inkscape-font-specification:'Segoe Condensed, Condensed'"
+       xml:space="preserve"><tspan
+         y="624.13275"
+         x="1212.6816"
+         sodipodi:role="line"
+         id="tspan3138">Schedule automatic tasks,</tspan><tspan
+         y="651.63275"
+         x="1212.6816"
+         sodipodi:role="line"
+         id="tspan3168">avoids monotonous tasks,</tspan><tspan
+         y="679.13275"
+         x="1212.6816"
+         sodipodi:role="line"
+         id="tspan3170">and follow it in anywhere,</tspan><tspan
+         y="706.63275"
+         x="1212.6816"
+         sodipodi:role="line"
+         id="tspan3172">anytime.</tspan></text>
   </g>
 </svg>
