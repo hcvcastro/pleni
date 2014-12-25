@@ -1,0 +1,85 @@
+.jumbotron {
+    width: 100%;
+    height: 480px;
+    background: @color3 url(/img/tile.svg);
+    position: relative;
+
+    &>div:nth-child(1) {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        overflow: hidden;
+
+        .node1, .node2, .node3 {
+            border: 1px solid #000000;
+        }
+    }
+    &>div:nth-child(2) {
+        position: absolute;
+        height: 192px;
+        width: auto;
+        top: 144px;
+        left: 576px;
+    }
+}
+
+.node1 {
+    position: absolute;
+    top: 157px;
+    left: 192px;
+/*    animation-name: rotate;
+    animation-duration: 12s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;*/
+}
+
+.node2 {
+    position: absolute;
+    top: 96px;
+    left: 96px;
+    animation: spin2 12s linear infinite;
+}
+
+.node3 {
+    position: absolute;
+    top: 64px;
+    left: 64px;
+/*    animation: spin2 20s linear infinite;*/
+}
+
+.node4 {
+    position: absolute;
+    top: 96px;
+    left: 32px;
+/*    animation: spin2 28s linear infinite;*/
+}
+
+/*.description {
+    &>div:nth-child(2) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-start;
+        align-content: stretch;
+        &>div.block {
+            margin: 1.0rem 0;
+            width: 25%;
+            h2 {
+                .font2;
+                color: @color2;
+                font-size: 24pt;
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+            p {
+                .font1;
+                font-weight: lighter;
+                font-size: 14pt;
+                padding-left: 0.5rem;
+            }
+        }
+    }
+}*/
+

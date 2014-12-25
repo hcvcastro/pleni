@@ -1,11 +1,11 @@
-@keyframes spin1 {
-    from {
+@keyframes rotate {
+    0% {
         transform: rotate(0deg);
     }
     50% {
         transform: rotate(180deg);
     }
-    to {
+    100% {
         transform: rotate(360deg);
     }
 }
@@ -20,33 +20,5 @@
     to {
         transform: rotate(-360deg);
     }
-}
-
-.node1 {
-    position: absolute;
-    top: 128px;
-    left: 128px;
-    animation: spin1 8s linear infinite;
-}
-
-.node2 {
-    position: absolute;
-    top: 96px;
-    left: 96px;
-    animation: spin2 12s linear infinite;
-}
-
-.node3 {
-    position: absolute;
-    top: 64px;
-    left: 64px;
-    animation: spin2 20s linear infinite;
-}
-
-.node4 {
-    position: absolute;
-    top: 96px;
-    left: 32px;
-    animation: spin2 28s linear infinite;
 }
 

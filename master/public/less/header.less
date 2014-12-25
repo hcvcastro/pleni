@@ -1,33 +1,41 @@
 header {
-    background-color: @color1;
+    background-color: fade(@color2,60%);
+    height: 50px;
     nav {
-        max-width: 960px;
-        margin: 0 auto;
+        padding: 10px 0 0 0;
         ul {
             list-style: none;
-            float: left;
             li {
                 float: left;
-                transition: 0.5s ease-in 0s;
+                height: 40px;
+                width: 120px;
+                border-radius: 0.5rem 0.5rem 0 0;
+                transition: all 0.5s ease-in 0.15s;
                 a {
+                    .font1;
                     float: left;
-                    padding: 1.2rem 1.0rem;
-                    text-decoration: none;
-                    color: @color5;
-                    .font2;
-                    &:focus, &:hover, &.active {
-                        outline: none;
-                    }
-                }
-                &:focus, &:hover {
-                    background-color: darken(@color2,10%);
-                    border-bottom: 0.25rem solid @color4;
-                }
-                &.active {
-                    background-color: @color2;
-                    border-bottom: 0.25rem solid @color4;
+                    color: @color1;
+                    width: 100%;
+                    text-align: center;
+                    padding: 0.3rem 0;
+                    transition: inherit;
                 }
             }
+            li:hover {
+                margin-top: -0.4rem;
+                padding-bottom: 0.4rem;
+                a {
+                    padding: 0.5rem 0;
+                    color: @color3;
+                }
+            }
+            &.left>li:nth-child(1) {background-color: fade(@color2,80%);}
+            &.left>li:nth-child(2) {background-color: fade(@color2,70%);}
+            &.left>li:nth-child(3) {background-color: fade(@color2,50%);}
+            &.left>li:nth-child(4) {background-color: fade(@color2,40%);}
+            &.left>li:nth-child(5) {background-color: fade(@color2,30%);}
+            &.right>li:nth-child(1) {background-color: fade(@color2,40%);}
+            &.right>li:nth-child(2) {background-color: fade(@color2,70%);}
         }
     }
 }
