@@ -18,8 +18,7 @@ html(lang='en')
                     li: a(href='/#/register') Register
                     li: a(href='/#/login') Login
                 .clearfix
-        #content
-            section(ng-view)
+        #content(ng-view)
         script(src='/jquery/dist/jquery.min.js')
         script(src='/socket.io-client/socket.io.js')
         script(src='/json-editor/dist/jsoneditor.min.js')
