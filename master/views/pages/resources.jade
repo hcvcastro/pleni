@@ -1,34 +1,34 @@
-nav.menu
-    ul
-        li: a(ng-click='dbservers.show()') DB Servers
-        li: a(ng-click='repositories.show()') Repositories
-        li: a(ng-click='planners.show()') Planners
-        li: a(ng-click='notifiers.show()') Notifiers
-
-section.messages
-section.main
-    section.dbservers
-        h1 DB Servers
-        include ../blocks/resources/list/dbservers
-        include ../blocks/resources/view/dbservers
-        include ../blocks/resources/form/dbservers
-        include ../blocks/resources/remove/dbservers
-    section.repositories
-        h1 Repositories
-        include ../blocks/resources/list/repositories
-        include ../blocks/resources/view/repositories
-        include ../blocks/resources/form/repositories
-        include ../blocks/resources/remove/repositories
-    section.planners
-        h1 Planners
-        include ../blocks/resources/list/planners
-        include ../blocks/resources/view/planners
-        include ../blocks/resources/form/planners
-        include ../blocks/resources/remove/planners
-    section.notifiers
-        h1 Notifiers
-        include ../blocks/resources/list/notifiers
-        include ../blocks/resources/view/notifiers
-        include ../blocks/resources/form/notifiers
-        include ../blocks/resources/remove/notifiers
+.wrapper
+    nav.menu
+        ul
+            li: a(ng-click='dbservers.show()') DB Servers
+            li: a(ng-click='repositories.show()') Repositories
+            li: a(ng-click='planners.show()') Planners
+            li: a(ng-click='notifiers.show()') Notifiers
+    .main
+        .messages
+        section.dbservers
+            h1 DB Servers
+            include ../blocks/resources/list/dbservers
+            include ../blocks/resources/view/dbservers
+            include ../blocks/resources/form/dbservers
+            include ../blocks/resources/remove/dbservers
+        section.repositories
+            h1 Repositories
+            include ../blocks/resources/list/repositories
+            include ../blocks/resources/view/repositories
+            include ../blocks/resources/form/repositories
+            include ../blocks/resources/remove/repositories
+        section.planners
+            h1 Planners
+            include ../blocks/resources/list/planners
+            include ../blocks/resources/view/planners
+            include ../blocks/resources/form/planners
+            include ../blocks/resources/remove/planners
+        section.notifiers
+            h1 Notifiers
+            include ../blocks/resources/list/notifiers
+            include ../blocks/resources/view/notifiers
+            include ../blocks/resources/form/notifiers
+            include ../blocks/resources/remove/notifiers
 

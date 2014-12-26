@@ -1,3 +1,18 @@
+.flex_menu {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        align-items: center;
+        align-content: space-beetwen;
+}
+
+.fa-hiperborea {
+    background-image: url('/img/logo.svg');
+    width: 53px;
+    height: 53px;
+}
+
 footer {
     flex-grow: 1;
     width: 100%;
@@ -6,8 +21,10 @@ footer {
 
     .extra {
         ul {
+            width: 100%;
             list-style: none;
             float: left;
+            .flex_menu;
             li {
                 float: left;
                 width: 96px;
@@ -17,6 +34,23 @@ footer {
                     .font3;
                     width: 100%;
                     text-align: center;
+                    padding: 0.15rem 0;
+                }
+            }
+        }
+    }
+
+    .icons {
+        padding: 3.0rem 0rem;
+        ul {
+            width: 100%;
+            list-style: none;
+            float: left;
+            .flex_menu;
+            li {
+                a {
+                    font-size: 2.3rem;
+                    color: @color5;
                 }
             }
         }
