@@ -1,10 +1,13 @@
-.wrapper
+.wrapper.full
     nav.menu
-        ul
+        ul.items
             li: a(ng-click='dbservers.show()') DB Servers
             li: a(ng-click='repositories.show()') Repositories
             li: a(ng-click='planners.show()') Planners
             li: a(ng-click='notifiers.show()') Notifiers
+        ul.footer
+            li: a.fa.fa-hiperborea.medium
+            li: a.fa.fa-github
     .main
         .messages
         section.dbservers
