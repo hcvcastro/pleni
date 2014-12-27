@@ -15,3 +15,69 @@ body {
     background-color: fade(@color5,60%);
 }
 
+.flex_menu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    align-content: space-beetwen;
+}
+
+.fa-hiperborea {
+    background-image: url('/img/logo.svg');
+    background-size: 100%;
+
+    &.big {
+        width: 53px;
+        height: 53px;
+    }
+    &.medium {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.last {
+    flex-grow: 1;
+    background-color: @color2;
+    height: 10px;
+
+    .extra {
+        ul {
+            width: 100%;
+            list-style: none;
+            float: left;
+            .flex_menu;
+            li {
+                float: left;
+                width: 96px;
+                background-color: @color3;
+                a {
+                    float: left;
+                    .font3;
+                    width: 100%;
+                    text-align: center;
+                    padding: 0.15rem 0;
+                }
+            }
+        }
+    }
+
+    .icons {
+        padding: 3.0rem 0rem;
+        ul {
+            width: 100%;
+            list-style: none;
+            float: left;
+            .flex_menu;
+            li {
+                a {
+                    font-size: 2.3rem;
+                    color: white;
+                }
+            }
+        }
+    }
+}
+

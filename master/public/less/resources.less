@@ -18,10 +18,24 @@ nav.menu {
             height: 40px;
             background-color: fade(@color2,50%);
             margin-bottom: 5px;
-            a {
+            &>a {
                 float: left;
                 padding: 0.36rem 0 0 0.6rem;
                 .font1;
+            }
+
+            .right {
+                color: @color1;
+                margin: 7px 7px 0 0;
+                span {
+                    float: left;
+                    .font3;
+                    width: 25px;
+                    text-align: right;
+                }
+                a {
+                    padding: 4px 0 0 4px;
+                }
             }
         }
 
@@ -32,8 +46,18 @@ nav.menu {
             background-repeat: no-repeat;
             background-position: top right;
             color: @color5;
+
+            .right {
+                span {
+                    padding-right: 15px;
+                    color: @color5;
+                }
+                a {
+                    display: none;
+                }
+            }
         }
-        li:not(active) {
+        li:not(.active) {
             width: 230px;
         }
     }
@@ -62,6 +86,10 @@ div.main {
     overflow: hidden;
     border-right: 10px solid @color5;
     box-sizing: border-box;
+
+    section:not(.active) {
+        display: none;
+    }
 }
 
 /*

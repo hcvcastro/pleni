@@ -3,10 +3,11 @@
 pleni.controller('ResourcesController',
     ['$scope','$sessionStorage',
     'DBServers','Repositories','Planners','Notifiers',
-    function($scope,$sessionStorage,
-        DBServers,Repositories,Planners,Notifiers){
+    function($scope,$sessionStorage,DBServers,Repositories,Planners,Notifiers){
         $scope.storage=$sessionStorage;
-        $('header nav ul li:nth-child(2)').addClass('active')
+
+        $('header>nav>ul:nth-child(2)>li').removeClass('active')
+        $('header>nav>ul:nth-child(1)>li:nth-child(2)').addClass('active')
             .siblings().removeClass('active');
 
         $scope.dbserver={
@@ -860,6 +861,11 @@ pleni.controller('ResourcesController',
                 }
             }
         };
+
+        $scope.dbservers.refresh();
+        $scope.repositories.refresh();
+        $scope.planners.refresh();
+        $scope.notifiers.refresh();
 
         $scope.dbservers.show();
     }]

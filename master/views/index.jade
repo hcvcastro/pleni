@@ -1,2 +1,72 @@
-extends layout
+doctype html
+html(lang='en')
+    head
+        title ⤻ ᴾᴸᴱᴺᴵ ⤻ ⛁
+        link(rel='stylesheet',href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300&subset=latin,latin-ext')
+        link(rel='stylesheet',href='/font-awesome/css/font-awesome.min.css')
+        link(rel='stylesheet',href='css/style.css')
+    body(ng-app='PleniApp')
+        header
+            nav.wrapper
+                ul.left
+                    li: a(href='/#/home') Home
+                    li: a(href='/#/resources') Resources
+                    li: a(href='/#/tasks') Tasks
+                    li: a(href='/#/tasks') Reports
+                    li: a(href='/#/tasks') Schedule
+                ul.right
+                    li: a(href='/#/register') Register
+                    li: a(href='/#/login') Login
+                .clearfix
+        #content(ng-view)
+        footer
+            .wrapper
+                .control
+                    .tabs
+                        .tab
+                            .fa.fa-circle
+                            .fa.fa-play
+                            .text localhost
+                        .tab
+                            .fa.fa-circle
+                            .fa.fa-play
+                            .text localhost
+                        .tab
+                            .fa.fa-circle
+                            .fa.fa-play
+                            .text localhost
+                        .tab
+                            .fa.fa-circle
+                            .fa.fa-play
+                            .text localhost
+                        .tab
+                            .fa.fa-circle
+                            .fa.fa-play
+                            .text localhost
+                    .bar
+                        .fa.fa-circle
+                        .set site/summarize
+                        .count 100
+                        .interval 3000
+                        .fa.fa-play
+                        .msg Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        a.run.fa.fa-stop
+        script(src='/jquery/dist/jquery.min.js')
+        script(src='/socket.io-client/socket.io.js')
+        script(src='/json-editor/dist/jsoneditor.min.js')
+        script(src='/angular/angular.js')
+        script(src='/angular-route/angular-route.js')
+        script(src='/angular-resource/angular-resource.js')
+        script(src='/angular-animate/angular-animate.js')
+        script(src='/angular-socket-io/socket.min.js')
+        script(src='/ngstorage/ngStorage.js')
+        script(src='/js/utils.js')
+        script(src='/js/editor.js')
+        script(src='/js/app.js')
+        script(src='/js/factories.js')
+        script(src='/js/controllers/home.js')
+        script(src='/js/controllers/resources.js')
+        script(src='/js/controllers/notifier.js')
+        script(src='/js/controllers/tasks.js')
+        script(src='http://localhost:35729/livereload.js')
 

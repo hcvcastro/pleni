@@ -7208,11 +7208,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="554.30198"
-     inkscape:cy="324.4031"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="999.77555"
+     inkscape:cy="161.12247"
      inkscape:document-units="px"
-     inkscape:current-layer="g5662"
+     inkscape:current-layer="layer6"
      showgrid="false"
      inkscape:showpageshadow="false"
      showborder="true"
@@ -7749,7 +7749,7 @@
          sodipodi:cy="246"
          sodipodi:rx="80"
          sodipodi:ry="80"
-         d="m 764,246 a 80,80 0 1 1 -160,0 80,80 0 1 1 160,0 z"
+         d="m 764,246 c 0,44.18278 -35.81722,80 -80,80 -44.18278,0 -80,-35.81722 -80,-80 0,-44.18278 35.81722,-80 80,-80 44.18278,0 80,35.81722 80,80 z"
          transform="matrix(0.625,0,0,0.625,237.8125,91.53125)" />
     </g>
   </g>
@@ -8106,7 +8106,7 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="footer"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true">
     <rect
        style="fill:#658068;fill-opacity:0.88235294;fill-rule:evenodd;stroke:none"
@@ -8509,7 +8509,8 @@
      style="display:inline"
      inkscape:label="menu.resources"
      id="g5662"
-     inkscape:groupmode="layer">
+     inkscape:groupmode="layer"
+     sodipodi:insensitive="true">
     <rect
        y="50"
        x="480"
@@ -8584,7 +8585,7 @@
      inkscape:groupmode="layer"
      id="layer5"
      inkscape:label="menu.resources.db"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true">
     <rect
        style="fill:#658068;fill-opacity:0.47058824;fill-rule:evenodd;stroke:none"
@@ -9404,7 +9405,7 @@
      inkscape:groupmode="layer"
      id="g6499"
      inkscape:label="resources.messages"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true">
     <text
        xml:space="preserve"
