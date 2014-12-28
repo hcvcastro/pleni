@@ -2,28 +2,33 @@ article.list
     div.tasks
         ul
             li
-                a.fa.fa-plus(ng-click='repositories.add()') &nbsp;Add
+                a.fa.fa-plus(ng-click='repositories.add()')
+                a(ng-click='repositories.add()') Add Server
             li
-                a.fa.fa-refresh(ng-click='repositories.refresh()') &nbsp;Refresh
+                a.fa.fa-refresh(ng-click='repositories.refresh()')
+                a(ng-click='repositories.refresh()') Refresh
         .clearfix
     table
-        tr
-            th Name
-            th DB Server
-            th DB Name
-            th Type
-            th Available
-            th &nbsp;
-        tr(ng-repeat='repository in storage.repositories')
-            td
-                span {{repository.id}}
-            td {{repository._dbserver}}
-            td {{repository.db.name}}
-            td.center {{repository.type}}
-            td.center
-                span.fa(ng-class='{\'fa-check\':repository.check==\'online\',\'fa-question\':repository.check==\'unknown\',\'fa-close\':repository.check==\'offline\'}')
-            td.options
-                a.fa.fa-refresh(title='Check connection',ng-click='repositories.check($index)',ng-class='{\'fa-spin\':repository.check==\'checking\'}')
-                a.fa.fa-edit(title='Edit properties',ng-click='repositories.edit($index)')
-                a.fa.fa-trash(title='Remove element',ng-click='repositories.remove($index)')
+        thead
+            tr
+                th Name
+                th DB Server
+                th DB Name
+                th.status &nbsp;
+                th.status &nbsp;
+                th.options &nbsp;
+        tbody
+            tr(ng-repeat='repository in storage.repositories')
+                td
+                    span {{repository.id}}
+                td {{repository._dbserver}}
+                td {{repository.db.name}}
+                td.status
+                    span.fa(ng-class='{\'fa-cloud-download\':repository.type==\'site\'}')
+                td.status
+                    span.fa(ng-class='{\'fa-check\':repository.check==\'online\',\'fa-question\':repository.check==\'unknown\',\'fa-close\':repository.check==\'offline\'}')
+                td.options
+                    a.fa.fa-refresh(title='Check connection',ng-click='repositories.check($index)',ng-class='{\'fa-spin\':repository.check==\'checking\'}')
+                    a.fa.fa-edit(title='Edit properties',ng-click='repositories.edit($index)')
+                    a.fa.fa-trash(title='Remove element',ng-click='repositories.remove($index)')
 

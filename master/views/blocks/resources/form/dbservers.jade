@@ -1,30 +1,33 @@
 article.form.animate(ng-show='dbservers.env.view==\'form\'')
-    h2(ng-show='dbservers.env.type==\'collection\'') Add a DB Server
-    h2(ng-show='dbservers.env.type==\'element\'') Edit: {{dbserver.id}}
-    div.close
-        a.fa.fa-close(ng-click='dbservers.list()')
-    form(ng-submit='dbservers.save()')
-        p
-            label Name
-            input(type='text',placeholder='The name for the connection',required,ng-model='dbserver.id')
-        p
-            label Host
-            input(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='dbserver.db.host')
-        p
-            label Port
-            input(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='dbserver.db.port')
-        p
-            label User
-            input(type='text',placeholder='The user for the connection',required,ng-model='dbserver.db.user')
-        p
-            label Password
-            input(type='password',placeholder='The pass for the user in couchdb server',required,ng-model='dbserver.db.pass')
-        p
-            label Prefix
-            input(type='text',placeholder='The prefix used in the couchdb server',required,ng-model='dbserver.db.prefix')
-        p.offset
-            button(type='submit') Save
-            button(type='button',ng-click='dbservers.check()') Test connection
-            span.hide.loader.fa.fa-spinner
-            span.hide.message
+    .title
+        h2(ng-show='dbservers.env.type==\'collection\'') Add a DB Server
+        h2(ng-show='dbservers.env.type==\'element\'') Edit: {{dbserver.id}}
+        .close
+            a.fa.fa-close(ng-click='dbservers.list()')
+    .body
+        form(ng-submit='dbservers.save()')
+            p
+                label Name
+                input(type='text',placeholder='The name for the connection',required,ng-model='dbserver.id')
+            p
+                label Host
+                input(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='dbserver.db.host')
+            p
+                label Port
+                input(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='dbserver.db.port')
+            p
+                label User
+                input(type='text',placeholder='The user for the connection',required,ng-model='dbserver.db.user')
+            p
+                label Password
+                input(type='password',placeholder='The pass for the user in couchdb server',required,ng-model='dbserver.db.pass')
+            p
+                label Prefix
+                input(type='text',placeholder='The prefix used in the couchdb server',required,ng-model='dbserver.db.prefix')
+            p.offset
+                span.hide.loader.fa.fa-spinner
+                span.hide.message
+            p.offset
+                button(type='submit') Save
+                button(type='button',ng-click='dbservers.check()') Test
 

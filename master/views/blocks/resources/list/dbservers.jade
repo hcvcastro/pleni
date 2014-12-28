@@ -2,24 +2,28 @@ article.list
     div.tasks
         ul
             li
-                a.fa.fa-plus(ng-click='dbservers.add()') &nbsp;Add
+                a.fa.fa-plus(ng-click='dbservers.add()')
+                a(ng-click='dbservers.add()') Add Server
             li
-                a.fa.fa-refresh(ng-click='dbservers.refresh()') &nbsp;Refresh
+                a.fa.fa-refresh(ng-click='dbservers.refresh()')
+                a(ng-click='dbservers.refresh()') Refresh
         .clearfix
     table
-        tr
-            th Name
-            th Host
-            th Available
-            th &nbsp;
-        tr(ng-repeat='dbserver in storage.dbservers')
-            td
-                a(ng-click='dbservers.view($index)') {{dbserver.id}}
-            td {{dbserver.db.host}}:{{dbserver.db.port}}
-            td.center
-                span.fa(ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
-            td.options
-                a.fa.fa-refresh(title='Check connection',ng-click='dbservers.check($index)',ng-class='{\'fa-spin\':dbserver.check==\'checking\'}')
-                a.fa.fa-edit(title='Edit properties',ng-click='dbservers.edit($index)')
-                a.fa.fa-trash(title='Remove element',ng-click='dbservers.remove($index)')
+        thead
+            tr
+                th Name
+                th Host
+                th.status &nbsp;
+                th.options &nbsp;
+        tbody
+            tr(ng-repeat='dbserver in storage.dbservers')
+                td
+                    a(ng-click='dbservers.view($index)') {{dbserver.id}}
+                td {{dbserver.db.host}}:{{dbserver.db.port}}
+                td.status
+                    span.fa(ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
+                td.options
+                    a.fa.fa-refresh(title='Check connection',ng-click='dbservers.check($index)',ng-class='{\'fa-spin\':dbserver.check==\'checking\'}')
+                    a.fa.fa-edit(title='Edit properties',ng-click='dbservers.edit($index)')
+                    a.fa.fa-trash(title='Remove element',ng-click='dbservers.remove($index)')
 

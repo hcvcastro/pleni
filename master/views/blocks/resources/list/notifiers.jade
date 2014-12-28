@@ -2,27 +2,31 @@ article.list
     div.tasks
         ul
             li
-                a.fa.fa-plus(ng-click='notifiers.add()') &nbsp;Add
+                a.fa.fa-plus(ng-click='notifiers.add()')
+                a(ng-click='notifiers.add()') Add Server
             li
-                a.fa.fa-refresh(ng-click='notifiers.refresh()') &nbsp;Refresh
+                a.fa.fa-refresh(ng-click='notifiers.refresh()')
+                a(ng-click='notifiers.refresh()') Refresh
         .clearfix
     table
-        tr
-            th Name
-            th Host
-            th Type
-            th Available
-            th &nbsp;
-        tr(ng-repeat='notifier in storage.notifiers')
-            td
-                a(ng-click='notifiers.view($index)') {{notifier.id}}
-            td {{notifier.notifier.host}}:{{notifier.notifier.port}}
-            td.center
-                span {{notifier.type}}
-            td.center
-                span.fa(ng-class='{\'fa-check\':notifier.check==\'online\',\'fa-question\':notifier.check==\'unknown\',\'fa-close\':notifier.check==\'offline\'}')
-            td.options
-                a.fa.fa-refresh(title='Check connection',ng-click='notifiers.check($index)',ng-class='{\'fa-spin\':notifier.check==\'checking\'}')
-                a.fa.fa-edit(title='Edit properties',ng-click='notifiers.edit($index)')
-                a.fa.fa-trash(title='Remove element',ng-click='notifiers.remove($index)')
+        thead
+            tr
+                th Name
+                th Host
+                th.status &nbsp;
+                th.status &nbsp;
+                th.options &nbsp;
+        tbody
+            tr(ng-repeat='notifier in storage.notifiers')
+                td
+                    a(ng-click='notifiers.view($index)') {{notifier.id}}
+                td {{notifier.notifier.host}}:{{notifier.notifier.port}}
+                td.status
+                    span.fa(ng-class='{\'fa-bullhorn\':notifier.type==\'io\'}')
+                td.status
+                    span.fa(ng-class='{\'fa-check\':notifier.check==\'online\',\'fa-question\':notifier.check==\'unknown\',\'fa-close\':notifier.check==\'offline\'}')
+                td.options
+                    a.fa.fa-refresh(title='Check connection',ng-click='notifiers.check($index)',ng-class='{\'fa-spin\':notifier.check==\'checking\'}')
+                    a.fa.fa-edit(title='Edit properties',ng-click='notifiers.edit($index)')
+                    a.fa.fa-trash(title='Remove element',ng-click='notifiers.remove($index)')
 

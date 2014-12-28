@@ -391,6 +391,7 @@ pleni.controller('ResourcesController',
                               , tid:0
                               , schema:{}
                             }
+                         , follow:false
                         });
                     }
                     $('article.list table').fadeIn();

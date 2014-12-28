@@ -7208,11 +7208,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="999.77555"
-     inkscape:cy="161.12247"
+     inkscape:zoom="1"
+     inkscape:cx="849.5859"
+     inkscape:cy="785.60902"
      inkscape:document-units="px"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="layer3"
      showgrid="false"
      inkscape:showpageshadow="false"
      showborder="true"
@@ -7385,8 +7385,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="layout"
-     style="display:inline"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="fill:#d9ddd9;fill-opacity:0.58823529;fill-rule:evenodd;stroke:none;display:inline"
        id="rect3006"
@@ -9405,7 +9404,7 @@
      inkscape:groupmode="layer"
      id="g6499"
      inkscape:label="resources.messages"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true">
     <text
        xml:space="preserve"
@@ -9551,8 +9550,7 @@
      inkscape:groupmode="layer"
      id="g5578"
      inkscape:label="resources.db.index"
-     style="display:none"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <text
        sodipodi:linespacing="125%"
        id="text5580"
@@ -10061,11 +10059,10 @@
        y="148" />
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="resources.db.add"
      id="g6055"
-     inkscape:groupmode="layer"
-     sodipodi:insensitive="true">
+     inkscape:groupmode="layer">
     <text
        sodipodi:linespacing="125%"
        id="text6113"
