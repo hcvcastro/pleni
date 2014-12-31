@@ -1,6 +1,6 @@
 article.form.animate(ng-show='dbservers.env.view==\'form\'')
     .title
-        h2(ng-show='dbservers.env.type==\'collection\'') Add a DB Server
+        h2(ng-show='dbservers.env.type==\'collection\'') Add a Database Server
         h2(ng-show='dbservers.env.type==\'element\'') Edit: {{dbserver.id}}
         .close
             a.fa.fa-close(ng-click='dbservers.list()')
@@ -25,7 +25,7 @@ article.form.animate(ng-show='dbservers.env.view==\'form\'')
                 label Prefix
                 input(type='text',placeholder='The prefix used in the couchdb server',required,ng-model='dbserver.db.prefix')
             p.offset
-                span.hide.loader.fa.fa-spinner
+                span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message
             p.offset
                 button(type='submit') Save

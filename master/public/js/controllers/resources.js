@@ -39,8 +39,8 @@ pleni.controller('ResourcesController',
                     $scope.dbservers.refresh();
                 }
             }
-          , refresh:function(){
-                $('article.list table').fadeOut();
+          , refresh:function(hide){
+                utils.load_resources_start(1,hide);
                 DBServers.query(function(data){
                     $scope.storage.dbservers=new Array();
                     for(var i=0;i<data.length;i++){
@@ -55,7 +55,7 @@ pleni.controller('ResourcesController',
                           , check:'unknown'
                         });
                     }
-                    $('article.list table').fadeIn();
+                    utils.load_resources_end(1,hide);
                 });
             }
           , save:function(){
@@ -225,7 +225,8 @@ pleni.controller('ResourcesController',
                     $scope.repositories.refresh();
                 }
             }
-          , refresh:function(){
+          , refresh:function(hide){
+                utils.load_resources_start(2,hide);
                 $('article.list table').fadeOut();
                 Repositories.query(function(data){
                     $scope.storage.repositories=new Array();
@@ -240,7 +241,7 @@ pleni.controller('ResourcesController',
                           , type:'site'
                         });
                     }
-                    $('article.list table').fadeIn();
+                    utils.load_resources_end(2,hide);
                 });
             }
           , save:function(){
@@ -369,8 +370,8 @@ pleni.controller('ResourcesController',
                     $scope.planners.refresh();
                 }
             }
-          , refresh:function(){
-                $('article.list table').fadeOut();
+          , refresh:function(hide){
+                utils.load_resources_start(3,hide);
                 Planners.query(function(data){
                     $scope.storage.planners=new Array();
                     for(var i=0;i<data.length;i++){
@@ -394,7 +395,7 @@ pleni.controller('ResourcesController',
                          , follow:false
                         });
                     }
-                    $('article.list table').fadeIn();
+                    utils.load_resources_end(3,hide);
                 });
             }
           , save:function(){
@@ -703,8 +704,8 @@ pleni.controller('ResourcesController',
                     $scope.notifiers.refresh();
                 }
             }
-          , refresh:function(){
-                $('article.list table').fadeOut();
+          , refresh:function(hide){
+                utils.load_resources_start(4,hide);
                 Notifiers.query(function(data){
                     $scope.storage.notifiers=new Array();
                     for(var i=0;i<data.length;i++){
@@ -719,7 +720,7 @@ pleni.controller('ResourcesController',
                           , planners:new Array()
                         });
                     }
-                    $('article.list table').fadeIn();
+                    utils.load_resources_end(4,hide);
                 });
             }
           , save:function(){
