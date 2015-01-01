@@ -7208,9 +7208,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="849.5859"
-     inkscape:cy="785.60902"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="866.72856"
+     inkscape:cy="725.16091"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="false"
@@ -10059,7 +10059,7 @@
        y="148" />
   </g>
   <g
-     style="display:inline"
+     style="display:none"
      inkscape:label="resources.db.add"
      id="g6055"
      inkscape:groupmode="layer">
@@ -10559,11 +10559,10 @@
     </g>
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="resources.db.view"
      id="g5849"
-     inkscape:groupmode="layer"
-     sodipodi:insensitive="true">
+     inkscape:groupmode="layer">
     <text
        sodipodi:linespacing="125%"
        id="text5907"
@@ -10711,7 +10710,7 @@
          sodipodi:role="line"
          id="tspan5902"
          x="791.79974"
-         y="459.14001">Scan repositories</tspan></text>
+         y="459.14001">Scan</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text5904"
