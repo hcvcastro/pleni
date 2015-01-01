@@ -26,15 +26,8 @@ pleni.controller('ResourcesController',
               , type:'collection'
             }
           , show:function(){
-                $scope.dbservers.env.view='list';
-                $scope.repositories.env.view='list';
-                $scope.planners.env.view='list';
-                $scope.notifiers.env.view='list';
-
-                $('section.dbservers').addClass('active')
-                    .siblings().removeClass('active');
-                $('nav.menu>ul>li:nth-child(1)').addClass('active')
-                    .siblings().removeClass('active');
+                utils.set_list($scope);
+                utils.set_active('dbservers',1);
                 if(!$scope.storage.dbservers){
                     $scope.dbservers.refresh();
                 }
@@ -212,22 +205,14 @@ pleni.controller('ResourcesController',
               , type:'collection'
             }
           , show:function(){
-                $scope.dbservers.env.view='list';
-                $scope.repositories.env.view='list';
-                $scope.planners.env.view='list';
-                $scope.notifiers.env.view='list';
-
-                $('section.repositories').addClass('active')
-                    .siblings().removeClass('active');
-                $('nav.menu>ul>li:nth-child(2)').addClass('active')
-                    .siblings().removeClass('active');
+                utils.set_list($scope);
+                utils.set_active('repositories',2);
                 if(!$scope.storage.repositories){
                     $scope.repositories.refresh();
                 }
             }
           , refresh:function(hide){
                 utils.load_resources_start(2,hide);
-                $('article.list table').fadeOut();
                 Repositories.query(function(data){
                     $scope.storage.repositories=new Array();
                     for(var i=0;i<data.length;i++){
@@ -357,15 +342,8 @@ pleni.controller('ResourcesController',
               , type:'collection'
             }
           , show:function(){
-                $scope.dbservers.env.view='list';
-                $scope.repositories.env.view='list';
-                $scope.planners.env.view='list';
-                $scope.notifiers.env.view='list';
-
-                $('section.planners').addClass('active')
-                    .siblings().removeClass('active');
-                $('nav.menu>ul>li:nth-child(3)').addClass('active')
-                    .siblings().removeClass('active');
+                utils.set_list($scope);
+                utils.set_active('planners',3);
                 if(!$scope.storage.planners){
                     $scope.planners.refresh();
                 }
@@ -691,15 +669,8 @@ pleni.controller('ResourcesController',
               , type:'collection'
             }
           , show:function(){
-                $scope.dbservers.env.view='list';
-                $scope.repositories.env.view='list';
-                $scope.planners.env.view='list';
-                $scope.notifiers.env.view='list';
-
-                $('section.notifiers').addClass('active')
-                    .siblings().removeClass('active');
-                $('nav.menu>ul>li:nth-child(4)').addClass('active')
-                    .siblings().removeClass('active');
+                utils.set_list($scope);
+                utils.set_active('notifiers',4);
                 if(!$scope.storage.notifiers){
                     $scope.notifiers.refresh();
                 }
