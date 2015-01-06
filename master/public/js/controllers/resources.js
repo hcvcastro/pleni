@@ -463,14 +463,18 @@ pleni.controller('ResourcesController',
                 $scope.planners.env.view='view';
                 $scope.planners.env.type='element';
                 $scope.planner=$scope.storage.planners[index];
-                if(!$scope.planner.api){
-                    $scope.planners.api();
+                console.log($scope.planner);
+                if($scope.planner.status=='online'){
+                    if(!$scope.planner.api){
+                        $scope.planners.api();
+                    }
                 }
                 if($scope.planner.set.status=='set'){
                     $scope.planners.editor();
                 }
             }
           , api:function(){
+                $('.api').addClass('fa-spin');
                 utils.clean();
                 if($scope.planners.env.type=='element'){
                     utils.send('Getting available tasks ...');
@@ -479,6 +483,7 @@ pleni.controller('ResourcesController',
                         $scope.planner.check='online';
                         $scope.planner.api=data.planner.tasks;
                         utils.receive();
+                        $('.api').removeClass('fa-spin');
                         if(data.length==0){
                             utils.show('warning','Planner has no Tasks!!');
                         }
@@ -527,6 +532,9 @@ pleni.controller('ResourcesController',
             }
           , get:function(){
                 if($scope.planners.env.type=='element'){
+                    if(!$scope.planner.api){
+                        $scope.planners.api();
+                    }
                     Planners.get({
                         server:$scope.planner.id
                     },function(data){
@@ -534,12 +542,14 @@ pleni.controller('ResourcesController',
                         $scope.planner.set.name=data.planner.task.name;
                         $scope.planner.set.count=data.planner.task.count;
                         $scope.planner.set.interval=data.planner.task.interval;
-                        for(var i=0;i<$scope.planner.api.length;i++){
-                            if($scope.planner.set.name==
-                                $scope.planner.api[i].name){
-                                $scope.planner.set.schema=
-                                    $scope.planner.api[i].schema;
-                                break;
+                        if($scope.planner.api){
+                            for(var i=0;i<$scope.planner.api.length;i++){
+                                if($scope.planner.set.name==
+                                    $scope.planner.api[i].name){
+                                    $scope.planner.set.schema=
+                                        $scope.planner.api[i].schema;
+                                    break;
+                                }
                             }
                         }
                         $scope.planners.editor();

@@ -7208,9 +7208,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="866.72856"
-     inkscape:cy="725.16091"
+     inkscape:zoom="0.7071068"
+     inkscape:cx="689.12277"
+     inkscape:cy="505.74458"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="false"
@@ -9550,7 +9550,7 @@
      inkscape:groupmode="layer"
      id="g5578"
      inkscape:label="resources.db.index"
-     style="display:inline">
+     style="display:none">
     <text
        sodipodi:linespacing="125%"
        id="text5580"
@@ -10559,7 +10559,7 @@
     </g>
   </g>
   <g
-     style="display:inline"
+     style="display:none"
      inkscape:label="resources.db.view"
      id="g5849"
      inkscape:groupmode="layer">
@@ -12816,7 +12816,7 @@
     </g>
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="resources.notif.index"
      id="g6787"
      inkscape:groupmode="layer"
@@ -13339,7 +13339,7 @@
      inkscape:groupmode="layer"
      id="g6415"
      inkscape:label="resources.notif.view"
-     style="display:none"
+     style="display:inline"
      sodipodi:insensitive="true">
     <text
        xml:space="preserve"

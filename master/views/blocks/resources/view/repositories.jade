@@ -1,14 +1,7 @@
 article.view.animate(ng-show='repositories.env.view==\'view\'')
-    h2 {{repository.id}} ({{repository.db.name}})
-    div.close
-        a.fa.fa-close(ng-click='repositories.list()')
-    div.tasks
-        ul
-            li
-                a.fa.fa-database(ng-click='repositories.scan()') &nbsp;Scan repositories
-        .clearfix
-    p.offset
-        span.hide.loader.fa.fa-spinner
-        span.hide.message
-    br
+    .title
+        h2 {{repository.id}} ({{repository.db.name}})
+        .close
+            a.fa.fa-close(ng-click='repositories.list()')
+    .body
 

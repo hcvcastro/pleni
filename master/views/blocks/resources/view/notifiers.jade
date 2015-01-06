@@ -1,8 +1,9 @@
 article.view.animate(ng-show='notifiers.env.view==\'view\'')
-    h2 {{notifier.id}} ({{notifier.notifier.host}}:{{notifier.notifier.port}})
-    div.close
-        a.fa.fa-close(ng-click='notifiers.list()')
-    div
+    .title
+        h2 {{notifier.id}} ({{notifier.notifier.host}}:{{notifier.notifier.port}})
+        .close
+            a.fa.fa-close(ng-click='notifiers.list()')
+    .body
         form(ng-submit='notifiers.addplanner()')
             h3 Connected planners
             .item(ng-repeat='planner in notifier.planners')
@@ -17,9 +18,8 @@ article.view.animate(ng-show='notifiers.env.view==\'view\'')
                 select(required,ng-model='notifier.planner',ng-options='planner.id as planner.id for planner in storage.planners')
                     option(value='',selected='selected',disabled='disabled') Select a Planner
             p.offset
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
                 button(type='submit') Add Planner
-        p.offset
-            span.hide.loader.fa.fa-spinner
-            span.hide.message
-    br
 

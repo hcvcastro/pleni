@@ -276,8 +276,15 @@ div.main {
             .body {
                 padding: 5px 0;
 
+                h3 {
+                    height: 32px;
+                    margin: 0;
+                    padding: 5px 0 0 0;
+                    .font3;
+                }
+
                 form {
-                    p {
+                    p, .form-control, .container-headers {
                         height: 32px;
                         width: 100%;
                         background-color: fade(@color3,39%);
@@ -311,6 +318,10 @@ div.main {
                                 padding: 6px 0;
                                 box-sizing: border-box;
                             }
+                        }
+
+                        a.extra {
+                            margin: 0 0 0 10px;
                         }
 
                         button {

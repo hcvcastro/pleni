@@ -1,11 +1,14 @@
 article.remove.animate(ng-show='notifiers.env.view==\'remove\'')
-    h2 Remove notifier
-    div.close
-        a.fa.fa-close(ng-click='notifiers.list()')
-    form(ng-submit='notifiers.delete()')
-        p Press the button if you want remove the registry for the notifier.
-        p.offset
-            button(type='submit') Remove connection
-            span.hide.loader.fa.fa-spinner
-            span.hide.message
+    .title
+        h2 Remove notifier
+        .close
+            a.fa.fa-close(ng-click='notifiers.list()')
+    .body
+        form(ng-submit='notifiers.delete()')
+            p.large Press the button if you want remove the registry for the notifier.
+            p.offset
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='submit') Remove
 
