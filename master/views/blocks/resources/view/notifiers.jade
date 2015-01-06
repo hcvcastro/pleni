@@ -4,22 +4,22 @@ article.view.animate(ng-show='notifiers.env.view==\'view\'')
         .close
             a.fa.fa-close(ng-click='notifiers.list()')
     .body
-        form(ng-submit='notifiers.addplanner()')
-            h3 Connected planners
-            .item(ng-repeat='planner in notifier.planners')
-                .body {{planner}}
+        .column1
+            .title
+                h3 Connected Planners
+            .item(ng-repeat='planner in notifier.planners') {{planner}}
                 .close
                     a.fa.fa-trash(ng-click='notifiers.removeplanner($index)')
                 .clearfix
-            br
-            h3 Connect a new planner
-            p
-                label &nbsp;
-                select(required,ng-model='notifier.planner',ng-options='planner.id as planner.id for planner in storage.planners')
-                    option(value='',selected='selected',disabled='disabled') Select a Planner
-            p.offset
-                span.hide.loader.fa.fa-spinner.fa-spin
-                span.hide.message
-            p.offset
-                button(type='submit') Add Planner
+        .column2
+            .title
+                h3 Available Planners
+            .item(ng-repeat='planner in storage.planners') {{planner.id}}
+                .close
+                    a.fa.fa-plus-circle(ng-click='notifiers.addplanner($index)')
+                .clearfix
+        .clearfix
+        p.offset
+            span.hide.loader.fa.fa-spinner.fa-spin
+            span.hide.message
 

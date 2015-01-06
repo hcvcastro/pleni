@@ -789,17 +789,18 @@ pleni.controller('ResourcesController',
                     });
                 }
             }
-          , addplanner:function(){
+          , addplanner:function(index){
                 utils.clean();
                 if($scope.notifiers.env.type=='element'){
                     utils.send('Send add request ...');
                     Notifiers.add({
                         server:$scope.notifier.id
-                      , planner:$scope.notifier.planner
+                      , planner:$scope.storage.planners[index].id
                     },function(data){
                         utils.receive();
                         $scope.notifier.planners=data._planners;
                         $scope.notifiers.get();
+                        utils.show('success','Planner added to the list');
                     },function(error){
                         utils.receive();
                     });
@@ -807,15 +808,19 @@ pleni.controller('ResourcesController',
             }
           , removeplanner:function(index){
                 utils.clean();
-                Notifiers.remove({
-                    server:$scope.notifier.id
-                  , planner:$scope.notifier.planners[index]
-                },function(data){
-                    utils.receive();
-                    $scope.notifiers.get();
-                },function(error){
-                    utils.receive();
-                });
+                if($scope.notifiers.env.type=='element'){
+                    utils.send('Send a remove request ...');
+                    Notifiers.remove({
+                        server:$scope.notifier.id
+                      , planner:$scope.notifier.planners[index]
+                    },function(data){
+                        utils.receive();
+                        $scope.notifiers.get();
+                        utils.show('success','Planner removed to the list');
+                    },function(error){
+                        utils.receive();
+                    });
+                }
             }
           , edit:function(index){
                 $scope.notifiers.env.view='form';
