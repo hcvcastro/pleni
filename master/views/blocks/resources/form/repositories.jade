@@ -1,22 +1,25 @@
 article.form.animate(ng-show='repositories.env.view==\'form\'')
-    h2(ng-show='repositories.env.type==\'collection\'') Add a Repository
-    h2(ng-show='repositories.env.type==\'element\'') Edit: {{repository.id}}
-    div.close
-        a.fa.fa-close(ng-click='repositories.list()')
-    form(ng-submit='repositories.save()')
-        p
-            label Name
-            input(type='text',placeholder='The name for the repository',required,ng-model='repository.id')
-        p
-            label DB Server
-            select(required,ng-model='repository._dbserver',ng-options='dbserver.id as dbserver.id for dbserver in storage.dbservers')
-                option(value='',selected='selected',disabled='disabled') Select a DB Server
-        p
-            label DB Name
-            input(type='text',placeholder='The name of the CouchDB database',required,ng-model='repository.db.name')
-        p.offset
-            button(type='submit') Save
-            button(type='button',ng-click='repositories.check()') Test connection
-            span.hide.loader.fa.fa-spinner
-            span.hide.message
+    .title
+        h2(ng-show='repositories.env.type==\'collection\'') Add a Repository
+        h2(ng-show='repositories.env.type==\'element\'') Edit: {{repository.id}}
+        .close
+            a.fa.fa-close(ng-click='repositories.list()')
+    .body
+        form(ng-submit='repositories.save()')
+            p
+                label Name
+                input(type='text',placeholder='The name for the repository',required,ng-model='repository.id')
+            p
+                label DB Server
+                select(required,ng-model='repository._dbserver',ng-options='dbserver.id as dbserver.id for dbserver in storage.dbservers')
+                    option(value='',selected='selected',disabled='disabled') Select a DB Server
+            p
+                label DB Name
+                input(type='text',placeholder='The name of the CouchDB database',required,ng-model='repository.db.name')
+            p.offset
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='submit') Save
+                button(type='button',ng-click='repositories.check()') Test
 
