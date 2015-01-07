@@ -48,7 +48,9 @@ module.exports=function(app,ios,ioc){
         response.json(notifier.map(
             function(notifier){
                 return {
-                    planner:{
+                    id:get_planner(
+                        notifier.planner.host,notifier.planner.port,app)
+                  , planner:{
                         host:notifier.planner.host
                       , port:notifier.planner.port
                     }
@@ -80,7 +82,8 @@ module.exports=function(app,ios,ioc){
                 action:'put'
               , msg:app.get('notifier').map(function(element){
                     return {
-                        id:get_planner(element.planner.host,element.planner.port,app)
+                        id:get_planner(
+                            element.planner.host,element.planner.port,app)
                       , planner:{
                             host:element.planner.host
                           , port:element.planner.port

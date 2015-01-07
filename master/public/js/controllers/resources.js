@@ -370,7 +370,6 @@ pleni.controller('ResourcesController',
                               , tid:0
                               , schema:{}
                             }
-                         , follow:false
                         });
                     }
                     utils.load_resources_end(3,hide);
