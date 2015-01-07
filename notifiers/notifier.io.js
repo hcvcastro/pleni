@@ -81,6 +81,18 @@ app.put('/notifier',function(request,response){
               , socket:socket_connect(host+':'+port)
             }
         }));
+
+        ios.emit('notifier',{
+            action:'put'
+          , msg:app.get('planners').map(function(element){
+                return {
+                    planner:{
+                        host:element.planner.host
+                      , port:element.planner.port
+                    }
+                }
+            })
+        });
         response.status(201).json(_success.ok);
     }else{
         response.status(400).json(_error.json);
@@ -102,6 +114,16 @@ app.post('/notifier',function(request,response){
                 }
               , socket:socket_connect(host+':'+port)
             });
+
+            ios.emit('notifier',{
+                action:'post'
+              , msg:{
+                    planner:{
+                        host:host
+                      , port:port
+                    }
+                }
+            });
             response.status(201).json(_success.ok);
         }else{
             response.status(403).json(_error.notoverride);
@@ -117,6 +139,10 @@ app.delete('/notifier',function(request,response){
     });
 
     app.set('planners',new Array());
+
+    ios.emit('notifier',{
+        action:'delete'
+    });
     response.status(200).json(_success.ok);
 });
 
@@ -137,6 +163,16 @@ app.post('/notifier/_add',function(request,response){
             });
 
             app.set('planners',planners);
+
+            ios.emit('notifier',{
+                action:'add'
+              , msg:{
+                    planner:{
+                        host:host
+                      , port:port
+                    }
+                }
+            });
             response.status(201).json(_success.ok);
         }else{
             planners[planner[0]].socket.disconnect();
@@ -146,6 +182,16 @@ app.post('/notifier/_add',function(request,response){
             planners[planner[0]].socket=socket_connect(host+':'+port);
 
             app.set('planners',planners);
+
+            ios.emit('notifier',{
+                action:'override'
+              , msg:{
+                    planner:{
+                        host:host
+                      , port:port
+                    }
+                }
+            });
             response.status(200).json(_success.ok);
         }
     }else{
@@ -157,12 +203,20 @@ app.post('/notifier/_remove',function(request,response){
     if(schema.js.validate(request.body,schema.notifier_planner).length==0){
         var planners=app.get('planners')
           , planner=get_element(request.body,planners)
-          , host=validate.toValidHost(request.body.planner.host)
-          , port=validate.toInt(request.body.planner.port)
 
         if(planner){
             planners.splice(planner[0],1);
             app.set('planners',planners);
+
+            ios.emit('notifier',{
+                action:'remove'
+              , msg:{
+                    planner:{
+                        host:planner[1].host
+                      , port:planner[1].port
+                    }
+                }
+            });
             response.status(200).json(_success.ok);
         }else{
             response.status(404).json(_error.notfound);

@@ -637,6 +637,9 @@ pleni.controller('ResourcesController',
                     });
                 }
             }
+          , follow:function(index){
+                console.log('follow -> '+index);
+            }
           , edit:function(index){
                 $scope.planners.env.view='form';
                 $scope.planners.env.type='element';
@@ -798,7 +801,6 @@ pleni.controller('ResourcesController',
                       , planner:$scope.storage.planners[index].id
                     },function(data){
                         utils.receive();
-                        $scope.notifier.planners=data._planners;
                         $scope.notifiers.get();
                         utils.show('success','Planner added to the list');
                     },function(error){
