@@ -19,38 +19,7 @@ html(lang='en')
                     li: a(href='/#/login') Login
                 .clearfix
         #content(ng-view)
-        footer(ng-controller='SocketController')
-            .wrapper
-                .control
-                    .tabs
-                        .tab
-                            .fa.fa-circle
-                            .fa.fa-play
-                            .text localhost
-                        .tab
-                            .fa.fa-circle
-                            .fa.fa-play
-                            .text localhost
-                        .tab
-                            .fa.fa-circle
-                            .fa.fa-play
-                            .text localhost
-                        .tab
-                            .fa.fa-circle
-                            .fa.fa-play
-                            .text localhost
-                        .tab
-                            .fa.fa-circle
-                            .fa.fa-play
-                            .text localhost
-                    .bar
-                        .fa.fa-circle
-                        .set site/summarize
-                        .count 100
-                        .interval 3000
-                        .fa.fa-play
-                        .msg Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        a.run.fa.fa-stop
+        include ./blocks/control
         script(src='/jquery/dist/jquery.min.js')
         script(src='/socket.io-client/socket.io.js')
         script(src='/json-editor/dist/jsoneditor.min.js')
