@@ -5,7 +5,7 @@ footer(ng-controller='SocketController')
                 .tab(ng-repeat='thread in storage.threads')
                     .fa(ng-class='{\'fa-circle\':thread.set.status==\'set\',\'fa-question\':thread.set.status==\'unknown\',\'fa-circle-o\':thread.set.status==\'unset\'}')
                     .fa(ng-class='{\'fa-play\':thread.status==\'running\',\'fa-question\':thread.status==\'unknown\',\'fa-stop\':thread.status==\'stopped\'}')
-                    .text {{thread.id}}
+                    .text(ng-click='pick($index)') {{thread.id}}
             .bar(ng-show='thread')
                 .fa(ng-class='{\'fa-circle\':thread.set.status==\'set\',\'fa-question\':thread.set.status==\'unknown\',\'fa-circle-o\':thread.set.status==\'unset\'}')
                 .set {{thread.set.name}}
@@ -13,5 +13,5 @@ footer(ng-controller='SocketController')
                 .interval {{thread.set.interval}}
                 .fa(ng-class='{\'fa-play\':thread.status==\'running\',\'fa-question\':thread.status==\'unknown\',\'fa-stop\':thread.status==\'stopped\'}')
                 .msg {{message}}
-                a.run.fa.fa-stop
+                a.run.fa.fa-stop(ng-click='stop()')
 

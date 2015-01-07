@@ -13,19 +13,5 @@
           , "port":3002
         }
     }
-  , {
-        "id":"hiperborea"
-      , "notifier":{
-            "host":"http://192.3.27.103"
-          , "port":3002
-        }
-    }
-  , {
-        "id":"smith"
-      , "notifier":{
-            "host":"http://167.157.28.33"
-          , "port":3002
-        }
-    }
 ]
 

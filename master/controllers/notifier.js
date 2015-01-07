@@ -166,7 +166,7 @@ module.exports=function(app,ios,ioc){
                 app.set('notifier',notifier);
 
                 ios.emit('notifier',{
-                    action:'add'
+                    action:'create'
                   , msg:{
                         id:id
                       , planner:{
@@ -187,9 +187,10 @@ module.exports=function(app,ios,ioc){
                 app.set('notifier',notifier);
 
                 ios.emit('notifier',{
-                    action:'override'
+                    action:'update'
                   , msg:{
-                        planner:{
+                        id:id
+                      , planner:{
                             host:host
                           , port:port
                         }
@@ -208,13 +209,16 @@ module.exports=function(app,ios,ioc){
               , planner=get_element(request.body,notifier)
 
             if(planner){
+                var host=planner[1].planner.host
+                  , port=planner[1].planner.port
+
                 notifier.splice(planner[0],1);
                 app.set('notifier',notifier);
 
                 ios.emit('notifier',{
                     action:'remove'
                   , msg:{
-                        id:get_planner(planner[1].host,planner[1].port,app)
+                        id:get_planner(host,port,app)
                     }
                 });
                 response.status(200).json(_success.ok);
