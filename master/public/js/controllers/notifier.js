@@ -7,7 +7,7 @@ pleni.controller('SocketController',
         $scope.storage.threads=[];
 
         $scope.thread=undefined;
-        $scope.index=undefined;
+        $scope.current=undefined;
         $scope.message='';
 
         var get_element=function(needle,haystack){
@@ -64,12 +64,12 @@ pleni.controller('SocketController',
         };
 
         $scope.pick=function(index){
-            if(index==$scope.index){
-                $scope.index=undefined;
+            if(index==$scope.current){
+                $scope.current=undefined;
                 $scope.thread=undefined;
             }else{
-                $scope.index=index;
-                $scope.thread=$scope.storage.threads[index];
+                $scope.current=index;
+                $scope.thread=$scope.storage.threads[$scope.current];
             }
         }
 
@@ -96,8 +96,39 @@ pleni.controller('SocketController',
                 case 'create':
                     $scope.storage.threads.push(create_thread(pkg.msg));
                     break;
-                default:
-                    console.log(pkg);
+                case 'connection':
+                    break;
+                case 'planner':
+                    var i=get_element(pkg.id,$scope.storage.threads)[0];
+                    switch(pkg.planner.action){
+                        case 'connection':
+                            break;
+                        case 'create':
+                            $scope.storage.threads[i].set={
+                                status:'set'
+                              , name:pkg.planner.task.name
+                              , count:pkg.planner.task.count
+                              , interval:pkg.planner.task.interval
+                            };
+                            break;
+                        case 'remove':
+                            $scope.storage.threads[i].set={
+                                status:'unset'
+                              , name:''
+                              , count:undefined
+                              , interval:undefined
+                            };
+                            break;
+                        case 'run':
+                            $scope.storage.threads[i].status='running';
+                            break;
+                        case 'stop':
+                            $scope.storage.threads[i].status='stopped';
+                            break;
+                        default:
+                            console.log(pkg);
+                            break;
+                    }
                     break;
             }
         });

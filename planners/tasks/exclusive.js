@@ -2,8 +2,9 @@
 
 module.exports=function(params,repeat,stop,notifier){
     notifier({
-        task:{
-            action:'tick'
+        action:'task'
+      , task:{
+            msg:'tick'
         }
     });
     repeat();

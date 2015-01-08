@@ -54,9 +54,9 @@ module.exports=function(notifier){
                     this.interval(interval);
 
                     notifier({
-                        task:{
-                            action:'create'
-                          , name:this.name
+                        action:'create'
+                      , task:{
+                            name:this.name
                           , count:count
                           , interval:interval
                         }
@@ -81,9 +81,9 @@ module.exports=function(notifier){
         if(this.tid!==undefined&&this.tid===request.params.tid){
             this._stop();
             notifier({
-                task:{
-                    action:'remove'
-                  , name:this.name
+                action:'remove'
+              , task:{
+                    name:this.name
                 }
             });
 

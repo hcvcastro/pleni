@@ -462,7 +462,6 @@ pleni.controller('ResourcesController',
                 $scope.planners.env.view='view';
                 $scope.planners.env.type='element';
                 $scope.planner=$scope.storage.planners[index];
-                console.log($scope.planner);
                 if($scope.planner.status=='online'){
                     if(!$scope.planner.api){
                         $scope.planners.api();

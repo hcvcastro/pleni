@@ -59,9 +59,7 @@ app.use(function(request,response){
 
 ios.sockets.on('connection',function(socket){
     socket.emit('notifier',{
-        notifier:{
-            action:'connection'
-        }
+        action:'connection'
     });
 });
 

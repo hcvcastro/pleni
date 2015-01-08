@@ -27,8 +27,11 @@ var validate=require('../../planners/utils/validators')
   , socket_connect=function(ios,ioc,host,port,id){
         var socket=ioc.connect(host+':'+port,{reconnect:true})
         socket.on('notifier',function(msg){
-            msg.id=id;
-            ios.emit('notifier',msg);
+            ios.emit('notifier',{
+                action:'planner'
+              , id:id
+              , planner:msg
+            });
         });
         return socket;
     }

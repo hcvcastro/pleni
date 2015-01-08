@@ -17,9 +17,7 @@ server.listen(new planner(notifier));
 
 io.on('connection',function(socket){
     socket.emit('notifier',{
-        planner:{
-            action:'connection'
-        }
+        action:'connection'
     });
 });
 

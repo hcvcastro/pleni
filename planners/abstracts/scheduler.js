@@ -64,9 +64,7 @@ module.exports=function(notifier,task,count,interval){
             this._status='running';
             if(notifier){
                 notifier({
-                    planner:{
-                        action:'run'
-                    }
+                    action:'run'
                 });
             }
         }
@@ -78,9 +76,7 @@ module.exports=function(notifier,task,count,interval){
             this._status='stopped'
             if(notifier){
                 notifier({
-                    planner:{
-                        action:'stop'
-                    }
+                    action:'stop'
                 });
             }
         }
