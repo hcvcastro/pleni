@@ -10,6 +10,15 @@ pleni.controller('ResourcesController',
         $('header>nav>ul:nth-child(1)>li:nth-child(2)').addClass('active')
             .siblings().removeClass('active');
 
+        var get_element=function(needle,haystack){
+                for(var i in haystack){
+                    if(haystack[i].id==needle){
+                        return [i,haystack[i]];
+                    }
+                }
+                return;
+            };
+
         $scope.dbserver={
             id:''
           , db:{
@@ -362,6 +371,9 @@ pleni.controller('ResourcesController',
                           , type:'?'
                           , check:'unknown'
                           , status:'unknown'
+                          , follow:
+                                (get_element(data[i].id,$scope.storage.threads)
+                                    !==undefined)
                           , set:{
                                 status:'unknown'
                               , name:''
@@ -636,7 +648,34 @@ pleni.controller('ResourcesController',
                 }
             }
           , follow:function(index){
-                console.log('follow -> '+index);
+                var planner=$scope.storage.planners[index]
+                  , notifier='master'
+
+                if(planner.follow){
+                    utils.send('Send a remove request ...');
+                    Notifiers.remove({
+                        server:notifier
+                      , planner:planner.id
+                    },function(data){
+                        utils.receive();
+                        $scope.storage.planners[index].follow=false;
+                        utils.show('success','Planner removed to the list');
+                    },function(error){
+                        utils.receive();
+                    });
+                }else{
+                    utils.send('Send add request ...');
+                    Notifiers.add({
+                        server:notifier
+                      , planner:planner.id
+                    },function(data){
+                        utils.receive();
+                        $scope.storage.planners[index].follow=true;
+                        utils.show('success','Planner added to the list');
+                    },function(error){
+                        utils.receive();
+                    });
+                }
             }
           , edit:function(index){
                 $scope.planners.env.view='form';
@@ -800,6 +839,7 @@ pleni.controller('ResourcesController',
                     },function(data){
                         utils.receive();
                         $scope.notifiers.get();
+                        $scope.storage.planners[index].follow=true;
                         utils.show('success','Planner added to the list');
                     },function(error){
                         utils.receive();
@@ -816,6 +856,9 @@ pleni.controller('ResourcesController',
                     },function(data){
                         utils.receive();
                         $scope.notifiers.get();
+                        $scope.storage.planners[get_element(
+                            $scope.notifier.planners[index],
+                            $scope.storage.planners)[0]].follow=false;
                         utils.show('success','Planner removed to the list');
                     },function(error){
                         utils.receive();
