@@ -215,15 +215,17 @@ module.exports=function(app,ios,ioc){
                 var host=planner[1].planner.host
                   , port=planner[1].planner.port
 
-                notifier.splice(planner[0],1);
-                app.set('notifier',notifier);
-
                 ios.emit('notifier',{
                     action:'remove'
                   , msg:{
                         id:get_planner(host,port,app)
                     }
                 });
+
+                notifier[planner[0]].socket.disconnect();
+                notifier.splice(planner[0],1);
+                app.set('notifier',notifier);
+
                 response.status(200).json(_success.ok);
             }else{
                 response.status(404).json(_error.notfound);

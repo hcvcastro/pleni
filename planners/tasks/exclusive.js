@@ -4,7 +4,8 @@ module.exports=function(params,repeat,stop,notifier){
     notifier({
         action:'task'
       , task:{
-            msg:'tick'
+            id:'exclusive'
+          , msg:'tick'
         }
     });
     repeat();

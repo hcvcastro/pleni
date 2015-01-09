@@ -12,6 +12,6 @@ footer(ng-controller='SocketController')
                 .count {{thread.set.count}}
                 .interval {{thread.set.interval}}
                 .fa(ng-class='{\'fa-play\':thread.status==\'running\',\'fa-question\':thread.status==\'unknown\',\'fa-stop\':thread.status==\'stopped\'}')
-                .msg {{message}}
+                .msg {{thread.msg}}
                 a.run.fa.fa-stop(ng-click='stop()')
 

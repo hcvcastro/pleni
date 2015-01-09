@@ -39,9 +39,10 @@ module.exports=function(params,repeat,stop,notifier){
     .then(design)
     .then(function(args){
         notifier({
-            task:{
-                action:'create'
-              , name:args.db.name
+            action:'task'
+          , task:{
+                id:'site/create'
+              , msg:'site repository created ('+args.db.name+')'
             }
         });
         stop();
