@@ -43,6 +43,10 @@ footer {
                 width: 92px;
                 padding-left: 5px;
                 cursor: pointer;
+
+                &.active {
+                    color: @color1;
+                }
             }
         }
         .tab:nth-child(1) {background-color: fade(@color2,56%);}
@@ -80,6 +84,7 @@ footer {
         }
         :nth-child(7) {
             .button1;
+            color: @error_frg;
         }
 
         :nth-child(1) {background-color: fade(@color2,95%);}
@@ -88,7 +93,7 @@ footer {
         :nth-child(4) {background-color: fade(@color2,65%);}
         :nth-child(5) {background-color: fade(@color2,95%);}
         :nth-child(6) {background-color: fade(@color2,85%);}
-        :nth-child(7) {background-color: @error_frg;}
+        :nth-child(7) {background-color: @color3;}
     }
 }
 

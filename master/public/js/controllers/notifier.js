@@ -75,7 +75,10 @@ pleni.controller('SocketController',
         }
 
         $scope.stop=function(){
-            //console.log('stopped current planner');
+            Planners.stop({server:$scope.thread.id},function(){
+            },function(error){
+                utils.show('error',error);
+            });
         }
 
         Socket.on('notifier',function(pkg){
@@ -120,12 +123,17 @@ pleni.controller('SocketController',
                                 break;
                             case 'run':
                                 $scope.storage.threads[i].status='running';
+                                $scope.storage.planners[get_element(
+                                    thread[1].id,$scope.storage.planners)[0]
+                                ].status='running';
                                 break;
                             case 'stop':
                                 $scope.storage.threads[i].status='stopped';
+                                $scope.storage.planners[get_element(
+                                    thread[1].id,$scope.storage.planners)[0]
+                                ].status='stopped';
                                 break;
                             case 'task':
-                                console.log('-> '+JSON.stringify(pkg));
                                 if($scope.storage.threads[i].set.count>0){
                                     $scope.storage.threads[i].set.count--;
                                 }

@@ -25,7 +25,7 @@ var validate=require('../../planners/utils/validators')
         return null;
     }
   , socket_connect=function(ios,ioc,host,port,id){
-        var socket=ioc.connect(host+':'+port,{reconnect:true})
+        var socket=ioc.connect(host+':'+port,{reconnect:true,'forceNew':true})
         socket.on('notifier',function(msg){
             ios.emit('notifier',{
                 action:'planner'
@@ -158,15 +158,13 @@ module.exports=function(app,ios,ioc){
               , id=get_planner(host,port,app)
 
             if(!planner){
-                notifier.push({
+                app.get('notifier').push({
                     planner:{
                         host:host
                       , port:port
                     }
                   , socket:socket_connect(ios,ioc,host,port,id)
                 });
-
-                app.set('notifier',notifier);
 
                 ios.emit('notifier',{
                     action:'create'
@@ -180,15 +178,6 @@ module.exports=function(app,ios,ioc){
                 });
                 response.status(201).json(_success.ok);
             }else{
-                notifier[planner[0]].socket.disconnect();
-
-                notifier[planner[0]].planner.host=host;
-                notifier[planner[0]].planner.port=port;
-                notifier[planner[0]].socket=socket_connect(
-                    ios,ioc,host,port,id);
-
-                app.set('notifier',notifier);
-
                 ios.emit('notifier',{
                     action:'update'
                   , msg:{
@@ -215,15 +204,15 @@ module.exports=function(app,ios,ioc){
                 var host=planner[1].planner.host
                   , port=planner[1].planner.port
 
+                notifier[planner[0]].socket.disconnect();
+                notifier.splice(planner[0],1);
+
                 ios.emit('notifier',{
                     action:'remove'
                   , msg:{
                         id:get_planner(host,port,app)
                     }
                 });
-
-                notifier[planner[0]].socket.disconnect();
-                notifier.splice(planner[0],1);
                 app.set('notifier',notifier);
 
                 response.status(200).json(_success.ok);
