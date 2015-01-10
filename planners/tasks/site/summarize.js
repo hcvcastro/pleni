@@ -38,9 +38,10 @@ module.exports=function(params,repeat,stop,notifier){
     .then(summarize)
     .then(function(args){
         notifier({
-            task:{
-                action:'summarize'
-              , name:args.db.name
+            action:'task'
+          , task:{
+                id:'site/summarize'
+              , msg:'repository summarized ('+args.db.name+')'
             }
         });
         stop();

@@ -69,18 +69,22 @@ module.exports=function(params,repeat,stop,notifier){
     .then(spread)
     .then(function(args){
         if(args.task.complete){
+            var url=args.task.wait.id.substr(5)
+              , spread=args.task.spread
+              , count=0
+
+            if(spread){
+                count=spread.length
+            }
+
             notifier({
-                task:{
-                    action:'fetch'
-                  , url:args.task.wait.id.substr(5)
-                  , spread:args.task.spread
+                action:'task'
+              , task:{
+                    id:'site/fetch'
+                  , msg:url+' -> '+count
                 }
             });
         }
-
-//        console.log('finally');
-//        console.log(args);
-
         repeat();
     })
     .fail(function(error){
@@ -89,12 +93,14 @@ module.exports=function(params,repeat,stop,notifier){
         }else{
             if(error.complete){
                 notifier({
-                    task:{
-                        action:'fetch'
-                      , complete:true
+                    action:'task'
+                  , task:{
+                        id:'site/fetch'
+                      , msg:'completed'
                     }
                 });
             }else{
+                console.log(error);
                 notifier({
                     error:error
                 });

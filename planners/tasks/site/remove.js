@@ -26,9 +26,10 @@ module.exports=function(params,repeat,stop,notifier){
     .then(remove)
     .then(function(args){
         notifier({
-            task:{
-                action:'remove'
-              , name:args.db.name
+            action:'task'
+          , task:{
+                id:'site/remove'
+              , msg:'repository removed ('+args.db.name+')'
             }
         });
         repeat();
