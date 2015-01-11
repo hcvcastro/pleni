@@ -865,6 +865,19 @@ pleni.controller('ResourcesController',
                     });
                 }
             }
+          , cleanplanners:function(index){
+                utils.clean();
+                utils.send('Cleaning planners list ...');
+                Notifiers.clean({
+                    server:$scope.notifier.id
+                },function(data){
+                    utils.receive();
+                    $scope.notifiers.get();
+                    utils.show('success','Planners removed successfully');
+                },function(error){
+                    utils.receive();
+                });
+            }
           , edit:function(index){
                 $scope.notifiers.env.view='form';
                 $scope.notifiers.env.type='element';

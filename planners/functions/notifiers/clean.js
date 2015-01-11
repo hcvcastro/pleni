@@ -14,8 +14,7 @@ module.exports=function(args){
       , url=args.notifier.host+'/notifier'
 
     if(args.debug){
-        console.log('remove client for notifier ... '
-            +args.notifier.planner.host+':'+args.notifier.planner.port);
+        console.log('clean clients for notifier ... ');
     }
     request.del({url:url},function(error,response){
         if(!error){
