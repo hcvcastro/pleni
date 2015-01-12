@@ -48,7 +48,7 @@ require('./controllers/resources/repositories')(app);
 require('./controllers/resources/planners')(app);
 require('./controllers/resources/notifiers')(app);
 require('./controllers/notifier')(app,ios,ioc);
-require('./controllers/tasks')(app);
+require('./controllers/activities')(app);
 
 app.use(function(request,response){
     response.status(404).render('404.jade',{

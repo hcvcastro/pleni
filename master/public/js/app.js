@@ -13,9 +13,9 @@ var pleni=angular
                 templateUrl:'/resources/view',
                 controller:'ResourcesController'
             })
-            .when('/tasks',{
-                templateUrl:'/tasks/view',
-                controller:'TasksController'
+            .when('/activities',{
+                templateUrl:'/activities/view',
+                controller:'ActivitiesController'
             })
             .otherwise({
                 redirectTo: '/home'
