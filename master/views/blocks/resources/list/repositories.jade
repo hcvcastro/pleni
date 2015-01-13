@@ -1,12 +1,12 @@
 article.list
     div.tasks
         ul
-            li
-                a.fa.fa-plus(ng-click='repositories.add()')
-                a(ng-click='repositories.add()') Add Server
-            li
-                a.fa.fa-refresh(ng-click='repositories.refresh(1)')
-                a(ng-click='repositories.refresh(1)') Refresh
+            li(ng-click='repositories.add()')
+                span.fa.fa-plus
+                span Add Server
+            li(ng-click='repositories.refresh(1)')
+                span.fa.fa-refresh
+                span Refresh
         .clearfix
     table
         thead

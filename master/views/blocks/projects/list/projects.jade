@@ -1,0 +1,26 @@
+article.list
+    div.tasks
+        ul
+            li(ng-click='projects.add()')
+                span.fa.fa-plus
+                span New Project
+            li(ng-click='projects.refresh()')
+                span.fa.fa-refresh
+                span Refresh
+        .clearfix
+    table
+        thead
+            tr
+                th Name
+                th Repositories
+                th.options &nbsp;
+        tbody
+            tr(ng-repeat='project in storage.projects')
+                td
+                    span {{project.id}}
+                td {{project._repositories}}
+                td.options
+                    a.fa.fa-sign-in(title='Open workspace',ng-click='projects.open($index)')
+                    a.fa.fa-edit(title='Edit properties',ng-click='projects.edit($index)')
+                    a.fa.fa-trash(title='Remove element',ng-click='projects.remove($index)')
+

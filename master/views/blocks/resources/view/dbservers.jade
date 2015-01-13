@@ -6,9 +6,9 @@ article.view.animate(ng-show='dbservers.env.view==\'view\'')
     .body
         div.tasks
             ul
-                li
-                    a.fa.fa-database(ng-click='dbservers.scan()')
-                    a(ng-click='dbservers.scan()') Scan
+                li(ng-click='dbservers.scan()')
+                    span.fa.fa-database
+                    span Scan Repositories
             .clearfix
         p.offset
             span.hide.loader.fa.fa-spinner.fa-spin

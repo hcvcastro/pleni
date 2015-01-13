@@ -1,12 +1,12 @@
 article.list
     div.tasks
         ul
-            li
-                a.fa.fa-plus(ng-click='dbservers.add()')
-                a(ng-click='dbservers.add()') Add Server
-            li
-                a.fa.fa-refresh(ng-click='dbservers.refresh(1)')
-                a(ng-click='dbservers.refresh(1)') Refresh
+            li(ng-click='dbservers.add()')
+                span.fa.fa-plus
+                span Add DB Server
+            li(ng-click='dbservers.refresh(1)')
+                span.fa.fa-refresh
+                span Refresh
         .clearfix
     table
         thead
