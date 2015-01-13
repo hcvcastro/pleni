@@ -32,7 +32,7 @@ module.exports=function(app){
 
     app.put('/resources/repositories',function(request,response){
         if(schema.js.validate(request.body,schema.repositories).length==0){
-            var resources=app.get('resources')
+            var resources=app.get('resources');
             resources.repositories=request.body.map(function(repository){
                 return {
                     id:validate.toString(repository.id)
@@ -58,8 +58,8 @@ module.exports=function(app){
 
             if(!repository){
                 var new_repository={
-                    id:request.body.id
-                  , _dbserver:request.body._dbserver
+                    id:validate.toString(request.body.id)
+                  , _dbserver:validate.toString(request.body._dbserver)
                   , db:{
                         name:validate.toString(request.body.db.name)
                     }

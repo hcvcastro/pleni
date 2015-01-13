@@ -1,6 +1,6 @@
 'use strict';
 
-pleni.controller('ActivitiesController',
+pleni.controller('ProjectsController',
     ['$scope','$sessionStorage',
     function($scope,$sessionStorage){
         $scope.storage=$sessionStorage;
@@ -11,7 +11,7 @@ pleni.controller('ActivitiesController',
 
         $scope.view={
             show:function(){
-                utils.set_active('activities',1);
+                utils.set_active('projects',1);
             }
         }
 

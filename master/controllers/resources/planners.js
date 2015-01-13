@@ -38,7 +38,7 @@ module.exports=function(app){
 
     app.put('/resources/planners',function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
-            var resources=app.get('resources')
+            var resources=app.get('resources');
             resources.planners=request.body.map(function(planner){
                 return {
                     id:validate.toString(planner.id)

@@ -35,7 +35,7 @@ module.exports=function(app){
 
     app.put('/resources/notifiers',function(request,response){
         if(schema.js.validate(request.body,schema.notifiers).length==0){
-            var resources=app.get('resources')
+            var resources=app.get('resources');
             resources.notifiers=request.body.map(function(notifier){
                 return {
                     id:validate.toString(notifier.id)
@@ -61,7 +61,7 @@ module.exports=function(app){
 
             if(!notifier){
                 var new_notifier={
-                    id:request.body.id
+                    id:validate.toString(request.body.id)
                   , notifier:{
                         host:validate.toValidHost(request.body.notifier.host)
                       , port:validate.toInt(request.body.notifier.port)

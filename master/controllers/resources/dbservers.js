@@ -36,7 +36,7 @@ module.exports=function(app){
 
     app.put('/resources/dbservers',function(request,response){
         if(schema.js.validate(request.body,schema.dbservers).length==0){
-            var resources=app.get('resources')
+            var resources=app.get('resources');
             resources.dbservers=request.body.map(function(dbserver){
                 return {
                     id:validate.toString(dbserver.id)
@@ -65,7 +65,7 @@ module.exports=function(app){
 
             if(!dbserver){
                 var new_dbserver={
-                    id:request.body.id
+                    id:validate.toString(request.body.id)
                   , db:{
                         host:validate.toValidHost(request.body.db.host)
                       , port:validate.toInt(request.body.db.port)+''

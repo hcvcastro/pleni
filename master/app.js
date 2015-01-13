@@ -13,15 +13,18 @@ var http=require('http')
   , ioc=require('socket.io-client')
   , resources={}
   , notifier=new Array()
+  , projects=new Array()
 
 // sync methods
 resources.dbservers=loadconfig(join(__dirname,'config','dbservers.json'));
 resources.repositories=loadconfig(join(__dirname,'config','repositories.json'));
 resources.planners=loadconfig(join(__dirname,'config','planners.json'));
 resources.notifiers=loadconfig(join(__dirname,'config','notifiers.json'));
+projects=loadconfig(join(__dirname,'config','projects.json'));
 
 app.set('resources',resources);
 app.set('notifier',notifier);
+app.set('projects',projects);
 
 // async methods
 app.set('port',process.env.PORT||3000);
@@ -48,7 +51,7 @@ require('./controllers/resources/repositories')(app);
 require('./controllers/resources/planners')(app);
 require('./controllers/resources/notifiers')(app);
 require('./controllers/notifier')(app,ios,ioc);
-require('./controllers/activities')(app);
+require('./controllers/projects')(app);
 
 app.use(function(request,response){
     response.status(404).render('404.jade',{

@@ -66,5 +66,17 @@ describe('loading the config files',function(){
         }
         done();
     });
+
+    it('loading projects.js',function(done){
+        var config=loadconfig(path.join(
+            __dirname,'..','..','..','master','config','projects.json'));
+
+        config.should.be.Array;
+        for(var a in config){
+            config[a].should.have.property('id').and.have.be.a.String;
+            config[a].should.have.property('_repositories').and.have.be.Array;
+        }
+        done();
+    });
 });
 

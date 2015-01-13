@@ -287,3 +287,31 @@ var notifier_planners={
 };
 exports.notifier_planners=notifier_planners;
 
+var project={
+    'type':'object'
+  , 'properties':{
+        'id':{
+            'type':'string'
+          , 'format':'id'
+        }
+      , '_repositories':{
+            'type':'array'
+          , 'items':{
+                'type':'string'
+            }
+          , 'minItems':0
+          , 'uniqueItems':true
+        }
+    }
+  , 'required':['id','_repositories']
+};
+exports.project=project;
+
+var projects={
+    'type':'array'
+  , 'items':project
+  , 'minItems':1
+  , 'uniqueItems':true
+};
+exports.projects=projects;
+

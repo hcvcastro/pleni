@@ -1,7 +1,10 @@
 [
     {
         "id":"test"
-      , "repositories":{
-        }
+      , "_repositories":[
+            "test"
+          , "atb"
+        ]
     }
 ]
+
