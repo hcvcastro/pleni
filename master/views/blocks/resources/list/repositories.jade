@@ -26,7 +26,7 @@ article.list
                 td.status
                     span.fa(ng-class='{\'fa-cloud-download\':repository.type==\'site\'}')
                 td.status
-                    span.fa(ng-class='{\'fa-check\':repository.check==\'online\',\'fa-question\':repository.check==\'unknown\',\'fa-close\':repository.check==\'offline\'}')
+                    span.fa(title='Repository connection: {{repository.check}}',ng-class='{\'fa-check\':repository.check==\'online\',\'fa-question\':repository.check==\'unknown\',\'fa-close\':repository.check==\'offline\'}')
                 td.options
                     a.fa.fa-refresh(title='Check connection',ng-click='repositories.check($index)',ng-class='{\'fa-spin\':repository.check==\'checking\'}')
                     a.fa.fa-edit(title='Edit properties',ng-click='repositories.edit($index)')

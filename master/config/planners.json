@@ -1,8 +1,8 @@
 [
     {
-        "id":"localhost"
+        "id":"main"
       , "planner":{
-            "host":"http://127.0.0.1"
+            "host":"http://181.177.142.72"
           , "port":3001
         }
     }
@@ -17,13 +17,6 @@
         "id":"smith"
       , "planner":{
             "host":"http://167.157.28.33"
-          , "port":3001
-        }
-    }
-  , {
-        "id":"dozer"
-      , "planner":{
-            "host":"http://167.157.28.34"
           , "port":3001
         }
     }

@@ -1,37 +1,9 @@
 [
     {
         "id":"test"
-      , "_dbserver":"localhost"
+      , "_dbserver":"main"
       , "db":{
             "name":"db_test"
-        }
-    }
-  , {
-        "id":"atb"
-      , "_dbserver":"hiperborea"
-      , "db":{
-            "name":"pleni_site_atb"
-        }
-    }
-  , {
-        "id":"galao"
-      , "_dbserver":"localhost"
-      , "db":{
-            "name":"pleni_site_galao"
-        }
-    }
-  , {
-        "id":"koala"
-      , "_dbserver":"hiperborea"
-      , "db":{
-            "name":"pleni_site_koala"
-        }
-    }
-  , {
-        "id":"reduno"
-      , "_dbserver":"hiperborea"
-      , "db":{
-            "name":"pleni_site_reduno"
         }
     }
 ]

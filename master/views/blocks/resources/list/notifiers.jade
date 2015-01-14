@@ -23,11 +23,11 @@ article.list
                     a(ng-click='notifiers.view($index)') {{notifier.id}}
                 td {{notifier.notifier.host}}:{{notifier.notifier.port}}
                 td.status
-                    span.fa(ng-class='{\'fa-bullhorn\':notifier.type==\'io\'}')
+                    span.fa(title='Notifier type: {{notifier.type}}',ng-class='{\'fa-bullhorn\':notifier.type==\'io\'}')
                 td.status
-                    span.fa(ng-class='{\'fa-check\':notifier.check==\'online\',\'fa-question\':notifier.check==\'unknown\',\'fa-close\':notifier.check==\'offline\'}')
+                    span.fa(title='Notifier connection: {{notifier.check}}',ng-class='{\'fa-check\':notifier.check==\'online\',\'fa-question\':notifier.check==\'unknown\',\'fa-close\':notifier.check==\'offline\'}')
                 td.status
-                    a.fa.fa-recycle(title='Clean connections',ng-click='notifiers.planners.clean($index)')
+                    a.fa.fa-recycle(title='Clean all connections',ng-click='notifiers.planners.clean($index)')
                 td.options
                     a.fa.fa-refresh(title='Check connection',ng-click='notifiers.check($index)',ng-class='{\'fa-spin\':notifier.check==\'checking\'}')
                     a.fa.fa-edit(title='Edit properties',ng-click='notifiers.edit($index)')

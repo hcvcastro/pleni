@@ -21,7 +21,7 @@ article.list
                     a(ng-click='dbservers.view($index)') {{dbserver.id}}
                 td {{dbserver.db.host}}:{{dbserver.db.port}}
                 td.status
-                    span.fa(ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
+                    span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
                 td.options
                     a.fa.fa-refresh(title='Check connection',ng-click='dbservers.check($index)',ng-class='{\'fa-spin\':dbserver.check==\'checking\'}')
                     a.fa.fa-edit(title='Edit properties',ng-click='dbservers.edit($index)')
