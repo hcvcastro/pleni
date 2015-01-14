@@ -45,33 +45,49 @@ pleni.controller('ProjectsController',
                     }
                 });
             }
+          , implode:function(glue,pieces){
+                return pieces.join(glue);
+            }
           , save:function(){
-                var dbserver=new DBServers($scope.dbserver);
+                var project=new Projects($scope.project);
 
                 utils.clean();
-                if($scope.dbservers.env.type=='collection'){
-                    utils.send('Saving DB server settings ...');
-                    dbserver.$save(function(data){
-                        $scope.dbservers.refresh();
-                        $scope.dbservers.list();
+                if($scope.projects.env.type=='collection'){
+                    utils.send('Saving project settings ...');
+                    project.$save(function(data){
+                        $scope.projects.refresh();
+                        $scope.projects.list();
                         utils.receive();
-                        utils.show('success','DB server added to the list');
+                        utils.show('success','Project added to the list');
                     },function(error){
                         utils.receive();
                         utils.show('error',error.data.message);
                     });
-                }else if($scope.dbservers.env.type=='element'){
-                    utils.send('Updating DB server settings ...');
-                    dbserver.$update({dbserver:$scope.dbserver.id},
+                }else if($scope.projects.env.type=='element'){
+                    utils.send('Updating project settings ...');
+                    project.$update({project:$scope.project.id},
                     function(data){
-                        $scope.dbservers.refresh();
-                        $scope.dbservers.list();
+                        $scope.projects.refresh();
+                        $scope.projects.list();
                         utils.receive();
-                        utils.show('success','DB server updated');
+                        utils.show('success','Project updated');
                     },function(error){
                         utils.receive();
                         utils.show('error',error.data.message);
                     });
+                }
+            }
+          , repositories:{
+                add:function(index){
+                    var repository=$scope.storage.repositories[index].id;
+                    if($scope.project._repositories.indexOf(repository)<0){
+                        $scope.project._repositories.push(repository);
+                    }else{
+                        utils.show('warning','The repository already chosen');
+                    }
+                }
+              , remove:function(index){
+                    $scope.project._repositories.splice(index,1);
                 }
             }
           , list:function(){

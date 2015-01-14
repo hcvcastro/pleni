@@ -151,26 +151,28 @@ pleni.controller('ResourcesController',
                     });
                 }
             }
-          , add_repo:function(index){
-                utils.clean();
-                if($scope.dbservers.env.type=='element'){
-                    utils.send('Sending add repository request');
+          , repositories:{
+                add:function(index){
+                    utils.clean();
+                    if($scope.dbservers.env.type=='element'){
+                        utils.send('Sending add repository request');
 
-                    var _repository=$scope.dbserver.repositories[index]
-                      , repository=new Repositories({
-                            id:_repository.name
-                          , _dbserver:$scope.dbserver.id
-                          , db:{
-                                name:_repository.params.db_name
-                            }
+                        var _repository=$scope.dbserver.repositories[index]
+                          , repository=new Repositories({
+                                id:_repository.name
+                              , _dbserver:$scope.dbserver.id
+                              , db:{
+                                    name:_repository.params.db_name
+                                }
+                            });
+                        repository.$save(function(data){
+                            utils.receive();
+                            utils.show('success','Repository added to the list');
+                        },function(error){
+                            utils.receive();
+                            utils.show('error',error.data.message);
                         });
-                    repository.$save(function(data){
-                        utils.receive();
-                        utils.show('success','Repository added to the list');
-                    },function(error){
-                        utils.receive();
-                        utils.show('error',error.data.message);
-                    });
+                    }
                 }
             }
           , edit:function(index){
@@ -829,54 +831,56 @@ pleni.controller('ResourcesController',
                     });
                 }
             }
-          , addplanner:function(index){
-                utils.clean();
-                if($scope.notifiers.env.type=='element'){
-                    utils.send('Send add request ...');
-                    Notifiers.add({
+          , planners:{
+                add:function(index){
+                    utils.clean();
+                    if($scope.notifiers.env.type=='element'){
+                        utils.send('Send add request ...');
+                        Notifiers.add({
+                            server:$scope.notifier.id
+                          , planner:$scope.storage.planners[index].id
+                        },function(data){
+                            utils.receive();
+                            $scope.notifiers.get();
+                            $scope.storage.planners[index].follow=true;
+                            utils.show('success','Planner added to the list');
+                        },function(error){
+                            utils.receive();
+                        });
+                    }
+                }
+              , remove:function(index){
+                    utils.clean();
+                    if($scope.notifiers.env.type=='element'){
+                        utils.send('Send a remove request ...');
+                        Notifiers.remove({
+                            server:$scope.notifier.id
+                          , planner:$scope.notifier.planners[index]
+                        },function(data){
+                            utils.receive();
+                            $scope.notifiers.get();
+                            $scope.storage.planners[get_element(
+                                $scope.notifier.planners[index],
+                                $scope.storage.planners)[0]].follow=false;
+                            utils.show('success','Planner removed to the list');
+                        },function(error){
+                            utils.receive();
+                        });
+                    }
+                }
+              , clean:function(index){
+                    utils.clean();
+                    utils.send('Cleaning planners list ...');
+                    Notifiers.clean({
                         server:$scope.notifier.id
-                      , planner:$scope.storage.planners[index].id
                     },function(data){
                         utils.receive();
                         $scope.notifiers.get();
-                        $scope.storage.planners[index].follow=true;
-                        utils.show('success','Planner added to the list');
+                        utils.show('success','Planners removed successfully');
                     },function(error){
                         utils.receive();
                     });
                 }
-            }
-          , removeplanner:function(index){
-                utils.clean();
-                if($scope.notifiers.env.type=='element'){
-                    utils.send('Send a remove request ...');
-                    Notifiers.remove({
-                        server:$scope.notifier.id
-                      , planner:$scope.notifier.planners[index]
-                    },function(data){
-                        utils.receive();
-                        $scope.notifiers.get();
-                        $scope.storage.planners[get_element(
-                            $scope.notifier.planners[index],
-                            $scope.storage.planners)[0]].follow=false;
-                        utils.show('success','Planner removed to the list');
-                    },function(error){
-                        utils.receive();
-                    });
-                }
-            }
-          , cleanplanners:function(index){
-                utils.clean();
-                utils.send('Cleaning planners list ...');
-                Notifiers.clean({
-                    server:$scope.notifier.id
-                },function(data){
-                    utils.receive();
-                    $scope.notifiers.get();
-                    utils.show('success','Planners removed successfully');
-                },function(error){
-                    utils.receive();
-                });
             }
           , edit:function(index){
                 $scope.notifiers.env.view='form';

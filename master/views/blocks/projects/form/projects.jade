@@ -9,6 +9,21 @@ article.form.animate(ng-show='projects.env.view==\'form\'')
             p
                 label Name
                 input(type='text',placeholder='The name for the project',required,ng-model='project.id')
+            .column1
+                .title
+                    h3 Included Repositories
+                .item(ng-repeat='repository in project._repositories') {{repository}}
+                    .close
+                        a.fa.fa-trash(ng-click='projects.repositories.remove($index)')
+                    .clearfix
+            .column2
+                .title
+                    h3 Available Repositories
+                .item(ng-repeat='repository in storage.repositories') {{repository.id}}
+                    .close
+                        a.fa.fa-plus-circle(ng-click='projects.repositories.add($index)')
+                    .clearfix
+            .clearfix
             p.offset
                 span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message

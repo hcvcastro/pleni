@@ -18,7 +18,7 @@ article.list
             tr(ng-repeat='project in storage.projects')
                 td
                     span {{project.id}}
-                td {{project._repositories}}
+                td {{projects.implode(', ',project._repositories)}}
                 td.options
                     a.fa.fa-sign-in(title='Open workspace',ng-click='projects.open($index)')
                     a.fa.fa-edit(title='Edit properties',ng-click='projects.edit($index)')

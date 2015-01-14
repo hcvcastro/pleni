@@ -9,14 +9,14 @@ article.view.animate(ng-show='notifiers.env.view==\'view\'')
                 h3 Connected Planners
             .item(ng-repeat='planner in notifier.planners') {{planner}}
                 .close
-                    a.fa.fa-trash(ng-click='notifiers.removeplanner($index)')
+                    a.fa.fa-trash(ng-click='notifiers.planners.remove($index)')
                 .clearfix
         .column2
             .title
                 h3 Available Planners
             .item(ng-repeat='planner in storage.planners') {{planner.id}}
                 .close
-                    a.fa.fa-plus-circle(ng-click='notifiers.addplanner($index)')
+                    a.fa.fa-plus-circle(ng-click='notifiers.planners.add($index)')
                 .clearfix
         .clearfix
         p.offset
