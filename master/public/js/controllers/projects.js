@@ -97,11 +97,6 @@ pleni.controller('ProjectsController',
                 $scope.projects.env.view='form';
                 $scope.projects.env.type='collection';
             }
-          , view:function(index){
-                $scope.projects.env.view='view';
-                $scope.projects.env.type='element';
-                $scope.project=$scope.storage.projects[index];
-            }
           , edit:function(index){
                 $scope.projects.env.view='form';
                 $scope.projects.env.type='element';

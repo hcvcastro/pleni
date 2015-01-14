@@ -13,14 +13,16 @@ article.list
             tr
                 th Name
                 th Repositories
+                th.status &nbsp;
                 th.options &nbsp;
         tbody
             tr(ng-repeat='project in storage.projects')
                 td
                     span {{project.id}}
                 td {{projects.implode(', ',project._repositories)}}
+                td.status
+                    a.fa.fa-sign-in(title='Open workspace',href='/#/projects/{{project.id}}')
                 td.options
-                    a.fa.fa-sign-in(title='Open workspace',ng-click='projects.open($index)')
                     a.fa.fa-edit(title='Edit properties',ng-click='projects.edit($index)')
                     a.fa.fa-trash(title='Remove element',ng-click='projects.remove($index)')
 
