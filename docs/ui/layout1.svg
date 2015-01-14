@@ -7208,11 +7208,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="961.60058"
-     inkscape:cy="828.65821"
+     inkscape:zoom="1"
+     inkscape:cx="998.50075"
+     inkscape:cy="817.30844"
      inkscape:document-units="px"
-     inkscape:current-layer="layer9"
+     inkscape:current-layer="g5834"
      showgrid="false"
      inkscape:showpageshadow="false"
      showborder="true"
@@ -7280,10 +7280,6 @@
        position="480,1043"
        id="guide3814" />
     <sodipodi:guide
-       orientation="0,1"
-       position="480,1020"
-       id="guide3122" />
-    <sodipodi:guide
        orientation="1,0"
        position="720,1080"
        id="guide3896" />
@@ -7291,10 +7287,6 @@
        orientation="1,0"
        position="710,1080"
        id="guide3906" />
-    <sodipodi:guide
-       orientation="0,1"
-       position="660,980"
-       id="guide3908" />
     <sodipodi:guide
        orientation="0,1"
        position="480,50"
@@ -14494,33 +14486,7 @@
      inkscape:groupmode="layer"
      id="layer9"
      inkscape:label="workspace.general"
-     style="display:inline">
-    <rect
-       style="fill:#aec1b9;fill-opacity:1;fill-rule:evenodd;stroke:none"
-       id="rect5873"
-       width="960"
-       height="219.75"
-       x="480"
-       y="50" />
-    <rect
-       y="60.000107"
-       x="480"
-       height="39.999893"
-       width="230"
-       id="rect5842-2"
-       style="fill:#658068;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    <text
-       sodipodi:linespacing="125%"
-       id="text5846-4"
-       y="87.140106"
-       x="488.66"
-       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
-       xml:space="preserve"><tspan
-         y="87.140106"
-         x="488.66"
-         id="tspan5848-0"
-         sodipodi:role="line">Project: test</tspan></text>
-  </g>
+     style="display:inline" />
   <g
      style="display:inline"
      inkscape:label="workspace.menu"
@@ -14528,7 +14494,7 @@
      inkscape:groupmode="layer">
     <g
        id="g5904"
-       transform="translate(0,422)">
+       transform="translate(0,-1.0681152e-4)">
       <rect
          style="fill:#658068;fill-opacity:1;fill-rule:evenodd;stroke:none"
          id="rect5842"
@@ -14566,7 +14532,7 @@
          id="tspan5864"
          sodipodi:role="line" /></text>
     <rect
-       y="570"
+       y="147.99989"
        x="480"
        height="40"
        width="240"
@@ -14578,15 +14544,15 @@
        width="240"
        height="40"
        x="480"
-       y="614" />
+       y="191.99989" />
     <text
        sodipodi:linespacing="125%"
        id="text5854"
-       y="597"
+       y="174.99989"
        x="488.84"
        style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="597"
+         y="174.99989"
          x="488.84"
          id="tspan5856"
          sodipodi:role="line">pleni_versioning_test</tspan></text>
@@ -14594,16 +14560,16 @@
        xml:space="preserve"
        style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        x="488.84"
-       y="641.08002"
+       y="219.07991"
        id="text5858"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5860"
          x="488.84"
-         y="641.08002">pleni_common_sql</tspan></text>
+         y="219.07991">pleni_common_sql</tspan></text>
     <g
        id="g5910"
-       transform="translate(0,422)">
+       transform="matrix(0.99959149,0,0,1,0.19608686,-1.0681152e-4)">
       <rect
          y="104"
          x="480"
@@ -14637,18 +14603,18 @@
        id="rect5899"
        width="40"
        height="10.098083"
-       x="570"
+       x="147.99989"
        y="-720.09808" />
     <rect
        y="-720.09808"
-       x="614"
+       x="191.99989"
        height="10.098083"
        width="40"
        id="rect5901"
        style="fill:#d9ddd9;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline"
        transform="matrix(0,1,-1,0,0,0)" />
     <rect
-       y="658"
+       y="235.99989"
        x="480.00015"
        height="40"
        width="240"
@@ -14657,11 +14623,11 @@
     <text
        sodipodi:linespacing="125%"
        id="text5941"
-       y="685"
+       y="262.99988"
        x="488.84015"
        style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="685"
+         y="262.99988"
          x="488.84015"
          id="tspan5943"
          sodipodi:role="line">pleni_common_drupal</tspan></text>
@@ -14671,7 +14637,7 @@
        id="rect5953"
        width="40"
        height="10.098083"
-       x="658"
+       x="235.99989"
        y="-720.09827" />
   </g>
   <g
