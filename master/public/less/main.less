@@ -190,161 +190,161 @@ div.main {
                 }
             }
         }
+    }
+}
 
-        article.form, article.remove, article.view {
-            background-color: fade(@color3,39%);
+article.form, article.remove, article.view {
+    background-color: fade(@color3,39%);
 
-            &>.title {
+    &>.title {
+        height: 32px;
+        background-color: @color2;
+        position:relative;
+
+        h2 {
+            .font3;
+            color: @color5;
+            padding: 5px 0 0 5px;
+            margin: 0;
+        }
+
+        .close {
+            position: absolute;
+            color: @color5;
+            top: 4px;
+            right: 6px;
+        }
+    }
+
+    .body {
+        padding: 5px 0;
+
+        h3 {
+            height: 32px;
+            margin: 0;
+            padding: 5px 0 0 0;
+            .font3;
+        }
+
+        form {
+            p, .form-control, .container-headers {
                 height: 32px;
-                background-color: @color2;
-                position:relative;
+                width: 100%;
+                background-color: fade(@color3,39%);
+                margin: 0 0 5px 0;
+                padding: 0;
 
-                h2 {
+                label {
                     .font3;
-                    color: @color5;
-                    padding: 3px 0 0 5px;
-                    margin: 0;
+                    float: left;
+                    text-align: right;
+                    height: 100%;
+                    width: 200px;
+                    margin: 3px 20px 0 0;
                 }
+
+                input {
+                    height: 100%;
+                    width: 340px;
+                    box-sizing: border-box;
+                    border: 1px solid @color2;
+                }
+
+                select {
+                    height: 100%;
+                    width: 340px;
+                    box-sizing: border-box;
+                    border: 1px solid @color1;
+
+                    option {
+                        height: 30px;
+                        padding: 6px 0;
+                        box-sizing: border-box;
+                    }
+                }
+
+                a.extra {
+                    margin: 0 0 0 10px;
+                }
+
+                button {
+                    height: 100%;
+                    width: 110px;
+                    border: none;
+                    background-color: @color2;
+                    color: #ffffff;
+                    margin-right: 5px;
+                    .font3;
+                }
+            }
+        }
+
+        p {
+            &.large {
+                .font1;
+                box-sizing: border-box;
+                padding: 3px 0 0 10px;
+            }
+
+            &.offset {
+                box-sizing: border-box;
+                padding-left: 220px;
+                display: flex;
+
+                span {
+                    &.hide {
+                        display: none;
+                    }
+                }
+                .loader {
+                    width: 20px;
+                    height: 20px;
+                    margin-top: 6px;
+                }
+                .message {
+                    .font1;
+                    padding: 5px 0 0 10px;
+                    overflow: hidden;
+                }
+            }
+        }
+
+        .column1, .column2 {
+            float: left;
+            width: 320px;
+            margin-bottom: 5px;
+
+            .title {
+                height: 40px;
+                background-color: fade(@color2,75%);
+                box-sizing: bordex-box;
+                padding: 2px 0 0 12px;
+                .font3;
+            }
+
+            .item {
+                width: 320px;
+                height: 40px;
+                padding: 7px;
+                box-sizing: border-box;
+                .font3;
 
                 .close {
-                    position: absolute;
-                    color: @color5;
-                    top: 4px;
-                    right: 6px;
+                    float: right;
+                    width: 20px;
+                }
+
+                &:nth-child(even) {
+                    background-color: fade(@color2,20%);
+                }
+                &:nth-child(odd) {
+                    background-color: fade(@color2,10%);
                 }
             }
+        }
 
-            .body {
-                padding: 5px 0;
-
-                h3 {
-                    height: 32px;
-                    margin: 0;
-                    padding: 5px 0 0 0;
-                    .font3;
-                }
-
-                form {
-                    p, .form-control, .container-headers {
-                        height: 32px;
-                        width: 100%;
-                        background-color: fade(@color3,39%);
-                        margin: 0 0 5px 0;
-                        padding: 0;
-
-                        label {
-                            .font3;
-                            float: left;
-                            text-align: right;
-                            height: 100%;
-                            width: 200px;
-                            margin: 3px 20px 0 0;
-                        }
-
-                        input {
-                            height: 100%;
-                            width: 340px;
-                            box-sizing: border-box;
-                            border: 1px solid @color2;
-                        }
-
-                        select {
-                            height: 100%;
-                            width: 340px;
-                            box-sizing: border-box;
-                            border: 1px solid @color1;
-
-                            option {
-                                height: 30px;
-                                padding: 6px 0;
-                                box-sizing: border-box;
-                            }
-                        }
-
-                        a.extra {
-                            margin: 0 0 0 10px;
-                        }
-
-                        button {
-                            height: 100%;
-                            width: 110px;
-                            border: none;
-                            background-color: @color2;
-                            color: #ffffff;
-                            margin-right: 5px;
-                            .font3;
-                        }
-                    }
-                }
-
-                p {
-                    &.large {
-                        .font1;
-                        box-sizing: border-box;
-                        padding: 3px 0 0 10px;
-                    }
-
-                    &.offset {
-                        box-sizing: border-box;
-                        padding-left: 220px;
-                        display: flex;
-
-                        span {
-                            &.hide {
-                                display: none;
-                            }
-                        }
-                        .loader {
-                            width: 20px;
-                            height: 20px;
-                            margin-top: 6px;
-                        }
-                        .message {
-                            .font1;
-                            padding: 5px 0 0 10px;
-                            overflow: hidden;
-                        }
-                    }
-                }
-
-                .column1, .column2 {
-                    float: left;
-                    width: 320px;
-                    margin-bottom: 5px;
-
-                    .title {
-                        height: 40px;
-                        background-color: fade(@color2,75%);
-                        box-sizing: bordex-box;
-                        padding: 2px 0 0 12px;
-                        .font3;
-                    }
-
-                    .item {
-                        width: 320px;
-                        height: 40px;
-                        padding: 7px;
-                        box-sizing: border-box;
-                        .font3;
-
-                        .close {
-                            float: right;
-                            width: 20px;
-                        }
-
-                        &:nth-child(even) {
-                            background-color: fade(@color2,20%);
-                        }
-                        &:nth-child(odd) {
-                            background-color: fade(@color2,10%);
-                        }
-                    }
-                }
-
-                .column1 {
-                    margin-right: 20px;
-                }
-            }
+        .column1 {
+            margin-right: 20px;
         }
     }
 }

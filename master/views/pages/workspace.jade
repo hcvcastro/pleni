@@ -28,5 +28,26 @@
                 li
                     a.fa.fa-close
         .messages
-        svg.canvas
+        .workspace
+            article.form
+                .title
+                    h2 Workspace configuration
+                .body
+                    form(ng-submit='planners.save()')
+                        p
+                            label Name
+                            input(type='text',placeholder='The name for the planner',required,ng-model='planner.id')
+                        p
+                            label Host
+                            input(type='text',placeholder='The host or a IP of your planner',required,ng-model='planner.planner.host')
+                        p
+                            label Port
+                            input(type='number',placeholder='The port for the planner',min=1,max=65535,required,ng-model='planner.planner.port')
+                        p.offset
+                            span.hide.loader.fa.fa-spinner.fa-spin
+                            span.hide.message
+                        p.offset
+                            button(type='submit') Save
+                            button(type='button',ng-click='planners.check()') Test
+            svg.canvas
 
