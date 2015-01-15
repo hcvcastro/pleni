@@ -22,6 +22,10 @@ div.main {
     border-right: 10px solid @color5;
     box-sizing: border-box;
 
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
     .messages {
         width: 660px;
         margin: 10px 25px 0 25px;
@@ -51,7 +55,6 @@ div.main {
         height: 40px;
 
         ul {
-            float: left;
             list-style: none;
             li {
                 float: left;
