@@ -12,13 +12,13 @@ nav.menu {
         width: 100%;
         margin: 10px 0 0 0;
         list-style: none;
-        li {
+        &>li {
             float: left;
             z-index: 10;
             height: 40px;
             background-color: fade(@color2,50%);
             margin-bottom: 5px;
-            &>a {
+            &>a, &>span {
                 float: left;
                 padding: 0.36rem 0 0 0.6rem;
                 .font1;
@@ -42,10 +42,13 @@ nav.menu {
         li.active {
             width: 240px;
             background-color: @color2;
-            background-image: url('/img/arrow.svg');
             background-repeat: no-repeat;
             background-position: top right;
             color: @color5;
+
+            &:not(.header) {
+                background-image: url('/img/arrow.svg');
+            }
 
             .right {
                 span {

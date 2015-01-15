@@ -1,23 +1,23 @@
 .wrapper.full
     nav.menu
         ul.items
-            li
-                a(ng-click='dbservers.show()') Database Servers
+            li(ng-click='dbservers.show()')
+                a Database Servers
                 .right
                     span {{storage.dbservers.length}}
                     a.fa.fa-refresh(ng-click='dbservers.refresh()')
-            li
-                a(ng-click='repositories.show()') Repositories
+            li(ng-click='repositories.show()')
+                a Repositories
                 .right
                     span {{storage.repositories.length}}
                     a.fa.fa-refresh(ng-click='repositories.refresh()')
-            li
-                a(ng-click='planners.show()') Planners
+            li(ng-click='planners.show()')
+                a Planners
                 .right
                     span {{storage.planners.length}}
                     a.fa.fa-refresh(ng-click='planners.refresh()')
-            li
-                a(ng-click='notifiers.show()') Notifiers
+            li(ng-click='notifiers.show()')
+                a Notifiers
                 .right
                     span {{storage.notifiers.length}}
                     a.fa.fa-refresh(ng-click='notifiers.refresh()')

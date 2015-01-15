@@ -45,6 +45,36 @@ div.main {
         }
     }
 
+    .tools {
+        margin-top: 10px;
+        background-color: @color2;
+        height: 40px;
+
+        ul {
+            float: left;
+            list-style: none;
+            li {
+                float: left;
+                width: 40px;
+                height: 40px;
+                margin-right: 5px;
+                background-color: fade(@color4,50%);
+                text-align: center;
+                color: @color5;
+                transition: 0.5s linear 0s;
+
+                a {
+                    padding-top: 8px;
+                    font-size: 25px;
+                }
+
+                &:hover {
+                    background-color: darken(@color2,5%);
+                }
+            }
+        }
+    }
+
     section:not(.active) {
         display: none;
     }
