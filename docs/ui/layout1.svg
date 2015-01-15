@@ -7237,9 +7237,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="941.93392"
-     inkscape:cy="868.92455"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="1067.0421"
+     inkscape:cy="805.49701"
      inkscape:document-units="px"
      inkscape:current-layer="g5909"
      showgrid="false"
@@ -14893,170 +14893,56 @@
          x="1377.5199"
          id="tspan5919"
          sodipodi:role="line"></tspan></text>
-    <g
-       id="g5921"
-       transform="translate(0,-433)">
-      <rect
-         style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none"
-         id="rect5923"
-         width="650"
-         height="40"
-         x="750"
-         y="609" />
-      <rect
-         y="609"
-         x="750"
-         height="32"
-         width="650"
-         id="rect5925"
-         style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none" />
-      <text
-         xml:space="preserve"
-         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
-         x="919.25977"
-         y="631.29999"
-         id="text5927"
-         sodipodi:linespacing="125%"><tspan
-           sodipodi:role="line"
-           id="tspan5929"
-           x="919.25977"
-           y="631.29999">Name</tspan></text>
-      <rect
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         id="rect5931"
-         width="340"
-         height="32"
-         x="980"
-         y="609" />
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:#658068;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 980,609 0,32 340,0 0,-32 -340,0 z m 0.78125,0.78125 338.49995,0 0,30.4375 -338.49995,0 0,-30.4375 z"
-         id="path5933" />
-    </g>
-    <g
-       transform="translate(0,-431.875)"
-       id="g5935">
-      <rect
-         y="648"
-         x="750"
-         height="40"
-         width="650"
-         id="rect5937"
-         style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none" />
-      <rect
-         style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none"
-         id="rect5940"
-         width="650"
-         height="32"
-         x="750"
-         y="648" />
-      <text
-         sodipodi:linespacing="125%"
-         id="text5942"
-         y="670.29999"
-         x="919.25977"
-         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
-         xml:space="preserve"><tspan
-           y="670.29999"
-           x="919.25977"
-           id="tspan5944"
-           sodipodi:role="line">Host</tspan></text>
-      <rect
-         y="648"
-         x="980"
-         height="32"
-         width="340"
-         id="rect5946"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         id="path5948"
-         d="m 980,648 0,32 340,0 0,-32 -340,0 z m 0.78125,0.78125 338.49995,0 0,30.4375 -338.49995,0 0,-30.4375 z"
-         style="fill:#658068;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       transform="translate(0,-352.9375)"
-       id="g5950">
-      <rect
-         y="609"
-         x="750"
-         height="40"
-         width="650"
-         id="rect5952"
-         style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none" />
-      <rect
-         style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none"
-         id="rect5954"
-         width="650"
-         height="32"
-         x="750"
-         y="609" />
-      <text
-         sodipodi:linespacing="125%"
-         id="text5956"
-         y="631.29999"
-         x="919.25977"
-         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
-         xml:space="preserve"><tspan
-           y="631.29999"
-           x="919.25977"
-           id="tspan5958"
-           sodipodi:role="line">Port</tspan></text>
-      <rect
-         y="609"
-         x="980"
-         height="32"
-         width="340"
-         id="rect5960"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         inkscape:connector-curvature="0"
-         id="path5962"
-         d="m 980,609 0,32 340,0 0,-32 -340,0 z m 0.78125,0.78125 338.49995,0 0,30.4375 -338.49995,0 0,-30.4375 z"
-         style="fill:#658068;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-    </g>
-    <g
-       id="g5964"
-       transform="translate(0,-352)">
-      <rect
-         style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none"
-         id="rect5966"
-         width="650"
-         height="40"
-         x="750"
-         y="648" />
-      <rect
-         y="648"
-         x="750"
-         height="32"
-         width="650"
-         id="rect5968"
-         style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none" />
-      <text
-         xml:space="preserve"
-         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
-         x="919.25977"
-         y="670.29999"
-         id="text5970"
-         sodipodi:linespacing="125%"><tspan
-           sodipodi:role="line"
-           id="tspan5972"
-           x="919.25977"
-           y="670.29999">User</tspan></text>
-      <rect
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         id="rect5974"
-         width="340"
-         height="32"
-         x="980"
-         y="648" />
-      <path
-         inkscape:connector-curvature="0"
-         style="fill:#658068;fill-opacity:1;fill-rule:evenodd;stroke:none"
-         d="m 980,648 0,32 340,0 0,-32 -340,0 z m 0.78125,0.78125 338.49995,0 0,30.4375 -338.49995,0 0,-30.4375 z"
-         id="path5976" />
-    </g>
+    <rect
+       y="176"
+       x="750"
+       height="40"
+       width="650"
+       id="rect5923"
+       style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none" />
+    <rect
+       style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none"
+       id="rect5925"
+       width="650"
+       height="32"
+       x="750"
+       y="176" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text5927"
+       y="198.29999"
+       x="759.72272"
+       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
+       xml:space="preserve"><tspan
+         y="198.29999"
+         x="759.72272"
+         id="tspan5929"
+         sodipodi:role="line">Please select the planners that use in workspace:</tspan></text>
+    <rect
+       style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none"
+       id="rect5937"
+       width="650"
+       height="40"
+       x="750"
+       y="216.125" />
+    <rect
+       y="216.125"
+       x="750"
+       height="32"
+       width="650"
+       id="rect5940"
+       style="fill:#b5c9ab;fill-opacity:0.39215686;fill-rule:evenodd;stroke:none" />
+    <text
+       xml:space="preserve"
+       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
+       x="779.25262"
+       y="238.42499"
+       id="text5942"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5944"
+         x="779.25262"
+         y="238.42499">localhost</tspan></text>
     <g
        id="g5978"
        transform="translate(0,-433)">
