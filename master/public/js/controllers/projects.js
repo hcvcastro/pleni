@@ -1,9 +1,13 @@
 'use strict';
 
 pleni.controller('ProjectsController',
-    ['$scope','$sessionStorage','Projects',
-    function($scope,$sessionStorage,Projects){
+    ['$scope','$location','$sessionStorage','Projects',
+    function($scope,$location,$sessionStorage,Projects){
         $scope.storage=$sessionStorage;
+
+        if($scope.storage.workspace){
+            $location.path('/projects/'+$scope.storage.workspace.project);
+        }
 
         $('header>nav>ul:nth-child(2)>li').removeClass('active')
         $('header>nav>ul:nth-child(1)>li:nth-child(3)').addClass('active')
