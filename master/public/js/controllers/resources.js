@@ -1,9 +1,8 @@
 'use strict';
 
 pleni.controller('ResourcesController',
-    ['$scope','$sessionStorage',
-    'DBServers','Repositories','Planners','Notifiers',
-    function($scope,$sessionStorage,DBServers,Repositories,Planners,Notifiers){
+    ['$scope','$sessionStorage','Resources',
+    function($scope,$sessionStorage,Resources){
         $scope.storage=$sessionStorage;
 
         $('header>nav>ul:nth-child(2)>li').removeClass('active')
@@ -42,31 +41,14 @@ pleni.controller('ResourcesController',
                 }
             }
           , refresh:function(hide){
-                utils.load_resources_start(1,hide);
-                DBServers.query(function(data){
-                    $scope.storage.dbservers=new Array();
-                    for(var i=0;i<data.length;i++){
-                        $scope.storage.dbservers.push({
-                            id:data[i].id
-                          , db:{
-                                host:data[i].db.host
-                              , port:data[i].db.port
-                              , user:data[i].db.user
-                              , prefix:data[i].db.prefix
-                            }
-                          , check:'unknown'
-                        });
-                    }
-                    utils.load_resources_end(1,hide);
-                });
+                utils.load_resources_start(1,hide)
+                Resources.dbservers.load(utils.load_resources_end(1,hide));
             }
           , save:function(){
-                var dbserver=new DBServers($scope.dbserver);
-
                 utils.clean();
                 if($scope.dbservers.env.type=='collection'){
                     utils.send('Saving DB server settings ...');
-                    dbserver.$save(function(data){
+                    Resources.dbservers.create($scope.dbserver,function(data){
                         $scope.dbservers.refresh();
                         $scope.dbservers.list();
                         utils.receive();
@@ -77,8 +59,7 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.dbservers.env.type=='element'){
                     utils.send('Updating DB server settings ...');
-                    dbserver.$update({dbserver:$scope.dbserver.id},
-                    function(data){
+                    Resources.dbservers.update($scope.dbserver,function(data){
                         $scope.dbservers.refresh();
                         $scope.dbservers.list();
                         utils.receive();
@@ -100,11 +81,10 @@ pleni.controller('ResourcesController',
                     if(!$scope.dbserver.db.prefix){
                         $scope.dbserver.db.prefix='pleni_';
                     }
-                    var dbserver=new DBServers($scope.dbserver);
 
                     utils.clean();
                     utils.send('Checking connection ...');
-                    dbserver.$check({},function(data){
+                    Resources.dbservers.check($scope.dbserver,function(data){
                         utils.receive();
                         utils.show('info','DB Server is online');
                     },function(error){
@@ -114,7 +94,9 @@ pleni.controller('ResourcesController',
                 }else{
                     var dbserver=$scope.storage.dbservers[index];
                     dbserver.check='checking';
-                    DBServers.check({dbserver:dbserver.id},function(data){
+                    Resources.dbservers.check({
+                        dbserver:dbserver.id
+                    },function(data){
                         dbserver.check='online';
                     },function(error){
                         dbserver.check='offline';
@@ -137,8 +119,9 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.dbservers.env.type=='element'){
                     utils.send('Scanning repositories ...');
-                    DBServers.scan({dbserver:$scope.dbserver.id},
-                    function(data){
+                    Resources.dbservers.scan({
+                        dbserver:$scope.dbserver.id
+                    },function(data){
                         $scope.dbserver.check='online';
                         $scope.dbserver.repositories=data;
                         utils.receive();
@@ -156,18 +139,17 @@ pleni.controller('ResourcesController',
                     utils.clean();
                     if($scope.dbservers.env.type=='element'){
                         utils.send('Sending add repository request');
-
-                        var _repository=$scope.dbserver.repositories[index]
-                          , repository=new Repositories({
-                                id:_repository.name
-                              , _dbserver:$scope.dbserver.id
-                              , db:{
-                                    name:_repository.params.db_name
-                                }
-                            });
-                        repository.$save(function(data){
+                        var _repository=$scope.dbserver.repositories[index];
+                        Resources.repositories.create({
+                            id:_repository.name
+                          , _dbserver:$scope.dbserver.id
+                          , db:{
+                                name:_repository.params.db_name
+                            }
+                        },function(data){
                             utils.receive();
-                            utils.show('success','Repository added to the list');
+                            utils.show('success',
+                                'Repository added to the list');
                         },function(error){
                             utils.receive();
                             utils.show('error',error.data.message);
@@ -189,8 +171,9 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.dbservers.env.type='element'){
                     utils.send('Sending delete request ...');
-                    DBServers.delete({dbserver:$scope.dbserver.id},
-                    function(data){
+                    Resources.dbservers.delete({
+                        dbserver:$scope.dbserver.id
+                    },function(data){
                         $scope.dbservers.refresh();
                         $scope.dbservers.list();
                         utils.receive();
@@ -223,30 +206,15 @@ pleni.controller('ResourcesController',
                 }
             }
           , refresh:function(hide){
-                utils.load_resources_start(2,hide);
-                Repositories.query(function(data){
-                    $scope.storage.repositories=new Array();
-                    for(var i=0;i<data.length;i++){
-                        $scope.storage.repositories.push({
-                            id:data[i].id
-                          , _dbserver:data[i]._dbserver
-                          , db:{
-                                name:data[i].db.name
-                            }
-                          , check:'unknown'
-                          , type:'site'
-                        });
-                    }
-                    utils.load_resources_end(2,hide);
-                });
+                utils.load_resources_start(2,hide)
+                Resources.repositories.load(utils.load_resources_end(2,hide));
             }
           , save:function(){
-                var repository=new Repositories($scope.repository);
-
                 utils.clean();
                 if($scope.repositories.env.type=='collection'){
                     utils.send('Saving Repository settings ...');
-                    repository.$save(function(data){
+                    Resources.repositories.create($scope.repository,
+                    function(data){
                         $scope.repositories.refresh();
                         $scope.repositories.list();
                         utils.receive();
@@ -257,7 +225,7 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.repositories.env.type=='element'){
                     utils.send('Updating Repository settings ...');
-                    repository.$update({repository:$scope.repository.id},
+                    Resources.repositories.update($scope.repository,
                     function(data){
                         $scope.repositories.refresh();
                         $scope.repositories.list();
@@ -277,11 +245,11 @@ pleni.controller('ResourcesController',
                     if(!$scope.repository.id){
                         $scope.repository.id='test';
                     }
-                    var repository=new Repositories($scope.repository);
 
                     utils.clean();
                     utils.send('Checking connection ...');
-                    repository.$check({},function(data){
+                    Resources.repositories.check($scope.repository,
+                    function(data){
                         utils.receive();
                         utils.show('info','Repository is online');
                     },function(error){
@@ -291,8 +259,9 @@ pleni.controller('ResourcesController',
                 }else{
                     var repository=$scope.storage.repositories[index];
                     repository.check='checking';
-                    Repositories.check({repository:repository.id},
-                    function(data){
+                    Resources.repositories.check({
+                        repository:repository.id
+                    },function(data){
                         repository.check='online';
                     },function(error){
                         repository.check='offline';
@@ -326,8 +295,9 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.repositories.env.type='element'){
                     utils.send('Sending delete request ...');
-                    Repositories.delete({repository:$scope.repository.id},
-                    function(data){
+                    Resources.repositories.delete({
+                        repository:$scope.repository.id
+                    },function(data){
                         $scope.repositories.refresh();
                         $scope.repositories.list();
                         utils.receive();
@@ -360,42 +330,14 @@ pleni.controller('ResourcesController',
                 }
             }
           , refresh:function(hide){
-                utils.load_resources_start(3,hide);
-                Planners.query(function(data){
-                    $scope.storage.planners=new Array();
-                    for(var i=0;i<data.length;i++){
-                        $scope.storage.planners.push({
-                            id:data[i].id
-                          , planner:{
-                                host:data[i].planner.host
-                              , port:data[i].planner.port
-                            }
-                          , type:'?'
-                          , check:'unknown'
-                          , status:'unknown'
-                          , follow:
-                                (get_element(data[i].id,$scope.storage.threads)
-                                    !==undefined)
-                          , set:{
-                                status:'unknown'
-                              , name:''
-                              , count:undefined
-                              , interval:undefined
-                              , tid:0
-                              , schema:{}
-                            }
-                        });
-                    }
-                    utils.load_resources_end(3,hide);
-                });
+                utils.load_resources_start(3,hide)
+                Resources.planners.load(utils.load_resources_end(3,hide));
             }
           , save:function(){
-                var planner=new Planners($scope.planner);
-
                 utils.clean();
                 if($scope.planners.env.type=='collection'){
                     utils.send('Saving planner settings ...');
-                    planner.$save(function(data){
+                    Resources.planners.create($scope.planner,function(data){
                         $scope.planners.refresh();
                         $scope.planners.list();
                         utils.receive();
@@ -406,8 +348,7 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.planners.env.type=='element'){
                     utils.send('Updating planner settings ...');
-                    planner.$update({planner:$scope.planner.id},
-                    function(data){
+                    Resources.planners.update($scope.planner,function(data){
                         $scope.planners.refresh();
                         $scope.planners.list();
                         utils.receive();
@@ -426,11 +367,10 @@ pleni.controller('ResourcesController',
                     if(!$scope.planner.id){
                         $scope.planner.id='test';
                     }
-                    var planner=new Planners($scope.planner);
 
                     utils.clean();
                     utils.send('Checking connection ...');
-                    planner.$check({},function(data){
+                    Resources.planners.check($scope.planner,function(data){
                         utils.receive();
                         utils.show('info','Planner is online');
                     },function(error){
@@ -440,17 +380,23 @@ pleni.controller('ResourcesController',
                 }else{
                     var planner=$scope.storage.planners[index];
                     planner.check='checking';
-                    Planners.check({server:planner.id},function(data){
+                    Resources.planners.check({
+                        server:planner.id
+                    },function(data){
                         planner.check='online';
                         planner.type=data.planner.type;
                         
-                        Planners.status({server:planner.id},function(data){
+                        Resources.planners.status({
+                            server:planner.id
+                        },function(data){
                             planner.status=data.planner.status;
                         },function(error){
                             planner.status='unknown';
                         });
 
-                        Planners.isset({server:planner.id},function(data){
+                        Resources.planners.isset({
+                            server:planner.id
+                        },function(data){
                             if(data.planner.result){
                                 $scope.planners.get();
                             }else{
@@ -490,8 +436,9 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.planners.env.type=='element'){
                     utils.send('Getting available tasks ...');
-                    Planners.api({server:$scope.planner.id},
-                    function(data){
+                    Resources.planners.api({
+                        server:$scope.planner.id
+                    },function(data){
                         $scope.planner.check='online';
                         $scope.planner.api=data.planner.tasks;
                         utils.receive();
@@ -511,7 +458,7 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.planners.env.type=='element'){
                     utils.send('Send a set request ...');
-                    Planners.set({
+                    Resources.planners.set({
                         server:$scope.planner.id
                       , task:{
                             name:$scope.planner.set.name
@@ -530,7 +477,7 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.planners.env.type=='element'){
                     utils.send('Send a tid request ...');
-                    Planners.tid({
+                    Resources.planners.tid({
                         server:$scope.planner.id
                       , tid:$scope.planner.set.tid
                     },function(data){
@@ -547,7 +494,7 @@ pleni.controller('ResourcesController',
                     if(!$scope.planner.api){
                         $scope.planners.api();
                     }
-                    Planners.get({
+                    Resources.planners.get({
                         server:$scope.planner.id
                     },function(data){
                         $scope.planner.set.status='set';
@@ -600,8 +547,9 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.planners.env.type=='element'){
                     utils.send('Sending a remove request ...');
-                    Planners.unset({server:$scope.planner.id},
-                    function(data){
+                    Resources.planners.unset({
+                        server:$scope.planner.id
+                    },function(data){
                         utils.receive();
                         $scope.planner.set.status='unset';
                         $scope.planner.set.name='';
@@ -620,7 +568,7 @@ pleni.controller('ResourcesController',
                     utils.send('Sending a run request ...');
                     var error=$scope.jsoneditor.validate();
                     if(error.length==0){
-                        Planners.run({
+                        Resources.planners.run({
                             server:$scope.planner.id
                           , targs:$scope.jsoneditor.getValue()
                         },function(data){
@@ -640,7 +588,9 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.planners.env.type=='element'){
                     utils.send('Sending a stop request ...');
-                    Planners.stop({server:$scope.planner.id},function(data){
+                    Resources.planners.stop({
+                        server:$scope.planner.id
+                    },function(data){
                         utils.receive();
                         $scope.planner.status='stopped';
                     },function(error){
@@ -655,7 +605,7 @@ pleni.controller('ResourcesController',
 
                 if(planner.follow){
                     utils.send('Send a remove request ...');
-                    Notifiers.remove({
+                    Resources.notifiers.remove({
                         server:notifier
                       , planner:planner.id
                     },function(data){
@@ -667,7 +617,7 @@ pleni.controller('ResourcesController',
                     });
                 }else{
                     utils.send('Send add request ...');
-                    Notifiers.add({
+                    Resources.notifiers.add({
                         server:notifier
                       , planner:planner.id
                     },function(data){
@@ -693,8 +643,9 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.planners.env.type='element'){
                     utils.send('Sending delete request ...');
-                    Planners.delete({planner:$scope.planner.id},
-                    function(data){
+                    Resources.planners.delete({
+                        planner:$scope.planner.id
+                    },function(data){
                         $scope.planners.refresh();
                         $scope.planners.list();
                         utils.receive();
@@ -728,31 +679,14 @@ pleni.controller('ResourcesController',
                 }
             }
           , refresh:function(hide){
-                utils.load_resources_start(4,hide);
-                Notifiers.query(function(data){
-                    $scope.storage.notifiers=new Array();
-                    for(var i=0;i<data.length;i++){
-                        $scope.storage.notifiers.push({
-                            id:data[i].id
-                          , notifier:{
-                                host:data[i].notifier.host
-                              , port:data[i].notifier.port
-                            }
-                          , type:'?'
-                          , check:'unknown'
-                          , planners:new Array()
-                        });
-                    }
-                    utils.load_resources_end(4,hide);
-                });
+                utils.load_resources_start(4,hide)
+                Resources.notifiers.load(utils.load_resources_end(4,hide));
             }
           , save:function(){
-                var notifier=new Notifiers($scope.notifier);
-
                 utils.clean();
                 if($scope.notifiers.env.type=='collection'){
                     utils.send('Saving notifier settings ...');
-                    notifier.$save(function(data){
+                    Resources.notifiers.create($scope.notifier,function(data){
                         $scope.notifiers.refresh();
                         $scope.notifiers.list();
                         utils.receive();
@@ -763,8 +697,7 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.notifiers.env.type=='element'){
                     utils.send('Updating notifier settings ...');
-                    notifier.$update({notifier:$scope.notifier.id},
-                    function(data){
+                    Resources.notifiers.update($scope.notifier,function(data){
                         $scope.notifiers.refresh();
                         $scope.notifiers.list();
                         utils.receive();
@@ -783,11 +716,10 @@ pleni.controller('ResourcesController',
                     if(!$scope.notifier.id){
                         $scope.notifier.id='test';
                     }
-                    var notifier=new Notifiers($scope.notifier);
 
                     utils.clean();
                     utils.send('Checking connection ...');
-                    notifier.$check({},function(data){
+                    Resources.notifiers.check($scope.notifier,function(data){
                         utils.receive();
                         utils.show('info','Notifier is online');
                     },function(error){
@@ -797,7 +729,9 @@ pleni.controller('ResourcesController',
                 }else{
                     var notifier=$scope.storage.notifiers[index];
                     notifier.check='checking';
-                    Notifiers.check({server:notifier.id},function(data){
+                    Resources.notifiers.check({
+                        server:notifier.id
+                    },function(data){
                         notifier.check='online';
                         notifier.type=data.notifier.type;
                     },function(error){
@@ -822,7 +756,7 @@ pleni.controller('ResourcesController',
           , get:function(){
                 utils.clean();
                 if($scope.notifiers.env.type=='element'){
-                    Notifiers.get({
+                    Resources.notifiers.get({
                         server:$scope.notifier.id
                     },function(data){
                         $scope.notifier.planners=data.notifier._planners;
@@ -836,7 +770,7 @@ pleni.controller('ResourcesController',
                     utils.clean();
                     if($scope.notifiers.env.type=='element'){
                         utils.send('Send add request ...');
-                        Notifiers.add({
+                        Resources.notifiers.add({
                             server:$scope.notifier.id
                           , planner:$scope.storage.planners[index].id
                         },function(data){
@@ -853,7 +787,7 @@ pleni.controller('ResourcesController',
                     utils.clean();
                     if($scope.notifiers.env.type=='element'){
                         utils.send('Send a remove request ...');
-                        Notifiers.remove({
+                        Resources.notifiers.remove({
                             server:$scope.notifier.id
                           , planner:$scope.notifier.planners[index]
                         },function(data){
@@ -871,7 +805,7 @@ pleni.controller('ResourcesController',
               , clean:function(index){
                     utils.clean();
                     utils.send('Cleaning planners list ...');
-                    Notifiers.clean({
+                    Resources.notifiers.clean({
                         server:$scope.notifier.id
                     },function(data){
                         utils.receive();
@@ -896,8 +830,9 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.notifiers.env.type='element'){
                     utils.send('Sending delete request ...');
-                    Notifiers.delete({notifier:$scope.notifier.id},
-                    function(data){
+                    Resources.notifiers.delete({
+                        notifier:$scope.notifier.id
+                    },function(data){
                         $scope.notifiers.refresh();
                         $scope.notifiers.list();
                         utils.receive();
