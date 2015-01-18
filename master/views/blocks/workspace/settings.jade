@@ -1,0 +1,22 @@
+article.form(ng-show='storage.workspace.settings')
+    .title
+        h2 Workspace configuration
+    .body
+        form(ng-submit='workspace.apply()')
+            p.large You need set a planners for scanning the available tasks in your workspace.
+            p(ng-repeat='planner in storage.planners')
+                label {{planner.id}}
+                a.extra.fa(title='Planner type: {{planner.type}}',ng-class='{\'fa-bullhorn\':planner.type==\'io\',\'fa-headphones\':planner.type==\'ion\',\'fa-microphone-slash\':planner.type==\'none\'}')
+                a.extra.fa(title='Planner connection: {{planner.check}}',ng-class='{\'fa-check\':planner.check==\'online\',\'fa-question\':planner.check==\'unknown\',\'fa-close\':planner.check==\'offline\'}')
+                a.extra.fa(title='Planner playing status: {{planner.status}}',ng-class='{\'fa-play\':planner.status==\'running\',\'fa-question\':planner.status==\'unknown\',\'fa-stop\':planner.status==\'stopped\'}')
+                a.extra.fa(title='Planner setting status: {{planner.set.status}}',ng-class='{\'fa-circle\':planner.set.status==\'set\',\'fa-question\':planner.set.status==\'unknown\',\'fa-circle-o\':planner.set.status==\'unset\'}')
+                a.extra(title='Add/Remove planner to master notifier',ng-click='planners.follow($index)',ng-show='planner.type==\'io\'||planner.type==\'ion\'')
+                a.extra.fa(ng-class='{\'fa-bell-o\':planner.follow==true,\'fa-bell-slash-o\':planner.follow==false}')
+                a.extra.fa.fa-refresh(title='Check connection',ng-click='planners.check($index)',ng-class='{\'fa-spin\':planner.check==\'checking\'}')
+            p.offset
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='submit') Apply
+                button(type='button',ng-click='workspace.cancel()') Cancel
+
