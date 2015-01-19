@@ -1,26 +1,18 @@
 'use strict';
 
 pleni.controller('WorkspaceController',
-    ['$scope','$routeParams','$location','$sessionStorage','$http',
-    function($scope,$routeParams,$location,$sessionStorage,$http){
+    ['$scope','$routeParams','$location','$sessionStorage',
+    'Resources','Projects',
+    function($scope,$routeParams,$location,$sessionStorage,Resouces,Projects){
         $scope.storage=$sessionStorage;
 
-        var get_element=function(needle,haystack){
-                for(var i in haystack){
-                    if(haystack[i].id==needle){
-                        return [i,haystack[i]];
-                    }
-                }
-                return;
-            }
-          , project=$routeParams.project
-          , repositories=get_element(project,$scope.storage.projects)[1]
-
-        $scope.storage.workspace={
-            name:project
-          , repositories:repositories._repositories
-          , settings:true
-        };
+        if($routeParams.project){
+            $scope.storage.workspace={
+                name:$routeParams.project
+            };
+        }else{
+            $scope.workspace.close();
+        }
 
         $scope.workspace={
             close:function(){
