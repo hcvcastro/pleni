@@ -65,6 +65,12 @@ pleni.controller('WorkspaceController',
                             },function(error){
                                 planner.set.status='unknown';
                             });
+
+                            Resources.planners.api({
+                                server:planner.id
+                            },function(data){
+                                planner.api=data.planner.tasks;
+                            },function(error){});
                         },function(error){
                             planner.check='offline';
                         });

@@ -13,9 +13,10 @@ article.form(ng-show='storage.workspace.panel==\'settings\'')
                     li: span.fa(title='Planner setting status: {{planner.set.status}}',ng-class='{\'fa-circle\':planner.set.status==\'set\',\'fa-question\':planner.set.status==\'unknown\',\'fa-circle-o\':planner.set.status==\'unset\'}')
                     li: a(title='Add/Remove planner to master notifier',ng-click='planners.follow($index)')
                         span.fa(ng-class='{\'fa-bell-o\':planner.follow==true,\'fa-bell-slash-o\':planner.follow==false}')
-                    li: a.fa.fa-refresh(title='Check connection',ng-click='planners.check($index)',ng-class='{\'fa-spin\':planner.check==\'checking\'}')
+                    li: a(title='Check connection',ng-click='planners.check($index)')
+                        span.fa.fa-refresh(ng-class='{\'fa-spin\':planner.check==\'checking\'}')
                     li: a(title='Take control of planner',ng-click='planners.exclusive($index)',ng-class='{\'fa-lock\':planner.set.status==\'set\',\'fa-unlock\':planner.set.status==\'unset\'}')
-                .clearfix
+                span.extra {{planner.api.length}} tasks
             p.offset
                 span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message

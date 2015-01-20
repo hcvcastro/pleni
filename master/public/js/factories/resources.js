@@ -104,6 +104,7 @@ pleni.factory('Resources',['$sessionStorage',
                               , type:'?'
                               , check:'unknown'
                               , status:'unknown'
+                              , api:new Array()
                               , follow:(get_element(
                                     data[i].id,$sessionStorage.threads)
                                         !==undefined)
