@@ -12,26 +12,34 @@ pleni.controller('WorkspaceController',
 
         $scope.storage.workspace={
             name:$routeParams.project
-          , panel:'settings'
+          , api:{}
         };
 
         $scope.workspace={
-            init:function(){
+            env:{
+                panel:''
+            }
+          , init:function(){
                 Projects.get({
                     project:$scope.storage.workspace.name
                 },function(data){
                     $scope.storage.workspace.repositories=data._repositories;
                 },function(error){});
+
+                $scope.planners.load();
+                if(!$scope.storage.workspace.planners){
+                    $scope.workspace.settings();
+                }
             }
-          , close:function(){
+          , exit:function(){
                 delete $scope.storage.workspace;
                 $location.path('/projects');
             }
-          , accept:function(){
-                console.log('accept');
+          , settings:function(){
+                $scope.workspace.env.panel='settings';
             }
-          , cancel:function(){
-                console.log('cancel');
+          , close:function(){
+                $scope.workspace.env.panel='';
             }
         };
 
@@ -70,6 +78,15 @@ pleni.controller('WorkspaceController',
                                 server:planner.id
                             },function(data){
                                 planner.api=data.planner.tasks;
+                                planner.api.forEach(function(task){
+                                    if($scope.storage.workspace.api[task.name]){
+                                        $scope.storage.workspace
+                                              .api[task.name].push(planner);
+                                    }else{
+                                        $scope.storage.workspace
+                                              .api[task.name]=[planner];
+                                    }
+                                });
                             },function(error){});
                         },function(error){
                             planner.check='offline';
@@ -89,7 +106,6 @@ pleni.controller('WorkspaceController',
         };
 
         $scope.workspace.init();
-        $scope.planners.load();
     }]
 );
 

@@ -10,13 +10,13 @@
     .main
         .tools
             ul.left
-                li
+                li(title='Tasks/Planners configuration',ng-click='workspace.settings()')
                     a.fa.fa-gear
-                li
+                li(title='Refresh data from server',ng-click='workspace.init()')
                     a.fa.fa-refresh
             ul.right
-                li
-                    a.fa.fa-close(ng-click='workspace.close()',title='Close project workspace')
+                li(title='Close project workspace',ng-click='workspace.exit()')
+                    a.fa.fa-close
         .messages
         .workspace
             include ../blocks/workspace/settings

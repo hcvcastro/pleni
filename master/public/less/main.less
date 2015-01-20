@@ -286,6 +286,7 @@ article.form, article.remove, article.view {
 
                 ul.group {
                     list-style: none;
+                    float: left;
                     li {
                         float: left;
                         &>a, &>span {
@@ -307,6 +308,34 @@ article.form, article.remove, article.view {
                     .font4;
                     height: 32px;
                     margin: 5px 0 0 10px;
+                }
+            }
+
+            .expand {
+                background-color: fade(@color3, 39%);
+                .editor();
+
+                ul.group {
+                    list-style: none;
+                    float: left;
+                    li {
+                        float: left;
+                        .button {
+                            float: left;
+                            background-color: fade(@color2, 39%);
+                            margin: 0 0 0 5px;
+                            padding: 3px 10px;
+                            border-radius: 5px;
+                            box-sizing: border-box;
+                            span:nth-child(1) {
+                                font-size: 16px;
+                            }
+                            span:nth-child(2) {
+                                padding: 0 5px;
+                                .font4;
+                            }
+                        }
+                    }
                 }
             }
 

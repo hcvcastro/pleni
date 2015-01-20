@@ -1,8 +1,8 @@
-article.form(ng-show='storage.workspace.panel==\'settings\'')
+article.form(ng-show='workspace.env.panel==\'settings\'')
     .title
         h2 Workspace configuration
     .body
-        form(ng-submit='workspace.apply()')
+        form
             p.large You need set a planners for scanning the available tasks in your workspace.
             .row(ng-repeat='planner in storage.planners')
                 label {{planner.id}}
@@ -17,10 +17,14 @@ article.form(ng-show='storage.workspace.panel==\'settings\'')
                         span.fa.fa-refresh(ng-class='{\'fa-spin\':planner.check==\'checking\'}')
                     li: a(title='Take control of planner',ng-click='planners.exclusive($index)',ng-class='{\'fa-lock\':planner.set.status==\'set\',\'fa-unlock\':planner.set.status==\'unset\'}')
                 span.extra {{planner.api.length}} tasks
+            p.large Available Tasks in scanned planners:
+            .expand
+                ul.group
+                    li(ng-repeat='(name, task) in storage.workspace.api')
+                        .button
+                            span.fa.fa-taxi
+                            span {{name}}
+                .clearfix
             p.offset
-                span.hide.loader.fa.fa-spinner.fa-spin
-                span.hide.message
-            p.offset
-                button(type='submit',ng-click='workspace.accept()') Accept
-                button(type='button',ng-click='workspace.cancel()') Cancel
+                button(type='button',ng-click='workspace.close()') Close
 
