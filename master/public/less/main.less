@@ -261,7 +261,11 @@ article.form, article.remove, article.view {
                 }
 
                 a.extra {
-                    margin: 7px 0 0 10px;
+                    width: 32px;
+                    height: 32px;
+                    box-sizing: border-box;
+                    padding: 6px 0 0 0;
+                    text-align: center;
                 }
 
                 button {
@@ -274,11 +278,30 @@ article.form, article.remove, article.view {
                 }
             }
 
-            p {
+            p,.row {
                 height: 32px;
                 background-color: fade(@color3,39%);
                 display: flex;
                 .editor();
+
+                ul.group {
+                    list-style: none;
+                    li {
+                        float: left;
+                        &>a, &>span {
+                            float: left;
+                            width: 32px;
+                            height: 32px;
+                            box-sizing: border-box;
+                            padding: 6px 0 0 0;
+                            text-align: center;
+                        }
+
+                        a {
+                            background-color: fade(@color2, 25%);
+                        }
+                    }
+                }
             }
 
             .form-control {
