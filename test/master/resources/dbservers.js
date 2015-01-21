@@ -373,7 +373,7 @@ describe('dbservers controller functions',function(){
 
         [
             {test:'test',expected:_error.notfound,status:404}
-          , {test:'localhost',expected:_success.ok,status:200}
+          , {test:'main',expected:_success.ok,status:200}
         ]
         .forEach(function(element){
             it('POST /resources/dbservers/:dbserver/_check',function(done){
@@ -392,7 +392,7 @@ describe('dbservers controller functions',function(){
 
         [
             {test:'test',expected:_error.notfound,status:404}
-          , {test:'localhost',status:200}
+          , {test:'main',status:200}
         ]
         .forEach(function(element){
             it('POST /resources/dbservers/:dbserver/_databases',function(done){

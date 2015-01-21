@@ -165,14 +165,14 @@ describe('repositories controller functions',function(){
           , {test:{repository:'...'},expected:_error.validation,status:403}
           , {test:{
                 id:'test'
-              , _dbserver:'localhost'
+              , _dbserver:'main'
               , db:{
                     name:'pleni_test'
                 }
             },expected:_error.network,status:404}
           , {test :{
                 id:'test'
-              , _dbserver:'localhost'
+              , _dbserver:'main'
               , db:{
                     name:'db_test'
                 }

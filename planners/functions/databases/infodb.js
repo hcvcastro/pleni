@@ -29,12 +29,12 @@ module.exports=function(args){
             if(response.statusCode==200){
                 args.db.info=response.body
                 deferred.resolve(args);
-                return;
+            }else{
+                deferred.reject(JSON.parse(response.body));
             }
-            deferred.reject(JSON.parse(response.body));
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;

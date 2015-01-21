@@ -26,21 +26,18 @@ module.exports=function(args){
             if(validator.isJSON(response.body)){
                 var parse=JSON.parse(response.body);
 
-                if(response.statusCode==200){
-                    if(parse.notifier){
-                        args.notifier.type=parse.signature;
-                        deferred.resolve(args);
-                        return;
-                    }
+                if(response.statusCode==200&&parse.notifier){
+                    args.notifier.type=parse.signature;
+                    deferred.resolve(args);
+                }else{
+                    deferred.reject(response.body);
                 }
-                deferred.reject(response.body);
-                return;
+            }else{
+                deferred.reject({error:'response_malformed'});
             }
-            deferred.reject({error:'response_malformed'});
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
-        return;
     });
 
     return deferred.promise;

@@ -24,29 +24,33 @@ module.exports=function(args){
     if(args.debug){
         console.log('get a task for planner ... '+args.planner.host);
     }
-    request.get({url:url},function(error,response){
-        if(!error){
-            if(validator.isJSON(response.body)){
-                var parse=JSON.parse(response.body);
 
-                if(response.statusCode==200){
-                    args.planner.task={
-                        name:parse.task
-                      , count:parse.count
-                      , interval:parse.interval
-                    };
-                    deferred.resolve(args);
-                    return;
+    if(!args.planner.tid){
+        deferred.reject({error:'not tid provided'});
+    }else{
+        request.get({url:url},function(error,response){
+            if(!error){
+                if(validator.isJSON(response.body)){
+                    var parse=JSON.parse(response.body);
+
+                    if(response.statusCode==200){
+                        args.planner.task={
+                            name:parse.task
+                          , count:parse.count
+                          , interval:parse.interval
+                        };
+                        deferred.resolve(args);
+                    }else{
+                        deferred.reject(parse);
+                    }
+                }else{
+                    deferred.reject({error:'response_malformed'});
                 }
-                deferred.reject(parse);
-                return;
+            }else{
+                deferred.reject(error);
             }
-            deferred.reject({error:'response_malformed'});
-            return;
-        }
-        deferred.reject(error);
-        return;
-    });
+        });
+    }
 
     return deferred.promise;
 };

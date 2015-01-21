@@ -27,16 +27,15 @@ module.exports=function(args){
                 if(response.statusCode==200){
                     args.planner.status=(JSON.parse(response.body)).status;
                     deferred.resolve(args);
-                    return;
+                }else{
+                    deferred.reject(response.body);
                 }
-                deferred.reject(response.body);
-                return;
+            }else{
+                deferred.reject({error:'response_malformed'});
             }
-            deferred.reject({error:'response_malformed'});
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
-        return;
     });
 
     return deferred.promise;

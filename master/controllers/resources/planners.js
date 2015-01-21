@@ -249,7 +249,6 @@ module.exports=function(app){
             if(json){
                 args=extend(body,args);
             }
-
             sequence.reduce(function(previous,current){
                 return previous.then(current);
             },test(args))
@@ -263,10 +262,8 @@ module.exports=function(app){
                     response.status(401).json(_error.auth);
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
-                }else if(error.ok==false){
-                    if(error.message=='Resource cannot overridden'){
-                        response.status(403).json(_error.auth);
-                    }
+                }else if(error.error=='not tid provided'){
+                    response.status(401).json(_error.auth);
                 }else{
                     response.status(403).json(_error.badrequest);
                 }

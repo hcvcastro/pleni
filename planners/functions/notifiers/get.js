@@ -29,16 +29,15 @@ module.exports=function(args){
                 if(response.statusCode==200){
                     args.notifier.planners=parse;
                     deferred.resolve(args);
-                    return;
+                }else{
+                    deferred.reject(parse);
                 }
-                deferred.reject(parse);
-                return;
+            }else{
+                deferred.reject({error:'response_malformed'});
             }
-            deferred.reject({error:'response_malformed'});
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
-        return;
     });
 
     return deferred.promise;

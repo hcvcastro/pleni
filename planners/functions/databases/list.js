@@ -29,10 +29,9 @@ module.exports=function(args){
             if(response.statusCode==200){
                 args.db.list=JSON.parse(response.body);
                 deferred.resolve(args);
-                return;
+            }else{
+                deferred.reject(response.body);
             }
-            deferred.reject(response.body);
-            return;
         }
         deferred.reject(error);
     });

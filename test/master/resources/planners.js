@@ -210,7 +210,7 @@ describe('planners controller functions',function(){
 
         it('GET /resources/planners/:planner',function(done){
             request(app)
-                .get('/resources/planners/localhost')
+                .get('/resources/planners/main')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -335,7 +335,7 @@ describe('planners controller functions',function(){
 
         [
             {test:'test',expected:_error.notfound,status:404}
-          , {test:'localhost',expected:_success.ok,status:200}
+          , {test:'main',expected:_success.ok,status:200}
         ]
         .forEach(function(element){
             it('POST /resources/planners/:planner/_check',function(done){
@@ -360,7 +360,7 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_status',function(done){
             request(app)
-                .post('/resources/planners/localhost/_status')
+                .post('/resources/planners/main/_status')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -375,7 +375,7 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_isset',function(done){
             request(app)
-                .post('/resources/planners/localhost/_isset')
+                .post('/resources/planners/main/_isset')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -390,7 +390,7 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_api',function(done){
             request(app)
-                .post('/resources/planners/localhost/_api')
+                .post('/resources/planners/main/_api')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -405,11 +405,11 @@ describe('planners controller functions',function(){
 
         it('GET /resources/planners/:planner/_get',function(done){
             request(app)
-                .post('/resources/planners/localhost/_get')
+                .post('/resources/planners/main/_get')
                 .expect('Content-Type',/json/)
                 .expect(403)
                 .end(function(err,res){
-                    res.statusCode.should.be.eql(403);
+                    res.statusCode.should.be.eql(401);
                     res.body.should.have.property('ok').and.be.false;
                     res.body.should.have.property('message');
                     done();
@@ -418,9 +418,9 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_set',function(done){
             request(app)
-                .post('/resources/planners/localhost/_set')
+                .post('/resources/planners/main/_set')
                 .send({
-                    server:'localhost'
+                    server:'main'
                   , task:{
                         name:'exclusive'
                       , count:-1
@@ -441,7 +441,7 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_isset',function(done){
             request(app)
-                .post('/resources/planners/localhost/_isset')
+                .post('/resources/planners/main/_isset')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -456,7 +456,7 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_get',function(done){
             request(app)
-                .post('/resources/planners/localhost/_get')
+                .post('/resources/planners/main/_get')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -473,9 +473,9 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_run',function(done){
             request(app)
-                .post('/resources/planners/localhost/_run')
+                .post('/resources/planners/main/_run')
                 .send({
-                    server:'localhost'
+                    server:'main'
                   , targs:{}
                 })
                 .expect('Content-Type',/json/)
@@ -492,7 +492,7 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_stop',function(done){
             request(app)
-                .post('/resources/planners/localhost/_stop')
+                .post('/resources/planners/main/_stop')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -507,7 +507,7 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_unset',function(done){
             request(app)
-                .post('/resources/planners/localhost/_unset')
+                .post('/resources/planners/main/_unset')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -522,7 +522,7 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_isset',function(done){
             request(app)
-                .post('/resources/planners/localhost/_isset')
+                .post('/resources/planners/main/_isset')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -537,9 +537,9 @@ describe('planners controller functions',function(){
 
         it('POST /resources/planners/:planner/_tid',function(done){
             request(app)
-                .post('/resources/planners/localhost/_tid')
+                .post('/resources/planners/main/_tid')
                 .send({
-                    server:'localhost'
+                    server:'main'
                   , tid:1024
                 })
                 .expect('Content-Type',/json/)

@@ -210,7 +210,7 @@ describe('notifiers controller functions',function(){
 
         it('GET /resources/notifiers/:notifier',function(done){
             request(app)
-                .get('/resources/notifiers/localhost')
+                .get('/resources/notifiers/master')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -335,7 +335,7 @@ describe('notifiers controller functions',function(){
 
         [
             {test:'test',expected:_error.notfound,status:404}
-          , {test:'localhost',expected:_success.ok,status:200}
+          , {test:'master',expected:_success.ok,status:200}
         ]
         .forEach(function(element){
             it('POST /resources/notifiers/:notifier/_check',function(done){
@@ -360,7 +360,7 @@ describe('notifiers controller functions',function(){
 
         it('POST /resources/notifiers/:notifier/_get',function(done){
             request(app)
-                .post('/resources/notifiers/localhost/_get')
+                .post('/resources/notifiers/master/_get')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -374,8 +374,8 @@ describe('notifiers controller functions',function(){
 
         it('POST /resources/notifiers/:notifier/_add',function(done){
             request(app)
-                .post('/resources/notifiers/localhost/_add')
-                .send({server:'server',planner:'localhost'})
+                .post('/resources/notifiers/master/_add')
+                .send({server:'server',planner:'main'})
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -389,8 +389,8 @@ describe('notifiers controller functions',function(){
 
         it('POST /resources/notifiers/:notifier/_remove',function(done){
             request(app)
-                .post('/resources/notifiers/localhost/_remove')
-                .send({server:'server',planner:'localhost'})
+                .post('/resources/notifiers/master/_remove')
+                .send({server:'server',planner:'main'})
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -404,7 +404,7 @@ describe('notifiers controller functions',function(){
 
         it('POST /resources/notifiers/:notifier/_clean',function(done){
             request(app)
-                .post('/resources/notifiers/localhost/_clean')
+                .post('/resources/notifiers/master/_clean')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){

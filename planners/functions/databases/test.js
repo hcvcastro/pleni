@@ -27,21 +27,18 @@ module.exports=function(args){
                 if(validator.isJSON(response.body)){
                     var parse=JSON.parse(response.body);
  
-                    if(response.statusCode==200){
-                        if(parse.couchdb){
+                    if(response.statusCode==200&&parse.couchdb){
                             args.db.check=true;
                             deferred.resolve(args);
-                            return;
-                        }
+                    }else{
+                        deferred.reject(parse);
                     }
-                    deferred.reject(parse);
-                    return;
+                }else{
+                    deferred.reject({error:'response_malformed'});
                 }
-                deferred.reject({error:'response_malformed'});
-                return;
+            }else{
+                deferred.reject(error);
             }
-            deferred.reject(error);
-            return;
         });
     }else{
         deferred.resolve(args);

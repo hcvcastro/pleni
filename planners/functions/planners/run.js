@@ -20,10 +20,9 @@ module.exports=function(args){
         if(!error){
             if(response.statusCode==200){
                 deferred.resolve(args);
-                return;
+            }else{
+                deferred.reject(response.body);
             }
-            deferred.reject(response.body);
-            return;
         }
         deferred.reject(error);
     });

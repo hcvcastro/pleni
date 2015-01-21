@@ -38,12 +38,12 @@ module.exports=function(args){
                     }
                     args.auth.cookie=exec[1];
                     deferred.resolve(args);
-                    return;
+                }else{
+                    deferred.reject(response.body);
                 }
-                deferred.reject(response.body);
-                return;
+            }else{
+                deferred.reject(error);
             }
-            deferred.reject(error);
         });
     }else{
         deferred.resolve(args);
