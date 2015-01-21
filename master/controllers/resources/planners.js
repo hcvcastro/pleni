@@ -264,6 +264,8 @@ module.exports=function(app){
                     response.status(400).json(_error.json);
                 }else if(error.error=='not tid provided'){
                     response.status(401).json(_error.auth);
+                }else if(error.error=='not override'){
+                    response.status(403).json(_error.notoverride);
                 }else{
                     response.status(403).json(_error.badrequest);
                 }

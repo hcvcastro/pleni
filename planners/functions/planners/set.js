@@ -36,7 +36,7 @@ module.exports=function(args){
                 args.planner.tid=response.body.tid;
                 deferred.resolve(args);
             }else{
-                deferred.reject(response.body);
+                deferred.reject({error:'not override'});
             }
         }else{
             deferred.reject(error);
