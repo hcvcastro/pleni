@@ -59,7 +59,11 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.dbservers.env.type=='element'){
                     utils.send('Updating DB server settings ...');
-                    Resources.dbservers.update($scope.dbserver,function(data){
+                    Resources.dbservers.update({
+                        dbserver:$scope.dbserver.id
+                      , id:$scope.dbserver.id
+                      , db:$scope.dbserver.db
+                    },function(data){
                         $scope.dbservers.refresh();
                         $scope.dbservers.list();
                         utils.receive();
@@ -225,8 +229,12 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.repositories.env.type=='element'){
                     utils.send('Updating Repository settings ...');
-                    Resources.repositories.update($scope.repository,
-                    function(data){
+                    Resources.repositories.update({
+                        repository:$scope.repository.id
+                      , id:$scope.repository.id
+                      , _dbserver:$scope.repository._dbserver
+                      , db:$scope.repository.db
+                    },function(data){
                         $scope.repositories.refresh();
                         $scope.repositories.list();
                         utils.receive();
@@ -348,7 +356,11 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.planners.env.type=='element'){
                     utils.send('Updating planner settings ...');
-                    Resources.planners.update($scope.planner,function(data){
+                    Resources.planners.update({
+                        planner:$scope.planner.id
+                      , id:$scope.planner.id
+                      , planner:$scope.planner.planner
+                    },function(data){
                         $scope.planners.refresh();
                         $scope.planners.list();
                         utils.receive();
@@ -699,7 +711,11 @@ pleni.controller('ResourcesController',
                     });
                 }else if($scope.notifiers.env.type=='element'){
                     utils.send('Updating notifier settings ...');
-                    Resources.notifiers.update($scope.notifier,function(data){
+                    Resources.notifiers.update({
+                        notifier:$scope.notifier.id
+                      , id:$scope.notifier.id
+                      , notifier:$scope.notifier.notifier
+                    },function(data){
                         $scope.notifiers.refresh();
                         $scope.notifiers.list();
                         utils.receive();

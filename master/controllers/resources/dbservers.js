@@ -68,7 +68,7 @@ module.exports=function(app){
                     id:validate.toString(request.body.id)
                   , db:{
                         host:validate.toValidHost(request.body.db.host)
-                      , port:validate.toInt(request.body.db.port)+''
+                      , port:validate.toInt(request.body.db.port)
                       , user:validate.toString(request.body.db.user)
                       , pass:validate.toString(request.body.db.pass)
                       , prefix:validate.toString(request.body.db.prefix)
