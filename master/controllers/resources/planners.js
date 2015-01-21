@@ -263,8 +263,11 @@ module.exports=function(app){
                     response.status(401).json(_error.auth);
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
+                }else if(error.ok==false){
+                    if(error.message=='Resource cannot overridden'){
+                        response.status(403).json(_error.auth);
+                    }
                 }else{
-                    //console.log(error);
                     response.status(403).json(_error.badrequest);
                 }
             })

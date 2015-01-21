@@ -41,6 +41,9 @@ pleni.controller('WorkspaceController',
           , close:function(){
                 $scope.workspace.env.panel='';
             }
+          , icon:function(name){
+                return 'fa-pleni-'+name.replace('/','-');
+            }
         };
 
         $scope.planners={

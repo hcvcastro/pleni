@@ -470,6 +470,7 @@ pleni.controller('ResourcesController',
                         $scope.planners.get();
                     },function(error){
                         utils.receive();
+                        utils.show('error',error.data.message);
                     });
                 }
             }
@@ -486,6 +487,7 @@ pleni.controller('ResourcesController',
                         $scope.planners.get();
                     },function(error){
                         utils.receive();
+                        utils.show('error',error.data.message);
                     });
                 }
             }
