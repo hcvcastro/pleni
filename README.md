@@ -1,4 +1,4 @@
-# pleni tool
+# pleni toolkit
 
 Fullstack application for deploy a servers for automatic activities related with
 security and http things.
@@ -10,8 +10,8 @@ git clone https://github.com/ccaballero/pleni.git
 cd pleni
 npm install
 bower install
-PORT=3000 node planner/planner.js
-PORT=3001 node master/app.js
+PORT=3000 node master/app.js
+PORT=3001 node planners/planner.io.js
 ```
 
 ## How test
@@ -21,19 +21,22 @@ in localhost, and webserver.
 ```sh
 cd pleni
 grunt test:dumb
-PORT=3001 node planners/planner.js
-grunt test:planner # for testing the planner
-grunt test:master  # for testing the master control
+PORT=3001 node planners/planner.io.js
+grunt test:planner  # for testing the planner
+PORT=3002 node notifiers/notifier.io.js
+grunt test:notifier # for testing the notifier
+grunt test:master   # for testing the master control
 ```
 
 # more details
-Pleni consists of two separate servers:
+Pleni consists of three separate servers:
 
 - Planner server.
+- Notifier server.
 - Master server.
 
 ## How use the planner
-For use the planner server, you should start the server, there are a two
+For use the planner server, you should start the server, there are a three
 differents planners.
 
 ```sh
@@ -45,10 +48,16 @@ or
 PORT=3001 node planners/planner.io.js
 ```
 
+or
+
+```
+PORT=3001 node planners/planner.ion.js
+```
+
 to make sure the server is started, you can make the REST request:
 
 ```sh
-curl -X GET http://localhost:3001
+curl -X GET http://localhost:3001/id
 ```
 
 the answer will be:
