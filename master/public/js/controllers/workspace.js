@@ -176,7 +176,7 @@ pleni.controller('WorkspaceController',
                     planner.set.name=data.planner.task.name;
                     planner.set.count=data.planner.task.count;
                     planner.set.interval=data.planner.task.interval;
-                    /*if(planner.api){
+                    if(planner.api){
                         for(var i=0;i<planner.api.length;i++){
                             if(planner.set.name==
                                 planner.api[i].name){
@@ -184,24 +184,30 @@ pleni.controller('WorkspaceController',
                                 break;
                             }
                         }
-                    }*/
+                    }
                 },function(error){});
             }
           , exclusive:function(index){
                 var planner=$scope.storage.planners[index];
 
-                Resources.planners.set({
-                    server:planner.id
-                  , task:{
-                        name:'exclusive'
-                      , count:1
-                      , interval:500
-                    }
-                },function(data){
-                    console.log(data);
-                },function(error){
-                    console.log(error);
-                });
+                switch(planner.set.status){
+                    case 'unset':
+                        Resources.planners.set({
+                            server:planner.id
+                          , task:{
+                                name:'exclusive'
+                              , count:1
+                              , interval:500
+                            }
+                        },function(data){
+                            console.log(data);
+                        },function(error){
+                            console.log(error);
+                        });
+                        break;
+                    case 'set':
+                        break;
+                }
             }
         };
 
