@@ -434,16 +434,9 @@ pleni.controller('ResourcesController',
                 $scope.planners.env.view='view';
                 $scope.planners.env.type='element';
                 $scope.planner=$scope.storage.planners[index];
-                if($scope.planner.status=='online'){
-                    if(!$scope.planner.api){
-                        $scope.planners.api();
-                    }
-                }
-                if($scope.planner.set.status=='set'){
-                    $scope.planners.editor();
-                }
+                $scope.planners.check(index);
             }
-          , api:function(){
+          , api:function(next){
                 $('.api').addClass('fa-spin');
                 utils.clean();
                 if($scope.planners.env.type=='element'){
@@ -457,6 +450,9 @@ pleni.controller('ResourcesController',
                         $('.api').removeClass('fa-spin');
                         if(data.length==0){
                             utils.show('warning','Planner has no Tasks!!');
+                        }
+                        if(next){
+                            next();
                         }
                     },function(error){
                         $scope.planner.check='offline';
@@ -505,9 +501,6 @@ pleni.controller('ResourcesController',
             }
           , get:function(){
                 if($scope.planners.env.type=='element'){
-                    if(!$scope.planner.api){
-                        $scope.planners.api();
-                    }
                     Resources.planners.get({
                         server:$scope.planner.id
                     },function(data){
@@ -515,7 +508,8 @@ pleni.controller('ResourcesController',
                         $scope.planner.set.name=data.planner.task.name;
                         $scope.planner.set.count=data.planner.task.count;
                         $scope.planner.set.interval=data.planner.task.interval;
-                        if($scope.planner.api){
+
+                        $scope.planners.api(function(){
                             for(var i=0;i<$scope.planner.api.length;i++){
                                 if($scope.planner.set.name==
                                     $scope.planner.api[i].name){
@@ -524,8 +518,9 @@ pleni.controller('ResourcesController',
                                     break;
                                 }
                             }
-                        }
-                        $scope.planners.editor();
+
+                            $scope.planners.editor();
+                        });
                     },function(error){
                         utils.show('error','Planner cannot get the task');
                     });
