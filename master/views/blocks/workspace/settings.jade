@@ -4,7 +4,7 @@ article.form(ng-show='workspace.env.panel==\'settings\'')
     .body
         form
             p.large You need set a planners for scanning the available tasks in your workspace.
-            .row.planners(ng-repeat='planner in storage.planners',ng-class='{\'lock\':planner.set.status==\'set\'}',ng-mouseenter='workspace.planners.enter($index)',ng-mouseleave='workspace.planners.leave($index)')
+            .row(ng-repeat='planner in storage.planners',ng-class='{\'lock\':planner.set.status==\'set\'}',ng-mouseenter='workspace.planners.enter($index)',ng-mouseleave='workspace.planners.leave()')
                 ul.group
                     li: a.fa(title='Take control of planner',ng-click='planners.exclusive($index)',ng-class='{\'fa-lock\':planner.set.status==\'set\',\'fa-unlock\':planner.set.status==\'unset\'}')
                 label {{planner.id}}
@@ -17,12 +17,12 @@ article.form(ng-show='workspace.env.panel==\'settings\'')
                         span.fa(ng-class='{\'fa-bell-o\':planner.follow==true,\'fa-bell-slash-o\':planner.follow==false}')
                     li: a(title='Check connection',ng-click='planners.check($index)')
                         span.fa.fa-refresh(ng-class='{\'fa-spin\':planner.check==\'checking\'}')
-                span.extra {{planner.api.length}} tasks
+                span.extra(ng-class='{\'pick\':ui.planner[$index]}') {{planner.api.length}} tasks 
             p.large Available Tasks in scanned planners:
             .expand
-                ul.group.tasks
-                    li(ng-repeat='(name,planner) in storage.workspace.api',ng-mouseenter='workspace.tasks.enter($index)',ng-mouseleave='workspace.tasks.leave($index)',ng-class='{\'pick\':ui.tasks[$index]}')
-                        .button
+                ul.group
+                    li(ng-repeat='(name,planner) in storage.workspace.api',ng-mouseenter='workspace.tasks.enter(name)',ng-mouseleave='workspace.tasks.leave()')
+                        .button(ng-class='{\'pick\':ui.task[name]}')
                             span.fa(ng-class='workspace.icon(name)')
                             span {{name}}
                 .clearfix

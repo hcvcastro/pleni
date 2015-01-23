@@ -15,6 +15,11 @@ pleni.controller('WorkspaceController',
           , api:{}
         };
 
+        $scope.ui={
+            planner:[]
+          , task:{}
+        }
+
         $scope.workspace={
             env:{
                 panel:''
@@ -53,22 +58,32 @@ pleni.controller('WorkspaceController',
             }
           , planners:{
                 enter:function(index){
-                    $scope.storage.planners[index].api.map(function(task){
-                        return task.name;
-                    }).forEach(function(task){
-                        
-                    });
+                    for(var i in $scope.storage.workspace.api){
+                        $scope.ui.task[i]=$scope.storage.planners[index].api
+                            .some(function(element){
+                                return element.name==i;
+                            });
+                    }
                 }
-              , leave:function(index){
-                    console.log('leave: '+index);
+              , leave:function(){
+                    for(var i in $scope.ui.task){
+                        $scope.ui.task[i]=false;
+                    }
                 }
             }
           , tasks:{
-                enter:function(index){
-                    console.log('enter: '+index);
+                enter:function(task){
+                    for(var i in $scope.storage.planners){
+                        $scope.ui.planner[i]=$scope.storage.planners[i].api
+                            .some(function(element){
+                                return element.name==task;
+                            });
+                    }
                 }
-              , leave:function(index){
-                    console.log('leave: '+index);
+              , leave:function(){
+                    for(var i in $scope.ui.planner){
+                        $scope.ui.planner[i]=false;
+                    }
                 }
             }
         };
@@ -78,6 +93,7 @@ pleni.controller('WorkspaceController',
                 Resources.planners.load(function(data){
                     for(var index in $scope.storage.planners){
                         $scope.planners.check(index);
+                        $scope.ui.planner.push(false);
                     }
                 });
             }
@@ -142,6 +158,7 @@ pleni.controller('WorkspaceController',
                             }else{
                                 $scope.storage.workspace
                                       .api[task.name]=[planner];
+                                $scope.ui.task[task.name]=false;
                             }
                         });
                     },function(error){});
@@ -159,7 +176,7 @@ pleni.controller('WorkspaceController',
                     planner.set.name=data.planner.task.name;
                     planner.set.count=data.planner.task.count;
                     planner.set.interval=data.planner.task.interval;
-                    if(planner.api){
+                    /*if(planner.api){
                         for(var i=0;i<planner.api.length;i++){
                             if(planner.set.name==
                                 planner.api[i].name){
@@ -167,8 +184,7 @@ pleni.controller('WorkspaceController',
                                 break;
                             }
                         }
-                    }
-//                    $scope.planners.editor();
+                    }*/
                 },function(error){});
             }
           , exclusive:function(index){

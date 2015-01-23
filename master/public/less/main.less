@@ -309,6 +309,10 @@ article.form, article.remove, article.view {
                     .font4;
                     height: 32px;
                     margin: 5px 0 0 10px;
+
+                    &.pick:after {
+                        content: '\2713';
+                    }
                 }
 
                 &.lock {
@@ -338,6 +342,10 @@ article.form, article.remove, article.view {
                             span:nth-child(2) {
                                 padding: 0 0 0 10px;
                                 .font4;
+                            }
+
+                            &.pick {
+                                background-color: @color2;
                             }
                         }
                     }
