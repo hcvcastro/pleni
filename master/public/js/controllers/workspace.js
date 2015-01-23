@@ -36,13 +36,40 @@ pleni.controller('WorkspaceController',
                 $location.path('/projects');
             }
           , settings:function(){
-                $scope.workspace.env.panel='settings';
+                switch($scope.workspace.env.panel){
+                    case '':
+                        $scope.workspace.env.panel='settings';
+                        break;
+                    case 'settings':
+                        $scope.workspace.close();
+                        break;
+                }
             }
           , close:function(){
                 $scope.workspace.env.panel='';
             }
           , icon:function(name){
                 return 'fa-pleni-'+name.replace('/','-');
+            }
+          , planners:{
+                enter:function(index){
+                    $scope.storage.planners[index].api.map(function(task){
+                        return task.name;
+                    }).forEach(function(task){
+                        
+                    });
+                }
+              , leave:function(index){
+                    console.log('leave: '+index);
+                }
+            }
+          , tasks:{
+                enter:function(index){
+                    console.log('enter: '+index);
+                }
+              , leave:function(index){
+                    console.log('leave: '+index);
+                }
             }
         };
 

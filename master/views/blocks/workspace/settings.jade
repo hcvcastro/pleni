@@ -4,7 +4,7 @@ article.form(ng-show='workspace.env.panel==\'settings\'')
     .body
         form
             p.large You need set a planners for scanning the available tasks in your workspace.
-            .row(ng-repeat='planner in storage.planners',ng-class='{\'lock\':planner.set.status==\'set\'}')
+            .row.planners(ng-repeat='planner in storage.planners',ng-class='{\'lock\':planner.set.status==\'set\'}',ng-mouseenter='workspace.planners.enter($index)',ng-mouseleave='workspace.planners.leave($index)')
                 ul.group
                     li: a.fa(title='Take control of planner',ng-click='planners.exclusive($index)',ng-class='{\'fa-lock\':planner.set.status==\'set\',\'fa-unlock\':planner.set.status==\'unset\'}')
                 label {{planner.id}}
@@ -20,8 +20,8 @@ article.form(ng-show='workspace.env.panel==\'settings\'')
                 span.extra {{planner.api.length}} tasks
             p.large Available Tasks in scanned planners:
             .expand
-                ul.group
-                    li(ng-repeat='(name, task) in storage.workspace.api')
+                ul.group.tasks
+                    li(ng-repeat='(name,planner) in storage.workspace.api',ng-mouseenter='workspace.tasks.enter($index)',ng-mouseleave='workspace.tasks.leave($index)',ng-class='{\'pick\':ui.tasks[$index]}')
                         .button
                             span.fa(ng-class='workspace.icon(name)')
                             span {{name}}
