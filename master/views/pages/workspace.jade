@@ -14,6 +14,9 @@
                     a.fa.fa-gear
                 li(title='Refresh data from server',ng-click='workspace.init()')
                     a.fa.fa-refresh
+            ul.left
+                li(ng-repeat='(task,planners) in storage.workspace.enabled')
+                    a.fa.fa-gear
             ul.right
                 li(title='Close project workspace',ng-click='workspace.exit()')
                     a.fa.fa-close

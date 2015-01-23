@@ -12,7 +12,8 @@ pleni.controller('WorkspaceController',
 
         $scope.storage.workspace={
             name:$routeParams.project
-          , api:{}
+          , available:{}
+          , enabled:{}
         };
 
         $scope.ui={
@@ -25,6 +26,8 @@ pleni.controller('WorkspaceController',
                 panel:''
             }
           , init:function(){
+                $scope.workspace.env.panel='';
+
                 Projects.get({
                     project:$scope.storage.workspace.name
                 },function(data){
@@ -58,7 +61,7 @@ pleni.controller('WorkspaceController',
             }
           , planners:{
                 enter:function(index){
-                    for(var i in $scope.storage.workspace.api){
+                    for(var i in $scope.storage.workspace.available){
                         $scope.ui.task[i]=$scope.storage.planners[index].api
                             .some(function(element){
                                 return element.name==i;
@@ -135,35 +138,50 @@ pleni.controller('WorkspaceController',
                         planner.status='unknown';
                     });
 
-                    Resources.planners.isset({
-                        server:planner.id
-                    },function(data){
-                        if(data.planner.result){
-                            $scope.planners.get(index);
-                        }else{
-                            planner.set.status='unset';
-                        }
-                    },function(error){
-                        planner.set.status='unknown';
-                    });
+                    $scope.planners.isset(index);
 
                     Resources.planners.api({
                         server:planner.id
                     },function(data){
                         planner.api=data.planner.tasks;
                         planner.api.forEach(function(task){
-                            if($scope.storage.workspace.api[task.name]){
+                            if($scope.storage.workspace.available[task.name]){
                                 $scope.storage.workspace
-                                      .api[task.name].push(planner);
+                                      .available[task.name].push(planner);
                             }else{
                                 $scope.storage.workspace
-                                      .api[task.name]=[planner];
+                                      .available[task.name]=[planner];
                                 $scope.ui.task[task.name]=false;
                             }
                         });
                     },function(error){});
                 },function(error){
                     planner.check='offline';
+                });
+            }
+          , isset:function(index){
+                var planner=$scope.storage.planners[index];
+
+                Resources.planners.isset({
+                    server:planner.id
+                },function(data){
+                    if(data.planner.result){
+                        $scope.planners.get(index);
+                    }else{
+                        planner.set.status='unset';
+                        for(var i in $scope.storage.workspace.enabled){
+                            $scope.storage.workspace.enabled[i]=
+                                $scope.storage.workspace.enabled[i]
+                                    .filter(function(element){
+                                        return element.id!=planner.id;
+                                    });
+                            if($scope.storage.workspace.enabled[i].length==0){
+                                delete $scope.storage.workspace.enabled[i];
+                            }
+                        }
+                    }
+                },function(error){
+                    planner.set.status='unknown';
                 });
             }
           , get:function(index){
@@ -185,6 +203,15 @@ pleni.controller('WorkspaceController',
                             }
                         }
                     }
+                    planner.api.forEach(function(task){
+                        if($scope.storage.workspace.enabled[task.name]){
+                            $scope.storage.workspace
+                                .enabled[task.name].push(planner);
+                        }else{
+                            $scope.storage.workspace
+                                .enabled[task.name]=[planner];
+                        }
+                    });
                 },function(error){});
             }
           , exclusive:function(index){
@@ -192,6 +219,7 @@ pleni.controller('WorkspaceController',
 
                 switch(planner.set.status){
                     case 'unset':
+                        planner.set.status='setting';
                         Resources.planners.set({
                             server:planner.id
                           , task:{
@@ -200,12 +228,21 @@ pleni.controller('WorkspaceController',
                               , interval:500
                             }
                         },function(data){
-                            console.log(data);
+                            $scope.planners.get(index);
                         },function(error){
-                            console.log(error);
+                            planner.set.status='unknown';
+                            utils.show('error',error.data.message);
                         });
                         break;
                     case 'set':
+                        planner.set.status='setting';
+                        Resources.planners.unset({
+                            server:planner.id
+                        },function(data){
+                            $scope.planners.isset(index);
+                        },function(error){
+                            console.log(error);
+                        });
                         break;
                 }
             }
