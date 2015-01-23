@@ -15,7 +15,7 @@
 }
 
 div.main {
-    width: 720px;
+    max-width: 720px;
     height: 100%;
     padding-bottom: 50px;
     overflow: hidden;
@@ -278,12 +278,8 @@ article.form, article.remove, article.view {
                 }
             }
 
-            p,.row {
-                height: 32px;
+            .item(){
                 background-color: fade(@color3,39%);
-                display: flex;
-                .editor();
-
                 ul.group {
                     list-style: none;
                     float: left;
@@ -301,33 +297,7 @@ article.form, article.remove, article.view {
                         &.link {
                             background-color: fade(@color2, 25%);
                         }
-                    }
-                }
 
-                span.extra {
-                    .font4;
-                    height: 32px;
-                    margin: 5px 0 0 10px;
-
-                    &.pick:after {
-                        content: '\2713';
-                    }
-                }
-
-                &.lock {
-                    background-color: fade(@color2, 50%);
-                }
-            }
-
-            .expand {
-                background-color: fade(@color3, 39%);
-                .editor();
-
-                ul.group {
-                    list-style: none;
-                    float: left;
-                    li {
-                        float: left;
                         .button {
                             float: left;
                             background-color: fade(@color2, 39%);
@@ -349,6 +319,38 @@ article.form, article.remove, article.view {
                         }
                     }
                 }
+
+                span.extra {
+                    .font4;
+                    height: 32px;
+                    margin: 5px 0 0 10px;
+
+                    &.pick:after {
+                        content: '\2713';
+                    }
+                }
+
+                &.lock {
+                    background-color: fade(@color2, 50%);
+                }
+            }
+
+            p {
+                height: 32px;
+                display: flex;
+                .editor();
+                .item();
+            }
+
+            .row {
+                display: flex;
+                .editor();
+                .item();
+            }
+
+            .expand {
+                .editor();
+                .item();
             }
 
             .form-control {
