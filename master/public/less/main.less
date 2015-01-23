@@ -56,6 +56,7 @@ div.main {
 
         ul {
             list-style: none;
+            margin-right: 10px;
             li {
                 float: left;
                 width: 40px;
@@ -65,10 +66,22 @@ div.main {
                 text-align: center;
                 color: @color5;
                 transition: 0.5s linear 0s;
+                position: relative;
 
                 a {
                     padding-top: 8px;
                     font-size: 25px;
+                }
+
+                small {
+                    position: absolute;
+                    .font5;
+                    bottom: 0;
+                    right: 0;
+                    background-color: fade(@color2,50%);
+                    color: @color5;
+                    padding: 0 3px;
+                    border-radius: 2px;
                 }
 
                 &:hover {
