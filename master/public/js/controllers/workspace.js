@@ -248,6 +248,12 @@ pleni.controller('WorkspaceController',
             }
         };
 
+        $scope.tasks={
+            open:function(task,planners){
+                console.log(planners);
+            }
+        };
+
         $scope.workspace.init();
     }]
 );

@@ -15,7 +15,7 @@
                 li(title='Refresh data from server',ng-click='workspace.init()')
                     a.fa.fa-refresh
             ul.left
-                li(ng-repeat='(task,planners) in storage.workspace.enabled',title='{{task}} in {{planners.length}} planners')
+                li(ng-repeat='(task,planners) in storage.workspace.enabled',title='{{task}} in {{planners.length}} planners',ng-click='tasks.open(task,planners)')
                     a.fa(ng-class='workspace.icon(task)')
                     small {{planners.length}}
             ul.right
