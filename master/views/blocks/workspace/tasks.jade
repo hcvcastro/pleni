@@ -1,0 +1,12 @@
+article.form(ng-show='workspace.env.panel==\'tasks\'')
+    .title
+        h2 Task: {{task.name}}
+    .body
+        form
+            div#editor
+            p.offset
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='button',ng-click='workspace.close()') Close
+

@@ -2,8 +2,9 @@
 
 pleni.controller('WorkspaceController',
     ['$scope','$routeParams','$location','$sessionStorage',
-    'Resources','Projects',
-    function($scope,$routeParams,$location,$sessionStorage,Resources,Projects){
+    'Resources','Projects','Editor',
+    function($scope,$routeParams,$location,$sessionStorage,
+        Resources,Projects,Editor){
         $scope.storage=$sessionStorage;
 
         if(!$routeParams.project){
@@ -14,6 +15,7 @@ pleni.controller('WorkspaceController',
             name:$routeParams.project
           , available:{}
           , enabled:{}
+          , apis:{}
         };
 
         $scope.ui={
@@ -24,6 +26,7 @@ pleni.controller('WorkspaceController',
         $scope.workspace={
             env:{
                 panel:''
+              , task:''
             }
           , init:function(){
                 $scope.workspace.env.panel='';
@@ -35,7 +38,7 @@ pleni.controller('WorkspaceController',
                 },function(error){});
 
                 $scope.planners.load();
-                if(!$scope.storage.workspace.planners){
+                if(!$scope.storage.workspace.enabled){
                     $scope.workspace.settings();
                 }
             }
@@ -44,13 +47,10 @@ pleni.controller('WorkspaceController',
                 $location.path('/projects');
             }
           , settings:function(){
-                switch($scope.workspace.env.panel){
-                    case '':
-                        $scope.workspace.env.panel='settings';
-                        break;
-                    case 'settings':
-                        $scope.workspace.close();
-                        break;
+                if($scope.workspace.env.panel=='settings'){
+                    $scope.workspace.close();
+                } else {
+                    $scope.workspace.env.panel='settings';
                 }
             }
           , close:function(){
@@ -145,6 +145,8 @@ pleni.controller('WorkspaceController',
                     },function(data){
                         planner.api=data.planner.tasks;
                         planner.api.forEach(function(task){
+                            $scope.storage.workspace
+                                .apis[task.name]=task.schema;
                             if($scope.storage.workspace.available[task.name]){
                                 $scope.storage.workspace
                                       .available[task.name].push(planner);
@@ -248,9 +250,23 @@ pleni.controller('WorkspaceController',
             }
         };
 
+        $scope.task={
+            name:''
+          , planners:[]
+        };
+
         $scope.tasks={
             open:function(task,planners){
-                console.log(planners);
+                if($scope.workspace.env.panel=='tasks'&&
+                    $scope.workspace.env.task==task){
+                    $scope.workspace.close();
+                }else{
+                    $scope.workspace.env.panel='tasks';
+                    $scope.workspace.env.task=task;
+                    $scope.task.name=task;
+                    $scope.task.planners=planners;
+                    Editor.create(task,$scope.storage.workspace.apis[task]);
+                }
             }
         };
 

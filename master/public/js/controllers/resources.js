@@ -1,8 +1,8 @@
 'use strict';
 
 pleni.controller('ResourcesController',
-    ['$scope','$sessionStorage','Resources',
-    function($scope,$sessionStorage,Resources){
+    ['$scope','$sessionStorage','Resources','Editor',
+    function($scope,$sessionStorage,Resources,Editor){
         $scope.storage=$sessionStorage;
 
         $('header>nav>ul:nth-child(2)>li').removeClass('active')
@@ -372,9 +372,6 @@ pleni.controller('ResourcesController',
                 }
             }
           , check:function(index){
-                if(index){
-                    $scope.planners.list();
-                }
                 if($scope.planners.env.view=='form'){
                     if(!$scope.planner.id){
                         $scope.planner.id='test';
@@ -527,30 +524,11 @@ pleni.controller('ResourcesController',
                 }
             }
           , editor:function(){
-                if($scope.jsoneditor){
-                    $scope.jsoneditor.destroy();
-                }
-
-                var schema=$scope.planner.set.schema;
-                if(schema.properties._dbserver){
-                    schema.properties._dbserver.enum=
-                        $scope.storage.dbservers.map(function(dbserver){
-                            return dbserver.id;
-                        });
-                }
-                if(schema.properties._repository){
-                    schema.properties._repository.enum=
-                        $scope.storage.repositories.map(function(repository){
-                            return repository.id;
-                        });
-                }
-
-                $scope.jsoneditor=jsoneditor(
+                Editor.create(
                     $scope.planner.set.name+' ('
                         +$scope.planner.set.count+':'
-                        +$scope.planner.set.interval+')'
-                  , schema
-                );
+                        +$scope.planner.set.interval+')',
+                    $scope.planner.set.schema);
             }
           , unset:function(){
                 utils.clean();
@@ -575,11 +553,10 @@ pleni.controller('ResourcesController',
                 utils.clean();
                 if($scope.planners.env.type=='element'){
                     utils.send('Sending a run request ...');
-                    var error=$scope.jsoneditor.validate();
-                    if(error.length==0){
+                    if(Editor.is_valid()){
                         Resources.planners.run({
                             server:$scope.planner.id
-                          , targs:$scope.jsoneditor.getValue()
+                          , targs:Editor.values()
                         },function(data){
                             utils.receive();
                             $scope.planner.status='running';
