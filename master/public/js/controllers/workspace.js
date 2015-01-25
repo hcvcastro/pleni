@@ -38,9 +38,7 @@ pleni.controller('WorkspaceController',
                 },function(error){});
 
                 $scope.planners.load();
-                if(!$scope.storage.workspace.enabled){
-                    $scope.workspace.settings();
-                }
+                $scope.workspace.settings();
             }
           , exit:function(){
                 delete $scope.storage.workspace;

@@ -91,6 +91,8 @@ pleni.controller('SocketController',
                     var thread=get_element(pkg.msg.id,$scope.storage.threads);
                     if(thread){
                         $scope.storage.threads.splice(thread[0],1);
+                        $scope.current=undefined;
+                        $scope.thread=undefined;
                     }
                     break;
                 case 'create':

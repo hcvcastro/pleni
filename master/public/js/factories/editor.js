@@ -2,7 +2,7 @@
 
 pleni.factory('Editor',['$sessionStorage',
     function($sessionStorage){
-        var editor
+        var editor;
 
         return {
             create:function(name,schema){

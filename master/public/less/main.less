@@ -247,17 +247,32 @@ article.form, article.remove, article.view {
 
                 label {
                     .font3;
-                    text-align: right;
                     height: 32px;
-                    width: 200px;
-                    margin: 5px 20px 0 0;
+
+                    &:not(.min){
+                        width: 200px;
+                        text-align: right;
+                        margin: 5px 20px 0 0;
+                    }
+
+                    &.min {
+                        width: 130px;
+                        margin: 5px 10px 0 10px;
+                    }
                 }
 
                 input {
                     height: 32px;
-                    width: 340px;
                     box-sizing: border-box;
                     border: 1px solid @color2;
+
+                    &:not(.min) {
+                        width: 340px;
+                    }
+
+                    &.min {
+                        width: 100px;
+                    }
                 }
 
                 select {
@@ -331,6 +346,10 @@ article.form, article.remove, article.view {
                             }
                         }
                     }
+                }
+
+                .separator {
+                    width: 46px;
                 }
 
                 span.extra {
