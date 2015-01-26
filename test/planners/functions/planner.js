@@ -105,7 +105,9 @@ describe('planner functions',function(){
         })
         .fail(function(error){
             error.should.be.an.Object;
-            error.should.have.property('ok').and.be.eql(false);
+            error.should.have.property('error').and.be.eql('not override');
+        })
+        .done(function(args){
             done();
         })
     });

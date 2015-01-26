@@ -175,7 +175,7 @@ describe('notifiers controller functions',function(){
                 id:'test'
               , notifier:{
                     host:'http://localhost'
-                  , port:3002
+                  , port:3000
                 }
             },expected:_success.ok,status:200}
         ]

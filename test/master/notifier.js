@@ -188,13 +188,13 @@ describe('notifiers controller functions',function(){
           , {test:{
                 planner:{
                     host:'http://127.0.0.1'
-                  , port:3002
+                  , port:3000
                 }
             },id:'test',expected:_success.ok,status:201}
           , {test:{
                 planner:{
                     host:'http://127.0.0.1'
-                  , port:3002
+                  , port:3000
                 }
             },id:'test',expected:_success.ok,status:200}
         ]
@@ -221,7 +221,7 @@ describe('notifiers controller functions',function(){
                 .send({
                     planner:{
                         host:'http://127.0.0.1'
-                      , port:3002
+                      , port:3000
                     }
                 })
                 .expect('Content-Type',/json/)
@@ -240,7 +240,7 @@ describe('notifiers controller functions',function(){
                 .send({
                     planner:{
                         host:'http://127.0.0.1'
-                      , port:3002
+                      , port:3000
                     }
                 })
                 .expect('Content-Type',/json/)
