@@ -4,8 +4,10 @@
             li.active.header
                 span Project: {{storage.workspace.name}}
         ul.items
-            li(ng-repeat='repository in storage.workspace.repositories')
+            li(ng-repeat='repository in storage.workspace.repositories',ng-click='')
                 a {{repository}}
+                .right
+                    a.fa.fa-cloud-download
         include ../blocks/footer/bottom
     .main
         .tools

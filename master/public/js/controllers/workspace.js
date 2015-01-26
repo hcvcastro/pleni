@@ -137,24 +137,7 @@ pleni.controller('WorkspaceController',
                     });
 
                     $scope.planners.isset(index);
-
-                    Resources.planners.api({
-                        server:planner.id
-                    },function(data){
-                        planner.api=data.planner.tasks;
-                        planner.api.forEach(function(task){
-                            $scope.storage.workspace
-                                .apis[task.name]=task.schema;
-                            if($scope.storage.workspace.available[task.name]){
-                                $scope.storage.workspace
-                                      .available[task.name].push(planner);
-                            }else{
-                                $scope.storage.workspace
-                                      .available[task.name]=[planner];
-                                $scope.ui.task[task.name]=false;
-                            }
-                        });
-                    },function(error){});
+                    $scope.planners.api(index);
                 },function(error){
                     planner.check='offline';
                 });
@@ -184,6 +167,32 @@ pleni.controller('WorkspaceController',
                     planner.set.status='unknown';
                 });
             }
+          , api:function(index){
+                var planner=$scope.storage.planners[index];
+                Resources.planners.api({
+                    server:planner.id
+                },function(data){
+                    planner.api=data.planner.tasks;
+                    planner.api.forEach(function(task){
+                        $scope.storage.workspace
+                            .apis[task.name]=task.schema;
+                        if($scope.storage.workspace.available[task.name]){
+                            if(!$scope.storage.workspace
+                                    .available[task.name].some(
+                                        function(element){
+                                return element.id==planner.id;
+                            })){
+                                $scope.storage.workspace
+                                      .available[task.name].push(planner);
+                            }
+                        }else{
+                            $scope.storage.workspace
+                                  .available[task.name]=[planner];
+                            $scope.ui.task[task.name]=false;
+                        }
+                    });
+                },function(error){});
+            }
           , get:function(index){
                 var planner=$scope.storage.planners[index];
 
@@ -205,8 +214,14 @@ pleni.controller('WorkspaceController',
                     }
                     planner.api.forEach(function(task){
                         if($scope.storage.workspace.enabled[task.name]){
-                            $scope.storage.workspace
-                                .enabled[task.name].push(planner);
+                            if(!$scope.storage.workspace
+                                    .enabled[task.name].some(
+                                        function(element){
+                                return element.id==planner.id;
+                            })){
+                                $scope.storage.workspace
+                                    .enabled[task.name].push(planner);
+                            }
                         }else{
                             $scope.storage.workspace
                                 .enabled[task.name]=[planner];
@@ -265,6 +280,15 @@ pleni.controller('WorkspaceController',
                     $scope.task.planners=planners;
                     Editor.create(task,$scope.storage.workspace.apis[task]);
                 }
+            }
+          , run:function(index){
+                console.log('run on '+index);
+            }
+          , stop:function(index){
+                console.log('stop on '+index);
+            }
+          , unset:function(index){
+                console.log('unset on '+index);
             }
         };
 
