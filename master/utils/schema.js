@@ -46,6 +46,13 @@ js.addFormat('slug',function(value){
     }
     return 'there is not a valid slug';
 });
+js.addFormat('emptyslug',function(value){
+    if(value==''
+        || /^[a-z][a-z0-9_]*$/i.test(value)){
+        return null;
+    }
+    return 'there is not a valid slug';
+});
 exports.js=js;
 
 var dbserver={
@@ -75,10 +82,10 @@ var dbserver={
                 }
               , 'prefix':{
                     'type':'string'
-                  , 'format':'slug'
+                  , 'format':'emptyslug'
                 }
             }
-          , 'required':['host','port','user','pass']
+          , 'required':['host','port','user','pass','prefix']
         }
     }
   , 'required':['id','db']
