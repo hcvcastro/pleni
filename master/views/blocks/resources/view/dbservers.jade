@@ -17,7 +17,6 @@ article.view.animate(ng-show='dbservers.env.view==\'view\'')
             thead
                 tr
                     th Name
-                    th Type
                     th Documents
                     th Disk Size
                     th Data Size
@@ -26,11 +25,10 @@ article.view.animate(ng-show='dbservers.env.view==\'view\'')
             tbody
                 tr(ng-repeat='repositories in dbserver.repositories')
                     td {{repositories.name}}
-                    td {{repositories.type}}
-                    td {{repositories.params.doc_count}}
-                    td {{repositories.params.disk_size}}
-                    td {{repositories.params.data_size}}
-                    td {{repositories.params.update_seq}}
+                    td.aright {{repositories.params.doc_count}}
+                    td.aright {{repositories.params.disk_size}}
+                    td.aright {{repositories.params.data_size}}
+                    td.aright {{repositories.params.update_seq}}
                     td.status
                         a.fa.fa-plus-circle(title='Add database to repositories list',ng-click='dbservers.repositories.add($index)')
 

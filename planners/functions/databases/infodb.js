@@ -24,6 +24,9 @@ module.exports=function(args){
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
+    if(args.debug){
+        console.log('get information from ... '+url);
+    }
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
             if(response.statusCode==200){

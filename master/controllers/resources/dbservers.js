@@ -269,24 +269,19 @@ module.exports=function(app){
             .then(list)
             .then(infodbs)
             .then(function(args){
-                var refined=args.db.explist.map(function(element){
-                    var regex=/([a-z0-9]+)_(.*)/i
-                      , name=element.db_name.substring(prefix.length)
-                      , match=regex.exec(name)
-
-                    return {
-                        name:match[2]
-                      , type:match[1]
-                      , params:{
-                            db_name:element.db_name
-                          , doc_count:element.doc_count
-                          , disk_size:pretty(element.disk_size)
-                          , data_size:pretty(element.data_size)
-                          , update_seq:element.update_seq
-                        }
-                    }
-                });
-                response.status(200).json(refined);
+                response.status(200).json(args.db.explist.map(
+                    function(element){
+                        return {
+                            name:element.db_name
+                          , params:{
+                                db_name:element.db_name
+                              , doc_count:element.doc_count
+                              , disk_size:pretty(element.disk_size)
+                              , data_size:pretty(element.data_size)
+                              , update_seq:element.update_seq
+                            }
+                        };
+                    }));
             })
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){

@@ -271,6 +271,7 @@ pleni.controller('ResourcesController',
                         repository:repository.id
                     },function(data){
                         repository.check='online';
+                        utils.show('info','Repository is online');
                     },function(error){
                         repository.check='offline';
                         utils.show('error','Repository cannot be founded');
