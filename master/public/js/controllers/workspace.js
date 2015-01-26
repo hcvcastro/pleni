@@ -255,9 +255,7 @@ pleni.controller('WorkspaceController',
                             server:planner.id
                         },function(data){
                             $scope.planners.isset(index);
-                        },function(error){
-                            console.log(error);
-                        });
+                        },function(error){});
                         break;
                 }
             }
@@ -281,14 +279,42 @@ pleni.controller('WorkspaceController',
                     Editor.create(task,$scope.storage.workspace.apis[task]);
                 }
             }
-          , run:function(index){
-                console.log('run on '+index);
+          , run:function(index,planner){
+                if(!planner.set.count||!planner.set.interval){
+                    utils.show('error',
+                    'The count and interval parameters cannot are required');
+                    return;
+                }
+                if(!Editor.is_valid()){
+                    utils.show('error',
+                    'Some parameters in form are not valid');
+                    return;
+                }
+
+                Resources.planners.unset({
+                    server:planner.id
+                },function(data){
+                    Resources.planners.set({
+                        server:planner.id
+                      , task:{
+                            name:$scope.task.name
+                          , count:planner.set.count
+                          , interval:planner.set.interval
+                        }
+                    },function(data){
+                        Resources.planners.run({
+                            server:planner.id
+                          , targs:Editor.values()
+                        },function(data){
+                        },function(error){});
+                    },function(error){});
+                },function(error){});
             }
-          , stop:function(index){
-                console.log('stop on '+index);
-            }
-          , unset:function(index){
-                console.log('unset on '+index);
+          , stop:function(index,planner){
+                Resources.planners.stop({
+                    server:planner.id
+                },function(data){
+                },function(error){});
             }
         };
 

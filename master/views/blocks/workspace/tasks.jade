@@ -17,16 +17,14 @@ article.form(ng-show='workspace.env.panel==\'tasks\'')
                 .separator
                 ul.group
                     li
-                        input.min(type='number',placeholder='Count',min=-1,max=1000000,required)
+                        input.min(type='number',placeholder='Count',min=-1,max=1000000,required,ng-model='planner.set.count')
                     li
-                        input.min(type='number',placeholder='Interval',min=0,max=1000000,step=500,required)
+                        input.min(type='number',placeholder='Interval',min=0,max=1000000,step=500,required,ng-model='planner.set.interval')
                 ul.group
-                    li.link(ng-click='tasks.run($index)')
+                    li.link(ng-click='tasks.run($index,planner)')
                         a.fa.fa-play(title='Run task in planner')
-                    li.link(ng-click='tasks.stop($index)')
+                    li.link(ng-click='tasks.stop($index,planner)')
                         a.fa.fa-stop(title='Stop task in planner')
-                    li.link(ng-click='tasks.unset($index)')
-                        a.fa.fa-eject(title='Unset task in planner')
             div#editor
             p.offset
                 span.hide.loader.fa.fa-spinner.fa-spin

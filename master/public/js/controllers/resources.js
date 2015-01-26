@@ -566,7 +566,8 @@ pleni.controller('ResourcesController',
                         });
                     }else{
                         utils.receive();
-                        utils.show('error','Some parameters are invalids');
+                        utils.show('error',
+                            'Some parameters in the form are not valid');
                     }
                 }
             }
