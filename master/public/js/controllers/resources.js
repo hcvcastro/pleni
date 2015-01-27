@@ -358,8 +358,7 @@ pleni.controller('ResourcesController',
                 }else if($scope.planners.env.type=='element'){
                     utils.send('Updating planner settings ...');
                     Resources.planners.update({
-                        planner:$scope.planner.id
-                      , id:$scope.planner.id
+                        id:$scope.planner.id
                       , planner:$scope.planner.planner
                     },function(data){
                         $scope.planners.refresh();
@@ -686,8 +685,7 @@ pleni.controller('ResourcesController',
                 }else if($scope.notifiers.env.type=='element'){
                     utils.send('Updating notifier settings ...');
                     Resources.notifiers.update({
-                        notifier:$scope.notifier.id
-                      , id:$scope.notifier.id
+                        id:$scope.notifier.id
                       , notifier:$scope.notifier.notifier
                     },function(data){
                         $scope.notifiers.refresh();
