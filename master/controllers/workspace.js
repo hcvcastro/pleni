@@ -17,5 +17,11 @@ module.exports=function(app){
     app.get('/workspace/view',function(request,response){
         response.render('pages/workspace');
     });
+
+    app.get('/workspace/:project/:repository',function(request,response){
+        var id_p=validate.toString(request.params.project)
+          , id_r=validate.toString(request.params.repository)
+          , project=get_element(id_p,app.get('projects'))
+    });
 };
 

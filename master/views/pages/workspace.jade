@@ -1,13 +1,11 @@
 .wrapper.full.last
     nav.menu
         ul.items
-            li.active.header
+            li.header(ng-click='repositories.empty()',ng-class='{\'active\':storage.workspace.visual==\'\'}')
                 span Project: {{storage.workspace.name}}
         ul.items
-            li(ng-repeat='repository in storage.workspace.repositories',ng-click='')
-                a {{repository}}
-                .right
-                    a.fa.fa-cloud-download
+            li(ng-repeat='repository in storage.workspace.repositories',ng-click='repositories.open($index)',ng-class='{\'active\':storage.workspace.visual==storage.workspace.repositories[$index]}')
+                span {{repository}}
         include ../blocks/footer/bottom
     .main
         .tools

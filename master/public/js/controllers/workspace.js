@@ -17,6 +17,7 @@ pleni.controller('WorkspaceController',
           , available:{}
           , enabled:{}
           , apis:{}
+          , visual:''
         };
 
         $scope.ui={
@@ -40,7 +41,6 @@ pleni.controller('WorkspaceController',
 
                 $scope.planners.load();
                 $scope.repositories.load();
-                $scope.workspace.repositories();
             }
           , exit:function(){
                 delete $scope.storage.workspace;
@@ -392,13 +392,27 @@ pleni.controller('WorkspaceController',
                 },function(error){
                     switch(error.data.message){
                         case 'Validation error':
-                            utils.show('error','The repository cannot be added');
+                            utils.show('error',
+                                'The repository cannot be added');
                             break;
                         case 'Resource cannot overridden':
                             add_workspace();
                             break;
                     }
                 });
+            }
+          , empty:function(){
+                $scope.storage.workspace.visual='';
+            }
+          , open:function(index){
+                $scope.storage.workspace.visual=
+                    $scope.storage.workspace.repositories[index];
+            }
+        };
+
+        $scope.visual={
+            load:function(repository){
+
             }
         };
 
