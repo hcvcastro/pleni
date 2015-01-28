@@ -21,7 +21,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , view='/_design/wait/_view/wait'
+      , view='/_design/sites/_view/wait'
       , buffer=16
       , url=args.db.host+'/'+args.db.name+view+'?limit='+buffer
       , headers={

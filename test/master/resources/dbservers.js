@@ -187,6 +187,7 @@ describe('dbservers controller functions',function(){
                   , port:8080
                   , user:'boo'
                   , pass:'boo.'
+                  , prefix:''
                 }
             },expected:_error.network,status:404}
           , {test:{
@@ -196,6 +197,7 @@ describe('dbservers controller functions',function(){
                   , port:5984
                   , user:'boo'
                   , pass:'boo.'
+                  , prefix:''
                 }
             },expected:_error.auth,status:401}
           , {test :{
@@ -205,6 +207,7 @@ describe('dbservers controller functions',function(){
                   , port:5984
                   , user:'jacobian'
                   , pass:'asdf'
+                  , prefix:''
                 }
             },expected:_success.ok,status:200}
         ]
@@ -412,7 +415,6 @@ describe('dbservers controller functions',function(){
                                 res.body.should.have.an.Array;
                                 for(var i in res.body){
                                     res.body[i].should.be.property('name');
-                                    res.body[i].should.be.property('type');
                                     res.body[i].should.be.property('params');
                                     res.body[i].params.should.be.
                                         property('db_name');

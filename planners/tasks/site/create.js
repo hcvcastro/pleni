@@ -28,7 +28,7 @@ var base='../../functions'
  *          summary
  *          root
  *          design
- *              wait
+ *              sites
  */
 module.exports=function(params,repeat,stop,notifier){
     test(params)

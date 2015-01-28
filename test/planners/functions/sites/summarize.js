@@ -8,7 +8,6 @@ var should=require('should')
   , summary=require(base+'/repositories/sites/create/summary')
   , rootsite=require(base+'/repositories/sites/create/rootsite')
   , design=require(base+'/repositories/sites/create/designdocument')
-  , design2=require(base+'/repositories/sites/summarize/designdocument')
   , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
   , summary2=require(base+'/repositories/sites/summarize/getsummary')
   , summarize=require(base+'/repositories/sites/summarize/summarize')
@@ -46,7 +45,7 @@ describe('site fetcher pages functions',function(){
     });
 
     describe('testing for summarize a site',function(){
-        it('push a document design timestamp',function(done){
+        it('summarizing site',function(done){
             auth({
                 db:{
                     host:host
@@ -55,13 +54,12 @@ describe('site fetcher pages functions',function(){
                   , name:name
                 }
             })
-            .then(design2)
             .then(timestamp)
             .then(summary2)
             .then(summarize)
             .done(function(args){
-                args.site.should.have.property('design');
-                args.site.design.should.have.property('timestamp');
+                args.site.should.have.property('summary');
+                args.site.summary.should.have.property('_rev');
                 done();
             });
         });

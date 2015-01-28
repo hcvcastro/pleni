@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="pleni_tasks.svg"
+   sodipodi:docname="tasks.svg"
    inkscape:export-filename="/home/jacobian/Proyectos/pleni/docs/pleni_tasks.png"
    inkscape:export-xdpi="180"
    inkscape:export-ydpi="180">
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="681.21562"
-     inkscape:cy="559.13509"
+     inkscape:zoom="1.4"
+     inkscape:cx="297.76144"
+     inkscape:cy="744.06038"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -38,8 +38,8 @@
      inkscape:guide-bbox="true"
      inkscape:window-width="1914"
      inkscape:window-height="1055"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      inkscape:window-maximized="0"
      showborder="false">
     <inkscape:grid
@@ -116,7 +116,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -135,7 +135,7 @@
     <rect
        y="-215"
        x="880"
-       height="320"
+       height="280"
        width="480"
        id="rect3786"
        style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#000000" />
@@ -152,14 +152,14 @@
        width="400"
        height="90"
        x="0"
-       y="345" />
+       y="505" />
     <rect
        style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#000000;display:inline"
        id="rect3499"
        width="400"
        height="180"
        x="0"
-       y="125" />
+       y="285" />
   </g>
   <g
      inkscape:label="letters"
@@ -170,22 +170,22 @@
     <text
        sodipodi:linespacing="125%"
        id="text4680"
-       y="663.07642"
+       y="823.07642"
        x="10"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="663.07642"
+         y="823.07642"
          x="10"
          id="tspan4682"
          sodipodi:role="line">exclusive</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text4684"
-       y="673.07642"
+       y="833.07642"
        x="10"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="673.07642"
+         y="833.07642"
          x="10"
          id="tspan4686"
          sodipodi:role="line">exclusive.js</tspan></text>
@@ -551,7 +551,7 @@
          id="tspan4845"
          y="342.36218"
          x="290"
-         sodipodi:role="line">site.design.wait</tspan></text>
+         sodipodi:role="line">site.design.sites</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
@@ -638,7 +638,7 @@
     <path
        sodipodi:nodetypes="cc"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
-       d="m 0,682.36218 400,0"
+       d="m 0,842.36218 400,0"
        id="path3852"
        inkscape:connector-curvature="0" />
     <text
@@ -771,88 +771,88 @@
     <text
        sodipodi:linespacing="125%"
        id="text3501"
-       y="442.36218"
+       y="602.36218"
        x="10"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="442.36218"
+         y="602.36218"
          x="10"
          id="tspan3503"
          sodipodi:role="line">remove</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3505"
-       y="452.36218"
+       y="612.36218"
        x="10"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="452.36218"
+         y="612.36218"
          x="10"
          id="tspan3507"
          sodipodi:role="line">site/remove.js</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3509"
-       y="492.36218"
+       y="652.36218"
        x="80"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="492.36218"
+         y="652.36218"
          x="80"
          id="tspan3511"
          sodipodi:role="line">test</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3513"
-       y="502.36218"
+       y="662.36218"
        x="80"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="502.36218"
+         y="662.36218"
          x="80"
          id="tspan3515"
          sodipodi:role="line">databases/test.js</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3517"
-       y="482.36218"
+       y="642.36218"
        x="10"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        xml:space="preserve"><tspan
          id="tspan3519"
-         y="482.36218"
+         y="642.36218"
          x="10"
          sodipodi:role="line">db.host</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        x="290"
-       y="482.36218"
+       y="642.36218"
        id="text3521"
        sodipodi:linespacing="89.999998%"><tspan
          sodipodi:role="line"
          x="290"
-         y="482.36218"
+         y="642.36218"
          id="tspan3523">db.check</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3525"
-       y="532.36218"
+       y="692.36218"
        x="80"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="532.36218"
+         y="692.36218"
          x="80"
          id="tspan3527"
          sodipodi:role="line">auth</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3529"
-       y="542.36218"
+       y="702.36218"
        x="80"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="542.36218"
+         y="702.36218"
          x="80"
          id="tspan3531"
          sodipodi:role="line">databases/auth.js</tspan></text>
@@ -860,73 +860,73 @@
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        x="10"
-       y="522.36218"
+       y="682.36218"
        id="text3533"
        sodipodi:linespacing="89.999998%"><tspan
          sodipodi:role="line"
          x="10"
-         y="522.36218"
+         y="682.36218"
          id="tspan3535">db.user</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3537"
-       y="532.36218"
+       y="692.36218"
        x="10"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        xml:space="preserve"><tspan
          id="tspan3539"
-         y="532.36218"
+         y="692.36218"
          x="10"
          sodipodi:role="line">db.pass</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3541"
-       y="522.36218"
+       y="682.36218"
        x="290"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        xml:space="preserve"><tspan
          id="tspan3543"
-         y="522.36218"
+         y="682.36218"
          x="290"
          sodipodi:role="line">auth.cookie</tspan></text>
     <path
        sodipodi:nodetypes="cc"
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;display:inline"
-       d="m 0,462.36219 400,0"
+       d="m 0,622.36219 400,0"
        id="path3597"
        inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        x="80"
-       y="572.36218"
+       y="732.36218"
        id="text3122"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3124"
          x="80"
-         y="572.36218">remove</tspan></text>
+         y="732.36218">remove</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        x="80"
-       y="582.36218"
+       y="742.36218"
        id="text3138"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3140"
          x="80"
-         y="582.36218">databases/remove.js</tspan></text>
+         y="742.36218">databases/remove.js</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        x="10"
-       y="562.36218"
+       y="722.36218"
        id="text3364"
        sodipodi:linespacing="89.999998%"><tspan
          sodipodi:role="line"
          x="10"
-         y="562.36218"
+         y="722.36218"
          id="tspan3366">db.name</tspan></text>
     <text
        xml:space="preserve"
@@ -1050,201 +1050,157 @@
          y="182.36218"
          id="tspan3716">auth.cookie</tspan></text>
     <text
-       xml:space="preserve"
-       style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
-       x="960"
-       y="232.36218"
-       id="text3426"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3428"
-         x="960"
-         y="232.36218">designdocument</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
-       x="960"
-       y="242.36218"
-       id="text3434"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3436"
-         x="960"
-         y="242.36218">repositories/sites/summarize/designdocument.js</tspan></text>
-    <text
-       sodipodi:linespacing="89.999998%"
-       id="text3439"
-       y="222.36218"
-       x="890"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
-       xml:space="preserve"><tspan
-         id="tspan3441"
-         y="222.36218"
-         x="890"
-         sodipodi:role="line">db.name</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
-       x="1210"
-       y="222.36218"
-       id="text3447"
-       sodipodi:linespacing="89.999998%"><tspan
-         sodipodi:role="line"
-         x="1210"
-         y="222.36218"
-         id="tspan3449">site.design.timestamp</tspan></text>
-    <text
        sodipodi:linespacing="125%"
        id="text3453"
-       y="272.36218"
+       y="232.36218"
        x="960"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="272.36218"
+         y="232.36218"
          x="960"
          id="tspan3455"
          sodipodi:role="line">getsummary</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3461"
-       y="282.36218"
+       y="242.36218"
        x="960"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="282.36218"
+         y="242.36218"
          x="960"
          id="tspan3463"
          sodipodi:role="line">repositories/sites/summarize/getsummary.js</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3473"
-       y="262.36218"
+       y="222.36218"
        x="1210"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        xml:space="preserve"><tspan
          id="tspan3475"
-         y="262.36218"
+         y="222.36218"
          x="1210"
          sodipodi:role="line">site.summary._id</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        x="960"
-       y="322.36218"
+       y="282.36218"
        id="text3483"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3485"
          x="960"
-         y="322.36218">gettimestampdocument</tspan></text>
+         y="282.36218">gettimestampdocument</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        x="960"
-       y="332.36218"
+       y="292.36218"
        id="text3492"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3494"
          x="960"
-         y="332.36218">repositories/sites/summarize/gettimestampdocument.js</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
-       x="1210"
-       y="312.36218"
-       id="text3504"
-       sodipodi:linespacing="89.999998%"><tspan
-         sodipodi:role="line"
-         x="1210"
-         y="312.36218"
-         id="tspan3506">task.timestamp.min</tspan></text>
+         y="292.36218">repositories/sites/summarize/gettimestampdocument.js</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        x="1210"
        y="272.36218"
-       id="text3663"
+       id="text3504"
        sodipodi:linespacing="89.999998%"><tspan
          sodipodi:role="line"
          x="1210"
          y="272.36218"
+         id="tspan3506">task.timestamp.min</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
+       x="1210"
+       y="232.36218"
+       id="text3663"
+       sodipodi:linespacing="89.999998%"><tspan
+         sodipodi:role="line"
+         x="1210"
+         y="232.36218"
          id="tspan3665">site.summary._rev</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        x="1210"
-       y="282.36218"
+       y="242.36218"
        id="text3671"
        sodipodi:linespacing="89.999998%"><tspan
          sodipodi:role="line"
          x="1210"
-         y="282.36218"
+         y="242.36218"
          id="tspan3673">site.summary.type</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3675"
-       y="292.36218"
+       y="252.36218"
        x="1210"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        xml:space="preserve"><tspan
          id="tspan3677"
-         y="292.36218"
+         y="252.36218"
          x="1210"
          sodipodi:role="line">site.summary.url</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3679"
-       y="322.36218"
+       y="282.36218"
        x="1210"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        xml:space="preserve"><tspan
          id="tspan3681"
-         y="322.36218"
+         y="282.36218"
          x="1210"
          sodipodi:role="line">task.timestamp.max</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        x="1210"
-       y="332.36218"
+       y="292.36218"
        id="text3683"
        sodipodi:linespacing="89.999998%"><tspan
          sodipodi:role="line"
          x="1210"
-         y="332.36218"
+         y="292.36218"
          id="tspan3685">task.timestamp.count</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3693"
-       y="372.36218"
+       y="332.36218"
        x="960"
        style="font-size:26px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="372.36218"
+         y="332.36218"
          x="960"
          id="tspan3695"
          sodipodi:role="line">summarize</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3701"
-       y="382.36218"
+       y="342.36218"
        x="960"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Helvetica Neue LT Com;-inkscape-font-specification:Helvetica Neue LT Com"
        xml:space="preserve"><tspan
-         y="382.36218"
+         y="342.36218"
          x="960"
          id="tspan3703"
          sodipodi:role="line">repositories/sites/summarize/summarize.js</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3780"
-       y="362.36218"
+       y="322.36218"
        x="1210"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
        xml:space="preserve"><tspan
          id="tspan3782"
-         y="362.36218"
+         y="322.36218"
          x="1210"
          sodipodi:role="line">site.summary._rev</tspan></text>
     <path

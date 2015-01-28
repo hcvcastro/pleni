@@ -3,7 +3,6 @@
 var base='../../functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
-  , design=require(base+'/repositories/sites/summarize/designdocument')
   , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
   , summary=require(base+'/repositories/sites/summarize/getsummary')
   , summarize=require(base+'/repositories/sites/summarize/summarize')
@@ -20,9 +19,6 @@ var base='../../functions'
  * args output
  *      auth
  *          cookie
- *      site
- *          design
- *              timestamp
  *      task
  *          timestamp
  *              min
@@ -32,7 +28,6 @@ var base='../../functions'
 module.exports=function(params,repeat,stop,notifier){
     test(params)
     .then(auth)
-    .then(design)
     .then(summary)
     .then(timestamp)
     .then(summarize)

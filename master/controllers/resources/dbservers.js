@@ -58,7 +58,6 @@ module.exports=function(app){
     });
 
     app.post('/resources/dbservers',function(request,response){
-        console.log(schema.js.validate(request.body,schema.dbserver));
         if(schema.js.validate(request.body,schema.dbserver).length==0){
             var resources=app.get('resources')
               , dbservers=resources.dbservers
