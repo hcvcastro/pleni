@@ -1,8 +1,9 @@
 'use strict';
 
 pleni.factory('Resources',['$sessionStorage',
-    'DBServers','Repositories','Planners','Notifiers',
-    function($sessionStorage,DBServers,Repositories,Planners,Notifiers){
+    'DBServers','Repositories','Planners','Notifiers','Projects',
+    function($sessionStorage,
+        DBServers,Repositories,Planners,Notifiers,Projects){
         var get_element=function(needle,haystack){
                 for(var i in haystack){
                     if(haystack[i].id==needle){
@@ -207,6 +208,31 @@ pleni.factory('Resources',['$sessionStorage',
                 }
               , delete:function(notifier,success,failure){
                     bind(Notifiers.delete,notifier,success,failure);
+                }
+            }
+          , projects:{
+                load:function(success,failure){
+                    Projects.query(function(data){
+                        $sessionStorage.projects=new Array();
+                        for(var i=0;i<data.length;i++){
+                            $sessionStorage.projects.push({
+                                id:data[i].id
+                              , _repositories:data[i]._repositories
+                            });
+                        }
+                        if(success){success(data);}
+                    },function(error){
+                        if(error){failure(error);}
+                    });
+                }
+              , create:function(project,success,failure){
+                    bind(Projects.save,project,success,failure);
+                }
+              , update:function(project,success,failure){
+                    bind(Projects.update,project,success,failure);
+                }
+              , delete:function(project,success,failure){
+                    bind(Projects.delete,project,success,failure);
                 }
             }
         };

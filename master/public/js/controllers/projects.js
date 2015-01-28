@@ -1,8 +1,8 @@
 'use strict';
 
 pleni.controller('ProjectsController',
-    ['$scope','$location','$sessionStorage','Projects',
-    function($scope,$location,$sessionStorage,Projects){
+    ['$scope','$location','$sessionStorage','Resources',
+    function($scope,$location,$sessionStorage,Resources){
         $scope.storage=$sessionStorage;
 
         if($scope.storage.workspace){
@@ -39,26 +39,16 @@ pleni.controller('ProjectsController',
                 }
             }
           , refresh:function(){
-                Projects.query(function(data){
-                    $scope.storage.projects=new Array();
-                    for(var i=0;i<data.length;i++){
-                        $scope.storage.projects.push({
-                            id:data[i].id
-                          , _repositories:data[i]._repositories
-                        });
-                    }
-                });
+                Resources.projects.load();
             }
           , implode:function(glue,pieces){
                 return pieces.join(glue);
             }
           , save:function(){
-                var project=new Projects($scope.project);
-
                 utils.clean();
                 if($scope.projects.env.type=='collection'){
                     utils.send('Saving project settings ...');
-                    project.$save(function(data){
+                    Resources.projects.create($scope.project,function(data){
                         $scope.projects.refresh();
                         $scope.projects.list();
                         utils.receive();
@@ -69,8 +59,11 @@ pleni.controller('ProjectsController',
                     });
                 }else if($scope.projects.env.type=='element'){
                     utils.send('Updating project settings ...');
-                    project.$update({project:$scope.project.id},
-                    function(data){
+                    Resources.projects.update({
+                        project:$scope.project.id
+                      , id:$scope.project.id
+                      , _repositories:$scope.project._repositories
+                    },function(data){
                         $scope.projects.refresh();
                         $scope.projects.list();
                         utils.receive();
@@ -115,8 +108,9 @@ pleni.controller('ProjectsController',
                 utils.clean();
                 if($scope.projects.env.type='element'){
                     utils.send('Sending delete request ...');
-                    Projects.delete({project:$scope.project.id},
-                    function(data){
+                    Resources.projects.delete({
+                        project:$scope.project.id
+                    },function(data){
                         $scope.projects.refresh();
                         $scope.projects.list();
                         utils.receive();
