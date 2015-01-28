@@ -17,7 +17,7 @@ article.form(ng-show='workspace.env.panel==\'repositories\'')
                     label {{repository.name}}
                     ul.group
                         li.link
-                            a.fa.fa-plus-circle(title='Add repository to workspace',ng-click='repositories.add(dbserver.id,$index)')
+                            a.fa.fa-plus-circle(title='Add repository to workspace',ng-click='repositories.add($parent.$index,$index)')
                     span.extra {{repository.params.data_size}} / {{repository.params.doc_count}} docs
             p.offset
                 button(type='button',ng-click='workspace.close()') Close

@@ -54,7 +54,7 @@ module.exports=function(args){
         if(args.debug){
             console.log('spreading the info db for ... '+arguments.length);
         }
-        var map=new Array()
+        var map=new Array();
 
         for(var i in arguments){
             map.push(JSON.parse(arguments[i].db.info));

@@ -271,7 +271,7 @@ module.exports=function(app){
                 response.status(200).json(args.db.explist.map(
                     function(element){
                         return {
-                            name:element.db_name
+                            name:element.db_name.substring(prefix.length)
                           , params:{
                                 db_name:element.db_name
                               , doc_count:element.doc_count

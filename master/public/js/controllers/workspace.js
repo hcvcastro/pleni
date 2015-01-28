@@ -38,6 +38,7 @@ pleni.controller('WorkspaceController',
                 },function(error){});
 
                 $scope.planners.load();
+                $scope.repositories.load();
                 $scope.workspace.repositories();
             }
           , exit:function(){
@@ -56,7 +57,6 @@ pleni.controller('WorkspaceController',
                     $scope.workspace.close();
                 }else{
                     $scope.workspace.env.panel='repositories';
-                    $scope.repositories.load();
                 }
             }
           , close:function(){
@@ -360,9 +360,23 @@ pleni.controller('WorkspaceController',
                         break;
                 }
             }
-          , add:function(dbserver,index){
-                console.log(dbserver);
-                console.log(index);
+          , add:function(index1,index2){
+                var dbserver=$scope.storage.dbservers[index1]
+                  , repository=dbserver.repositories[index2]
+
+                Resources.repositories.create({
+                    id:repository.name
+                  , _dbserver:dbserver.id
+                  , db:{
+                        name:repository.params.db_name
+                    }
+                },function(data){
+                    
+                },function(error){
+                    if(error.data.message=='Validation error'){
+                        utils.show('error','The repository cannot be added');
+                    }
+                });
             }
         };
 
