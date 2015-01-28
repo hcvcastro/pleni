@@ -45,16 +45,15 @@ module.exports=function(args){
                     }
                     args.task.wait=json.rows[index];
                     deferred.resolve(args);
-                    return;
                 }else{
                     deferred.reject({"complete":true});
-                    return;
                 }
+            }else{
+                deferred.reject(response.body);
             }
-            deferred.reject(response.body);
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;

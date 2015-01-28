@@ -8,44 +8,19 @@ var should=require('should')
   , summary=require(base+'/repositories/sites/create/summary')
   , rootsite=require(base+'/repositories/sites/create/rootsite')
   , design=require(base+'/repositories/sites/create/designdocument')
-  , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
   , getsummary=require(base+'/repositories/sites/view/getsummary')
-  , summarize=require(base+'/repositories/sites/summarize/summarize')
-  , remove=require(base+'/databases/remove')
+  , getmapsite=require(base+'/repositories/sites/view/getmapsite')
 
 var host='http://localhost:5984'
   , user='jacobian'
   , pass='asdf'
-  , name='test'
-  , url='http://galao.local'
+  , name='db_test'
 
 describe('site fetcher pages functions',function(){
     var packet;
 
-    before(function(done){
-        auth({
-            db:{
-                host:host
-              , user:user
-              , pass:pass
-              , name:name
-            }
-          , site:{
-                url:url
-            }
-        })
-       .then(create)
-       .then(summary)
-       .then(rootsite)
-       .then(design)
-        .done(function(args){
-            packet=args;
-            done();
-        });
-    });
-
-    describe('testing for summarize a site',function(){
-        it('summarizing site',function(done){
+    describe('testing for viewer a site',function(){
+        it('view api site',function(done){
             auth({
                 db:{
                     host:host
@@ -54,21 +29,16 @@ describe('site fetcher pages functions',function(){
                   , name:name
                 }
             })
-            .then(timestamp)
             .then(getsummary)
-            .then(summarize)
+            .then(getmapsite)
             .done(function(args){
+                args.should.have.property('site');
                 args.site.should.have.property('summary');
                 args.site.summary.should.have.property('_rev');
+                args.site.should.have.property('mapsite');
+                args.site.mapsite.should.be.an.Array;
                 done();
             });
-        });
-    });
-
-    after(function(done){
-        remove(packet)
-        .done(function(args){
-            done();
         });
     });
 });

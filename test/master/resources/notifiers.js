@@ -375,7 +375,7 @@ describe('notifiers controller functions',function(){
         it('POST /resources/notifiers/:notifier/_add',function(done){
             request(app)
                 .post('/resources/notifiers/master/_add')
-                .send({server:'server',planner:'main'})
+                .send({server:'server',planner:'localhost'})
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -390,7 +390,7 @@ describe('notifiers controller functions',function(){
         it('POST /resources/notifiers/:notifier/_remove',function(done){
             request(app)
                 .post('/resources/notifiers/master/_remove')
-                .send({server:'server',planner:'main'})
+                .send({server:'server',planner:'localhost'})
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){

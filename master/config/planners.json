@@ -6,26 +6,5 @@
           , "port":3001
         }
     }
-  , {
-        "id":"main"
-      , "planner":{
-            "host":"http://181.177.142.72"
-          , "port":3001
-        }
-    }
-  , {
-        "id":"hiperborea"
-      , "planner":{
-            "host":"http://192.3.27.103"
-          , "port":3001
-        }
-    }
-  , {
-        "id":"smith"
-      , "planner":{
-            "host":"http://167.157.28.33"
-          , "port":3001
-        }
-    }
 ]
 

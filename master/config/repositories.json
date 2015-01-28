@@ -1,7 +1,7 @@
 [
     {
         "id":"test"
-      , "_dbserver":"main"
+      , "_dbserver":"localhost"
       , "db":{
             "name":"db_test"
         }

@@ -8,7 +8,7 @@ var should=require('should')
   , clean=require('../../../planners/functions/notifiers/clean')
 
 var host='http://localhost'
-  , port=3000
+  , port=3002
 
 describe('notifier functions',function(){
     var url=host+':'+port

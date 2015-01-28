@@ -9,35 +9,5 @@
           , "prefix":""
         }
     }
-  , {
-        "id":"main"
-      , "db":{
-            "host":"http://181.177.142.72"
-          , "port":5984
-          , "user":"jacobian"
-          , "pass":"asdf"
-          , "prefix":"pleni_"
-        }
-    }
-  , {
-        "id":"hiperborea"
-      , "db":{
-            "host":"http://192.3.27.103"
-          , "port":5984
-          , "user":"jacobian"
-          , "pass":"asdf"
-          , "prefix":"pleni_"
-        }
-    }
-  , {
-        "id":"smith"
-      , "db":{
-            "host":"http://167.157.28.33"
-          , "port":5984
-          , "user":"jacobian"
-          , "pass":"asdf"
-          , "prefix":"pleni_"
-        }
-    }
 ]
 

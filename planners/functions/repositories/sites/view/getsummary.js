@@ -4,7 +4,7 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for register the timestamps in the summary in a site repository
+ * Function for getting a summary document in a site repository
  * args input
  *      db
  *          host
@@ -28,19 +28,19 @@ module.exports=function(args){
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
+    if(args.debug){
+        console.log('get a summary document');
+    }
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
-            if(args.debug){
-                console.log('getting a summary document');
-            }
             if(!args.site){
                 args.site={};
             }
             args.site.summary=JSON.parse(response.body);
             deferred.resolve(args);
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;
