@@ -371,10 +371,14 @@ pleni.controller('WorkspaceController',
                         name:repository.params.db_name
                     }
                 },function(data){
-                    
+
                 },function(error){
-                    if(error.data.message=='Validation error'){
-                        utils.show('error','The repository cannot be added');
+                    switch(error.data.message){
+                        case 'Validation error':
+                            utils.show('error','The repository cannot be added');
+                            break;
+                        case 'Resource cannot overridden':
+                            break;
                     }
                 });
             }
