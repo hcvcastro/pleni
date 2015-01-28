@@ -38,7 +38,7 @@ pleni.controller('WorkspaceController',
                 },function(error){});
 
                 $scope.planners.load();
-                $scope.workspace.settings();
+                $scope.workspace.repositories();
             }
           , exit:function(){
                 delete $scope.storage.workspace;
@@ -47,8 +47,16 @@ pleni.controller('WorkspaceController',
           , settings:function(){
                 if($scope.workspace.env.panel=='settings'){
                     $scope.workspace.close();
-                } else {
+                }else{
                     $scope.workspace.env.panel='settings';
+                }
+            }
+          , repositories:function(){
+                if($scope.workspace.env.panel=='repositories'){
+                    $scope.workspace.close();
+                }else{
+                    $scope.workspace.env.panel='repositories';
+                    $scope.repositories.load();
                 }
             }
           , close:function(){
@@ -315,6 +323,46 @@ pleni.controller('WorkspaceController',
                     server:planner.id
                 },function(data){
                 },function(error){});
+            }
+        };
+
+        $scope.repositories={
+            load:function(){
+                Resources.dbservers.load(function(data){
+                    for(var index in $scope.storage.dbservers){
+                        $scope.repositories.scan(index);
+                    }
+                });
+            }
+          , scan:function(index){
+                var dbserver=$scope.storage.dbservers[index];
+
+                dbserver.check='scanning';
+                dbserver.toggle='show';
+                Resources.dbservers.scan({
+                    dbserver:dbserver.id
+                },function(data){
+                    dbserver.check='online';
+                    dbserver.repositories=data;
+                },function(error){
+                    dbserver.check='offline';
+                });
+            }
+          , toggle:function(index){
+                var dbserver=$scope.storage.dbservers[index];
+
+                switch(dbserver.toggle){
+                    case 'show':
+                        dbserver.toggle='hide';
+                        break;
+                    case 'hide':
+                        dbserver.toggle='show';
+                        break;
+                }
+            }
+          , add:function(dbserver,index){
+                console.log(dbserver);
+                console.log(index);
             }
         };
 

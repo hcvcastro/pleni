@@ -46,6 +46,7 @@ module.exports=function(args){
                 }
               , 'mapsite':{
                     'map':'function(doc){if(doc.type&&doc.type==\'page\'){'
+                         +'if(doc.status==\'complete\'){'
                          +'var m=doc.head.headers[\'content-type\'];'
                          +'emit(doc._id.substring(5),{status:doc.head.status'
                          +',mime:m,get:doc.head.get,type:(function(x,y){'
@@ -53,7 +54,8 @@ module.exports=function(args){
                          +'if(y.indexOf(\'text/html\')){return \'page\';'
                          +'}else{return \'extra\';}}})(doc._id,m)'
                          +',rel:(function(x){if(x.ref&&x.ref.related){'
-                         +'return x.ref.related;}else{return [];}})(doc)});}}'
+                         +'return x.ref.related;}else{return [];}})(doc)});'
+                         +'}else{emit(doc._id.substring(5),{});}}}'
                 }
             }
         };

@@ -14,6 +14,8 @@
             ul.left
                 li(title='Tasks/Planners configuration',ng-click='workspace.settings()')
                     a.fa.fa-gear
+                li(title='Repository management',ng-click='workspace.repositories()')
+                    a.fa.fa-database
                 li(title='Refresh data from server',ng-click='workspace.init()')
                     a.fa.fa-refresh
             ul.left
@@ -26,6 +28,7 @@
         .messages
         .workspace.last
             include ../blocks/workspace/settings
+            include ../blocks/workspace/repositories
             include ../blocks/workspace/tasks
             svg.canvas
 
