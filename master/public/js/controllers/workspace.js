@@ -13,6 +13,7 @@ pleni.controller('WorkspaceController',
 
         $scope.storage.workspace={
             name:$routeParams.project
+          , repositories:new Array()
           , available:{}
           , enabled:{}
           , apis:{}
@@ -361,8 +362,24 @@ pleni.controller('WorkspaceController',
                 }
             }
           , add:function(index1,index2){
-                var dbserver=$scope.storage.dbservers[index1]
+                var project=$scope.storage.workspace
+                  , repositories=$scope.storage.workspace.repositories
+                  , dbserver=$scope.storage.dbservers[index1]
                   , repository=dbserver.repositories[index2]
+                  , add_workspace=function(){
+                        repositories.push(repository.name);
+                        Resources.projects.update({
+                            project:project.name
+                          , id:project.name
+                          , _repositories:project.repositories
+                        },function(data){
+                        },function(error){});
+                    }
+
+                if(repositories.indexOf(repository.name)>=0){
+                    utils.show('error','The repository is already added');
+                    return;
+                }
 
                 Resources.repositories.create({
                     id:repository.name
@@ -371,13 +388,14 @@ pleni.controller('WorkspaceController',
                         name:repository.params.db_name
                     }
                 },function(data){
-
+                    add_workspace();
                 },function(error){
                     switch(error.data.message){
                         case 'Validation error':
                             utils.show('error','The repository cannot be added');
                             break;
                         case 'Resource cannot overridden':
+                            add_workspace();
                             break;
                     }
                 });
