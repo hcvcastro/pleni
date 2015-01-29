@@ -5,8 +5,9 @@ var validate=require('../../planners/utils/validators')
   , _error=require('../../planners/utils/json-response').error
   , test=require('../../planners/functions/databases/test')
   , auth=require('../../planners/functions/databases/auth')
-  , getsummary=require('../../planners/functions/repositories/sites/view/getsummary')
-  , getmapsite=require('../../planners/functions/repositories/sites/view/getmapsite')
+  , viewers='../../planners/functions/repositories/sites'
+  , getsummary=require(viewers+'/view/getsummary')
+  , getmapsite=require(viewers+'/view/getmapsite')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
@@ -21,7 +22,7 @@ module.exports=function(app){
         response.render('pages/workspace');
     });
 
-    app.get('/workspace/:project/:repository',function(request,response){
+    var generic_document=function(request,response,func,done){
         var id_p=validate.toString(request.params.project)
           , id_r=validate.toString(request.params.repository)
           , resources=app.get('resources')
@@ -40,10 +41,8 @@ module.exports=function(app){
                 }
             })
             .then(auth)
-            .then(getsummary)
-            .then(function(args){
-                response.status(200).json(args.site.summary);
-            })
+            .then(func)
+            .then(done)
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){
                     response.status(404).json(_error.network);
@@ -57,6 +56,20 @@ module.exports=function(app){
         }else{
             response.status(404).json(_error.notfound);
         }
+    };
+
+    app.get('/workspace/:project/:repository/summary',
+    function(request,response){
+        return generic_document(request,response,getsummary,function(args){
+            response.status(200).json(args.site.summary);
+        });
+    });
+
+    app.get('/workspace/:project/:repository/mapsite',
+    function(request,response){
+        return generic_document(request,response,getmapsite,function(args){
+            response.status(200).json(args.site.mapsite);
+        });
     });
 };
 

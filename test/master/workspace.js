@@ -16,9 +16,9 @@ describe('workspace controller functions',function(){
                 .expect(200,done);
         });
 
-        it('GET /workspace/:project/:repository',function(done){
+        it('GET /workspace/:project/:repository/summary',function(done){
             request(app)
-                .get('/workspace/test/test')
+                .get('/workspace/test/test/summary')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){
@@ -28,6 +28,21 @@ describe('workspace controller functions',function(){
                     res.body.should.have.property('_rev');
                     res.body.should.have.property('type');
                     res.body.should.have.property('url');
+                    done();
+                });
+        });
+
+        it('GET /workspace/:project/:repository/mapsite',function(done){
+            request(app)
+                .get('/workspace/test/test/mapsite')
+                .expect('Content-Type',/json/)
+                .expect(200)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(200);
+                    res.should.be.json;
+                    res.body.should.have.property('count');
+                    res.body.should.have.property('nodes').and.be.Array;
+                    res.body.should.have.property('links').and.be.Array;
                     done();
                 });
         });
