@@ -16,29 +16,49 @@ var host='http://localhost:5984'
   , pass='asdf'
   , name='db_test'
 
-describe('site fetcher pages functions',function(){
+describe('viewer functions for site repository',function(){
     var packet;
 
-    describe('testing for viewer a site',function(){
-        it('view api site',function(done){
-            auth({
-                db:{
-                    host:host
-                  , user:user
-                  , pass:pass
-                  , name:name
-                }
-            })
-            .then(getsummary)
-            .then(getmapsite)
-            .done(function(args){
-                args.should.have.property('site');
-                args.site.should.have.property('summary');
-                args.site.summary.should.have.property('_rev');
-                args.site.should.have.property('mapsite');
-                //args.site.mapsite.should.be.an.Array;
-                done();
-            });
+    before(function(done){
+        auth({
+            db:{
+                host:host
+              , user:user
+              , pass:pass
+              , name:name
+            }
+        })
+        .done(function(args){
+            packet=args;
+            done();
+        });
+    });
+
+    it('testing function getsummary',function(done){
+        getsummary(packet)
+        .done(function(args){
+            args.should.have.property('site');
+            args.site.should.have.property('summary');
+            args.site.summary.should.have.property('_id');
+            args.site.summary.should.have.property('_rev');
+            args.site.summary.should.have.property('ts_created');
+            args.site.summary.should.have.property('ts_modified');
+            args.site.summary.should.have.property('type');
+            args.site.summary.should.have.property('url');
+            done();
+        });
+    });
+
+    it('testing function getmapsite',function(done){
+        getmapsite(packet)
+        .done(function(args){
+            args.should.have.property('site');
+            args.site.should.have.property('mapsite');
+            args.site.mapsite.should.have.property('count');
+            args.site.mapsite.should.have.property('nodes').and.be.Array;
+            args.site.mapsite.should.have.property('links').and.be.Array;
+            console.log(args.site.mapsite);
+            done();
         });
     });
 });

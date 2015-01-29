@@ -39,7 +39,7 @@ module.exports=function(args){
 
             args.site.mapsite={
                 count:parse.total_rows
-              , nodes:parse.rows.map(node){
+              , nodes:parse.rows.map(function(node){
                     if(Object.keys(node.value).length){
                         return {
                             page:node.key
@@ -53,7 +53,7 @@ module.exports=function(args){
                           , type:node.value.type
                         };
                     }
-                }
+                })
               , links:links
             };
             deferred.resolve(args);
