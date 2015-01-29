@@ -14,9 +14,7 @@ var request=require('request')
  *          cookie
  *      task
  *          wait
- *              id
- *              key
- *              value
+ *              url
  *          ref
  *              related
  *
@@ -34,8 +32,9 @@ module.exports=function(args){
       , body={
             status:'wait'
           , type:'page'
-          , url:validator.toValidHost(args.task.wait.key)
-          , timestamp:Date.now()
+          , url:validator.toValidHost(args.task.wait.url)
+          , ts_created:Date.now()
+          , ts_modified:Date.now()
         }
 
     if(args.task && args.task.ref && args.task.ref.related){

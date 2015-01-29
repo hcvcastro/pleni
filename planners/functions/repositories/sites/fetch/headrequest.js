@@ -9,8 +9,7 @@ var request=require('request')
  *      task
  *          wait
  *              id
- *              key
- *              value
+ *              url
  *      headers(*)
  *
  * args output
@@ -22,7 +21,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.task.wait.key+args.task.wait.id.substr(5)
+      , url=args.task.wait.url+args.task.wait.id.substr(5)
       , headers={}
 
     if(args.headers){
@@ -51,9 +50,9 @@ module.exports=function(args){
               , 'get':(r_body & s_body)
             }
             deferred.resolve(args);
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;

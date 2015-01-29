@@ -33,7 +33,29 @@ module.exports=function(args){
             if(!args.site){
                 args.site={};
             }
-            args.site.mapsite=JSON.parse(response.body).rows;
+
+            var parse=JSON.parse(response.body)
+              , links=new Array()
+
+            args.site.mapsite={
+                count:parse.total_rows
+              , nodes:parse.rows.map(node){
+                    if(Object.keys(node.value).length){
+                        return {
+                            page:node.key
+                        };
+                    }else{
+                        return {
+                            page:node.key
+                          , status:node.value.status
+                          , mime:node.value.mime
+                          , get:node.value.get
+                          , type:node.value.type
+                        };
+                    }
+                }
+              , links:links
+            };
             deferred.resolve(args);
         }else{
             deferred.reject(error);

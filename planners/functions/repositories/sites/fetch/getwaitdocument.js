@@ -16,8 +16,9 @@ var request=require('request')
  *      task
  *          wait
  *              id
- *              key
- *              value
+ *              _rev
+ *              url
+ *              ts_created
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -43,7 +44,12 @@ module.exports=function(args){
                     if(!args.task){
                         args.task={};
                     }
-                    args.task.wait=json.rows[index];
+                    args.task.wait={
+                        id:json.rows[index].id
+                      , _rev:json.rows[index].value[0]
+                      , url:json.rows[index].key
+                      , ts_created:json.rows[index].value[1]
+                    };
                     deferred.resolve(args);
                 }else{
                     deferred.reject({"complete":true});

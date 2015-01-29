@@ -11,8 +11,7 @@ var request=require('request')
  *      task
  *          wait
  *              id
- *              key
- *              value
+ *              url
  *          head
  *              status
  *              headers
@@ -45,7 +44,7 @@ module.exports=function(args){
             var $=cheerio.load(args.task.get.body)
               , links={script:[],link:[],a:[],img:[],form:[]}
               , samedomain=[]
-              , base=_url.parse(args.task.wait.key+args.task.wait.id.substr(5))
+              , base=_url.parse(args.task.wait.url+args.task.wait.id.substr(5))
               , register_link=function(link,haystack){
                     if(link==undefined){return}
 

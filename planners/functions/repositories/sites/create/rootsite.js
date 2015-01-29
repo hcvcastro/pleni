@@ -18,6 +18,7 @@ var request=require('request')
  * args output
  *      site
  *          root
+ *              _rev
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -30,17 +31,28 @@ module.exports=function(args){
             status:'wait'
           , type:'page'
           , url:validator.toValidHost(args.site.url)
-          , timestamp:Date.now()
+          , ts_created:Date.now()
+          , ts_modified:Date.now()
         }
 
+    if(args.debug){
+        console.log('create a root site for site repository');
+    }
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
-            args.site.root=response.body.rev;
+            if(!args.site){
+                args.site={};
+            }
+            if(!args.site.root){
+                args.site.root={};
+            }
+            args.site.root._rev=response.body.rev;
             deferred.resolve(args);
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;
 };
+

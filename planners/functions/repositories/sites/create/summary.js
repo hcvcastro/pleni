@@ -18,6 +18,7 @@ var request=require('request')
  * args output
  *      site
  *          summary
+ *              _rev
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -29,15 +30,26 @@ module.exports=function(args){
       , body={
             type:'site'
           , url:validator.toValidHost(args.site.url)
+          , ts_created:Date.now()
+          , ts_modified:Date.now()
         }
 
+    if(args.debug){
+        console.log('create a summary document for site repository');
+    }
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
-            args.site.summary=response.body.rev;
+            if(!args.site){
+                args.site={};
+            }
+            if(!args.site.summary){
+                args.site.summary={};
+            }
+            args.site.summary._rev=response.body.rev;
             deferred.resolve(args);
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;

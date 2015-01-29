@@ -16,6 +16,7 @@ var request=require('request')
  *      site
  *          design
  *              sites
+ *                  _rev
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -28,12 +29,12 @@ module.exports=function(args){
             'language':'javascript'
           , 'views':{
                 'wait':{
-                    'map':'function(doc){if(doc.status&&doc.status'
-                         +'==\'wait\'){emit(doc.url,doc._rev)}}'
+                    'map':'function(doc){if(doc.status&&doc.status=='
+                         +'\'wait\'){emit(doc.url,[doc._rev,doc.ts_created])}}'
                 }
               , 'timestamp':{
-                    'map':'function(doc){if(doc.timestamp){emit(null,'
-                         +'doc.timestamp)}}',
+                    'map':'function(doc){if(doc.ts_modified){emit(null,'
+                         +'doc.ts_modified)}}',
                     'reduce':'function(keys,values,rereduce){if(rereduce){'
                             +'return{\'min\':values.reduce(function(a,b){'
                             +'return Math.min(a,b.min)},Infinity),\'max\':'
@@ -60,6 +61,9 @@ module.exports=function(args){
             }
         };
 
+    if(args.debug){
+        console.log('create a design document for site repository');
+    }
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
             if(!args.site){
@@ -68,11 +72,14 @@ module.exports=function(args){
             if(!args.site.design){
                 args.site.design={};
             }
-            args.site.design.sites=response.body.rev;
+            if(!args.site.design.sites){
+                args.site.design.sites={};
+            }
+            args.site.design.sites._rev=response.body.rev;
             deferred.resolve(args);
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;

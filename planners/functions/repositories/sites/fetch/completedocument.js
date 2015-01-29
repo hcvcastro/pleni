@@ -14,12 +14,10 @@ var request=require('request')
  *      task
  *          wait
  *              id
- *              key
- *              value
+ *              url
+ *              ts_created
  *          lock
- *              ok
- *              id
- *              rev
+ *              _rev
  *          head
  *              status
  *              headers
@@ -38,24 +36,24 @@ var request=require('request')
  * args output
  *      task
  *          complete
- *              ok
  *              id
- *              rev
+ *              _rev
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , doc='/'+encodeURIComponent(args.task.lock.id)
+      , doc='/'+encodeURIComponent(args.task.wait.id)
       , url=args.db.host+'/'+args.db.name+doc
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , body={
-            status:'complete'
+            _rev:args.task.lock._rev
+          , status:'complete'
+          , ts_created:args.task.wait.ts_created
+          , ts_modified:Date.now()
           , type:'page'
-          , _rev:args.task.lock.rev
-          , url:args.task.wait.key
-          , timestamp:Date.now()
+          , url:args.task.wait.url
         }
 
     if(args.headers){
@@ -72,17 +70,18 @@ module.exports=function(args){
     }
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
-            if(response.statusCode==201){
-                if(response.body.ok){
-                    args.task.complete=response.body;
-                    deferred.resolve(args);
-                    return;
-                }
+            if(response.statusCode==201&&response.body.ok){
+                args.task.complete={
+                    id:response.body.id
+                  , _rev:response.body.rev
+                };
+                deferred.resolve(args);
+            }else{
+                deferred.reject(response.body);
             }
-            deferred.reject(response.body);
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;

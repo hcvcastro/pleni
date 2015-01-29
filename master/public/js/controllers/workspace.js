@@ -389,6 +389,7 @@ pleni.controller('WorkspaceController',
                     }
                 },function(data){
                     add_workspace();
+                    Resources.repositories.load();
                 },function(error){
                     switch(error.data.message){
                         case 'Validation error':

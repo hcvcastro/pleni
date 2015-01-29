@@ -17,6 +17,8 @@ var request=require('request')
  *          summary
  *              _id
  *              _rev
+ *              ts_created
+ *              ts_modified
  *              type
  *              url
  */

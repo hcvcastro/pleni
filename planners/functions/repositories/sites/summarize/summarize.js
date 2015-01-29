@@ -15,6 +15,8 @@ var request=require('request')
  *          summary
  *              _id
  *              _rev
+ *              ts_created
+ *              ts_modified
  *              type
  *              url
  *      task
@@ -38,10 +40,12 @@ module.exports=function(args){
       , body={
             _id:args.site.summary._id
           , _rev:args.site.summary._rev
+          , ts_created:args.site.summary.ts_created
+          , ts_modified:args.site.summary.ts_modified
           , type:args.site.summary.type
           , url:args.site.summary.url
-          , starttime:args.task.timestamp.min
-          , endtime:args.task.timestamp.max
+          , ts_started:args.task.timestamp.min
+          , ts_ended:args.task.timestamp.max
           , count:args.task.timestamp.count
         }
 

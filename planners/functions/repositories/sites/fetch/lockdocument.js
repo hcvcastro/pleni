@@ -14,15 +14,15 @@ var request=require('request')
  *      task
  *          wait
  *              id
- *              key
- *              value
+ *              _rev
+ *              url
+ *              ts_created
  *
  * args outputs
  *      tas
  *          lock
- *              ok
  *              id
- *              rev
+ *              _rev
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -33,11 +33,12 @@ module.exports=function(args){
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , body={
-            status:'lock'
+            _rev:args.task.wait._rev
+          , status:'lock'
+          , ts_created:args.task.wait.ts_created
+          , ts_modified:Date.now()
           , type:'page'
-          , _rev:args.task.wait.value
-          , url:args.task.wait.key
-          , timestamp:Date.now()
+          , url:args.task.wait.url
         }
 
     if(args.debug){
@@ -45,15 +46,15 @@ module.exports=function(args){
     }
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
-            if(response.statusCode==201){
-                if(response.body.ok){
-                    args.task.lock=response.body;
-                    deferred.resolve(args);
-                    return;
-                }
+            if(response.statusCode==201&&response.body.ok){
+                args.task.lock={
+                    id:response.body.id
+                  , _rev:response.body.rev
+                };
+                deferred.resolve(args);
+            }else{
+                deferred.reject(response.body);
             }
-            deferred.reject(response.body);
-            return;
         }
         deferred.reject(error);
     });

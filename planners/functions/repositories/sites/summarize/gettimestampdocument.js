@@ -43,12 +43,12 @@ module.exports=function(args){
                 }
                 args.task.timestamp=json.rows[0].value;
                 deferred.resolve(args);
-                return;
+            }else{
+                deferred.reject(response.body);
             }
-            deferred.reject(response.body);
-            return;
+        }else{
+            deferred.reject(error);
         }
-        deferred.reject(error);
     });
 
     return deferred.promise;
