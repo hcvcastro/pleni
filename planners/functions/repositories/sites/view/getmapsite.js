@@ -35,25 +35,43 @@ module.exports=function(args){
             }
 
             var parse=JSON.parse(response.body)
+              , dict={}
+              , nodes=new Array()
               , links=new Array()
+
+            for(var i=0;i<parse.rows.length;i++){
+                dict[parse.rows[i].key]=i;
+            }
+
+            nodes=parse.rows.map(function(node){
+                if(Object.keys(node.value).length==0){
+                    return {
+                        page:node.key
+                      , status:'unknown'
+                      , mime:'unknown'
+                      , get:false
+                      , type:'unknown'
+                    };
+                }else{
+                    node.value.rel.forEach(function(link){
+                        links.push({
+                            source:dict[node.key]
+                          , target:dict[link]
+                        })
+                    });
+                    return {
+                        page:node.key
+                      , status:node.value.status
+                      , mime:node.value.mime
+                      , get:node.value.get
+                      , type:node.value.type
+                    };
+                }
+            });
 
             args.site.mapsite={
                 count:parse.total_rows
-              , nodes:parse.rows.map(function(node){
-                    if(Object.keys(node.value).length){
-                        return {
-                            page:node.key
-                        };
-                    }else{
-                        return {
-                            page:node.key
-                          , status:node.value.status
-                          , mime:node.value.mime
-                          , get:node.value.get
-                          , type:node.value.type
-                        };
-                    }
-                })
+              , nodes:nodes
               , links:links
             };
             deferred.resolve(args);

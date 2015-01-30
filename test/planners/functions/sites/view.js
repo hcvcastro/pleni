@@ -14,7 +14,7 @@ var should=require('should')
 var host='http://localhost:5984'
   , user='jacobian'
   , pass='asdf'
-  , name='db_test'
+  , name='pleni_site_j1'
 
 describe('viewer functions for site repository',function(){
     var packet;
@@ -57,7 +57,6 @@ describe('viewer functions for site repository',function(){
             args.site.mapsite.should.have.property('count');
             args.site.mapsite.should.have.property('nodes').and.be.Array;
             args.site.mapsite.should.have.property('links').and.be.Array;
-            console.log(args.site.mapsite);
             done();
         });
     });

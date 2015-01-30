@@ -2,9 +2,9 @@
 
 pleni.controller('WorkspaceController',
     ['$scope','$routeParams','$location','$sessionStorage',
-    'Resources','Editor',
+    'Resources','Editor','Visual',
     function($scope,$routeParams,$location,$sessionStorage,
-        Resources,Editor){
+        Resources,Editor,Visual){
         $scope.storage=$sessionStorage;
 
         if(!$routeParams.project){
@@ -420,6 +420,7 @@ pleni.controller('WorkspaceController',
           , open:function(index){
                 $scope.storage.workspace.visual=
                     $scope.storage.workspace.repositories[index].name;
+                $scope.visual.mapsite(index);
             }
         };
 
@@ -437,8 +438,14 @@ pleni.controller('WorkspaceController',
                     $scope.storage.workspace.repositories[index].summary=data;
                 },function(error){});
             }
-          , mapsite:function(repository){
-                
+          , mapsite:function(index){
+                var project=$scope.storage.workspace.name
+                  , repository=$scope.storage.workspace.repositories[index].name
+
+                Resources.workspace.mapsite(project,repository,function(data){
+                    Visual.clean();
+                    Visual.render(data);
+                },function(error){});
             }
         };
 

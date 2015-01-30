@@ -1,48 +1,42 @@
-svg.canvas {
-/*    position: absolute;
-    box-sizing: border-box;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 5;*/
-
-    line {
-        stroke: @color5;
-        stroke-width: 2px;
-    }
-
-    .node {
-        &.root {
-            fill: @success_frg;
-            stroke-width: 4px;
-        }
-        &.page {
-            fill: @color2;
-            stroke-width: 3px;
-        }
-        &.extra {
-            fill: @color3;
+#canvas {
+    svg {
+        line {
+            stroke: @color5;
             stroke-width: 2px;
         }
 
-        &.s-200 {
-            stroke: @color4;
-        }
-        &.s-404 {
-            stroke: fade(@error_frg,50%);
-        }
-    }
+        .node {
+            &.root {
+                fill: @success_frg;
+                stroke-width: 4px;
+            }
+            &.page {
+                fill: @color2;
+                stroke-width: 3px;
+            }
+            &.extra {
+                fill: @color3;
+                stroke-width: 2px;
+            }
 
-    .text {
-        fill: @color1;
-        fill-opacity: 0.75;
-        &.title {
-            .font4;
+            &.s-200 {
+                stroke: @color4;
+            }
+            &.s-404 {
+                stroke: fade(@error_frg,50%);
+            }
         }
-        &.subtle {
-            .font5;
+
+        .text {
+            fill: @color1;
+            fill-opacity: 0.75;
+            &.title {
+                .font4;
+            }
+            &.subtle {
+                .font5;
+            }
         }
     }
-}
+};
 
