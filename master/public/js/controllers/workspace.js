@@ -2,9 +2,9 @@
 
 pleni.controller('WorkspaceController',
     ['$scope','$routeParams','$location','$sessionStorage',
-    'Resources','Projects','Editor',
+    'Resources','Editor',
     function($scope,$routeParams,$location,$sessionStorage,
-        Resources,Projects,Editor){
+        Resources,Editor){
         $scope.storage=$sessionStorage;
 
         if(!$routeParams.project){
@@ -33,14 +33,20 @@ pleni.controller('WorkspaceController',
           , init:function(){
                 $scope.workspace.env.panel='';
 
-                Projects.get({
+                Resources.projects.get({
                     project:$scope.storage.workspace.name
                 },function(data){
-                    $scope.storage.workspace.repositories=data._repositories;
-                },function(error){});
+                    $scope.storage.workspace.repositories=
+                        data._repositories.map(function(repository){
+                        return {
+                            name:repository
+                        };
+                    });
 
-                $scope.planners.load();
-                $scope.repositories.load();
+                    $scope.planners.load();
+                    $scope.repositories.load();
+                    $scope.visual.load();
+                },function(error){});
             }
           , exit:function(){
                 delete $scope.storage.workspace;
@@ -63,8 +69,11 @@ pleni.controller('WorkspaceController',
           , close:function(){
                 $scope.workspace.env.panel='';
             }
-          , icon:function(name){
+          , icon_p:function(name){
                 return 'fa-pleni-'+name.replace('/','-');
+            }
+          , icon_r:function(name){
+                return 'fa-pleni-repo-'+name;
             }
           , planners:{
                 enter:function(index){
@@ -367,16 +376,19 @@ pleni.controller('WorkspaceController',
                   , dbserver=$scope.storage.dbservers[index1]
                   , repository=dbserver.repositories[index2]
                   , add_workspace=function(){
-                        repositories.push(repository.name);
+                        repositories.push({name:repository.name});
                         Resources.projects.update({
                             project:project.name
                           , id:project.name
-                          , _repositories:project.repositories
+                          , _repositories:project.repositories.map(
+                            function(r){return r.name;})
                         },function(data){
+                            $scope.visual.summary(repositories.length-1);
                         },function(error){});
                     }
 
-                if(repositories.indexOf(repository.name)>=0){
+                if(repositories.some(function(r){
+                        return repository.name==r.name;})){
                     utils.show('error','The repository is already added');
                     return;
                 }
@@ -407,13 +419,26 @@ pleni.controller('WorkspaceController',
             }
           , open:function(index){
                 $scope.storage.workspace.visual=
-                    $scope.storage.workspace.repositories[index];
+                    $scope.storage.workspace.repositories[index].name;
             }
         };
 
         $scope.visual={
-            load:function(repository){
+            load:function(){
+                for(var index in $scope.storage.workspace.repositories){
+                    $scope.visual.summary(index);
+                }
+            }
+          , summary:function(index){
+                var project=$scope.storage.workspace.name
+                  , repository=$scope.storage.workspace.repositories[index].name
 
+                Resources.workspace.summary(project,repository,function(data){
+                    $scope.storage.workspace.repositories[index].summary=data;
+                },function(error){});
+            }
+          , mapsite:function(repository){
+                
             }
         };
 

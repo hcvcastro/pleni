@@ -1,9 +1,9 @@
 'use strict';
 
 pleni.factory('Resources',['$sessionStorage',
-    'DBServers','Repositories','Planners','Notifiers','Projects',
+    'DBServers','Repositories','Planners','Notifiers','Projects','Workspace',
     function($sessionStorage,
-        DBServers,Repositories,Planners,Notifiers,Projects){
+        DBServers,Repositories,Planners,Notifiers,Projects,Workspace){
         var get_element=function(needle,haystack){
                 for(var i in haystack){
                     if(haystack[i].id==needle){
@@ -225,6 +225,9 @@ pleni.factory('Resources',['$sessionStorage',
                         if(error){failure(error);}
                     });
                 }
+              , get:function(project,success,failure){
+                    bind(Projects.get,project,success,failure);
+                }
               , create:function(project,success,failure){
                     bind(Projects.save,project,success,failure);
                 }
@@ -233,6 +236,22 @@ pleni.factory('Resources',['$sessionStorage',
                 }
               , delete:function(project,success,failure){
                     bind(Projects.delete,project,success,failure);
+                }
+            }
+          , workspace:{
+                summary:function(project,repository,success,failure){
+                    bind(Workspace.get,{
+                        project:project
+                      , repository:repository
+                      , document:'summary'
+                    },success,failure);
+                }
+              , mapsite:function(project,repository,success,failure){
+                    bind(Workspace.get,{
+                        project:project
+                      , repository:repository
+                      , document:'mapsite'
+                    },success,failure);
                 }
             }
         };

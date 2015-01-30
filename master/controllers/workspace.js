@@ -25,37 +25,48 @@ module.exports=function(app){
     var generic_document=function(request,response,func,done){
         var id_p=validate.toString(request.params.project)
           , id_r=validate.toString(request.params.repository)
-          , resources=app.get('resources')
-          , project=get_element(id_p,app.get('projects'))
-          , repository=get_element(id_r,resources.repositories)
-          , dbserver=get_element(repository[1]._dbserver,resources.dbservers)
+          , resources=app.get('resources');
 
-        if(project&&repository&&dbserver){
-            test({
-                db:{
-                    host:dbserver[1].db.host+':'+
-                         dbserver[1].db.port
-                  , user:dbserver[1].db.user
-                  , pass:dbserver[1].db.pass
-                  , name:repository[1].db.name
-                }
-            })
-            .then(auth)
-            .then(func)
-            .then(done)
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='not_found'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
-                }
-            })
-            .done();
-        }else{
+        var project=get_element(id_p,app.get('projects'))
+        if(!project){
             response.status(404).json(_error.notfound);
+            return;
         }
+        
+        var repository=get_element(id_r,resources.repositories);
+        if(!repository){
+            response.status(404).json(_error.notfound);
+            return;
+        }
+        
+        var dbserver=get_element(repository[1]._dbserver,resources.dbservers);
+        if(!dbserver){
+            response.status(404).json(_error.notfound);
+            return;
+        }
+
+        test({
+            db:{
+                host:dbserver[1].db.host+':'+
+                     dbserver[1].db.port
+              , user:dbserver[1].db.user
+              , pass:dbserver[1].db.pass
+              , name:repository[1].db.name
+            }
+        })
+        .then(auth)
+        .then(func)
+        .then(done)
+        .fail(function(error){
+            if(error.code=='ECONNREFUSED'){
+                response.status(404).json(_error.network);
+            }else if(error.error=='not_found'){
+                response.status(404).json(_error.network);
+            }else if(error.error=='unauthorized'){
+                response.status(401).json(_error.auth);
+            }
+        })
+        .done();
     };
 
     app.get('/workspace/:project/:repository/summary',
