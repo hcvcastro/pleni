@@ -1,4 +1,4 @@
-.wrapper.full.last
+.fluid.full.last
     nav.menu
         ul.items
             li.header(ng-click='repositories.empty()',ng-class='{\'active\':storage.workspace.visual==\'\'}')
@@ -9,7 +9,7 @@
                 .right
                     a.fa(title='{{repository.summary.type}} repository',ng-class='workspace.icon_r(repository.summary.type)')
         include ../blocks/footer/bottom
-    .main
+    .main.last
         .tools
             ul.left
                 li(title='Tasks/Planners configuration',ng-click='workspace.settings()')
