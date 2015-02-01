@@ -28,8 +28,16 @@ visual.site={
             .call(visual.site.zoom)
             .append('svg:g')
             .call(visual.site.tip);
+
+        visual.site.legend=d3.select('#canvas')
+            .append('svg:svg')
+            .attr('width','250px')
+            .append('svg:g')
     }
   , draw:function(nodes,links){
+        this.nodes=nodes;
+        this.links=links;
+
         nodes[0].x=~~(visual.site.canvas.clientWidth/2)-9;
         nodes[0].y=~~(visual.site.canvas.clientHeight/2)-9;
         nodes[0].fixed=true;
@@ -106,15 +114,15 @@ visual.site={
                     if(e.index==r.index){return 1;}
                     return linked(e,r) || linkin(e,r) ? 1:0.25;
                 });
-                link.style('opacity',function(r){
+                link.classed('highlighted',function(r){
                     return r.source.index==e.index||
-                           r.target.index==e.index ? 1:0.1;
+                           r.target.index==e.index ? true:false;
                 });
             })
             .on('mouseout',function(e){
                 visual.site.tip.hide(e);
                 node.style('opacity',1);
-                link.style('opacity',1);
+                link.classed('highlighted',false);
             })
 
         visual.site.force.on('tick',function(){
@@ -143,10 +151,49 @@ visual.site={
             });
         });
     }
+  , panel:function(){
+        var dict={}
+          , mimes=new Array()
+
+        this.nodes.forEach(function(n){
+            if(!(n.mime in dict)){
+                dict[n.mime]=1;
+                mimes.push(n.mime);
+            }else{
+                dict[n.mime]++;
+            }
+        });
+
+        var legend=visual.site.legend.selectAll('.legend')
+            .data(mimes)
+            .enter().append('g')
+            .attr('class','legend')
+            .attr('transform',function(d,i){
+                return 'translate(0,'+i*20+')';});
+
+        legend.append('rect')
+            .attr('x',0)
+            .attr('width',12)
+            .attr('height',12)
+
+        legend.append("text")
+            .attr('x',20)
+            .attr('y',12)
+            .attr('class','label')
+            .text(function(d){return d;});
+
+        legend.append("text")
+            .attr('x',230)
+            .attr('y',12)
+            .attr('class','count')
+            .style('text-anchor','end')
+            .text(function(d){return dict[d];});
+    }
   , load:function(url){
         d3.json(url,function(data){
             visual.site.init();
             visual.site.draw(data.nodes,data.links);
+            visual.site.panel();
         });
     }
 };

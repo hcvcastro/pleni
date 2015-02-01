@@ -1,19 +1,38 @@
 #canvas {
+    .mime() {
+        &.m-text-html {
+            &:not(.root) {
+                fill: @color2;
+            }
+        }
+        &.m-text-css { fill: #0c73b8; }
+        &.m-application-javascript { fill: #e5a228; }
+
+        &.m-image-jpeg { fill: #32cd32; }
+        &.m-image-png { fill: #32cd32; }
+        &.m-image-gif { fill: #32cd32; }
+        &.m-image-x-icon { fill: #ff69b4; }
+    }
+
     width: 100%;
     height: 100%;
     overflow: hidden;
 
-    svg {
+    svg:nth-child(1) {
         cursor: move;
 
         line {
-            stroke: @color5;
-            stroke-width: 2px;
-            stroke-opacity: 0.35;
+            stroke-width: 1px;
+
+            &.highlighted {
+                stroke: @color2;
+            }
+            &:not(.highlighted) {
+                stroke: @color5;
+            }
         }
 
         .node {
-            fill-opacity: 0.75;
             stroke-width: 2px;
 
             &.s-2 { stroke: @success_frg; }
@@ -21,24 +40,33 @@
             &.s-4 { stroke: @error_frg; }
             &.s-5 { stroke: @error_frg; }
 
-            &.m-text-html {
-                &:not(.root) {
-                    fill: @color2;
-                }
-            }
-            &.m-text-css { fill: #0c73b8; }
-            &.m-application-javascript { fill: #e5a228; }
+            .mime();
+        }
+    }
 
-            &.m-image-jpeg { fill: #32cd32; }
-            &.m-image-png { fill: #32cd32; }
-            &.m-image-gif { fill: #32cd32; }
-            &.m-image-x-icon { fill: #ff69b4; }
+    svg:nth-child(2) {
+        position: absolute;
+        z-index: 10;
+        right: 10px;
+        top: 10px;
+        box-sizing: border-box;
+        padding: 10px 10px 20px 10px;
+        border-radius: 5px;
+        background-color: fade(@color1,50%);
+
+        text {
+            fill: @color5;
+            .font6;
+        }
+
+        rect {
+            .mime();
         }
     }
 };
 
 .tooltip {
-    background: fade(darken(@color2,25%),75%);
+    background: fade(@color1,50%);
     color: @white;
     border-radius: 5px;
     min-width: 200px;
