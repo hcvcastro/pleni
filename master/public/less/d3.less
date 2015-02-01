@@ -4,31 +4,31 @@
     overflow: hidden;
 
     svg {
+        cursor: move;
+
         line {
             stroke: @color5;
             stroke-width: 2px;
+            stroke-opacity: 0.35;
         }
 
         .node {
-            &.root {
-                fill: @success_frg;
-                stroke-width: 4px;
-            }
-            &.page {
-                fill: @color2;
-                stroke-width: 3px;
-            }
-            &.extra {
-                fill: @color3;
-                stroke-width: 2px;
-            }
+            fill-opacity: 0.75;
+            stroke-width: 2px;
 
-            &.s-200 {
-                stroke: @color4;
-            }
-            &.s-404 {
-                stroke: fade(@error_frg,50%);
-            }
+            &.s-2 { stroke: @success_frg; }
+            &.s-3 { stroke: @warning_frg; }
+            &.s-4 { stroke: @error_frg; }
+            &.s-5 { stroke: @error_frg; }
+
+            &.m-text-html { fill: @color2; }
+            &.m-text-css { fill: #0c73b8; }
+            &.m-application-javascript { fill: #e5a228; }
+
+            &.m-image-jpeg { fill: #32cd32; }
+            &.m-image-png { fill: #32cd32; }
+            &.m-image-gif { fill: #32cd32; }
+            &.m-image-x-icon { fill: #ff69b4; }
         }
     }
 };

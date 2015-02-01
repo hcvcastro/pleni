@@ -64,7 +64,7 @@ var draw=function(nodes,links){
             return [
                 'node'
               , d.type
-              , (function(status){return 's-'+status;})(d.status)
+              , (function(status){return 's-'+~~(status/100);})(d.status)
               , (function(mime){return 'm-'+mime.replace('/','-');})(d.mime)
             ].join(' ');
         })
@@ -84,7 +84,7 @@ var draw=function(nodes,links){
   });
 };
 
-d3.json('http://localhost:3000/workspace/test/site_j1/mapsite',function(data){
+d3.json('http://localhost:3000/workspace/test/site_atb/mapsite',function(data){
     draw(data.nodes,data.links);
 });
 
