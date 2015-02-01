@@ -416,6 +416,7 @@ pleni.controller('WorkspaceController',
             }
           , empty:function(){
                 $scope.storage.workspace.visual='';
+                Visual.clean();
             }
           , open:function(index){
                 $scope.storage.workspace.visual=
