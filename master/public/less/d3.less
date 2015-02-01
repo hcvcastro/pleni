@@ -21,7 +21,11 @@
             &.s-4 { stroke: @error_frg; }
             &.s-5 { stroke: @error_frg; }
 
-            &.m-text-html { fill: @color2; }
+            &.m-text-html {
+                &:not(.root) {
+                    fill: @color2;
+                }
+            }
             &.m-text-css { fill: #0c73b8; }
             &.m-application-javascript { fill: #e5a228; }
 
