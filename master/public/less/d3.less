@@ -1,10 +1,6 @@
 #canvas {
     .mime() {
-        &.m-text-html {
-            &:not(.root) {
-                fill: @color2;
-            }
-        }
+        &.m-text-html { fill: @color2; }
         &.m-text-css { fill: #0c73b8; }
         &.m-application-javascript { fill: #e5a228; }
 
@@ -47,16 +43,15 @@
     svg:nth-child(2) {
         position: absolute;
         z-index: 10;
-        right: 10px;
-        top: 10px;
+        right: 0;
+        top: 0;
         box-sizing: border-box;
-        padding: 10px 10px 20px 10px;
-        border-radius: 5px;
-        background-color: fade(@color1,50%);
+        margin: 10px;
+        padding: 10px;
 
         text {
-            fill: @color5;
-            .font6;
+            fill: @color1;
+            .font5;
         }
 
         rect {

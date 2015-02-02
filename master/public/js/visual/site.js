@@ -165,27 +165,31 @@ visual.site={
         });
 
         var legend=visual.site.legend.selectAll('.legend')
-            .data(mimes)
+            .data(mimes.sort())
             .enter().append('g')
             .attr('class','legend')
             .attr('transform',function(d,i){
-                return 'translate(0,'+i*20+')';});
+                return 'translate(0,'+i*22+')';});
 
         legend.append('rect')
             .attr('x',0)
-            .attr('width',12)
-            .attr('height',12)
+            .attr('y',0)
+            .attr('width',14)
+            .attr('height',14)
+            .attr('class',function(d){
+                return 'm-'+d.replace('/','-');
+            });
 
-        legend.append("text")
+        legend.append('text')
             .attr('x',20)
-            .attr('y',12)
-            .attr('class','label')
+            .attr('y',11)
+            .attr('width',180)
+            .attr('height',14)
             .text(function(d){return d;});
 
         legend.append("text")
             .attr('x',230)
-            .attr('y',12)
-            .attr('class','count')
+            .attr('y',11)
             .style('text-anchor','end')
             .text(function(d){return dict[d];});
     }
