@@ -39,42 +39,46 @@ module.exports=function(args){
               , nodes=new Array()
               , links=new Array()
 
-            for(var i=0;i<parse.rows.length;i++){
-                dict[parse.rows[i].key]=i;
-            }
-
-            nodes=parse.rows.map(function(node){
-                if(Object.keys(node.value).length==0){
-                    return {
-                        page:node.key
-                      , status:'unknown'
-                      , mime:'unknown'
-                      , get:false
-                      , type:'unknown'
-                    };
-                }else{
-                    node.value.rel.forEach(function(link){
-                        links.push({
-                            source:dict[node.key]
-                          , target:dict[link]
-                        })
-                    });
-                    return {
-                        page:node.key
-                      , status:node.value.status
-                      , mime:node.value.mime
-                      , get:node.value.get
-                      , type:node.value.type
-                    };
+            if(parse.rows){
+                for(var i=0;i<parse.rows.length;i++){
+                    dict[parse.rows[i].key]=i;
                 }
-            });
 
-            args.site.mapsite={
-                count:parse.total_rows
-              , nodes:nodes
-              , links:links
-            };
-            deferred.resolve(args);
+                nodes=parse.rows.map(function(node){
+                    if(!node.value||Object.keys(node.value).length==0){
+                        return {
+                            page:node.key
+                          , status:'unknown'
+                          , mime:'unknown'
+                          , get:false
+                          , type:'unknown'
+                        };
+                    }else{
+                        node.value.rel.forEach(function(link){
+                            links.push({
+                                source:dict[node.key]
+                              , target:dict[link]
+                            })
+                        });
+                        return {
+                            page:node.key
+                          , status:node.value.status
+                          , mime:node.value.mime
+                          , get:node.value.get
+                          , type:node.value.type
+                        };
+                    }
+                });
+
+                args.site.mapsite={
+                    count:parse.total_rows
+                  , nodes:nodes
+                  , links:links
+                };
+                deferred.resolve(args);
+            }else{
+                deferred.reject({error:'Not valid site repository'});
+            }
         }else{
             deferred.reject(error);
         }

@@ -40,6 +40,7 @@ pleni.controller('WorkspaceController',
                         data._repositories.map(function(repository){
                         return {
                             name:repository
+                          , loading:false
                         };
                     });
 
@@ -67,6 +68,7 @@ pleni.controller('WorkspaceController',
                 }
             }
           , close:function(){
+                Resources.projects.load();
                 $scope.workspace.env.panel='';
             }
           , icon_p:function(name){
@@ -419,9 +421,15 @@ pleni.controller('WorkspaceController',
                 Visual.clean();
             }
           , open:function(index){
-                $scope.storage.workspace.visual=
-                    $scope.storage.workspace.repositories[index].name;
-                $scope.visual.mapsite(index);
+                if($scope.storage.workspace.repositories[index]){
+                    $scope.storage.workspace.repositories[index].loading=true;
+                    $scope.storage.workspace.visual=
+                        $scope.storage.workspace.repositories[index].name;
+                    $scope.visual.mapsite(index);
+                }else{
+                    utils.show('error',
+                        'The repository does not have a valid format');
+                }
             }
         };
 
@@ -437,7 +445,9 @@ pleni.controller('WorkspaceController',
 
                 Resources.workspace.summary(project,repository,function(data){
                     $scope.storage.workspace.repositories[index].summary=data;
-                },function(error){});
+                },function(error){
+                    $scope.storage.workspace.repositories[index]=undefined;
+                });
             }
           , mapsite:function(index){
                 var project=$scope.storage.workspace.name
@@ -446,7 +456,12 @@ pleni.controller('WorkspaceController',
                 Resources.workspace.mapsite(project,repository,function(data){
                     Visual.clean();
                     Visual.render(data);
-                },function(error){});
+                    $scope.storage.workspace.repositories[index].loading=false;
+                },function(error){
+                    utils.show('error',
+                        'The repository does not have a valid mapsite');
+                    $scope.storage.workspace.repositories[index].loading=false;
+                });
             }
         };
 

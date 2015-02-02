@@ -35,11 +35,16 @@ module.exports=function(args){
     }
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
-            if(!args.site){
-                args.site={};
+            var parse=JSON.parse(response.body);
+            if(!parse.error){
+                if(!args.site){
+                    args.site={};
+                }
+                args.site.summary=parse;
+                deferred.resolve(args);
+            }else{
+                deferred.reject(response);
             }
-            args.site.summary=JSON.parse(response.body);
-            deferred.resolve(args);
         }else{
             deferred.reject(error);
         }
