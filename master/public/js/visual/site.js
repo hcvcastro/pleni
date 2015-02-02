@@ -5,8 +5,7 @@ if(!visual){
 }
 
 visual.site={
-    canvas:document.getElementById('canvas')
-  , init:function(){
+    init:function(){
         visual.site.tip=d3.tip()
             .attr('class','tooltip')
             .html(function(d){
@@ -20,6 +19,9 @@ visual.site={
                     'translate('+d3.event.translate+')'+
                     'scale('+d3.event.scale+')');
             });
+    
+        visual.site.canvas=document.getElementById('canvas');
+
         visual.site.vis=d3.select('#canvas')
             .append('svg:svg')
             .attr('width','100%')
