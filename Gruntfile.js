@@ -42,6 +42,7 @@ module.exports=function(grunt){
                   , 'master/controllers/**/*.js'
                   , 'master/utils/**/*.js'
                   , 'master/app.js'
+                  , 'planners/functions/**/*.js'
                 ]
               , tasks:[
                     'develop:master'
@@ -58,6 +59,28 @@ module.exports=function(grunt){
             }
           , jade:{
                 files:['master/views/**/*.jade']
+              , options:{livereload:reloadPort}
+            }
+/* -------- quickstarts  watching ------------------------------------------- */
+          , qs_server:{
+                files:[
+                    'quickstarts/sites/app.js'
+                ]
+              , tasks:[
+                    'develop:qs_server'
+                ]
+              , options:{livereload:reloadPort}
+            }
+          , qs_js:{
+                files:['quickstarts/sites/public/js/**/*.js']
+              , options:{livereload:reloadPort}
+            }
+          , qs_less:{
+                files:['quickstarts/sites/public/less/*.less']
+              , options:{livereload:reloadPort}
+            }
+          , qs_jade:{
+                files:['quickstarts/sites/views/**/*.jade']
               , options:{livereload:reloadPort}
             }
 /* -------- testing watching ------------------------------------------------ */
@@ -109,6 +132,12 @@ module.exports=function(grunt){
             }
           , master:{
                 file:'master/app.js'
+            }
+          , qs_server:{
+                file:'quickstarts/sites/app.js'
+              , env:{
+                    PORT:grunt.option('port')||3003
+                }
             }
         }
 
@@ -190,6 +219,10 @@ module.exports=function(grunt){
     ]);
     grunt.registerTask('serve:master',[
         'develop:master'
+      , 'watch'
+    ]);
+    grunt.registerTask('serve:qs:sites',[
+        'develop:qs_server'
       , 'watch'
     ]);
 };
