@@ -22,7 +22,7 @@ app.use(bodyparser.json());
 
 app.use(lessmiddleware('/less',{
     dest:'/css'
-  , pathRoot:join(__dirname,'public')
+  , pathRoot:join(__dirname,'..','..','master','public')
   , compress:true
 }));
 

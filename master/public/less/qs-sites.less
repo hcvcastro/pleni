@@ -1,0 +1,80 @@
+@color1: #100c17;
+@color2: #658068;
+@color3: #b5c9ab;
+@color4: #aec1b9;
+@color5: #d9ddd9;
+
+@white: #ffffff;
+
+@error_frg: #D8000C;
+@error_bck: #FFBABA;
+@info_frg: #00529B;
+@info_bck: #BDE5F8;
+@success_frg: #4F8A10;
+@success_bck: #DFF2BF;
+@warning_frg: #9F6000;
+@warning_bck: #FEEFB3;
+
+@import 'reset';
+@import 'base';
+
+#content {
+    width: 100vw;
+    height: 100vh;
+    background-color: @color4;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+
+.flex-item:nth-child(1) {
+-webkit-box-ordinal-group: 1;
+-moz-box-ordinal-group: 1;
+-webkit-order: 0;
+-ms-flex-order: 0;
+order: 0;
+-webkit-box-flex: 0;
+-moz-box-flex: 0;
+-webkit-flex: 0 1 auto;
+-ms-flex: 0 1 auto;
+flex: 0 1 auto;
+-webkit-align-self: auto;
+-ms-flex-item-align: auto;
+align-self: auto;
+}
+
+/*
+Legacy Firefox implementation treats all flex containers
+as inline-block elements.
+*/
+
+@-moz-document url-prefix() {
+.flex-container {
+width: 100%;
+-moz-box-sizing: border-box;
+}
+
+}
+
+/*.main {
+    background-color: @color3;
+    height: 20vh;
+    width: 33vw;
+
+    .central {
+        form {
+            input[type='text'] {
+                .font2;
+            }
+            input[type='submit'] {
+                .font2;
+            }
+        }
+    }
+}*/
+
