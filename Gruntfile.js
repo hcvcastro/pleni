@@ -75,10 +75,6 @@ module.exports=function(grunt){
                 files:['quickstarts/sites/public/js/**/*.js']
               , options:{livereload:reloadPort}
             }
-          , qs_less:{
-                files:['quickstarts/sites/public/less/*.less']
-              , options:{livereload:reloadPort}
-            }
           , qs_jade:{
                 files:['quickstarts/sites/views/**/*.jade']
               , options:{livereload:reloadPort}
