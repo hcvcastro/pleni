@@ -49,7 +49,7 @@ module.exports=function(args){
                     'map':'function(doc){if(doc.type&&doc.type==\'page\'){'
                          +'if(doc.status==\'complete\'){'
                          +'var m=doc.head.headers[\'content-type\']'
-                         +'.match(/[a-z]+\/[a-z-]+/i)[0];'
+                         +'.match(/[a-z]+\\/[a-z-]+/i)[0];'
                          +'emit(doc._id.substring(5),{status:doc.head.status'
                          +',mime:m,get:doc.head.get,type:(function(x,y){'
                          +'if(x==\'page_/\'){return \'root\';}else{'
