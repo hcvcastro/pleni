@@ -8,13 +8,18 @@ pleni.controller('SitesController',['$scope','$http',function($scope,$http){
         utils.clean();
         if($scope.url!=''){
             $http.put('/sites',{site:$scope.url}).success(function(data){
-                console.log('asdf');
+                $('footer').fadeOut('slow',function(){
+                    $('.main').fadeOut('slow',function(){
+                        $('#content').removeClass('blocked');
+                        $(this).remove();
+                    });
+                    $(this).remove();
+                });
             }).error(function(error){
                 utils.show('error','The url is not a valid host');
             });
         }
     }
-    
 }]);
 
 var utils={

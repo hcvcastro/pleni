@@ -26,7 +26,6 @@ body {
 #content {
     width: 100vw;
     height: 100vh;
-    background-color: fade(@color2,50%);
 
     display: flex;
     flex-direction: column;
@@ -34,6 +33,11 @@ body {
     justify-content: center;
     align-content: center;
     align-items: center;
+    transition: 2s linear 0s;
+
+    &.blocked {
+        background-color: fade(@color2,50%);
+    }
 }
 
 @keyframes rotate {
