@@ -9,5 +9,15 @@
           , "prefix":"pleni_"
         }
     }
+  , {
+        "id":"hiperborea"
+      , "db":{
+            "host":"http://hiperborea.com.bo"
+          , "port":5984
+          , "user":"jacobian"
+          , "pass":"asdf"
+          , "prefix":"pleni_"
+        }
+    }
 ]
 
