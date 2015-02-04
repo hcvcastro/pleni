@@ -1,9 +1,10 @@
+.messages
 #canvas
 section.main
     .logo
     .central
-        form
-            input(type='text',placeholder='Enter the url for fetching')
+        form(ng-submit='send()')
+            input(type='text',placeholder='Enter the url for viewing',ng-model='url')
             button(type='submit')
                 i.fa.fa-cloud-download
     .clearfix

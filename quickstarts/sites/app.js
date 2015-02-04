@@ -10,6 +10,9 @@ var http=require('http')
   , server=http.Server(app)
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
+  , validate=require('../../planners/utils/validators')
+  , _success=require('../../planners/utils/json-response').success
+  , _error=require('../../planners/utils/json-response').error
   , notifier=new Array()
 
 // async methods
@@ -36,6 +39,14 @@ app.get('/',function(request,response){
 });
 app.get('/sites',function(request,response){
     response.render('pages/sites');
+});
+app.put('/sites',function(request,response){
+    var site=validate.toString(request.body.site)
+    if(validate.validHost(site)){
+        response.status(200).json(_success.ok);
+    }else{
+        response.status(403).json(_error.json);
+    }
 });
 
 app.use(function(request,response){
