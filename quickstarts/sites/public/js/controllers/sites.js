@@ -1,6 +1,13 @@
 'use strict';
 
-pleni.controller('SitesController',['$scope','$http',function($scope,$http){
+pleni.controller('SitesController',
+    ['$scope','$sessionStorage','$http','Socket',
+    function($scope,$sessionStorage,$http,Socket){
+        $scope.storage=$sessionStorage;
+        $scope.thread=undefined;
+
+        $scope.message='';
+
     $('input[type=\'text\']').focus();
 
     $scope.url='';
@@ -20,6 +27,14 @@ pleni.controller('SitesController',['$scope','$http',function($scope,$http){
             });
         }
     }
+
+    Socket.on('notifier',function(pkg){
+        switch(pkg.action){
+            default:
+                console.log(pkg);
+        }
+    });
+
 }]);
 
 var utils={

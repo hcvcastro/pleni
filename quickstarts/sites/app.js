@@ -13,7 +13,18 @@ var http=require('http')
   , validate=require('../../planners/utils/validators')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
+  , planners=require('./planners')
   , notifier=new Array()
+  , planner={
+        host:'http://localhost'
+      , port:3001
+    }
+  , db={
+        host:'http://localhost:5984'
+      , user:'jacobian'
+      , pass:'asdf'
+      , name:'pleni_site_qs_1'
+    }
 
 // async methods
 app.set('port',process.env.PORT||3003);
@@ -43,6 +54,7 @@ app.get('/sites',function(request,response){
 app.put('/sites',function(request,response){
     var site=validate.toString(request.body.site)
     if(validate.validHost(site)){
+        planners.create(planner,db,site);
         response.status(200).json(_success.ok);
     }else{
         response.status(403).json(_error.json);
