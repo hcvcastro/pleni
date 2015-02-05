@@ -31,11 +31,11 @@ exports.create=function(planner,db,url,success,fail){
     .fail(fail)
     .done(function(args){
         tid=args.planner.tid;
-        success();
+        success(args);
     });
 };
 
-exports.fetch=function(planner,db,success,fail){
+exports.fetch=function(planner,db,agent,success,fail){
     var pkg={
         planner:{
             host:planner.host+':'+planner.port
@@ -45,7 +45,7 @@ exports.fetch=function(planner,db,success,fail){
             db:db
           , headers:[{
                 name:'User-Agent'
-              , value:''
+              , value:agent
             }]
         }
       , task:{

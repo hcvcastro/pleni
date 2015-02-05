@@ -14,7 +14,6 @@ var http=require('http')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
   , planners=require('./planners')
-  , notifier=new Array()
   , planner={
         host:'http://localhost'
       , port:3001
@@ -25,6 +24,9 @@ var http=require('http')
       , pass:'asdf'
       , name:'pleni_site_qs_1'
     }
+  , socket=undefined
+  , site=''
+  , agent=''
 
 // async methods
 app.set('port',process.env.PORT||3003);
@@ -52,9 +54,17 @@ app.get('/sites',function(request,response){
     response.render('pages/sites');
 });
 app.put('/sites',function(request,response){
-    var site=validate.toString(request.body.site)
+    site=validate.toString(request.body.site);
+    agent=validate.toString(request.body.agent);
+
     if(validate.validHost(site)){
-        planners.create(planner,db,site);
+        planners.create(planner,db,site,function(args){
+        },function(error){
+            ios.emit('notifier',{
+                action:'error'
+              , msg:error
+            });
+        });
         response.status(200).json(_success.ok);
     }else{
         response.status(403).json(_error.json);
@@ -68,10 +78,27 @@ app.use(function(request,response){
     });
 });
 
-ios.sockets.on('connection',function(socket){
-    socket.emit('notifier',{
-        action:'connection'
-    });
+socket=ioc.connect(planner.host+':'+planner.port,{reconnect:true})
+socket.on('notifier',function(msg){
+    if(msg.action=='task'){
+        if(msg.task.id=='site/create'){
+            planners.fetch(planner,db,agent,function(args){
+            },function(error){
+                ios.emit('notifier',{
+                    action:'error'
+                  , msg:error
+                });
+            });
+            ios.emit('notifier',{
+                action:'ready'
+              , msg:{}
+            });
+        }
+
+        if(msg.task.id=='site/fetch'){
+            ios.emit('notifier',msg);
+        }
+    }
 });
 
 server.listen(app.get('port'),function(){
