@@ -25,12 +25,20 @@ var visual={
             .attr('height','100%')
             .attr('pointer-events','all')
             .call(visual.zoom)
-            .append('svg:g')
             .call(visual.tip);
+
+        visual.vlinks=visual.vis
+            .append('svg:g')
+                .attr('class','links');
+
+        visual.vnodes=visual.vis
+            .append('svg:g')
+                .attr('class','nodes');
 
         visual.lateral=d3.select('#canvas')
             .append('svg:svg')
-            .attr('width','250px')
+            .attr('width','250px');
+
         visual.legend=visual.lateral.append('svg:g');
 
         visual.link;
@@ -65,12 +73,6 @@ var visual={
             .attr('y2',function(d){
                 return d.target.y;
             });
-        visual.node.attr('cx',function(d){
-                return d.x;
-            })
-            .attr('cy',function(d){
-                return d.y;
-            });
         visual.node.call(function(){
             this.attr('transform',function(d){
                 return 'translate('+d.x+','+d.y+')';
@@ -99,68 +101,71 @@ var visual={
         return (e.index+'_'+r.index) in visual.adjacency2;
     }
   , draw:function(){
-        visual.force
-            .nodes(visual.nodes)
-            .links(visual.links)
-            .start();
-
-        visual.link=visual.vis.selectAll('line.link')
-            .data(visual.links);
+        visual.link=visual.vis.select('.links').selectAll('line')
+            .data(visual.links,function(d,i){
+                return i;
+            });
+        visual.node=visual.vis.select('.nodes').selectAll('circle')
+            .data(visual.nodes,function(d,i){
+                return i;
+            });
 
         visual.link
             .enter()
-            .append('svg:line');
+            .append('line')
+            .attr('class','link')
         visual.link
             .exit()
             .remove();
 
-        visual.node=visual.vis.selectAll('g.node')
-            .data(visual.nodes)
-
         visual.node
             .enter()
-            .append('svg:g')
+            .append('circle')
+                .attr('r',function(d){
+                    switch(d.type){
+                        case 'root':
+                            return 18;
+                        case 'page':
+                            return 12;
+                        default:
+                            return 6;
+                    }
+                })
+                .attr('class',function(d){
+                    return [
+                        'node'
+                      , d.type
+                      , (function(status){return 's-'+~~(status/100);})(d.status)
+                      , (function(mime){return 'm-'+mime.replace('/','-');})(d.mime)
+                    ].join(' ');
+                })
+                .on('dblclick',function(d){
+                    d3.select(this).classed('fixed',d.fixed=false);
+                })
+                .on('mouseover',function(e){
+                    visual.tip.show(e);
+                    visual.link.classed('highlighted1',function(r){
+                        return r.source.index==e.index ? true:false;
+                    });
+                    visual.link.classed('highlighted2',function(r){
+                        return r.target.index==e.index ? true:false;
+                    });
+                })
+                .on('mouseout',function(e){
+                    visual.tip.hide(e);
+                    visual.node.style('opacity',1);
+                    visual.link.classed('highlighted1',false);
+                    visual.link.classed('highlighted2',false);
+                })
             .call(visual.drag);
+        visual.node
+            .exit()
+            .remove();
 
-        visual.node.append('svg:circle')
-            .attr('r',function(d){
-                switch(d.type){
-                    case 'root':
-                        return 18;
-                    case 'page':
-                        return 12;
-                    default:
-                        return 6;
-                }
-            })
-            .attr('class',function(d){
-                return [
-                    'node'
-                  , d.type
-                  , (function(status){return 's-'+~~(status/100);})(d.status)
-                  , (function(mime){return 'm-'+mime.replace('/','-');})(d.mime)
-                ].join(' ');
-            })
-            .on('dblclick',function(d){
-                d3.select(this).classed('fixed',d.fixed=false);
-            })
-            .on('mouseover',function(e){
-                visual.tip.show(e);
-                visual.link.classed('highlighted1',function(r){
-                    return r.source.index==e.index ? true:false;
-                });
-                visual.link.classed('highlighted2',function(r){
-                    return r.target.index==e.index ? true:false;
-                });
-            })
-            .on('mouseout',function(e){
-                visual.tip.hide(e);
-                visual.node.style('opacity',1);
-                visual.link.classed('highlighted1',false);
-                visual.link.classed('highlighted2',false);
-            })
-
-        visual.node.exit().remove();
+        visual.force
+            .nodes(visual.nodes)
+            .links(visual.links)
+            .start();
     }
   , panel:function(){
         var dict={}
@@ -204,7 +209,7 @@ var visual={
             .style('text-anchor','end')
             .text(function(d){return dict[d];});
 
-        visual.lateral.attr('height',(mimes.length*22+2)+'px');
+        visual.lateral.attr('height',(mimes.length*22+4)+'px');
     }
   , load:function(url){
         d3.json(url,function(data){
@@ -215,7 +220,14 @@ var visual={
         });
     }
   , add:function(){
-        visual.nodes.push({page:'/vlm/node',status:200,mime:"application/pdf",get:0,type:"extra"});
+        visual.nodes.push({
+            page:'/vlm/node'
+          , status:200,mime:'application/pdf',get:0,type:'extra'
+        });
+        visual.links.push({
+            source:0,target:11
+        });
+        visual.draw();
     }
 };
 
