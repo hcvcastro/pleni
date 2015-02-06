@@ -1,12 +1,8 @@
 'use strict';
 
-if(!visual){
-    var visual={};
-}
-
-visual.site={
+var visual={
     init:function(){
-        visual.site.tip=d3.tip()
+        visual.tip=d3.tip()
             .attr('class','tooltip')
             .html(function(d){
                 return '<div class="title">'+d.page+'</div>'+
@@ -14,81 +10,119 @@ visual.site={
                     '<div class="subtle">'+d.mime+'</div>';
             })
             .direction('n');
-        visual.site.zoom=d3.behavior.zoom().on('zoom',function(){
-                visual.site.vis.attr('transform',
+
+        visual.zoom=d3.behavior.zoom().on('zoom',function(){
+                visual.vis.attr('transform',
                     'translate('+d3.event.translate+')'+
                     'scale('+d3.event.scale+')');
             });
     
-        visual.site.canvas=document.getElementById('canvas');
+        visual.canvas=document.getElementById('canvas');
 
-        visual.site.vis=d3.select('#canvas')
+        visual.vis=d3.select('#canvas')
             .append('svg:svg')
             .attr('width','100%')
             .attr('height','100%')
             .attr('pointer-events','all')
-            .call(visual.site.zoom)
+            .call(visual.zoom)
             .append('svg:g')
-            .call(visual.site.tip);
+            .call(visual.tip);
 
-        visual.site.legend=d3.select('#canvas')
+        visual.lateral=d3.select('#canvas')
             .append('svg:svg')
             .attr('width','250px')
-            .append('svg:g')
-    }
-  , draw:function(nodes,links){
-        this.nodes=nodes;
-        this.links=links;
+        visual.legend=visual.lateral.append('svg:g');
 
-        nodes[0].x=~~(visual.site.canvas.clientWidth/2)-9;
-        nodes[0].y=~~(visual.site.canvas.clientHeight/2)-9;
-        nodes[0].fixed=true;
-
-        visual.site.force=d3.layout.force()
+        visual.link;
+        visual.node;
+        visual.force=d3.layout.force()
             .size([
-                visual.site.canvas.clientWidth,
-                visual.site.canvas.clientHeight])
-            .nodes(nodes)
-            .links(links)
+                visual.canvas.clientWidth,
+                visual.canvas.clientHeight])
             .linkDistance(200)
             .linkStrength(1)
             .friction(0.5)
             .charge(-2000)
             .gravity(0.1)
-            .start();
+            .on('tick',visual.tick);
 
-        var adjacency1={}
-          , adjacency2={}
-          , linked=function(e,r){
-                return (e.index+'_'+r.index) in adjacency1;
-            }
-          , linkin=function(e,r){
-                return (e.index+'_'+r.index) in adjacency2;
-            }
-
-        links.forEach(function(d){
-            adjacency1[d.source.index+'_'+d.target.index]=true;
-            adjacency2[d.target.index+'_'+d.source.index]=true;
-        });
-
-        var link=visual.site.vis.selectAll('line.link')
-            .data(links)
-            .enter()
-                .append('svg:line');
-
-        var drag=visual.site.force.drag()
+        visual.drag=visual.force.drag()
             .on('dragstart',function(d){
                 d3.event.sourceEvent.stopPropagation();
                 d3.select(this).classed('fixed',d.fixed=true);
             });
+    }
+  , tick:function(){
+        visual.link.attr('x1',function(d){
+                return d.source.x;
+            })
+            .attr('y1',function(d){
+                return d.source.y;
+            })
+            .attr('x2',function(d){
+                return d.target.x;
+            })
+            .attr('y2',function(d){
+                return d.target.y;
+            });
+        visual.node.attr('cx',function(d){
+                return d.x;
+            })
+            .attr('cy',function(d){
+                return d.y;
+            });
+        visual.node.call(function(){
+            this.attr('transform',function(d){
+                return 'translate('+d.x+','+d.y+')';
+            });
+        });
+    }
+  , set:function(nodes,links){
+        visual.nodes=nodes;
+        visual.links=links;
 
-        var node=visual.site.vis.selectAll('g.node')
-            .data(nodes)
+        nodes[0].x=~~(visual.canvas.clientWidth/2)-9;
+        nodes[0].y=~~(visual.canvas.clientHeight/2)-9;
+        nodes[0].fixed=true;
+
+        visual.adjacency1={}
+        visual.adjacency2={}
+        visual.links.forEach(function(d){
+            visual.adjacency1[d.source.index+'_'+d.target.index]=true;
+            visual.adjacency2[d.target.index+'_'+d.source.index]=true;
+        });
+    }
+  , linked:function(e,r){
+        return (e.index+'_'+r.index) in visual.adjacency1;
+    }
+  , linkin:function(e,r){
+        return (e.index+'_'+r.index) in visual.adjacency2;
+    }
+  , draw:function(){
+        visual.force
+            .nodes(visual.nodes)
+            .links(visual.links)
+            .start();
+
+        visual.link=visual.vis.selectAll('line.link')
+            .data(visual.links);
+
+        visual.link
+            .enter()
+            .append('svg:line');
+        visual.link
+            .exit()
+            .remove();
+
+        visual.node=visual.vis.selectAll('g.node')
+            .data(visual.nodes)
+
+        visual.node
             .enter()
             .append('svg:g')
-            .call(drag);
+            .call(visual.drag);
 
-        node.append('svg:circle')
+        visual.node.append('svg:circle')
             .attr('r',function(d){
                 switch(d.type){
                     case 'root':
@@ -111,53 +145,28 @@ visual.site={
                 d3.select(this).classed('fixed',d.fixed=false);
             })
             .on('mouseover',function(e){
-                visual.site.tip.show(e);
-                node.style('opacity',function(r){
-                    if(e.index==r.index){return 1;}
-                    return linked(e,r) || linkin(e,r) ? 1:0.25;
+                visual.tip.show(e);
+                visual.link.classed('highlighted1',function(r){
+                    return r.source.index==e.index ? true:false;
                 });
-                link.classed('highlighted',function(r){
-                    return r.source.index==e.index||
-                           r.target.index==e.index ? true:false;
+                visual.link.classed('highlighted2',function(r){
+                    return r.target.index==e.index ? true:false;
                 });
             })
             .on('mouseout',function(e){
-                visual.site.tip.hide(e);
-                node.style('opacity',1);
-                link.classed('highlighted',false);
+                visual.tip.hide(e);
+                visual.node.style('opacity',1);
+                visual.link.classed('highlighted1',false);
+                visual.link.classed('highlighted2',false);
             })
 
-        visual.site.force.on('tick',function(){
-            link.attr('x1',function(d){
-                    return d.source.x;
-                })
-                .attr('y1',function(d){
-                    return d.source.y;
-                })
-                .attr('x2',function(d){
-                    return d.target.x;
-                })
-                .attr('y2',function(d){
-                    return d.target.y;
-                });
-            node.attr('cx',function(d){
-                    return d.x;
-                })
-                .attr('cy',function(d){
-                    return d.y;
-                });
-            node.call(function(){
-                this.attr('transform',function(d){
-                    return 'translate('+d.x+','+d.y+')';
-                });
-            });
-        });
+        visual.node.exit().remove();
     }
   , panel:function(){
         var dict={}
           , mimes=new Array()
 
-        this.nodes.forEach(function(n){
+        visual.nodes.forEach(function(n){
             if(!(n.mime in dict)){
                 dict[n.mime]=1;
                 mimes.push(n.mime);
@@ -166,14 +175,14 @@ visual.site={
             }
         });
 
-        var legend=visual.site.legend.selectAll('.legend')
+        visual.legend=visual.legend.selectAll('.legend')
             .data(mimes.sort())
             .enter().append('g')
             .attr('class','legend')
             .attr('transform',function(d,i){
                 return 'translate(0,'+i*22+')';});
 
-        legend.append('rect')
+        visual.legend.append('rect')
             .attr('x',0)
             .attr('y',0)
             .attr('width',14)
@@ -182,25 +191,31 @@ visual.site={
                 return 'm-'+d.replace('/','-');
             });
 
-        legend.append('text')
+        visual.legend.append('text')
             .attr('x',20)
             .attr('y',11)
             .attr('width',180)
             .attr('height',14)
             .text(function(d){return d;});
 
-        legend.append("text")
+        visual.legend.append("text")
             .attr('x',230)
             .attr('y',11)
             .style('text-anchor','end')
             .text(function(d){return dict[d];});
+
+        visual.lateral.attr('height',(mimes.length*22+2)+'px');
     }
   , load:function(url){
         d3.json(url,function(data){
-            visual.site.init();
-            visual.site.draw(data.nodes,data.links);
-            visual.site.panel();
+            visual.init();
+            visual.set(data.nodes,data.links)
+            visual.draw();
+            visual.panel();
         });
+    }
+  , add:function(){
+        visual.nodes.push({page:'/vlm/node',status:200,mime:"application/pdf",get:0,type:"extra"});
     }
 };
 

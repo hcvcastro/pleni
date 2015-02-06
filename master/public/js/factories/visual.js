@@ -7,7 +7,8 @@ pleni.factory('Visual',[function(){
         }
       , render:function(data){
             visual.site.init();
-            visual.site.draw(data.nodes,data.links);
+            visual.site.set(data.nodes,data.links);
+            visual.site.draw();
             visual.site.panel();
         }
     };
