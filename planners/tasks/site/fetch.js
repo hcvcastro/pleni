@@ -69,9 +69,11 @@ module.exports=function(params,repeat,stop,notifier){
     .then(spread)
     .then(function(args){
         if(args.task.complete){
-            var url=args.task.wait.id.substr(5)
+            var url=args.task.complete.id.substr(5)
               , spread=args.task.spread
               , count=0
+              , m=args.task.head.headers['content-type']
+                                .match(/[a-z]+\/[a-z-]+/i)[0]
 
             if(spread){
                 count=spread.length
@@ -81,7 +83,32 @@ module.exports=function(params,repeat,stop,notifier){
                 action:'task'
               , task:{
                     id:'site/fetch'
-                  , msg:url+' -> '+count
+                  , msg:{
+                        node:{
+                            page:url
+                          , status:args.task.head.status
+                          , mime:m
+                          , get:args.task.head.get
+                          , type:(function(x,y){
+                                if(x=='/'){
+                                    return 'root';
+                                }else{
+                                    if(y.indexOf('text/html')==0){
+                                        return 'page';
+                                    }else{
+                                        return 'extra';
+                                    }
+                                }
+                            })(url,m)
+                          , rel:(function(x){
+                                if(x.ref&&x.ref.related){
+                                    return x.ref.related;
+                                }else{
+                                    return [];
+                                }
+                            })(args.task)
+                        }
+                    }
                 }
             });
         }

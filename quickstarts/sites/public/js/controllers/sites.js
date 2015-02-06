@@ -1,12 +1,23 @@
 'use strict';
 
 pleni.controller('SitesController',
-    ['$scope','$sessionStorage','$http','Socket',
-    function($scope,$sessionStorage,$http,Socket){
+    ['$scope','$sessionStorage','$http','Socket','Visual',
+    function($scope,$sessionStorage,$http,Socket,Visual){
         $scope.storage=$sessionStorage;
         $scope.thread=undefined;
 
         $scope.message='';
+        $scope.data={
+            count:1
+          , nodes:[{
+                page:'/'
+              , status:'unknown'
+              , mime:'unknown'
+              , get:false
+              , type:'unknown'
+            }]
+          , links:[]
+        };
 
     $('input[type=\'text\']').focus();
 
@@ -21,6 +32,7 @@ pleni.controller('SitesController',
                         $(this).remove();
                     });
                     $(this).remove();
+                    $('#content').empty().append('<div id="canvas"></div>');
                 });
             }).error(function(error){
                 utils.show('error','The url is not a valid host');
@@ -30,8 +42,26 @@ pleni.controller('SitesController',
 
     Socket.on('notifier',function(pkg){
         switch(pkg.action){
-            default:
-                console.log(pkg);
+            case 'ready':
+                Visual.render($scope.data);
+                break;
+            case 'task':
+                if(pkg.task.id=='site/fetch'){
+                    if(pkg.task.msg.node){
+                        console.log('node added');
+                        $scope.data.count++;
+                        $scope.data.nodes.push({
+                            page:pkg.task.msg.node.page
+                          , status:pkg.task.msg.node.status
+                          , mime:pkg.task.msg.node.mime
+                          , get:pkg.task.msg.node.get
+                          , tpye:pkg.task.msg.node.type
+                        });
+                    }else if(pkg.task.msg=='completed'){
+                        
+                    }
+                }
+                break;
         }
     });
 

@@ -30,8 +30,10 @@ exports.create=function(planner,db,url,success,fail){
     .then(run)
     .fail(fail)
     .done(function(args){
-        tid=args.planner.tid;
-        success(args);
+        if(args&&args.planner&&args.planner.tid){
+            tid=args.planner.tid;
+            success(args);
+        }
     });
 };
 

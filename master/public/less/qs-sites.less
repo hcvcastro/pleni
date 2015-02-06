@@ -17,6 +17,7 @@
 
 @import 'reset';
 @import 'base';
+@import 'd3';
 
 body {
     background-color: #ffffff;
@@ -38,6 +39,11 @@ body {
     &.blocked {
         background-color: fade(@color2,50%);
     }
+}
+
+#canvas {
+    top: 0;
+    left: 0;
 }
 
 @keyframes rotate {

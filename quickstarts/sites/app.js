@@ -13,17 +13,10 @@ var http=require('http')
   , validate=require('../../planners/utils/validators')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
+  , generator=require('../../planners/functions/utils/random').sync
   , planners=require('./planners')
-  , planner={
-        host:'http://localhost'
-      , port:3001
-    }
-  , db={
-        host:'http://localhost:5984'
-      , user:'jacobian'
-      , pass:'asdf'
-      , name:'pleni_site_qs_1'
-    }
+  , planner={}
+  , db={}
   , socket=undefined
   , site=''
   , agent=''
@@ -48,6 +41,39 @@ app.use(express.static(join(__dirname,'..','..','bower_components')));
 app.locals.pretty=true;
 
 app.get('/',function(request,response){
+    planner={
+        host:'http://localhost'
+      , port:3001
+    }
+  , db={
+        host:'http://localhost:5984'
+      , user:'jacobian'
+      , pass:'asdf'
+      , name:'pleni_site_qs_'+generator()
+    }
+  , socket=ioc.connect(planner.host+':'+planner.port,{reconnect:true})
+    socket.on('notifier',function(msg){
+        if(msg.action=='task'){
+            if(msg.task.id=='site/create'){
+                planners.fetch(planner,db,agent,function(args){
+                },function(error){
+                    ios.emit('notifier',{
+                        action:'error'
+                      , msg:error
+                    });
+                });
+                ios.emit('notifier',{
+                    action:'ready'
+                  , msg:{}
+                });
+            }
+
+            if(msg.task.id=='site/fetch'){
+                ios.emit('notifier',msg);
+            }
+        }
+    });
+
     response.render('index');
 });
 app.get('/sites',function(request,response){
@@ -76,29 +102,6 @@ app.use(function(request,response){
         title:'404',
         message:'I\'m so sorry, but file not found!!'
     });
-});
-
-socket=ioc.connect(planner.host+':'+planner.port,{reconnect:true})
-socket.on('notifier',function(msg){
-    if(msg.action=='task'){
-        if(msg.task.id=='site/create'){
-            planners.fetch(planner,db,agent,function(args){
-            },function(error){
-                ios.emit('notifier',{
-                    action:'error'
-                  , msg:error
-                });
-            });
-            ios.emit('notifier',{
-                action:'ready'
-              , msg:{}
-            });
-        }
-
-        if(msg.task.id=='site/fetch'){
-            ios.emit('notifier',msg);
-        }
-    }
 });
 
 server.listen(app.get('port'),function(){
