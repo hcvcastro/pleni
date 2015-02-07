@@ -5,19 +5,7 @@ pleni.controller('SitesController',
     function($scope,$sessionStorage,$http,Socket,Visual){
         $scope.storage=$sessionStorage;
         $scope.thread=undefined;
-
         $scope.message='';
-        $scope.data={
-            count:1
-          , nodes:[{
-                page:'/'
-              , status:'unknown'
-              , mime:'unknown'
-              , get:false
-              , type:'unknown'
-            }]
-          , links:[]
-        };
 
     $('input[type=\'text\']').focus();
 
@@ -43,20 +31,18 @@ pleni.controller('SitesController',
     Socket.on('notifier',function(pkg){
         switch(pkg.action){
             case 'ready':
-                Visual.render($scope.data);
+                Visual.render();
                 break;
             case 'task':
                 if(pkg.task.id=='site/fetch'){
                     if(pkg.task.msg.node){
-                        console.log('node added');
-                        $scope.data.count++;
-                        $scope.data.nodes.push({
+                        Visual.add({
                             page:pkg.task.msg.node.page
                           , status:pkg.task.msg.node.status
                           , mime:pkg.task.msg.node.mime
                           , get:pkg.task.msg.node.get
                           , tpye:pkg.task.msg.node.type
-                        });
+                        },pkg.task.msg.node.rel);
                     }else if(pkg.task.msg=='completed'){
                         
                     }

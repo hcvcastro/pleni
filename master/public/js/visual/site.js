@@ -10,12 +10,6 @@ var visual={
                     '<div class="subtle">'+d.mime+'</div>';
             })
             .direction('n');
-
-        visual.zoom=d3.behavior.zoom().on('zoom',function(){
-                visual.vis.attr('transform',
-                    'translate('+d3.event.translate+')'+
-                    'scale('+d3.event.scale+')');
-            });
     
         visual.canvas=document.getElementById('canvas');
 
@@ -23,9 +17,22 @@ var visual={
             .append('svg:svg')
             .attr('width','100%')
             .attr('height','100%')
+            .attr('preserveAspectRatio','xMidYMid meet')
             .attr('pointer-events','all')
-            .call(visual.zoom)
+            .call(d3.behavior.zoom().on('zoom',function(){
+                visual.vlinks.attr('transform',
+                    'translate('+d3.event.translate+')'+
+                    'scale('+d3.event.scale+')');
+                visual.vnodes.attr('transform',
+                    'translate('+d3.event.translate+')'+
+                    'scale('+d3.event.scale+')');
+            }))
             .call(visual.tip);
+
+        d3.select('#canvas')
+            .on('keyup',function(d){
+                console.log('keypress',d);
+            });
 
         visual.vlinks=visual.vis
             .append('svg:g')
@@ -79,7 +86,8 @@ var visual={
             });
         });
     }
-  , set:function(nodes,links){
+  , set:function(count,nodes,links){
+        visual.count=count;
         visual.nodes=nodes;
         visual.links=links;
 
@@ -93,6 +101,20 @@ var visual={
             visual.adjacency1[d.source.index+'_'+d.target.index]=true;
             visual.adjacency2[d.target.index+'_'+d.source.index]=true;
         });
+
+        visual.hash1={};
+        visual.hash2={};
+        visual.mimes=new Array();
+
+        for(var i=0;i<nodes.length;i++){
+            visual.hash1[nodes[i].page]=i;
+            if(!(nodes[i].mime in visual.hash2)){
+                visual.hash2[nodes[i].mime]=1;
+                visual.mimes.push(nodes[i].mime);
+            }else{
+                visual.hash2[nodes[i].mime]++;
+            }
+        };
     }
   , linked:function(e,r){
         return (e.index+'_'+r.index) in visual.adjacency1;
@@ -168,20 +190,8 @@ var visual={
             .start();
     }
   , panel:function(){
-        var dict={}
-          , mimes=new Array()
-
-        visual.nodes.forEach(function(n){
-            if(!(n.mime in dict)){
-                dict[n.mime]=1;
-                mimes.push(n.mime);
-            }else{
-                dict[n.mime]++;
-            }
-        });
-
         visual.legend=visual.legend.selectAll('.legend')
-            .data(mimes.sort())
+            .data(visual.mimes.sort())
             .enter().append('g')
             .attr('class','legend')
             .attr('transform',function(d,i){
@@ -207,27 +217,17 @@ var visual={
             .attr('x',230)
             .attr('y',11)
             .style('text-anchor','end')
-            .text(function(d){return dict[d];});
+            .text(function(d){return visual.hash2[d];});
 
-        visual.lateral.attr('height',(mimes.length*22+4)+'px');
+        visual.lateral.attr('height',(visual.mimes.length*22+4)+'px');
     }
   , load:function(url){
         d3.json(url,function(data){
             visual.init();
-            visual.set(data.nodes,data.links)
+            visual.set(data.count,data.nodes,data.links);
             visual.draw();
             visual.panel();
         });
-    }
-  , add:function(){
-        visual.nodes.push({
-            page:'/vlm/node'
-          , status:200,mime:'application/pdf',get:0,type:'extra'
-        });
-        visual.links.push({
-            source:0,target:11
-        });
-        visual.draw();
     }
 };
 
