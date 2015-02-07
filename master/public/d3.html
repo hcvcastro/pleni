@@ -21,7 +21,63 @@
         <script src='/js/visual/site.js'></script>
         <script src='http://localhost:35729/livereload.js'></script>
         <script>
-            visual.load('http://localhost:3000/workspace/test/site_qs_1/mapsite');
+            var empty={
+                    page:'/'
+                  , status:'unknown'
+                  , mime:'unknown'
+                  , get:false
+                  , type:'unknown'
+                }
+              , force={
+                    count:1
+                  , nodes:[empty]
+                  , links:[]
+                }
+             , data=force
+
+            visual.init();
+            visual.set(data.count,data.nodes,data.links);
+            visual.draw();
+            visual.panel();
+
+            var count=0;
+            var map=[{
+                node:{
+                    page:'/'
+                  , status:200
+                  , mime:'text/html'
+                  , get:true
+                  , type:'root'
+                }
+              , links:['/uno.html','/dos.html','/tres.html','/cuatro.html']
+            },{
+                node:{
+                    page:'/uno.html'
+                  , status:200
+                  , mime:'text/html'
+                  , get:true
+                  , type:'page'
+                }
+              , links:['/style.css','/script.js']
+            },{
+                node:{
+                    page:'/dos.html'
+                  , status:200
+                  , mime:'text/html'
+                  , get:true
+                  , type:'page'
+                }
+              , links:['/style.css','/script.js']
+            }];
+
+            setInterval(function(){
+                if(count<map.length){
+                    visual.add(map[count].node,map[count].links);
+                    count++;
+                }else{
+                    clearInterval();
+                }
+            },2000);
         </script>
     </body>
 </html>

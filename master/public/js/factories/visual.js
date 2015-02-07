@@ -28,25 +28,7 @@ pleni.factory('Visual',[function(){
             visual.panel();
         }
       , add:function(node,rels){
-            if(node.page in visual.hash1){
-                var index=visual.hash1[node.page];
-
-                visual.nodes[index]=node;
-                rels.forEach(function(rel){
-/*                    var j=visual.nodes.length;
-                    visual.nodes.push($.extend({},empty,{page:rel}));
-
-                    visual.links.push({source:j,target:index});
-                    visual.adjacency1[index+'_'+j]=true;
-                    visual.adjacency2[j+'_'+index]=true;
-
-                    visual.hash1[rel]=j;
-                    // MIME UPDATE
-*/
-                });
-
-                visual.draw();
-            }
+            visual.add(node,rels);
         }
     };
 }]);
