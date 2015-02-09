@@ -8,6 +8,12 @@ var http=require('http')
   , join=require('path').join
   , app=express()
   , server=http.Server(app)
+  , morgan=require('morgan')
+  , redis=require('redis')
+  , cookieparser=require('cookie-parser')
+  , session=require('express-session')
+  , redisstore=require('connect-redis')(session)
+  , redisclient=redis.createClient()
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , validate=require('../../planners/utils/validators')
@@ -21,13 +27,21 @@ var http=require('http')
   , site=''
   , agent=''
 
-// async methods
 app.set('port',process.env.PORT||3003);
 app.set('views',join(__dirname,'views'));
 app.set('view engine','jade');
 app.disable('x-powered-by');
-app.use(favicon(join(__dirname,'..','..','master','public','img','favicon.ico')));
+app.use(favicon(
+    join(__dirname,'..','..','master','public','img','favicon.ico')));
 app.use(bodyparser.json());
+app.use(morgan('dev'))
+app.use(cookieparser('pleni'));
+app.use(session({
+    secret:'pleni'
+  , store:new redisstore({host:'localhost',port:6379,client:redisclient})
+  , saveUninitialized:true
+  , resave:false
+}));
 
 app.use(lessmiddleware('/less',{
     dest:'/css'
@@ -38,7 +52,7 @@ app.use(lessmiddleware('/less',{
 app.use(express.static(join(__dirname,'public')));
 app.use(express.static(join(__dirname,'..','..','master','public')));
 app.use(express.static(join(__dirname,'..','..','bower_components')));
-app.locals.pretty=true;
+app.locals.pretty=false;
 
 app.get('/',function(request,response){
     planner={
@@ -105,7 +119,8 @@ app.use(function(request,response){
 });
 
 server.listen(app.get('port'),function(){
-    console.log('Master APP listening on port '+app.get('port'));
+    console.log('pleni ✯ quickstart sites: listening on port '
+        +app.get('port')+'\n');
 });
 
 module.exports=app;
