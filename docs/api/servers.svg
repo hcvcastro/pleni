@@ -13,7 +13,7 @@
    height="765"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="servers.svg"
    inkscape:export-filename="/home/jacobian/Proyectos/pleni/docs/pleni_servers.png"
    inkscape:export-xdpi="180"
@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="3048.0624"
-     inkscape:cy="916.48074"
+     inkscape:zoom="2.8"
+     inkscape:cx="635.595"
+     inkscape:cy="-73.825377"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -38,8 +38,8 @@
      inkscape:guide-bbox="true"
      inkscape:window-width="1914"
      inkscape:window-height="1055"
-     inkscape:window-x="-3"
-     inkscape:window-y="-3"
+     inkscape:window-x="-6"
+     inkscape:window-y="-6"
      inkscape:window-maximized="0"
      showborder="false">
     <inkscape:grid
@@ -2301,7 +2301,7 @@
        id="text3889-5-5"
        y="1112.3622"
        x="420"
-       style="font-size:9px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
        xml:space="preserve"><tspan
          id="tspan3891-1-4"
          y="1112.3622"
@@ -2312,7 +2312,9 @@
    style="fill:#0000ff"
    id="tspan3903-9">count</tspan>,interval:<tspan
    id="tspan3893-9"
-   style="fill:#0000ff">interval</tspan>}</tspan></text>
+   style="fill:#0000ff">interval</tspan>,tid:<tspan
+   style="fill:#0000ff"
+   id="tspan5232">tid</tspan>}</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"

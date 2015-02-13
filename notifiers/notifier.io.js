@@ -3,6 +3,7 @@
 var http=require('http')
   , express=require('express')
   , bodyparser=require('body-parser')
+  , morgan=require('morgan')
   , join=require('path').join
   , validate=require('../planners/utils/validators')
   , _success=require('../planners/utils/json-response').success
@@ -37,6 +38,7 @@ app.set('views',join(__dirname,'views'));
 app.disable('x-powered-by');
 
 app.use(bodyparser.json());
+app.use(morgan('dev'));
 app.use(express.static(join(__dirname,'public')));
 app.use(express.static(join(__dirname,'..','bower_components')));
 
@@ -235,7 +237,8 @@ ios.sockets.on('connection',function(socket){
 });
 
 server.listen(app.get('port'),function(){
-    console.log('Notifier APP listening on port '+app.get('port'));
+    console.log('pleni ✯ notifier: listening on port '
+        +app.get('port')+'\n');
 });
 
 module.exports=app;

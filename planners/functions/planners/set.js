@@ -9,6 +9,7 @@ var request=require('request')
  * args input
  *      planner
  *          host
+ *          tid <-- optional for override
  *      task <-- the task for planner
  *          name
  *          count
@@ -26,6 +27,10 @@ module.exports=function(args){
           , count:args.task.count
           , interval:args.task.interval
         }
+
+    if(args.planner.tid){
+        body.tid=args.planner.tid;
+    }
 
     if(args.debug){
         console.log('post request for setting task ... '+args.planner.host);

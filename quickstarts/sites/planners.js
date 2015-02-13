@@ -59,7 +59,6 @@ exports.fetch=function(planner,db,agent,success,fail){
     };
 
     test(pkg)
-    .then(unset)
     .then(set)
     .then(run)
     .then(success)

@@ -3,14 +3,18 @@
 var app=require('express')()
   , http=require('http').Server(app)
   , bodyparser=require('body-parser')
+  , morgan=require('morgan')
   , fs=require('fs')
   , join=require('path').join
+  , type
 
 exports.set=function(port,signature){
     app.set('port',port);
     app.disable('x-powered-by');
     app.use(bodyparser.json());
+    app.use(morgan('dev'));
 
+    type=signature;
     app.get('/id',function(request,response){
         response.status(200).json({
             planner:'ready for action'
@@ -26,10 +30,10 @@ exports.set=function(port,signature){
         http.close(function(){
             fs.unlink(join(__dirname,'..','run',port),function(err){
                 if(err) throw err;
-                console.log('Bye bye!!');
-                process.exit(0);
             });
         });
+        console.log('Bye bye!!');
+        process.exit(0);
     };
 
     process.on('SIGINT',destroy);
@@ -64,7 +68,8 @@ exports.listen=function(planner){
 
 exports.run=function(){
     return http.listen(app.get('port'),function(){
-        console.log('Planner APP listening on port '+app.get('port'));
+        console.log('pleni ✯ planner '+type+': listening on port '
+            +app.get('port')+'\n');
     });
 };
 
