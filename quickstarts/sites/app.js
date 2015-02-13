@@ -118,7 +118,7 @@ app.use(function(request,response){
     });
 });
 
-server.listen(app.get('port'),function(){
+server.listen(app.get('port'),'localhost',function(){
     console.log('pleni ✯ quickstart sites: listening on port '
         +app.get('port')+'\n');
 });

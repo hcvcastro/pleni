@@ -34,7 +34,7 @@ body {
     justify-content: center;
     align-content: center;
     align-items: center;
-    transition: 2s linear 0s;
+    /*transition: 2s linear 0s;*/
 
     &.blocked {
         background-color: fade(@color2,50%);
@@ -87,15 +87,32 @@ body {
     align-content: center;
     align-items: center;
 
+    @logo_width: 120px;
+    @logo_height: 120px;
+
     .logo {
-        width: 120px;
-        height: 120px;
         float: left;
         box-sizing: border-box;
-        margin-right: 20px;
         background-image: url('/img/qs-sites.svg');
-        -webkit-animation: rotate 4s linear infinite;
+        background-size: 100%;
         animation: rotate 4s linear infinite;
+        -webkit-animation: rotate 4s linear infinite;
+
+/*        @media (min-width: 600px){
+            width: @logo_width;
+            height: @logo_height;
+            margin-right: @logo_width/6;
+        }
+        @media (min-width: 380px) and (max-width: 599px){
+            width: @logo_width/1.5;
+            height: @logo_height/1.5;
+            margin-right: @logo_width/4;
+        }
+        @media (max-width: 379px){
+            width: @logo_width/1.3;
+            height: @logo_height/1.3;
+            margin-bottom: 4.0rem;
+        }*/
     }
 
     .central {
@@ -104,25 +121,45 @@ body {
             flex-direction: row;
 
             input[type='text'] {
-                .font2;
                 border: none;
-                padding: 10px 20px;
                 color: @color2;
                 border-top-left-radius: 10px;
                 border-bottom-left-radius: 10px;
+
+                @media (min-width: 700px){
+                    .font2;
+                    width: 20.0rem;
+                    padding: 10px 20px;
+                }
+                @media (min-width: 599px) and (max-width: 699px){
+                    .font3;
+                    width: 16.0rem;
+                    padding: 10px 20px;
+                }
+                @media (max-width: 599px){
+                    .font3;
+                    padding: 5px 10px;
+                }
             }
             button[type='submit'] {
-                .font2;
                 border: none;
                 background-color: @color2;
                 color: @white;
-                padding: 10px;
                 border-top-right-radius: 10px;
                 border-bottom-right-radius: 10px;
-                transition: 2s ease-out 0s;
+                transition: 1.2s ease-out 0s;
 
                 &:hover {
                     background-color: @info_frg;
+                }
+
+                @media (min-width: 700px){
+                    .font2;
+                    padding: 10px;
+                }
+                @media (max-width: 699px){
+                    .font3;
+                    padding: 10px;
                 }
             }
         }
@@ -131,12 +168,23 @@ body {
 
 footer {
     display: block;
-    margin-top: 2.0rem;
+
+    @media (min-width: 600px){
+        margin-top: 2.0rem;
+    }
+    @media (max-width: 599px){
+        margin-top: 1.0rem;
+    }
 
     ul {
         list-style: none;
         float: left;
-        margin-left: 6.0rem;
+
+        @media (min-width: 600px){
+            margin-left: 6.0rem;
+        }
+        @media (max-width: 599px){
+        }
 
         li {
             float: left;
@@ -144,7 +192,13 @@ footer {
             a {
                 float: left;
                 color: @white;
-                margin: 0 4.0rem;
+
+                @media (min-width: 600px){
+                    margin: 0 4.0rem;
+                }
+                @media (max-width: 599px){
+                    margin: 0 2.0rem;
+                }
             }
         }
     }

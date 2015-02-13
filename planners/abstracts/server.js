@@ -67,7 +67,7 @@ exports.listen=function(planner){
 };
 
 exports.run=function(){
-    return http.listen(app.get('port'),function(){
+    return http.listen(app.get('port'),'localhost',function(){
         console.log('pleni ✯ planner '+type+': listening on port '
             +app.get('port')+'\n');
     });

@@ -69,7 +69,7 @@ ios.sockets.on('connection',function(socket){
     });
 });
 
-server.listen(app.get('port'),function(){
+server.listen(app.get('port'),'localhost',function(){
     console.log('pleni ✯ master: listening on port '
         +app.get('port')+'\n');
 });
