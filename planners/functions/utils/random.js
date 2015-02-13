@@ -2,6 +2,7 @@
 
 var Q=require('q')
   , sha1=require('sha1')
+  , uuid=require('node-uuid')
 
 /*
  * Function for random generator
@@ -18,11 +19,8 @@ module.exports=function(args){
     return deferred.promise;
 };
 
-var generator=function(low,high){
-    var _low=low||0
-      , _high=high||1024
-
-    return Math.floor(Math.random()*(_high-_low)+_low);
+var generator=function(){
+    return uuid.v4();
 };
 module.exports.sync=generator;
 

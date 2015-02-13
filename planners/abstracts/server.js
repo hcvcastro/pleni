@@ -3,6 +3,8 @@
 var app=require('express')()
   , http=require('http').Server(app)
   , bodyparser=require('body-parser')
+  , fs=require('fs')
+  , join=require('path').join
 
 exports.set=function(port,signature){
     app.set('port',port);
@@ -15,6 +17,23 @@ exports.set=function(port,signature){
           , type:signature
         });
     });
+
+    fs.writeFile(join(__dirname,'..','run',port.toString()),'',function(err){
+        if(err) throw err;
+    });
+
+    var destroy=function(){
+        http.close(function(){
+            fs.unlink(join(__dirname,'..','run',port),function(err){
+                if(err) throw err;
+                console.log('Bye bye!!');
+                process.exit(0);
+            });
+        });
+    };
+
+    process.on('SIGINT',destroy);
+    process.on('SIGTERM',destroy);
 };
 
 exports.listen=function(planner){

@@ -6,14 +6,15 @@ var planner=require('./abstracts/planner')
   , server=require('./abstracts/server')
   , io=require('socket.io')(server.http)
   , join=require('path').join
+  , port=process.env.PORT||3001
   , notifier=function(msg){
         io.emit('notifier',msg);
     }
 
 planner.prototype=new scheduler(notifier);
 
-server.set(process.env.PORT||3001,'io');
-server.listen(new planner(notifier));
+server.set(port,'io');
+server.listen(new planner(port,notifier));
 
 io.on('connection',function(socket){
     socket.emit('notifier',{

@@ -14,7 +14,7 @@ var should=require('should')
 var host='http://localhost:5984'
   , user='jacobian'
   , pass='asdf'
-  , name='pleni_site_j1'
+  , name='db_test'
 
 describe('viewer functions for site repository',function(){
     var packet;

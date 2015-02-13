@@ -5,8 +5,10 @@ var validate=require('../utils/validators')
   , _error=require('../utils/json-response').error
   , generator=require('../functions/utils/random').sync
   , jayschema=require('jayschema')
+  , fs=require('fs')
+  , join=require('path').join
 
-module.exports=function(notifier){
+module.exports=function(port,notifier){
     this.valid_tasks=[
         'exclusive'
       , 'site/create'
@@ -29,7 +31,7 @@ module.exports=function(notifier){
 
     this.create=function(request,response){
         if(validate.validSlugSlash(request.body.task)){
-            if(this.tid===undefined){
+            if(this.tid===undefined||this.tid===request.body.tid){
                 var name=validate.toString(request.body.task)
                   , count=validate.toInt(request.body.count)
                   , interval=validate.toInt(request.body.interval)
@@ -37,7 +39,7 @@ module.exports=function(notifier){
                         return element===name})
 
                 if(valid_task){
-                    this.tid=generator().toString();
+                    this.tid=generator();
                     this.name=name;
 
                     if(isNaN(count)){
@@ -61,6 +63,12 @@ module.exports=function(notifier){
                           , interval:interval
                         }
                     });
+
+                    fs.writeFile(join(__dirname,'..','run',port.toString()),
+                        this.tid,function(err){
+                        if(err) throw err;
+                    });
+
                     response.status(200).json({ok:true,tid:this.tid});
                     return;
                 }
@@ -85,6 +93,11 @@ module.exports=function(notifier){
               , task:{
                     name:this.name
                 }
+            });
+
+            fs.writeFile(join(__dirname,'..','run',port.toString()),'',
+                function(err){
+                if(err) throw err;
             });
 
             this.tid=undefined;
