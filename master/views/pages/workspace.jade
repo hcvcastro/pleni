@@ -5,7 +5,7 @@
                 a Project: {{storage.workspace.name}}
         ul.items
             li(ng-repeat='repository in storage.workspace.repositories',ng-click='repositories.open($index)',ng-class='{\'active\':storage.workspace.visual==storage.workspace.repositories[$index].name}')
-                a {{repository.name}}
+                a {{repository.name|truncate:24}}
                 .right
                     a.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading==true')
                         a.fa(title='{{repository.summary.type}} repository',ng-show='storage.workspace.repositores[$index].loading==false',ng-class='workspace.icon_r(repository.summary.type)')

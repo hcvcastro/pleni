@@ -18,7 +18,7 @@ var validator=require('validator')
 
 js.addFormat('id',function(value){
     if(notEmpty(value)
-        && /^[a-z][a-z0-9_]*\/?[a-z][a-z0-9_]*$/i.test(value)){
+        && /^[a-z][a-z0-9_\-]*\/?[a-z][a-z0-9_\-]*$/i.test(value)){
         return null;
     }
     return 'id is not a valid string';
@@ -41,14 +41,14 @@ js.addFormat('port',function(value){
 });
 js.addFormat('slug',function(value){
     if(notEmpty(value)
-        && /^[a-z][a-z0-9_]*$/i.test(value)){
+        && /^[a-z][a-z0-9_\-]*$/i.test(value)){
         return null;
     }
     return 'there is not a valid slug';
 });
 js.addFormat('emptyslug',function(value){
     if(value==''
-        || /^[a-z][a-z0-9_]*$/i.test(value)){
+        || /^[a-z][a-z0-9_\-]*$/i.test(value)){
         return null;
     }
     return 'there is not a valid slug';

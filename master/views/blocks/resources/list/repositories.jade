@@ -20,9 +20,9 @@ article.list
         tbody
             tr(ng-repeat='repository in storage.repositories')
                 td
-                    span {{repository.id}}
+                    span {{repository.id|truncate:16}}
                 td {{repository._dbserver}}
-                td {{repository.db.name}}
+                td {{repository.db.name|truncate:32}}
                 td.status
                     span.fa(ng-class='{\'fa-cloud-download\':repository.type==\'site\'}')
                 td.status

@@ -20,7 +20,7 @@ article.list
         tbody
             tr(ng-repeat='notifier in storage.notifiers')
                 td
-                    a(ng-click='notifiers.view($index)') {{notifier.id}}
+                    a(ng-click='notifiers.view($index)') {{notifier.id|truncate:16}}
                 td {{notifier.notifier.host}}:{{notifier.notifier.port}}
                 td.status
                     span.fa(title='Notifier type: {{notifier.type}}',ng-class='{\'fa-bullhorn\':notifier.type==\'io\'}')

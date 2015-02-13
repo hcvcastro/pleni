@@ -4,6 +4,7 @@ var http=require('http')
   , express=require('express')
   , favicon=require('serve-favicon')
   , bodyparser=require('body-parser')
+  , morgan=require('morgan')
   , lessmiddleware=require('less-middleware')
   , join=require('path').join
   , loadconfig=require('./utils/loadconfig')
@@ -33,6 +34,7 @@ app.set('view engine','jade');
 app.disable('x-powered-by');
 app.use(favicon(join(__dirname,'public','img','favicon.ico')));
 app.use(bodyparser.json());
+app.use(morgan('dev'));
 
 app.use(lessmiddleware('/less',{
     dest:'/css'
@@ -68,7 +70,8 @@ ios.sockets.on('connection',function(socket){
 });
 
 server.listen(app.get('port'),function(){
-    console.log('Master APP listening on port '+app.get('port'));
+    console.log('pleni ✯ master: listening on port '
+        +app.get('port')+'\n');
 });
 
 module.exports=app;

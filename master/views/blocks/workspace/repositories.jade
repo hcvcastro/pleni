@@ -14,7 +14,7 @@ article.form(ng-show='workspace.env.panel==\'repositories\'')
                             span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-question\':dbserver.check==\'scanning\',\'fa-check\':dbserver.check==\'online\',\'fa-close\':dbserver.check==\'offline\'}')
                     h3 {{dbserver.id}} ({{dbserver.db.prefix}})
                 .row(ng-repeat='repository in dbserver.repositories',ng-show='dbserver.toggle==\'show\'')
-                    label {{repository.name}}
+                    label {{repository.name|truncate:20}}
                     ul.group
                         li.link
                             a.fa.fa-plus-circle(title='Add repository to workspace',ng-click='repositories.add($parent.$index,$index)')
