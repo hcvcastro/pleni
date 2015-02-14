@@ -11,9 +11,10 @@ var http=require('http')
   , morgan=require('morgan')
   , redis=require('redis')
   , cookieparser=require('cookie-parser')
-  , session=require('express-session')
-  , redisstore=require('connect-redis')(session)
+  , cookiesession=require('express-session')
+  , redisstore=require('connect-redis')(cookiesession)
   , redisclient=redis.createClient()
+  , secret='pleni'
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , validate=require('../../planners/utils/validators')
@@ -35,12 +36,24 @@ app.use(favicon(
     join(__dirname,'..','..','master','public','img','favicon.ico')));
 app.use(bodyparser.json());
 app.use(morgan('dev'))
-app.use(cookieparser('pleni'));
-app.use(session({
-    secret:'pleni'
-  , store:new redisstore({host:'localhost',port:6379,client:redisclient})
-  , saveUninitialized:true
+app.use(cookieparser(secret));
+app.use(cookiesession({
+    cookie:{
+        path:'/'
+      , httpOnly:true
+      , secure:false
+      , maxAge:3600000
+    }
+  , name:'pleni.sid'
   , resave:false
+  , saveUninitialized:true
+  , secret:secret
+  , store:new redisstore({
+        client:redisclient
+      , host:'localhost'
+      , port:6379
+      , prefix:'sites'
+    })
 }));
 
 app.use(lessmiddleware('/less',{
@@ -55,7 +68,53 @@ app.use(express.static(join(__dirname,'..','..','bower_components')));
 app.locals.pretty=false;
 
 app.get('/',function(request,response){
-    planner={
+    response.render('index');
+});
+
+app.get('/sites',function(request,response){
+    response.render('pages/sites');
+});
+
+app.get('/map',function(request,response){
+    response.render('pages/map');
+});
+
+app.put('/sites',function(request,response){
+    site=validate.toString(request.body.site);
+    agent=validate.toString(request.body.agent);
+
+    if(validate.validHost(site)){
+        // TODO
+        response.status(200).json(_success.ok);
+    }else{
+        response.status(403).json(_error.json);
+    }
+});
+
+app.use(function(request,response){
+    response.status(404).render('404.jade',{
+        title:'404',
+        message:'I\'m so sorry, but file not found!!'
+    });
+});
+
+server.listen(app.get('port'),'localhost',function(){
+    console.log('pleni ✯ quickstart sites: listening on port '
+        +app.get('port')+'\n');
+});
+
+module.exports=app;
+
+/*
+        planners.create(planner,db,site,function(args){
+        },function(error){
+            ios.emit('notifier',{
+                action:'error'
+              , msg:error
+            });
+        });
+*/
+/*    planner={
         host:'http://localhost'
       , port:3001
     }
@@ -64,8 +123,9 @@ app.get('/',function(request,response){
       , user:'jacobian'
       , pass:'asdf'
       , name:'pleni_site_qs_'+generator()
-    }
-  , socket=ioc.connect(planner.host+':'+planner.port,{reconnect:true})
+    }*/
+
+/*  , socket=ioc.connect(planner.host+':'+planner.port,{reconnect:true})
     socket.on('notifier',function(msg){
         if(msg.action=='task'){
             if(msg.task.id=='site/create'){
@@ -86,42 +146,5 @@ app.get('/',function(request,response){
                 ios.emit('notifier',msg);
             }
         }
-    });
-
-    response.render('index');
-});
-app.get('/sites',function(request,response){
-    response.render('pages/sites');
-});
-app.put('/sites',function(request,response){
-    site=validate.toString(request.body.site);
-    agent=validate.toString(request.body.agent);
-
-    if(validate.validHost(site)){
-        planners.create(planner,db,site,function(args){
-        },function(error){
-            ios.emit('notifier',{
-                action:'error'
-              , msg:error
-            });
-        });
-        response.status(200).json(_success.ok);
-    }else{
-        response.status(403).json(_error.json);
-    }
-});
-
-app.use(function(request,response){
-    response.status(404).render('404.jade',{
-        title:'404',
-        message:'I\'m so sorry, but file not found!!'
-    });
-});
-
-server.listen(app.get('port'),'localhost',function(){
-    console.log('pleni ✯ quickstart sites: listening on port '
-        +app.get('port')+'\n');
-});
-
-module.exports=app;
+    });*/
 
