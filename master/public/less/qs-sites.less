@@ -59,10 +59,19 @@ body {
 }
 
 .message {
-    .font3;
-    width: 20.0rem;
-    margin-left: 30px;
-    padding: 6px;
+    @media(min-width: 600px){
+        .font3;
+        width: 20.0rem;
+        margin-left: 60px;
+        padding: 6px;
+    }
+    @media(max-width: 599px){
+        .font4;
+        width: 100vw;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 1.0rem;
+    }
 
     &.error {
         background-color: @error_bck;
@@ -180,8 +189,11 @@ footer {
     @media (min-width: 700px){
         margin-top: 2.0rem;
     }
-    @media (max-width: 699px){
+    @media (min-width: 600px) and (max-width: 699px){
         margin-top: 3.0rem;
+    }
+    @media (max-width: 599px){
+        display: none;
     }
 
     ul {

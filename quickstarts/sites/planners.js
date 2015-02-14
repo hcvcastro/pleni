@@ -25,6 +25,10 @@ exports.create=function(planner,db,url,success,fail){
       , debug:true
     };
 
+    if(tid){
+        pkg.planner.tid=tid;
+    }
+
     test(pkg)
     .then(set)
     .then(run)
@@ -32,6 +36,8 @@ exports.create=function(planner,db,url,success,fail){
     .done(function(args){
         if(args&&args.planner&&args.planner.tid){
             tid=args.planner.tid;
+            console.log('set sites/create ... '+pkg.targs.db.name);
+            console.log(tid);
             success(args);
         }
     });
@@ -61,8 +67,14 @@ exports.fetch=function(planner,db,agent,success,fail){
     test(pkg)
     .then(set)
     .then(run)
-    .then(success)
     .fail(fail)
-    .done();
+    .done(function(args){
+        if(args&&args.planner&&args.planner.tid){
+            tid=args.planner.tid;
+            console.log('set sites/fetch ... '+pkg.targs.db.name);
+            console.log(tid);
+            success(args);
+        }
+    });
 };
 
