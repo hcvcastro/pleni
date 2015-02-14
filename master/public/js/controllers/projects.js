@@ -1,8 +1,8 @@
 'use strict';
 
 pleni.controller('ProjectsController',
-    ['$scope','$location','$sessionStorage','Resources',
-    function($scope,$location,$sessionStorage,Resources){
+    ['$scope','$location','$sessionStorage','Resources','$filter',
+    function($scope,$location,$sessionStorage,Resources,$filter){
         $scope.storage=$sessionStorage;
 
         if($scope.storage.workspace){
@@ -42,7 +42,9 @@ pleni.controller('ProjectsController',
                 Resources.projects.load();
             }
           , implode:function(glue,pieces){
-                return pieces.join(glue);
+                return pieces.map(function(element){
+                    return $filter('truncate')(element,16);
+                }).join(glue);
             }
           , save:function(){
                 utils.clean();
