@@ -225,3 +225,55 @@ footer {
     }
 }
 
+#control {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .wrapper {
+        max-width: 960px;
+        margin: 0 auto;
+
+        background-color: @color2;
+        color: @white;
+        padding: 0;
+        box-sizing: border-box;
+
+        &>:nth-child(2){ background-color: darken(@color2,10%); }
+        &>:nth-child(3){ background-color: darken(@color2,20%); }
+        &>:nth-child(4){ background-color: darken(@color2,30%); }
+
+        @height: 18px;
+
+        .status {
+            float: left;
+            width: @height;
+            height: @height;
+        }
+        .url {
+            float: left;
+            .font4;
+            width: 200px;
+            height: @height;
+            overflow: hidden;
+        }
+        .c1,.c2 {
+            float: left;
+            .font4;
+            padding: 6px 5px 5px 5px;
+            width: 30px;
+            height: @height;
+            overflow: hidden;
+        }
+        .msg {
+            .font4;
+            padding: 6px 5px 5px 5px;
+            width: 100%;
+            height: @height;
+
+
+        }
+    }
+}
+
