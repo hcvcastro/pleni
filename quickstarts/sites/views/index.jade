@@ -4,8 +4,18 @@ html(lang='en')
         title ⤻ ᴾᴸᴱᴺᴵ ₛᵢₜₑₛ ⤻ ⛁
         link(rel='stylesheet',href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300&subset=latin,latin-ext')
         link(rel='stylesheet',href='/font-awesome/css/font-awesome.min.css')
+        link(rel='stylesheet',href='/pushy/css/pushy.css')
         link(rel='stylesheet',href='css/qs-sites.css')
     body(ng-app='PleniApp')
+        nav.pushy.pushy-left
+            ul
+                li
+                    a Item 1
+                    a Item 2
+
+        .site-overlay
+        #container
+            .menu-btn Menu
         #content.blocked(ng-view)
         script(src='/jquery/dist/jquery.min.js')
         script(src='/socket.io-client/socket.io.js')
@@ -16,6 +26,7 @@ html(lang='en')
         script(src='/ngstorage/ngStorage.min.js')
         script(src='/d3/d3.min.js')
         script(src='/d3-tip/index.js')
+        script(src='/pushy/js/pushy.min.js')
         script(src='/js/app.js')
         script(src='/js/controllers/sites.js')
         script(src='/js/controllers/map.js')
