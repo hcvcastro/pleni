@@ -1,5 +1,10 @@
 'use strict';
 
+var pushy=new pushy();
+$('.close').click(function(){
+    pushy.togglePushy();
+});
+
 var pleni=angular
     .module('PleniApp',[
         'ngRoute','ngResource','ngStorage','btford.socket-io'])

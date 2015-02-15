@@ -18,6 +18,7 @@
 @import 'reset';
 @import 'base';
 @import 'd3';
+@import 'pushy';
 
 body {
     background-color: #ffffff;
@@ -100,6 +101,7 @@ body {
     }
     @media (max-width: 599px){
         flex-direction: column;
+        margin-bottom: 3.0rem;
     }
 
     @logo_width: 120px;
@@ -234,12 +236,11 @@ footer {
     @height: 24px;
 
     .wrapper {
-        max-width: 960px;
+        width: 100%;
         height: @height;
         margin: 0 auto;
         padding: 0;
 
-        background-color: @color2;
         color: @white;
         box-sizing: border-box;
 
@@ -251,10 +252,11 @@ footer {
         align-content: stretch;
 
         &>:nth-child(1){ background-color: @info_frg; }
-        &>:nth-child(2){ background-color: darken(@color2,08%); }
-        &>:nth-child(3){ background-color: darken(@color2,16%); }
-        &>:nth-child(4){ background-color: darken(@color2,24%); }
-        &>:nth-child(5){ background-color: darken(@color2,32%); }
+        &>:nth-child(2){ background-color: darken(@color2,06%); }
+        &>:nth-child(3){ background-color: darken(@color2,12%); }
+        &>:nth-child(4){ background-color: darken(@color2,18%); }
+        &>:nth-child(5){ background-color: darken(@color2,24%); }
+        &>:nth-child(6){ background-color: darken(@color2,30%); }
 
         .status {
             width: 24px;
@@ -321,7 +323,17 @@ footer {
             font-size: (@height - 7.5);
             box-sizing: border-box;
             padding: 4px;
+            cursor: pointer;
         }
     }
 }
 
+.close {
+    position: fixed;
+    top: 0;
+    right: 0;
+    font-size: 36px;
+    color: @white;
+    padding: 5px;
+    cursor: pointer;
+}

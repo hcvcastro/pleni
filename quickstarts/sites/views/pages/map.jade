@@ -1,11 +1,12 @@
 #canvas
 #control(ng-controller='SocketController')
     .wrapper
-        .menu.fa.fa-cloud-download
+        .menu.fa.fa-bars(ng-click='menu()')
         .url http://www.google.com.bo
         .c1 100
         .c2 100
         .msg 
-        .status.fa.fa-circle-o-notch.fa-spin
+        .status
+            span.fa.fa-circle-o-notch.fa-spin
         .clearfix
 
