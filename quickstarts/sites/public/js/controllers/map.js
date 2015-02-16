@@ -4,13 +4,11 @@ pleni.controller('MapController',['$scope','$http','Socket','Visual',
     function($scope,$http,Socket,Visual){
     
     $('#content').removeClass('blocked');
-}]);
 
-
-/*
-Socket.on('notifier',function(pkg){
+    Socket.on('notifier',function(pkg){
+        console.log(pkg);
         switch(pkg.action){
-            case 'ready':
+            case 'create':
                 Visual.render();
                 break;
             case 'task':
@@ -28,5 +26,8 @@ Socket.on('notifier',function(pkg){
                     }
                 }
                 break;
-        }*/
+        }
+    });
+}]);
+
 

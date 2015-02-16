@@ -1,9 +1,9 @@
 'use strict';
 
-var test=require('../../planners/functions/planners/test')
-  , set=require('../../planners/functions/planners/set')
-  , unset=require('../../planners/functions/planners/unset')
-  , run=require('../../planners/functions/planners/run')
+var test=require('../../../planners/functions/planners/test')
+  , set=require('../../../planners/functions/planners/set')
+  , unset=require('../../../planners/functions/planners/unset')
+  , run=require('../../../planners/functions/planners/run')
   , tid=undefined
 
 exports.create=function(planner,db,url,success,fail){
@@ -58,7 +58,7 @@ exports.fetch=function(planner,db,agent,success,fail){
         }
       , task:{
             name:'site/fetch'
-          , count: 20
+          , count: 4
           , interval: 1000
         }
       , debug:true

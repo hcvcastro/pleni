@@ -20,6 +20,8 @@ var http=require('http')
   , validate=require('../../planners/utils/validators')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
+  , monitor=require('./common/monitor')
+  , planners=require('./common/planners')
   , secret='pleni'
 
 app.set('port',process.env.PORT||3003);
@@ -38,7 +40,7 @@ var store=new redisstore({
     client:redisclient
   , host:'localhost'
   , port:6379
-  , prefix:'sites'
+  , prefix:'sites:'
 });
 app.use(cookiesession({
     cookie:{
@@ -82,16 +84,66 @@ app.put('/sites',function(request,response){
       , agent=validate.toString(request.body.agent);
 
     if(validate.validHost(site)){
-        // TODO
+        ios.emit('notifier',{
+            action:'start'
+          , msg:'Starting the process ...'
+        });
+        fetchsite(monitor.getplanner(),monitor.getrepository(),site,agent);
         response.status(200).json(_success.ok);
     }else{
         response.status(403).json(_error.json);
     }
 });
 
-var sessionsockets=new sessionsocketio(ios,store,parser);
+var action='';
+var fetchsite=function(planner,db,site,agent){
+    var socket=ioc.connect(planner.host+':'+planner.port,{
+        reconnect:true,'forceNew':true});
+    socket.on('notifier',function(msg){
+        switch(msg.action){
+            case 'create':
+                action=msg.task.name;
+                break;
+            case 'run':
+                break;
+            case 'task':
+                if(msg.task.id=='site/create'){
+                    planners.fetch(planner,db,agent,function(args){
+
+                    },function(error){
+                        ios.emit('notifier',{
+                            action:'error'
+                          , msg:error
+                        });
+                    });
+                    ios.emit('notifier',{
+                        action:'create'
+                      , msg:'Created site repository ...'
+                    });
+                }
+                if(msg.task.id=='site/fetch'){
+                    ios.emit('notifier',msg);
+                }
+                break;
+            case 'stop':
+                if(action=='site/fetch'){
+                    socket.disconnect();
+                }
+                break;
+        }
+    });
+
+    planners.create(planner,db,site,function(args){
+    },function(error){
+        ios.emit('notifier',{
+            action:'error'
+          , msg:error
+        });
+    });
+};
+
+var sessionsockets=new sessionsocketio(ios,store,parser,'pleni.sid');
 sessionsockets.on('connection',function(err,socket,session){
-    console.log(session);
 });
 
 app.use(function(request,response){
@@ -107,53 +159,4 @@ server.listen(app.get('port'),'localhost',function(){
 });
 
 module.exports=app;
-
-/*
-  , planners=require('./planners')
-  , planner={}
-  , db={}
-  , socket=undefined
-  , generator=require('../../planners/functions/utils/random').sync
-
-        planners.create(planner,db,site,function(args){
-        },function(error){
-            ios.emit('notifier',{
-                action:'error'
-              , msg:error
-            });
-        });
-
-        planner={
-        host:'http://localhost'
-      , port:3001
-    }
-  , db={
-        host:'http://localhost:5984'
-      , user:'jacobian'
-      , pass:'asdf'
-      , name:'pleni_site_qs_'+generator()
-    }*/
-
-/*  , socket=ioc.connect(planner.host+':'+planner.port,{reconnect:true})
-    socket.on('notifier',function(msg){
-        if(msg.action=='task'){
-            if(msg.task.id=='site/create'){
-                planners.fetch(planner,db,agent,function(args){
-                },function(error){
-                    ios.emit('notifier',{
-                        action:'error'
-                      , msg:error
-                    });
-                });
-                ios.emit('notifier',{
-                    action:'ready'
-                  , msg:{}
-                });
-            }
-
-            if(msg.task.id=='site/fetch'){
-                ios.emit('notifier',msg);
-            }
-        }
-    });*/
 

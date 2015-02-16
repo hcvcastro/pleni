@@ -8,6 +8,10 @@ pleni.controller('SitesController',['$scope','$http','$location',
 
     $('input[type=\'text\']').focus();
 
+    $scope.menu=function(){
+        pushy.togglePushy();
+    }
+
     $scope.send=function(){
         utils.clean();
         if($scope.url!=''){
