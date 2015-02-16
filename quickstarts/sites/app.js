@@ -14,19 +14,13 @@ var http=require('http')
   , cookiesession=require('express-session')
   , redisstore=require('connect-redis')(cookiesession)
   , redisclient=redis.createClient()
-  , secret='pleni'
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
+  , sessionsocketio=require('session.socket.io')
   , validate=require('../../planners/utils/validators')
   , _success=require('../../planners/utils/json-response').success
   , _error=require('../../planners/utils/json-response').error
-  , generator=require('../../planners/functions/utils/random').sync
-  , planners=require('./planners')
-  , planner={}
-  , db={}
-  , socket=undefined
-  , site=''
-  , agent=''
+  , secret='pleni'
 
 app.set('port',process.env.PORT||3003);
 app.set('views',join(__dirname,'views'));
@@ -36,7 +30,16 @@ app.use(favicon(
     join(__dirname,'..','..','master','public','img','favicon.ico')));
 app.use(bodyparser.json());
 app.use(morgan('dev'))
-app.use(cookieparser(secret));
+
+var parser=cookieparser(secret);
+app.use(parser);
+
+var store=new redisstore({
+    client:redisclient
+  , host:'localhost'
+  , port:6379
+  , prefix:'sites'
+});
 app.use(cookiesession({
     cookie:{
         path:'/'
@@ -48,12 +51,7 @@ app.use(cookiesession({
   , resave:false
   , saveUninitialized:true
   , secret:secret
-  , store:new redisstore({
-        client:redisclient
-      , host:'localhost'
-      , port:6379
-      , prefix:'sites'
-    })
+  , store:store
 }));
 
 app.use(lessmiddleware('/less',{
@@ -80,8 +78,8 @@ app.get('/map',function(request,response){
 });
 
 app.put('/sites',function(request,response){
-    site=validate.toString(request.body.site);
-    agent=validate.toString(request.body.agent);
+    var site=validate.toString(request.body.site)
+      , agent=validate.toString(request.body.agent);
 
     if(validate.validHost(site)){
         // TODO
@@ -89,6 +87,11 @@ app.put('/sites',function(request,response){
     }else{
         response.status(403).json(_error.json);
     }
+});
+
+var sessionsockets=new sessionsocketio(ios,store,parser);
+sessionsockets.on('connection',function(err,socket,session){
+    console.log(session);
 });
 
 app.use(function(request,response){
@@ -106,6 +109,12 @@ server.listen(app.get('port'),'localhost',function(){
 module.exports=app;
 
 /*
+  , planners=require('./planners')
+  , planner={}
+  , db={}
+  , socket=undefined
+  , generator=require('../../planners/functions/utils/random').sync
+
         planners.create(planner,db,site,function(args){
         },function(error){
             ios.emit('notifier',{
@@ -113,8 +122,8 @@ module.exports=app;
               , msg:error
             });
         });
-*/
-/*    planner={
+
+        planner={
         host:'http://localhost'
       , port:3001
     }
