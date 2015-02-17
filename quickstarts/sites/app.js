@@ -68,6 +68,7 @@ app.use(express.static(join(__dirname,'..','..','bower_components')));
 app.locals.pretty=false;
 
 app.get('/',function(request,response){
+    console.log(request.session);
     response.render('index');
 });
 
@@ -89,6 +90,7 @@ app.put('/sites',function(request,response){
           , msg:'Starting the process ...'
         });
         fetchsite(monitor.getplanner(),monitor.getrepository(),site,agent);
+        request.session.url=site;
         response.status(200).json(_success.ok);
     }else{
         response.status(403).json(_error.json);
@@ -128,6 +130,13 @@ var fetchsite=function(planner,db,site,agent){
             case 'stop':
                 if(action=='site/fetch'){
                     socket.disconnect();
+                    planners.free(planner,function(args){
+                    },function(error){
+                        ios.emit('notifier',{
+                            action:'error'
+                          , msg:error
+                        });
+                    });
                 }
                 break;
         }

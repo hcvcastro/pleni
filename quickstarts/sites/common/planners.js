@@ -78,3 +78,19 @@ exports.fetch=function(planner,db,agent,success,fail){
     });
 };
 
+exports.free=function(planner,success,fail){
+    var pkg={
+        planner:{
+            host:planner.host+':'+planner.port
+          , tid:tid
+        }
+    };
+
+    unset(pkg)
+    .fail(fail)
+    .done(function(args){
+        console.log('unset sites/fetch ...'+pkg.host);
+        success(args);
+    });
+};
+
