@@ -8,16 +8,11 @@ html(lang='en')
     body(ng-app='PleniApp')
         nav.pushy.pushy-left
             ul
-                li
-                    a 20 request more
-                li
-                    a Export mapsite
-                li
-                    a Generate report
-                li
-                    a Close session
-                li
-                    a About
+                li: a 20 pages+
+                li: a Export mapsite
+                li: a Generate report
+                li: a Close session
+                li: a About
         .site-overlay
             .close.fa.fa-close
         #content.blocked(ng-view)

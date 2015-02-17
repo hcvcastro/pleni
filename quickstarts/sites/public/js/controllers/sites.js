@@ -23,7 +23,6 @@ pleni.controller('SitesController',['$scope','$http','$location',
                     });
                     $(this).remove();
                 });
-                document.cookie='pleni.url=~'+$scope.url;
                 return $location.path('map');
             }).error(function(error){
                 utils.show('error','The url is not a valid host');

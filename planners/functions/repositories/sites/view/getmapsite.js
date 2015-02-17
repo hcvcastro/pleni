@@ -38,6 +38,7 @@ module.exports=function(args){
               , dict={}
               , nodes=new Array()
               , links=new Array()
+              , count=0
 
             if(parse.rows){
                 for(var i=0;i<parse.rows.length;i++){
@@ -54,6 +55,7 @@ module.exports=function(args){
                           , type:'unknown'
                         };
                     }else{
+                        count++;
                         node.value.rel.forEach(function(link){
                             links.push({
                                 source:dict[node.key]
@@ -71,7 +73,8 @@ module.exports=function(args){
                 });
 
                 args.site.mapsite={
-                    count:parse.total_rows
+                    count:count
+                  , total:parse.total_rows
                   , nodes:nodes
                   , links:links
                 };

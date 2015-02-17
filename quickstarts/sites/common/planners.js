@@ -60,7 +60,7 @@ exports.fetch=function(planner,db,agent,success,fail){
         }
       , task:{
             name:'site/fetch'
-          , count: 4
+          , count: 20
           , interval: 1000
         }
       , debug:true

@@ -29,11 +29,6 @@ var visual={
             }))
             .call(visual.tip);
 
-        d3.select('#canvas')
-            .on('keyup',function(d){
-                console.log('keypress',d);
-            });
-
         visual.vlinks=visual.vis
             .append('svg:g')
                 .attr('class','links');

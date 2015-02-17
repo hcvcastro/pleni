@@ -51,7 +51,7 @@ app.use(cookiesession({
     }
   , name:'pleni.sid'
   , resave:false
-  , saveUninitialized:true
+  , saveUninitialized:false
   , secret:secret
   , store:store
 }));
@@ -70,6 +70,8 @@ app.locals.pretty=false;
 app.get('/',function(request,response){
     if(request.session.url){
         response.cookie('pleni.url',request.session.url);
+    }else{
+        response.cookie('pleni.url','');
     }
     response.render('index');
 });
@@ -95,9 +97,13 @@ app.put('/sites',function(request,response){
         var planner=monitor.getplanner()
           , db=monitor.getrepository()
 
-        fetchsite(planner,db,site,agent);
+        fetchsite(request,planner,db,site,agent);
+
         request.session.url=site;
         request.session.db=db;
+        request.session.action='';
+
+        response.cookie('pleni.url',site);
         response.status(200).json(_success.ok);
     }else{
         response.status(403).json(_error.json);
@@ -105,32 +111,38 @@ app.put('/sites',function(request,response){
 });
 
 app.post('/mapsite',function(request,response){
-    planners.mapsite(request.session.db,function(args){
-        if(args&&args.site&&args.site.mapsite){
-            response.status(200).json(args.site.mapsite);
-        }else{
-            response.status(404).json(_error.notfound);
-        }
-    },function(error){
-        response.status(404).json(_error.json);
-    });
+    if(request.session.mapsite){
+        planners.mapsite(request.session.db,function(args){
+            if(args&&args.site&&args.site.mapsite){
+                response.status(200).json(args.site.mapsite);
+            }else{
+                response.status(404).json(_error.notfound);
+            }
+        },function(error){
+            response.status(404).json(_error.json);
+        });
+    }else{
+        response.status(200).json(_success.ok);
+    }
 });
 
-var action='';
-var fetchsite=function(planner,db,site,agent){
+var fetchsite=function(request,planner,db,site,agent){
     var socket=ioc.connect(planner.host+':'+planner.port,{
-        reconnect:true,'forceNew':true});
+        reconnect:true,'forceNew':true})
+
     socket.on('notifier',function(msg){
         switch(msg.action){
             case 'create':
-                action=msg.task.name;
+                request.session.action=msg.task.name;
+                request.session.save();
                 break;
             case 'run':
                 break;
             case 'task':
                 if(msg.task.id=='site/create'){
+                    request.session.mapsite=true;
+                    request.session.save();
                     planners.fetch(planner,db,agent,function(args){
-
                     },function(error){
                         ios.emit('notifier',{
                             action:'error'
@@ -141,14 +153,17 @@ var fetchsite=function(planner,db,site,agent){
                         action:'create'
                       , msg:'Created site repository ...'
                     });
-                }
-                if(msg.task.id=='site/fetch'){
+                }else if(msg.task.id=='site/fetch'){
                     ios.emit('notifier',msg);
                 }
                 break;
             case 'stop':
-                if(action=='site/fetch'){
+                if(request.session.action=='site/fetch'){
                     socket.disconnect();
+                    ios.emit('notifier',{
+                        action:'stop'
+                      , msg:'20 pages in site completed'
+                    });
                     planners.free(planner,function(args){
                     },function(error){
                         ios.emit('notifier',{
