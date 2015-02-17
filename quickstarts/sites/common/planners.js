@@ -4,6 +4,8 @@ var test=require('../../../planners/functions/planners/test')
   , set=require('../../../planners/functions/planners/set')
   , unset=require('../../../planners/functions/planners/unset')
   , run=require('../../../planners/functions/planners/run')
+  , auth=require('../../../planners/functions/databases/auth')
+  , mapsite=require('../../../planners/functions/repositories/sites/view/getmapsite')
   , tid=undefined
 
 exports.create=function(planner,db,url,success,fail){
@@ -89,7 +91,26 @@ exports.free=function(planner,success,fail){
     unset(pkg)
     .fail(fail)
     .done(function(args){
-        console.log('unset sites/fetch ...'+pkg.host);
+        console.log('unset sites/fetch ...'+pkg.planner.host);
+        success(args);
+    });
+};
+
+exports.mapsite=function(db,success,fail){
+    var pkg={
+        db:{
+            host:db.host
+          , user:db.user
+          , pass:db.pass
+          , name:db.name
+        }
+    };
+
+    auth(pkg)
+    .then(mapsite)
+    .fail(fail)
+    .done(function(args){
+        console.log('mapsite request ...'+pkg.db.name);
         success(args);
     });
 };

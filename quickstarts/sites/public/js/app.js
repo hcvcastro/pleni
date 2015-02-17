@@ -9,6 +9,13 @@ var pleni=angular
     .module('PleniApp',[
         'ngRoute','ngResource','ngStorage','btford.socket-io'])
     .config(['$routeProvider',function($routeProvider){
+        var match=/pleni.url=(.+)/.exec(document.cookie)
+          , site='/sites'
+
+        if(match&&match.length==2){
+            site='/map';
+        }
+
         $routeProvider
             .when('/sites',{
                 templateUrl:'/sites'
@@ -19,7 +26,7 @@ var pleni=angular
               , controller:'MapController'
             })
             .otherwise({
-                redirectTo: '/sites'
+                redirectTo:site
             });
     }]);
 

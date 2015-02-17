@@ -68,7 +68,9 @@ app.use(express.static(join(__dirname,'..','..','bower_components')));
 app.locals.pretty=false;
 
 app.get('/',function(request,response){
-    console.log(request.session);
+    if(request.session.url){
+        response.cookie('pleni.url',request.session.url);
+    }
     response.render('index');
 });
 
@@ -81,7 +83,7 @@ app.get('/map',function(request,response){
 });
 
 app.put('/sites',function(request,response){
-    var site=validate.toString(request.body.site)
+    var site=validate.toValidHost(request.body.site)
       , agent=validate.toString(request.body.agent);
 
     if(validate.validHost(site)){
@@ -89,12 +91,29 @@ app.put('/sites',function(request,response){
             action:'start'
           , msg:'Starting the process ...'
         });
-        fetchsite(monitor.getplanner(),monitor.getrepository(),site,agent);
+
+        var planner=monitor.getplanner()
+          , db=monitor.getrepository()
+
+        fetchsite(planner,db,site,agent);
         request.session.url=site;
+        request.session.db=db;
         response.status(200).json(_success.ok);
     }else{
         response.status(403).json(_error.json);
     }
+});
+
+app.post('/mapsite',function(request,response){
+    planners.mapsite(request.session.db,function(args){
+        if(args&&args.site&&args.site.mapsite){
+            response.status(200).json(args.site.mapsite);
+        }else{
+            response.status(404).json(_error.notfound);
+        }
+    },function(error){
+        response.status(404).json(_error.json);
+    });
 });
 
 var action='';

@@ -1,14 +1,37 @@
 'use strict';
 
-pleni.controller('MapController',['$scope','$http','Socket','Visual',
-    function($scope,$http,Socket,Visual){
+pleni.controller('MapController',
+    ['$scope','$http','$location','Socket','Visual',
+    function($scope,$http,$location,Socket,Visual){
     
     $('#content').removeClass('blocked');
+    var match=/pleni.url=(.+)/.exec(document.cookie)
+    if(match&&match.length==2){
+        $scope.url=decodeURIComponent(match[1]);
+        if($scope.url.indexOf('~')!=0){
+            $http.post('/mapsite').success(function(data,status){
+                Visual.clean();
+                Visual.render(data);
+            }).error(function(error,status){});
+        }
+    }else{
+        return $location.path('sites');
+    }
+
+    $scope.completed=0;
+    $scope.total=0;
+    $scope.message='';
+    $scope.waiting=false;
+
+    $scope.menu=function(){
+        pushy.togglePushy();
+    }
 
     Socket.on('notifier',function(pkg){
         console.log(pkg);
         switch(pkg.action){
             case 'create':
+                Visual.clean();
                 Visual.render();
                 break;
             case 'task':

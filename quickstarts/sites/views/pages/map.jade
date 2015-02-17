@@ -2,11 +2,11 @@
 #control
     .wrapper
         .menu.fa.fa-bars(ng-click='menu()')
-        .url http://www.google.com.bo
-        .c1 100
-        .c2 100
-        .msg 
+        .url {{url}}
+        .c1 {{completed}}
+        .c2 {{total}}
+        .msg {{message}}
         .status
-            span.fa.fa-circle-o-notch.fa-spin
+            span.fa.fa-circle-o-notch(ng-class='{\'fa-spin\':waiting==true}')
         .clearfix
 
