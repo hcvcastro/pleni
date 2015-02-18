@@ -36,6 +36,9 @@ pleni.controller('MapController',
     Socket.on('notifier',function(pkg){
         console.log(pkg);
         switch(pkg.action){
+            case 'start':
+                $scope.message=pkg.msg;
+                break;
             case 'create':
                 $scope.message=pkg.msg;
                 break;

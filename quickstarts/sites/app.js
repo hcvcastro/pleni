@@ -68,6 +68,7 @@ app.use(express.static(join(__dirname,'..','..','bower_components')));
 app.locals.pretty=false;
 
 app.get('/',function(request,response){
+    console.log(sockets);
     if(request.session.url){
         response.cookie('pleni.url',request.session.url);
     }else{
@@ -89,10 +90,12 @@ app.put('/sites',function(request,response){
       , agent=validate.toString(request.body.agent);
 
     if(validate.validHost(site)){
-        ios.emit('notifier',{
-            action:'start'
-          , msg:'Starting the process ...'
-        });
+        for(var i in sockets[request.sessionID]){
+            sockets[request.sessionID][i].emit('notifier',{
+                action:'start'
+              , msg:'Starting the process ...'
+            });
+        }
 
         var planner=monitor.getplanner()
           , db=monitor.getrepository()
@@ -144,32 +147,44 @@ var fetchsite=function(request,planner,db,site,agent){
                     request.session.save();
                     planners.fetch(planner,db,agent,function(args){
                     },function(error){
-                        ios.emit('notifier',{
-                            action:'error'
-                          , msg:error
+                        for(var i in sockets[request.sessionID]){
+                            sockets[request.sessionID][i].emit('notifier',{
+                                action:'error'
+                              , msg:error
+                            });
+                        }
+                    });
+
+                    for(var i in sockets[request.sessionID]){
+                        sockets[request.sessionID][i].emit('notifier',{
+                            action:'create'
+                          , msg:'Created site repository ...'
                         });
-                    });
-                    ios.emit('notifier',{
-                        action:'create'
-                      , msg:'Created site repository ...'
-                    });
+                    }
                 }else if(msg.task.id=='site/fetch'){
-                    ios.emit('notifier',msg);
+                    for(var i in sockets[request.sessionID]){
+                        sockets[request.sessionID][i].emit('notifier',msg);
+                    }
                 }
                 break;
             case 'stop':
                 if(request.session.action=='site/fetch'){
                     socket.disconnect();
-                    ios.emit('notifier',{
-                        action:'stop'
-                      , msg:'20 pages in site completed'
-                    });
+
+                    for(var i in sockets[request.sessionID]){
+                        sockets[request.sessionID][i].emit('notifier',{
+                            action:'stop'
+                          , msg:'20 pages in site completed'
+                        });
+                    }
                     planners.free(planner,function(args){
                     },function(error){
-                        ios.emit('notifier',{
-                            action:'error'
-                          , msg:error
-                        });
+                        for(var i in sockets[request.sessionID]){
+                            sockets[request.sessionID][i].emit('notifier',{
+                                action:'error'
+                              , msg:error
+                            });
+                        }
                     });
                 }
                 break;
@@ -178,15 +193,33 @@ var fetchsite=function(request,planner,db,site,agent){
 
     planners.create(planner,db,site,function(args){
     },function(error){
-        ios.emit('notifier',{
-            action:'error'
-          , msg:error
-        });
+        for(var i in sockets[request.sessionID]){
+            sockets[request.sessionID][i].emit('notifier',{
+                action:'error'
+              , msg:error
+            });
+        }
     });
 };
 
-var sessionsockets=new sessionsocketio(ios,store,parser,'pleni.sid');
+var sockets={}
+  , sessionsockets=new sessionsocketio(ios,store,parser,'pleni.sid');
+
 sessionsockets.on('connection',function(err,socket,session){
+    console.log('socket connection ... '+socket.id);
+    var sid=socket.handshake.signedCookies['pleni.sid'];
+    if(!(sid in sockets)){
+        sockets[sid]={};
+    }
+    sockets[sid][socket.id]=socket;
+
+    socket.on('disconnect',function(){
+        console.log('socket disconnection ... '+socket.id);
+        delete sockets[sid][socket.id];
+        if(Object.keys(sockets[sid]).length==0){
+            delete sockets[sid];
+        }
+    });
 });
 
 app.use(function(request,response){
