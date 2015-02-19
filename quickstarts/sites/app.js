@@ -6,6 +6,7 @@ var http=require('http')
   , bodyparser=require('body-parser')
   , lessmiddleware=require('less-middleware')
   , join=require('path').join
+  , url=require('url')
   , app=express()
   , server=http.Server(app)
   , morgan=require('morgan')
@@ -31,7 +32,7 @@ app.disable('x-powered-by');
 app.use(favicon(
     join(__dirname,'..','..','master','public','img','favicon.ico')));
 app.use(bodyparser.json());
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 
 var parser=cookieparser(secret);
 app.use(parser);
@@ -86,25 +87,17 @@ app.get('/map',function(request,response){
 });
 
 app.put('/sites',function(request,response){
-    var site=validate.toValidHost(request.body.site)
-      , agent=validate.toString(request.body.agent);
+    if(validate.validHost(request.body.site)){
+        var site=validate.toValidHost(request.body.site)
+          , agent=validate.toString(request.body.agent)
+          , url='http://localhost:'+app.get('port')+'/p/'+request.sessionID
 
-    if(validate.validHost(site)){
-        for(var i in sockets[request.sessionID]){
-            sockets[request.sessionID][i].emit('notifier',{
-                action:'start'
-              , msg:'Starting the process ...'
-            });
-        }
-
-        var planner=monitor.getplanner()
-          , db=monitor.getrepository()
-
-        fetchsite(request,planner,db,site,agent);
+        monitor.getplanner(url);
 
         request.session.url=site;
-        request.session.db=db;
+        request.session.agent=agent;
         request.session.action='';
+        request.session.db=monitor.getrepository();
 
         response.cookie('pleni.url',site);
         response.status(200).json(_success.ok);
@@ -129,78 +122,101 @@ app.post('/mapsite',function(request,response){
     }
 });
 
-var fetchsite=function(request,planner,db,site,agent){
-    var socket=ioc.connect(planner.host+':'+planner.port,{
-        reconnect:true,'forceNew':true})
+app.post('/p/:id',function(request,response){
+    var session=request.params.id
+      , sessionID='sites:'+request.params.id
+      , planner=request.body.planner
+      , dw_planner=url.parse(planner)
 
-    socket.on('notifier',function(msg){
-        switch(msg.action){
-            case 'create':
-                request.session.action=msg.task.name;
-                request.session.save();
-                break;
-            case 'run':
-                break;
-            case 'task':
-                if(msg.task.id=='site/create'){
-                    request.session.mapsite=true;
-                    request.session.save();
-                    planners.fetch(planner,db,agent,function(args){
-                    },function(error){
-                        for(var i in sockets[request.sessionID]){
-                            sockets[request.sessionID][i].emit('notifier',{
-                                action:'error'
-                              , msg:error
+    redisclient.get(sessionID,function(err,reply){
+        var _session=JSON.parse(reply);
+          , socket=ioc.connect(planner,{
+                reconnect:true
+              , 'forceNew':true
+            })
+
+        socket.on('notifier',function(msg){
+            switch(msg.action){
+                case 'create':
+                    redisclient.get(sessionID,function(err,reply){
+                        var s=JSON.parse(reply);
+                        s.action=msg.task.name;
+                        redisclient.set(sessionID,JSON.stringify(s));
+                    });
+                    break;
+                case 'run':
+                    break;
+                case 'task':
+                    if(msg.task.id=='site/create'){
+                        redisclient.get(sessionID,function(err,reply){
+                            var s=JSON.parse(reply);
+                            s.mapsite=true;
+                            redisclient.set(sessionID,JSON.stringify(s));
+                        });
+
+                        planners.fetch(planner,db,agent,function(args){
+                        },function(error){
+                            for(var i in sockets[session]){
+                                sockets[session][i].emit('notifier',{
+                                    action:'error'
+                                  , msg:error
+                                });
+                            }
+                        });
+
+                        for(var i in sockets[session]){
+                            sockets[session][i].emit('notifier',{
+                                action:'create'
+                              , msg:'Created site repository ...'
+                            });
+                        }
+                    }else if(msg.task.id=='site/fetch'){
+                        for(var i in sockets[session]){
+                            sockets[session][i].emit('notifier',msg);
+                        }
+                    }
+                    break;
+                case 'stop':
+                    redisclient.get(sessionID,function(err,reply){
+                        var s=JSON.parse(reply);
+                        if(s.action=='site/fetch'){
+                            socket.disconnect();
+
+                            for(var i in sockets[session]){
+                                sockets[session][i].emit('notifier',{
+                                    action:'stop'
+                                  , msg:'20 pages in site completed'
+                                });
+                            }
+                            planners.free(planner,function(args){
+                            },function(error){
+                                for(var i in sockets[session]){
+                                    sockets[session][i].emit('notifier',{
+                                        action:'error'
+                                      , msg:error
+                                    });
+                                }
                             });
                         }
                     });
+                    break;
+            }
+        });
 
-                    for(var i in sockets[request.sessionID]){
-                        sockets[request.sessionID][i].emit('notifier',{
-                            action:'create'
-                          , msg:'Created site repository ...'
-                        });
-                    }
-                }else if(msg.task.id=='site/fetch'){
-                    for(var i in sockets[request.sessionID]){
-                        sockets[request.sessionID][i].emit('notifier',msg);
-                    }
-                }
-                break;
-            case 'stop':
-                if(request.session.action=='site/fetch'){
-                    socket.disconnect();
+        planners.create(planner,db,site,function(args){
+        },function(error){
+            for(var i in sockets[session]){
+                sockets[session][i].emit('notifier',{
+                    action:'error'
+                  , msg:error
+                });
+            }
+        });
 
-                    for(var i in sockets[request.sessionID]){
-                        sockets[request.sessionID][i].emit('notifier',{
-                            action:'stop'
-                          , msg:'20 pages in site completed'
-                        });
-                    }
-                    planners.free(planner,function(args){
-                    },function(error){
-                        for(var i in sockets[request.sessionID]){
-                            sockets[request.sessionID][i].emit('notifier',{
-                                action:'error'
-                              , msg:error
-                            });
-                        }
-                    });
-                }
-                break;
-        }
     });
 
-    planners.create(planner,db,site,function(args){
-    },function(error){
-        for(var i in sockets[request.sessionID]){
-            sockets[request.sessionID][i].emit('notifier',{
-                action:'error'
-              , msg:error
-            });
-        }
-    });
-};
+    response.status(200).json(_success.ok);
+});
 
 var sockets={}
   , sessionsockets=new sessionsocketio(ios,store,parser,'pleni.sid');
