@@ -25,6 +25,7 @@ var http=require('http')
   , create=require('./common/planners').create
   , fetch=require('./common/planners').fetch
   , mapsite=require('./common/planners').mapsite
+  , free=require('./common/planners').free
   , secret='pleni'
 
 app.set('port',process.env.PORT||3003);
@@ -153,11 +154,12 @@ app.post('/p/:id',function(request,response){
           , 'forceNew':true
         });
         socket.on('notifier',function(msg){
+            console.log(msg);
             switch(msg.action){
                 case 'create':
                     get_session(sessionID,function(session){
                         session.action=msg.task.name;
-                        save_session(session);
+                        save_session(sessionID,session);
                     });
                     break;
                 case 'run':
@@ -166,26 +168,24 @@ app.post('/p/:id',function(request,response){
                     if(msg.task.id=='site/create'){
                         get_session(sessionID,function(session){
                             session.mapsite=true;
-                            save_session(session);
-                        });
+                            save_session(sessionID,session,function(){
+                                fetch(planner,session.db,session.agent,
+                                function(args){
+                                },function(error){
+                                    notifier(id,{
+                                        action:'error'
+                                      , msg:error
+                                    });
+                                });
 
-                        fetch(planner,session.db,session.agent,function(args){
-                        },function(error){
-                            notifier(id,{
-                                action:'error'
-                              , msg:error
+                                notifier(id,{
+                                    action:'create'
+                                  , msg:'Created site repository ...'
+                                });
                             });
                         });
-
-                        notifier(id,{
-                            action:'create'
-                          , msg:'Created site repository ...'
-                        });
                     }else if(msg.task.id=='site/fetch'){
-                        notifier(id,{
-                            action:'create'
-                          , msg:msg
-                        });
+                        notifier(id,msg);
                     }
                     break;
                 case 'stop':
@@ -214,12 +214,10 @@ app.post('/p/:id',function(request,response){
 
         create(planner,session.db,session.url,function(args){
         },function(error){
-            for(var i in sockets[id]){
-                sockets[id][i].emit('notifier',{
-                    action:'error'
-                  , msg:error
-                });
-            }
+            notifier(id,{
+                action:'error'
+              , msg:error
+            });
         });
     });
 

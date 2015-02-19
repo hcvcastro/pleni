@@ -15,7 +15,7 @@ exports.getplanner=function(task){
 }
 
 exports.freeplanner=function(task){
-    request.delete({
+    request.del({
         url:'http://localhost:3004/tasks'
       , json:{task:task}
     },function(error,response){
