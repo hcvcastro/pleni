@@ -9,6 +9,7 @@ exports.error = {
   , auth:           {ok:false,message:'Authorization error'}
   , json:           {ok:false,message:'JSON error'}
   , badrequest:     {ok:false,message:'Bad request'}
+  , busy:           {ok:false,message:'Resource is busy'}
   , notimplemented: {ok:false,message:'Not implemented service'}
 };
 

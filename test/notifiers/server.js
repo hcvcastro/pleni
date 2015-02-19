@@ -239,7 +239,6 @@ describe('notifiers controller functions',function(){
                 .expect(200)
                 .end(function(err,res){
                     res.statusCode.should.be.eql(200);
-                    res.body.should.have.property('ok');
                     res.body.should.eql(_success.ok);
                     done();
                 });

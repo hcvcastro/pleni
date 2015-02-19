@@ -69,7 +69,6 @@ app.use(express.static(join(__dirname,'..','..','bower_components')));
 app.locals.pretty=false;
 
 app.get('/',function(request,response){
-    console.log(sockets);
     if(request.session.url){
         response.cookie('pleni.url',request.session.url);
     }else{
