@@ -13,7 +13,6 @@ var http=require('http')
   , _success=require('../planners/utils/json-response').success
   , _error=require('../planners/utils/json-response').error
   , assign=function(planner,done){
-        console.log('assign');
         redisclient.lpop('monitor:queue',function(err,task){
             if(task){
                 notify(task,planner,function(){
@@ -33,7 +32,7 @@ var http=require('http')
         });
     }
   , notify=function(task,planner,success,fail){
-/*        request.post({
+        request.post({
             url:task
           , json:{planner:planner}
         },function(error,response){
@@ -42,8 +41,7 @@ var http=require('http')
             }else{
                 fail();
             }
-        });*/
-        success();
+        });
     }
 
 app.set('port',process.env.PORT||3004);
