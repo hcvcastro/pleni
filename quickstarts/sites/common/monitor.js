@@ -14,6 +14,17 @@ exports.getplanner=function(task){
     });
 }
 
+exports.freeplanner=function(task){
+    request.delete({
+        url:'http://localhost:3004/tasks'
+      , json:{task:task}
+    },function(error,response){
+        if(error){
+            console.log(error);
+        }
+    });
+}
+
 exports.getrepository=function(){
     return {
         host:'http://localhost:5984'

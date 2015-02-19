@@ -11,7 +11,7 @@ var test=require('../../../planners/functions/planners/test')
 exports.create=function(planner,db,url,success,fail){
     var pkg={
         planner:{
-            host:planner.host+':'+planner.port
+            host:planner
         }
       , targs:{
             db:db
@@ -48,7 +48,7 @@ exports.create=function(planner,db,url,success,fail){
 exports.fetch=function(planner,db,agent,success,fail){
     var pkg={
         planner:{
-            host:planner.host+':'+planner.port
+            host:planner
           , tid:tid
         }
       , targs:{
@@ -83,7 +83,7 @@ exports.fetch=function(planner,db,agent,success,fail){
 exports.free=function(planner,success,fail){
     var pkg={
         planner:{
-            host:planner.host+':'+planner.port
+            host:planner
           , tid:tid
         }
     };
