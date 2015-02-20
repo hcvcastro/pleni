@@ -61,22 +61,26 @@ module.exports=function(grunt){
                 files:['master/views/**/*.jade']
               , options:{livereload:reloadPort}
             }
-/* -------- quickstarts  watching ------------------------------------------- */
-          , qs_server:{
+/* -------- quickstarts watching -------------------------------------------- */
+          , qs_sites:{
                 files:[
                     'quickstarts/sites/app.js'
+                  , 'quickstarts/sites/public/js/**/*.js'
+                  , 'quickstarts/sites/views/**/*.jade'
                 ]
               , tasks:[
-                    'develop:qs_server'
+                    'develop:qs_sites'
                 ]
               , options:{livereload:reloadPort}
             }
-          , qs_js:{
-                files:['quickstarts/sites/public/js/**/*.js']
-              , options:{livereload:reloadPort}
-            }
-          , qs_jade:{
-                files:['quickstarts/sites/views/**/*.jade']
+/* -------- monitor watching ------------------------------------------------ */
+          , monitor:{
+                files:[
+                    'monitor/app.js'
+                ]
+              , tasks:[
+                    'develop:monitor'
+                ]
               , options:{livereload:reloadPort}
             }
 /* -------- testing watching ------------------------------------------------ */
@@ -129,10 +133,17 @@ module.exports=function(grunt){
           , master:{
                 file:'master/app.js'
             }
-          , qs_server:{
+          , qs_sites:{
                 file:'quickstarts/sites/app.js'
               , env:{
                     PORT:grunt.option('port')||3003
+                  , ENV:'development'
+                }
+            }
+          , monitor:{
+                file:'monitor/app.js'
+              , env:{
+                    PORT:grunt.option('port')||3004
                 }
             }
         }
@@ -151,10 +162,102 @@ module.exports=function(grunt){
                 'test/planners/planner/server.js'
               , 'test/planners/planner/scheduler.js'
             ]
-          , notifier:[
-                'test/notifiers/**/*.js'
-            ]
+          , notifier:['test/notifiers/**/*.js']
           , master:['test/master/**/*.js']
+          , qs_sites:['test/quickstarts/sites/*.js']
+          , monitor:['test/monitor/server.js']
+        }
+
+      , clean:{
+            qs_sites:'quickstarts/sites/dist'
+        }
+      , concurrent:{
+            qs_sites:[
+                'jade:qs_sites'
+              , 'less:qs_sites'
+              , 'uglify:qs_sites'
+              , 'copy:qs_sites'
+            ]
+        }
+      , jade:{
+            qs_sites:{
+                options:{
+                    pretty:false
+                }
+              , files:{
+                    'quickstarts/sites/dist/index.html'
+                  : 'quickstarts/sites/views/prod.jade'
+                  , 'quickstarts/sites/dist/map.html'
+                  : 'quickstarts/sites/views/pages/map.jade'
+                  , 'quickstarts/sites/dist/sites.html'
+                  : 'quickstarts/sites/views/pages/sites.jade'
+                }
+            }
+        }
+      , less:{
+            qs_sites:{
+                options:{
+                    cleancss:true
+                  , paths:['bower_components']
+                }
+              , files:{
+                    'quickstarts/sites/dist/style.css'
+                  : 'master/public/less/qs-sites.less'
+                }
+            }
+        }
+      , uglify:{
+            qs_sites:{
+                files:[{
+                    'quickstarts/sites/dist/js/qs.js':[
+                        'quickstarts/sites/public/js/app.js'
+                      , 'quickstarts/sites/public/js/controllers/sites.js'
+                      , 'quickstarts/sites/public/js/controllers/map.js'
+                      , 'master/public/js/visual/site.js'
+                      , 'master/public/js/factories/socket.js'
+                      , 'master/public/js/factories/visual.js'
+                    ]
+                },{
+                    'quickstarts/sites/dist/js/jquery.min.js':[
+                        'bower_components/jquery/dist/jquery.min.js'
+/*                      , 'bower_components/socket.io-client/socket.io.js'
+                      , 'bower_components/angular/angular.min.js'
+                      , 'bower_components/angular-route/angular-route.min.js'
+                      , 'bower_components/angular-socket-io/socket.min.js'
+                      , 'bower_components/d3/d3.min.js'
+                      , 'bower_components/d3-tip/index.js'
+                      , 'bower_components/pushy-dyn/js/pushy.js'*/
+                    ]
+                }]
+            }
+        }
+      , copy:{
+            qs_sites:{
+                files:[{
+                    src:'master/public/img/favicon.ico'
+                  , dest:'quickstarts/sites/dist/img/favicon.ico'
+                },{
+                    src:'bower_component/font-awesome/fonts/fontawesome-webfont.ttf'
+                    dest:'quickstarts/fonts/fontawesome-webfont.ttf'
+
+                }]
+            }
+        }
+      , cssmin:{
+            qs_sites:{
+                files:{
+                    'quickstarts/sites/dist/style.css':[
+                        'bower_components/font-awesome/css/font-awesome.min.css'
+                      , 'quickstarts/sites/dist/style.css'
+                    ]
+                }
+            }
+        }
+
+      , jshint:{
+            qs_sites:[
+                'quickstarts/sites/common/planners.js'
+            ]
         }
 
       , latex:{
@@ -173,6 +276,8 @@ module.exports=function(grunt){
     ]);
     grunt.registerTask('test:notifier',['mochacli:notifier']);
     grunt.registerTask('test:master',['mochacli:master']);
+    grunt.registerTask('test:qs:sites',['mochacli:qs_sites']);
+    grunt.registerTask('test:monitor',['mochacli:monitor']);
 
     grunt.config.requires('watch.master.files');
     filescontrol=grunt.config('watch.master.files');
@@ -218,8 +323,18 @@ module.exports=function(grunt){
       , 'watch'
     ]);
     grunt.registerTask('serve:qs:sites',[
-        'develop:qs_server'
-      , 'watch'
+        'develop:qs_sites'
+      , 'watch:qs_sites'
+    ]);
+    grunt.registerTask('serve:monitor',[
+        'develop:monitor'
+      , 'watch:monitor'
+    ]);
+
+    grunt.registerTask('build:qs:sites',[
+        'clean:qs_sites'
+      , 'concurrent:qs_sites'
+      , 'cssmin:qs_sites'
     ]);
 };
 

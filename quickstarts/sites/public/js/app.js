@@ -6,8 +6,7 @@ $('.close').click(function(){
 });
 
 var pleni=angular
-    .module('PleniApp',[
-        'ngRoute','ngResource','ngStorage','btford.socket-io'])
+    .module('PleniApp',['ngRoute','btford.socket-io'])
     .config(['$routeProvider',function($routeProvider){
         var match=/pleni.url=(.+)/.exec(document.cookie)
           , site='/sites'

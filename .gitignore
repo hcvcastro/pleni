@@ -25,6 +25,9 @@ build/Release
 node_modules
 bower_components
 
+# dist files
+quickstarts/sites/dist
+
 # latex files
 docs/*.log
 docs/*.aux

@@ -27,15 +27,35 @@ var http=require('http')
   , mapsite=require('./common/planners').mapsite
   , free=require('./common/planners').free
   , secret='pleni'
+  , env=process.env.ENV||'production'
 
 app.set('port',process.env.PORT||3003);
-app.set('views',join(__dirname,'views'));
-app.set('view engine','jade');
 app.disable('x-powered-by');
 app.use(favicon(
     join(__dirname,'..','..','master','public','img','favicon.ico')));
 app.use(bodyparser.json());
-app.use(morgan('dev'));
+
+
+if(env=='production'){
+    app.use(express.static(join(__dirname,'dist')));
+    app.use(morgan('combined'));
+}else{
+    app.set('views',join(__dirname,'views'));
+    app.set('view engine','jade');
+
+    app.use(lessmiddleware('/less',{
+        dest:'/css'
+      , pathRoot:join(__dirname,'..','..','master','public')
+      , compress:true
+    }));
+
+    app.use(express.static(join(__dirname,'public')));
+    app.use(express.static(join(__dirname,'..','..','master','public')));
+    app.use(express.static(join(__dirname,'..','..','bower_components')));
+    app.locals.pretty=false;
+
+    app.use(morgan('dev'));
+}
 
 var parser=cookieparser(secret);
 app.use(parser);
@@ -60,32 +80,33 @@ app.use(cookiesession({
   , store:store
 }));
 
-app.use(lessmiddleware('/less',{
-    dest:'/css'
-  , pathRoot:join(__dirname,'..','..','master','public')
-  , compress:true
-}));
-
-app.use(express.static(join(__dirname,'public')));
-app.use(express.static(join(__dirname,'..','..','master','public')));
-app.use(express.static(join(__dirname,'..','..','bower_components')));
-app.locals.pretty=false;
-
 app.get('/',function(request,response){
     if(request.session.url){
         response.cookie('pleni.url',request.session.url);
     }else{
         response.cookie('pleni.url','');
     }
-    response.render('index');
+    if(env=='production'){
+        response.sendFile(join(__dirname,'dist','index.html'));
+    }else{
+        response.render('dev');
+    }
 });
 
 app.get('/sites',function(request,response){
-    response.render('pages/sites');
+    if(env=='production'){
+        response.sendFile(join(__dirname,'dist','sites.html'));
+    }else{
+        response.render('pages/sites');
+    }
 });
 
 app.get('/map',function(request,response){
-    response.render('pages/map');
+    if(env=='production'){
+        response.sendFile(join(__dirname,'dist','map.html'));
+    }else{
+        response.render('pages/map');
+    }
 });
 
 app.put('/sites',function(request,response){
@@ -239,13 +260,6 @@ sessionsockets.on('connection',function(err,socket,session){
         if(Object.keys(sockets[sid]).length==0){
             delete sockets[sid];
         }
-    });
-});
-
-app.use(function(request,response){
-    response.status(404).render('404.jade',{
-        title:'404',
-        message:'I\'m so sorry, but file not found!!'
     });
 });
 

@@ -1,11 +1,32 @@
 #!/bin/bash
 
-HOST='http://localhost:3004/planners'
-PORT=3001
+HELP="$(basename "$0") [-h] [-p planner]
 
-REQUEST=$HOST/
+script for add planner in pleni monitor
+where:
+    -h          show this help text
+    -p planner  the planner location (host:port)"
+
+HOST='http://localhost:3004'
+
+while getopts 'hp:' OPTION; do
+    case "$OPTION" in
+        h) echo "$HELP"
+            exit
+            ;;
+        p) PLANNER=$OPTARG
+            ;;
+    esac
+done
+
+if [[ -z $PLANNER ]]; then
+    echo "$HELP"
+    exit
+fi
+
+REQUEST=$HOST/planners
 BODY=$(cat << EOF
-{"planner":"http://localhost:$PORT"}
+{"planner":"$PLANNER"}
 EOF
 )
 
