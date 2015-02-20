@@ -31,15 +31,17 @@ var http=require('http')
 
 app.set('port',process.env.PORT||3003);
 app.disable('x-powered-by');
-app.use(favicon(
-    join(__dirname,'..','..','master','public','img','favicon.ico')));
 app.use(bodyparser.json());
 
 
 if(env=='production'){
+    app.use(favicon(
+        join(__dirname,'dist','favicon.ico')));
     app.use(express.static(join(__dirname,'dist')));
     app.use(morgan('combined'));
 }else{
+    app.use(favicon(
+        join(__dirname,'..','..','master','public','img','favicon.ico')));
     app.set('views',join(__dirname,'views'));
     app.set('view engine','jade');
 
@@ -175,7 +177,6 @@ app.post('/p/:id',function(request,response){
           , 'forceNew':true
         });
         socket.on('notifier',function(msg){
-            console.log(msg);
             switch(msg.action){
                 case 'create':
                     get_session(sessionID,function(session){

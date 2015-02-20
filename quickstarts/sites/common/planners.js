@@ -24,7 +24,6 @@ exports.create=function(planner,db,url,success,fail){
           , count:1
           , interval:1000
         }
-      , debug:true
     };
 
     if(tid){
@@ -38,8 +37,6 @@ exports.create=function(planner,db,url,success,fail){
     .done(function(args){
         if(args&&args.planner&&args.planner.tid){
             tid=args.planner.tid;
-            console.log('set sites/create ... '+pkg.targs.db.name);
-            console.log(tid);
             success(args);
         }
     });
@@ -63,7 +60,6 @@ exports.fetch=function(planner,db,agent,success,fail){
           , count: 20
           , interval: 1000
         }
-      , debug:true
     };
 
     test(pkg)
@@ -73,8 +69,6 @@ exports.fetch=function(planner,db,agent,success,fail){
     .done(function(args){
         if(args&&args.planner&&args.planner.tid){
             tid=args.planner.tid;
-            console.log('set sites/fetch ... '+pkg.targs.db.name);
-            console.log(tid);
             success(args);
         }
     });
@@ -91,7 +85,6 @@ exports.free=function(planner,success,fail){
     unset(pkg)
     .fail(fail)
     .done(function(args){
-        console.log('unset sites/fetch ...'+pkg.planner.host);
         success(args);
     });
 };
@@ -110,7 +103,6 @@ exports.mapsite=function(db,success,fail){
     .then(mapsite)
     .fail(fail)
     .done(function(args){
-        console.log('mapsite request ...'+pkg.db.name);
         success(args);
     });
 };

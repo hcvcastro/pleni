@@ -177,6 +177,7 @@ module.exports=function(grunt){
               , 'less:qs_sites'
               , 'uglify:qs_sites'
               , 'copy:qs_sites'
+              , 'svgmin:qs_sites'
             ]
         }
       , jade:{
@@ -209,7 +210,7 @@ module.exports=function(grunt){
       , uglify:{
             qs_sites:{
                 files:[{
-                    'quickstarts/sites/dist/js/qs.js':[
+                    'quickstarts/sites/dist/js/qs.min.js':[
                         'quickstarts/sites/public/js/app.js'
                       , 'quickstarts/sites/public/js/controllers/sites.js'
                       , 'quickstarts/sites/public/js/controllers/map.js'
@@ -220,13 +221,28 @@ module.exports=function(grunt){
                 },{
                     'quickstarts/sites/dist/js/jquery.min.js':[
                         'bower_components/jquery/dist/jquery.min.js'
-/*                      , 'bower_components/socket.io-client/socket.io.js'
-                      , 'bower_components/angular/angular.min.js'
-                      , 'bower_components/angular-route/angular-route.min.js'
-                      , 'bower_components/angular-socket-io/socket.min.js'
-                      , 'bower_components/d3/d3.min.js'
+                      , 'bower_components/pushy-dyn/js/pushy.js'
+                    ]
+                },{
+                    'quickstarts/sites/dist/js/socket.io.min.js':[
+                        'bower_components/socket.io-client/socket.io.js'
+                    ]
+                },{
+                    'quickstarts/sites/dist/js/angular.min.js':[
+                        'bower_components/angular/angular.min.js'
+                    ]
+                },{
+                    'quickstarts/sites/dist/js/angular-route.min.js':[
+                        'bower_components/angular-route/angular-route.min.js'
+                    ]
+                },{
+                    'quickstarts/sites/dist/js/angular-socket-io.min.js':[
+                        'bower_components/angular-socket-io/socket.min.js'
+                    ]
+                },{
+                    'quickstarts/sites/dist/js/d3.min.js':[
+                        'bower_components/d3/d3.min.js'
                       , 'bower_components/d3-tip/index.js'
-                      , 'bower_components/pushy-dyn/js/pushy.js'*/
                     ]
                 }]
             }
@@ -235,11 +251,13 @@ module.exports=function(grunt){
             qs_sites:{
                 files:[{
                     src:'master/public/img/favicon.ico'
-                  , dest:'quickstarts/sites/dist/img/favicon.ico'
+                  , dest:'quickstarts/sites/dist/favicon.ico'
                 },{
-                    src:'bower_component/font-awesome/fonts/fontawesome-webfont.ttf'
-                    dest:'quickstarts/fonts/fontawesome-webfont.ttf'
-
+                    expand:true
+                  , flatten:true
+                  , cwd:'bower_components/font-awesome/'
+                  , src:'fonts/fontawesome-webfont.*'
+                  , dest:'quickstarts/sites/dist/fonts/'
                 }]
             }
         }
@@ -247,10 +265,23 @@ module.exports=function(grunt){
             qs_sites:{
                 files:{
                     'quickstarts/sites/dist/style.css':[
-                        'bower_components/font-awesome/css/font-awesome.min.css'
-                      , 'quickstarts/sites/dist/style.css'
+                        'quickstarts/sites/dist/style.css'
                     ]
                 }
+            }
+        }
+      , svgmin:{
+            qs_sites:{
+                files:[{
+                    src:'master/public/img/canvas.svg'
+                  , dest:'quickstarts/sites/dist/img/canvas.svg'
+                },{
+                    src:'master/public/img/hiperborea.svg'
+                  , dest:'quickstarts/sites/dist/img/hiperborea.svg'
+                },{
+                    src:'master/public/img/pleni.sites.svg'
+                  , dest:'quickstarts/sites/dist/img/pleni.sites.svg'
+                }]
             }
         }
 
