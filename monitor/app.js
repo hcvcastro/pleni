@@ -12,6 +12,7 @@ var http=require('http')
   , validate=require('../planners/utils/validators')
   , _success=require('../planners/utils/json-response').success
   , _error=require('../planners/utils/json-response').error
+  , env=process.env.ENV||'production'
   , assign=function(planner,done){
         redisclient.lpop('monitor:queue',function(err,task){
             if(task){
@@ -32,16 +33,21 @@ var http=require('http')
         });
     }
   , notify=function(task,planner,success,fail){
-        request.post({
-            url:task
-          , json:{planner:planner}
-        },function(error,response){
-            if(!error&&response.statusCode==200){
-                success();
-            }else{
-                fail();
-            }
-        });
+        if(env=='test'){
+            console.log('ASSIGN '+task+' -> '+planner);
+            success();
+        }else{
+            request.post({
+                url:task
+              , json:{planner:planner}
+            },function(error,response){
+                if(!error&&response.statusCode==200){
+                    success();
+                }else{
+                    fail();
+                }
+            });
+        }
     }
 
 app.set('port',process.env.PORT||3004);
@@ -81,10 +87,14 @@ app.put('/tasks',function(request,response){
 
         redisclient.spop('monitor:free',function(err,planner){
             redisclient.rpush('monitor:queue',task,function(err,reply){
-                if(reply==1){
-                    assign(planner,function(){
+                if(reply>=1){
+                    if(planner){
+                        assign(planner,function(){
+                            response.status(200).json(_success.ok);
+                        });
+                    }else{
                         response.status(200).json(_success.ok);
-                    });
+                    }
                 }else{
                     response.status(403).json(_error.json);
                 }
@@ -107,7 +117,7 @@ app.delete('/tasks',function(request,response){
                     });
                 });
             }else{
-                response.status(200).json(_success.ok);
+                response.status(403).json(_error.busy);
             }
         })
     }else{
