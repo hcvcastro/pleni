@@ -14,15 +14,20 @@ var http=require('http')
   , _error=require('../planners/utils/json-response').error
   , env=process.env.ENV||'production'
   , assign=function(planner,done){
-        redisclient.lpop('monitor:queue',function(err,task){
-            if(task){
-                notify(task,planner,function(){
-                    redisclient.hset('monitor:tasks',task,planner,function(){
-                        done();
-                    });
-                },function(){
-                    redisclient.rpush('monitor:queue',task,function(){
-                        assign(planner,done);
+        redisclient.zrange('monitor:queue',0,0,function(err,task){
+            if(task.length!=0){
+                redisclient.zremrangebyrank('monitor:queue',0,0,function(){
+                    notify(task,planner,function(){
+                        redisclient.hset('monitor:tasks',task,planner,
+                        function(){
+                            done();
+                        });
+                    },function(){
+                        var penalty=Math.floor(Math.random()*8);
+                        redisclient.zadd('monitor:queue',Date.now()+penalty,
+                        task,function(){
+                            assign(planner,done);
+                        });
                     });
                 });
             }else{
@@ -86,17 +91,14 @@ app.put('/tasks',function(request,response){
         var task=request.body.task;
 
         redisclient.spop('monitor:free',function(err,planner){
-            redisclient.rpush('monitor:queue',task,function(err,reply){
-                if(reply>=1){
-                    if(planner){
-                        assign(planner,function(){
-                            response.status(200).json(_success.ok);
-                        });
-                    }else{
+            redisclient.zadd('monitor:queue',Date.now(),task,
+            function(err,reply){
+                if(planner){
+                    assign(planner,function(){
                         response.status(200).json(_success.ok);
-                    }
+                    });
                 }else{
-                    response.status(403).json(_error.json);
+                    response.status(200).json(_success.ok);
                 }
             });
         });
@@ -117,7 +119,9 @@ app.delete('/tasks',function(request,response){
                     });
                 });
             }else{
-                response.status(403).json(_error.busy);
+                redisclient.zrem('monitor:queue',task,function(err,task){
+                    response.status(200).json(_success.ok);
+                });
             }
         })
     }else{

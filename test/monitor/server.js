@@ -163,7 +163,7 @@ describe('monitor controller functions',function(){
                 res.statusCode.should.be.eql(200);
                 res.body.should.eql(_success.ok);
 
-                redisclient.lrange('monitor:queue',0,-1,
+                redisclient.zrange('monitor:queue',0,-1,
                 function(err,reply){
                     reply.should.lengthOf(1);
                     reply[0].should.eql(task+'02');
@@ -184,7 +184,7 @@ describe('monitor controller functions',function(){
                 res.statusCode.should.be.eql(200);
                 res.body.should.eql(_success.ok);
 
-                redisclient.lrange('monitor:queue',0,-1,
+                redisclient.zrange('monitor:queue',0,-1,
                 function(err,reply){
                     reply.should.lengthOf(2);
                     reply[0].should.eql(task+'02');
@@ -206,7 +206,7 @@ describe('monitor controller functions',function(){
                 res.statusCode.should.be.eql(200);
                 res.body.should.eql(_success.ok);
 
-                redisclient.lrange('monitor:queue',0,-1,
+                redisclient.zrange('monitor:queue',0,-1,
                 function(err,reply){
                     reply.should.lengthOf(3);
                     reply[0].should.eql(task+'02');
@@ -233,7 +233,7 @@ describe('monitor controller functions',function(){
                 function(err,reply){
                     reply.should.be.eql(planner);
 
-                    redisclient.lrange('monitor:queue',0,-1,
+                    redisclient.zrange('monitor:queue',0,-1,
                     function(err,reply){
                         reply.should.lengthOf(2);
                         reply[0].should.eql(task+'03');
@@ -253,13 +253,75 @@ describe('monitor controller functions',function(){
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
-                res.statusCode.should.be.eql(403);
-                res.body.should.eql(_error.busy);
-                done();
+                res.statusCode.should.be.eql(200);
+                res.body.should.eql(_success.ok);
+
+                redisclient.hget('monitor:tasks',task+'02',
+                function(err,reply){
+                    reply.should.be.eql(planner);
+
+                    redisclient.zrange('monitor:queue',0,-1,
+                    function(err,reply){
+                        reply.should.lengthOf(1);
+                        reply[0].should.eql(task+'03');
+                        done();
+                    });
+                });
             });
     });
 
-/*    it('DELETE /planners',function(done){
+    it('DELETE /tasks',function(done){
+        request(app)
+            .delete('/tasks')
+            .send({
+                task:task+'02'
+            })
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.body.should.eql(_success.ok);
+
+                redisclient.hget('monitor:tasks',task+'03',
+                function(err,reply){
+                    reply.should.be.eql(planner);
+
+                    redisclient.zrange('monitor:queue',0,-1,
+                    function(err,reply){
+                        reply.should.lengthOf(0);
+                        done();
+                    });
+                });
+            });
+    });
+
+    it('DELETE /tasks',function(done){
+        request(app)
+            .delete('/tasks')
+            .send({
+                task:task+'03'
+            })
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.body.should.eql(_success.ok);
+
+                redisclient.hget('monitor:tasks',task+'03',
+                function(err,reply){
+                    res.statusCode.should.be.eql(200);
+                    res.body.should.eql(_success.ok);
+
+                    redisclient.sismember('monitor:free',planner,
+                    function(err,reply){
+                        reply.should.be.eql(1);
+                        done();
+                    });
+                });
+            });
+    });
+
+    it('DELETE /planners',function(done){
         request(app)
             .delete('/planners')
             .send({
@@ -272,6 +334,6 @@ describe('monitor controller functions',function(){
                 res.body.should.eql(_success.ok);
                 done();
             });
-    });*/
+    });
 });
 
