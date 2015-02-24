@@ -48,13 +48,16 @@ if(env=='production'){
     app.use(lessmiddleware('/less',{
         dest:'/css'
       , pathRoot:join(__dirname,'..','..','master','public')
-      , compress:true
+      , parser:{
+            paths:[join(__dirname,'..','..','bower_components')]
+        }
+      , compress:false
     }));
 
     app.use(express.static(join(__dirname,'public')));
     app.use(express.static(join(__dirname,'..','..','master','public')));
     app.use(express.static(join(__dirname,'..','..','bower_components')));
-    app.locals.pretty=false;
+    app.locals.pretty=true;
 
     app.use(morgan('dev'));
 }

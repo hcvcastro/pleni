@@ -35,6 +35,19 @@ module.exports=function(grunt){
                 ]
               , tasks:['develop:notifier']
             }
+/* -------- frontend watching ----------------------------------------------- */
+          , js:{
+                files:['master/public/js/**/*.js']
+              , options:{livereload:reloadPort}
+            }
+          , less:{
+                files:['master/public/less/**/*.less']
+              , options:{livereload:reloadPort}
+            }
+          , jade:{
+                files:['master/views/**/*.jade']
+              , options:{livereload:reloadPort}
+            }
 /* -------- master watching ------------------------------------------------- */
           , master:{
                 files:[
@@ -47,18 +60,6 @@ module.exports=function(grunt){
               , tasks:[
                     'develop:master'
                 ]
-              , options:{livereload:reloadPort}
-            }
-          , js:{
-                files:['master/public/js/**/*.js']
-              , options:{livereload:reloadPort}
-            }
-          , less:{
-                files:['master/public/less/*.less']
-              , options:{livereload:reloadPort}
-            }
-          , jade:{
-                files:['master/views/**/*.jade']
               , options:{livereload:reloadPort}
             }
 /* -------- quickstarts watching -------------------------------------------- */
@@ -203,7 +204,7 @@ module.exports=function(grunt){
                 }
               , files:{
                     'quickstarts/sites/dist/style.css'
-                  : 'master/public/less/qs-sites.less'
+                  : 'master/public/less/sites.less'
                 }
             }
         }
@@ -355,7 +356,7 @@ module.exports=function(grunt){
     ]);
     grunt.registerTask('serve:qs:sites',[
         'develop:qs_sites'
-      , 'watch:qs_sites'
+      , 'watch'
     ]);
     grunt.registerTask('serve:monitor',[
         'develop:monitor'
