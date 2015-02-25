@@ -2,19 +2,42 @@
 
 pleni.controller('MenuController',['$scope','$rootScope','$http','$location',
     function($scope,$rootScope,$http,$location){
-        var l=$location.path();
+        $scope.init=function(){
+            var match=/pleni.url=(.+)/.exec(document.cookie)
+              , site='/sites'
+              , location=$location.path()||site
 
-        $scope.items={
-            more:(l=='/map')
-          , mapsite:(l=='/map')
-          , report:(l=='/map')
-          , close:(l=='/map')
-          , about:(l!='/map')
+            if(match&&match.length==2){
+                site='/map';
+            }
+
+            $scope.items={
+                more:(site=='/map')
+              , mapsite:(site=='/map')
+              , report:(site=='/map')
+              , close:(site=='/map')
+              , home:(location=='/about')
+              , about:(location!='/about')
+            };
         };
-        
-        $scope.about=function(){
+
+        $scope.menu=function(){
+            $scope.init();
             pushy.togglePushy();
-            return $location.path('about');
         }
+
+        $scope.home=function(){
+            $scope.items.home=false;
+            pushy.togglePushy();
+            return $location.path('/');
+        }
+
+        $scope.about=function(){
+            $scope.items.home=true;
+            pushy.togglePushy();
+            return $location.path('/about');
+        }
+
+        $scope.init();
 }]);
 

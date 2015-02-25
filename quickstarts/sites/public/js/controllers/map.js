@@ -9,10 +9,6 @@ pleni.controller('MapController',
     $scope.message=$rootScope.monitor;
     $scope.waiting=true;
 
-    $scope.menu=function(){
-        pushy.togglePushy();
-    }
-
     $('#content').removeClass('blocked');
     var match=/pleni.url=(.+)/.exec(document.cookie)
     if(match&&match.length==2){
