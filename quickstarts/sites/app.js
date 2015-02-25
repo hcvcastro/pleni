@@ -134,10 +134,10 @@ app.put('/sites',function(request,response){
         request.session.db=monitor.getrepository();
         request.session.save();
 
-        monitor.getplanner(url);
-
-        response.cookie('pleni.url',site);
-        response.status(200).json(_success.ok);
+        monitor.getplanner(url,function(msg){
+            response.cookie('pleni.url',site);
+            response.status(200).json(msg);
+        });
     }else{
         response.status(403).json(_error.json);
     }

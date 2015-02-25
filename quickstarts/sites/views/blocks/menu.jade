@@ -1,21 +1,20 @@
 div(ng-controller='MenuController')
     nav.pushy.pushy-left
         ul
-            li(ng-show='items.more')
-                a +20 pages
-            li(ng-show='items.mapsite')
-                a Export mapsite
-            li(ng-show='items.report')
-                a Generate report
-            li(ng-show='items.close')
-                a Close session
-            li(ng-show='items.home')
+            li(ng-show='items[0]')
+                a(ng-click='more()') +20 pages
+            li(ng-show='items[1]')
+                a(ng-click='export()') Export mapsite
+            li(ng-show='items[2]')
+                a(ng-click='report()') Generate report
+            li(ng-show='items[3]')
+                a(ng-click='close()') Close session
+            li(ng-show='items[4]')
                 a(ng-click='home()') Return home
-            li(ng-show='items.about')
+            li(ng-show='items[5]')
                 a(ng-click='about()') About pleni
-    .site-overlay
+    .site-overlay(ng-click='hide()')
         .close.fa.fa-close
-
     .menubar
         .menu.fa.fa-bars(ng-click='menu()')
 

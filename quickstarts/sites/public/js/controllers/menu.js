@@ -2,42 +2,45 @@
 
 pleni.controller('MenuController',['$scope','$rootScope','$http','$location',
     function($scope,$rootScope,$http,$location){
-        $scope.init=function(){
-            var match=/pleni.url=(.+)/.exec(document.cookie)
-              , site='/sites'
-              , location=$location.path()||site
-
-            if(match&&match.length==2){
-                site='/map';
-            }
-
-            $scope.items={
-                more:(site=='/map')
-              , mapsite:(site=='/map')
-              , report:(site=='/map')
-              , close:(site=='/map')
-              , home:(location=='/about')
-              , about:(location!='/about')
-            };
-        };
+        $scope.items=[0,0,0,0,0,1];
 
         $scope.menu=function(){
-            $scope.init();
+            var hash=window.location.hash.substring(1);
+
+            switch(hash){
+                case '/about':
+                    $scope.items=[0,0,0,0,1,0];
+                    break;
+                case '/map':
+                    $scope.items=[1,1,1,1,0,1];
+                    break;
+                case '/sites':
+                    $scope.items=[0,0,0,0,0,1];
+            }
+
             pushy.togglePushy();
         }
 
-        $scope.home=function(){
-            $scope.items.home=false;
+        $scope.hide=function(){
             pushy.togglePushy();
-            return $location.path('/');
         }
 
         $scope.about=function(){
-            $scope.items.home=true;
             pushy.togglePushy();
             return $location.path('/about');
         }
 
-        $scope.init();
+        $scope.home=function(){
+            pushy.togglePushy();
+            return $location.path('/');
+        }
+
+        $scope.close=function(){
+            console.log('close session');
+        };
+
+        $scope.report=function(){}
+        $scope.export=function(){}
+        $scope.more=function(){}
 }]);
 

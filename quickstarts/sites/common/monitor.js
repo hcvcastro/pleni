@@ -3,13 +3,14 @@
 var generator=require('../../../planners/functions/utils/random').sync
   , request=require('request')
 
-exports.getplanner=function(task){
-    console.log('get planner');
+exports.getplanner=function(task,done){
     request.put({
         url:'http://localhost:3004/tasks'
       , json:{task:task}
     },function(error,response){
-        if(error){
+        if(!error){
+            done(response.body);
+        }else{
             console.log(error);
         }
     });
