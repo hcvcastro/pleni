@@ -312,7 +312,9 @@ module.exports=function(grunt){
     grunt.registerTask('test:monitor',['mochacli:monitor']);
 
     grunt.config.requires('watch.master.files');
-    filescontrol=grunt.config('watch.master.files');
+    grunt.config.requires('watch.qs_sites.files');
+    filescontrol=grunt.config('watch.master.files').concat(
+        grunt.config('watch.qs_sites.files'));
     filescontrol=grunt.file.expand(filescontrol);
 
     grunt.registerTask('delayed-livereload',

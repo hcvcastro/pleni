@@ -17,15 +17,15 @@ var http=require('http')
         redisclient.zrange('monitor:queue',0,0,function(err,task){
             if(task.length!=0){
                 redisclient.zremrangebyrank('monitor:queue',0,0,function(){
-                    notify(task,planner,function(){
-                        redisclient.hset('monitor:tasks',task,planner,
+                    notify(task[0],planner,function(){
+                        redisclient.hset('monitor:tasks',task[0],planner,
                         function(){
                             done();
                         });
                     },function(){
                         var penalty=Math.floor(Math.random()*8);
                         redisclient.zadd('monitor:queue',Date.now()+penalty,
-                        task,function(){
+                        task[0],function(){
                             assign(planner,done);
                         });
                     });
@@ -59,6 +59,11 @@ app.set('port',process.env.PORT||3004);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 app.use(morgan('dev'));
+
+redisclient.del('monitor:planners');
+redisclient.del('monitor:free');
+redisclient.del('monitor:queue');
+redisclient.del('monitor:tasks');
 
 app.get('/id',function(request,response){
     response.status(200).json({

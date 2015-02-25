@@ -4,6 +4,7 @@ var generator=require('../../../planners/functions/utils/random').sync
   , request=require('request')
 
 exports.getplanner=function(task){
+    console.log('get planner');
     request.put({
         url:'http://localhost:3004/tasks'
       , json:{task:task}
