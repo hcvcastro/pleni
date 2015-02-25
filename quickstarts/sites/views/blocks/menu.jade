@@ -1,10 +1,15 @@
-nav.pushy.pushy-left
+nav.pushy.pushy-left(ng-controller='MenuController')
     ul
-        li: a 20 pages+
-        li: a Export mapsite
-        li: a Generate report
-        li: a Close session
-        li: a About
+        li(ng-show='items.more')
+            a +20 pages
+        li(ng-show='items.mapsite')
+            a Export mapsite
+        li(ng-show='items.report')
+            a Generate report
+        li(ng-show='items.close')
+            a Close session
+        li(ng-show='items.about')
+            a(ng-click='about()') About us
 .site-overlay
     .close.fa.fa-close
 

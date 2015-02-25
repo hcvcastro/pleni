@@ -1,0 +1,5 @@
+Pleni Sites is a generator sitemap, one of many tools that make pleni.
+
+Pleni is a useful tool to create and execute tasks aimed towards information security, which are so necessary in the stages of software development, web deployed systems and safety assessments.
+
+Pleni is free software, and will be deployed as a service by the Hiperbórea Company in a few months, for which you can register for the beta service, contribute, share, test, and more ...

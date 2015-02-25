@@ -114,6 +114,14 @@ app.get('/map',function(request,response){
     }
 });
 
+app.get('/about',function(request,response){
+    if(env=='production'){
+        response.sendFile(join(__dirname,'dist','about.html'));
+    }else{
+        response.render('pages/about');
+    }
+});
+
 app.put('/sites',function(request,response){
     if(validate.validHost(request.body.site)){
         var site=validate.toValidHost(request.body.site)
@@ -219,7 +227,7 @@ app.post('/p/:id',function(request,response){
                             socket.disconnect();
                             notifier(id,{
                                 action:'stop'
-                              , msg:'20 pages in site completed'
+                              , msg:'requested pages in site completed'
                             });
 
                             free(planner,function(args){

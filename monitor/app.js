@@ -101,7 +101,7 @@ app.put('/tasks',function(request,response){
                 if(planner){
                     assign(planner,function(){
                         response.status(200).json({
-                            msg:'Available planner founded
+                            msg:'Available planner founded'
                           , queue:0
                         });
                     });
@@ -111,7 +111,7 @@ app.put('/tasks',function(request,response){
                             msg:'Waiting for an available planner'
                           , queue:reply
                         });
-                    }
+                    });
                 }
             });
         });

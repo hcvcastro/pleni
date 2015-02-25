@@ -24,6 +24,9 @@ var pleni=angular
                 templateUrl:'/map'
               , controller:'MapController'
             })
+            .when('/about',{
+                templateUrl:'/about'
+            })
             .otherwise({
                 redirectTo:site
             });

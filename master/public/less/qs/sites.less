@@ -348,3 +348,48 @@ footer {
     cursor: pointer;
 }
 
+.static {
+    overflow: auto;
+    .font1;
+    margin-bottom: 26px;
+    box-sizing: border-box;
+    max-width: 480px;
+    background-color: @white;
+
+    @media (min-width: 481px){
+        border-radius: 10px;
+    }
+
+    h1 {
+        background-color: @color1;
+        background-image: url('/img/pleni.sites.svg');
+        background-repeat: no-repeat;
+        background-size: 102px;
+        color: @color2;
+        padding: 10px 20px 10px 10px;
+        margin: 0 0 10px 0;
+        text-align: right;
+
+        @media (min-width: 481px){
+            border-radius: 10px 10px 0 0;
+        }
+    }
+
+    p {
+        padding: 0 10px 10px 10px;
+
+        &.center {
+            text-align: center;
+        }
+
+        button {
+            .font3;
+            padding: 10px;
+            background-color: @success_frg;
+            border: 1px solid darken(@success_frg, 10%);
+            border-radius: 10px;
+            color: @white;
+        }
+    }
+}
+

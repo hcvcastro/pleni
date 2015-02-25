@@ -1,0 +1,5 @@
+el generador de mapas de sitio es una de las muchas herramientas que componen pleni.
+
+pleni es una herramienta util para crear y ejecutar tareas enfocadas hacia la seguridad de la información, que son tan necesarias en las etapas de desarrollo de software, desplegado de sistemas web, y evaluaciones de seguridad.
+
+pleni es software libre, y será desplegado como servicio por la compania hiperborea dentro de unos meses, para lo cual puedes registrarte en la beta del servicio
