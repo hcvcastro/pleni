@@ -100,10 +100,18 @@ app.put('/tasks',function(request,response){
             function(err,reply){
                 if(planner){
                     assign(planner,function(){
-                        response.status(200).json(_success.ok);
+                        response.status(200).json({
+                            msg:'Available planner founded
+                          , queue:0
+                        });
                     });
                 }else{
-                    response.status(200).json(_success.ok);
+                    redisclient.zcard('monitor:queue',function(err,reply){
+                        response.status(200).json({
+                            msg:'Waiting for an available planner'
+                          , queue:reply
+                        });
+                    }
                 }
             });
         });

@@ -1,7 +1,7 @@
 'use strict';
 
-pleni.controller('SitesController',['$scope','$http','$location',
-    function($scope,$http,$location){
+pleni.controller('SitesController',['$scope','$rootScope','$http','$location',
+    function($scope,$rootScope,$http,$location){
 
     $scope.message='';
     $scope.url='';
@@ -15,7 +15,10 @@ pleni.controller('SitesController',['$scope','$http','$location',
     $scope.send=function(){
         utils.clean();
         if($scope.url!=''){
-            $http.put('/sites',{site:$scope.url}).success(function(data){
+            $http.put('/sites',{
+                site:$scope.url
+              , agent:navigator.userAgent
+            }).success(function(data){
                 $('footer').fadeOut('slow',function(){
                     $('.main').fadeOut('slow',function(){
                         $('#content').removeClass('blocked');
@@ -23,6 +26,9 @@ pleni.controller('SitesController',['$scope','$http','$location',
                     });
                     $(this).remove();
                 });
+
+                $rootScope.monitor=data.msg+' (aprox:'+data.queue+' minutes)';
+
                 return $location.path('map');
             }).error(function(error){
                 utils.show('error','The url is not a valid host');

@@ -1,12 +1,12 @@
 'use strict';
 
 pleni.controller('MapController',
-    ['$scope','$http','$location','Socket','Visual',
-    function($scope,$http,$location,Socket,Visual){
+    ['$scope','$rootScope','$http','$location','Socket','Visual',
+    function($scope,$rootScope,$http,$location,Socket,Visual){
 
     $scope.completed=0;
     $scope.total=0;
-    $scope.message='';
+    $scope.message=$rootScope.monitor;
     $scope.waiting=true;
 
     $scope.menu=function(){

@@ -234,6 +234,12 @@ app.post('/p/:id',function(request,response){
                         }
                     });
                     break;
+                case 'error':
+                    notifier(id,{
+                        action:'stop'
+                      , msg:'the site is not available'
+                    });
+                    break;
             }
         });
 

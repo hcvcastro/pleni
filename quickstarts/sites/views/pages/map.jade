@@ -5,7 +5,8 @@
         .url {{url}}
         .c1 {{completed}}
         .c2 {{total}}
-        .msg {{message}}
+        .msg
+            .wrapper {{message}}
         .status
             span.fa.fa-circle-o-notch(ng-class='{\'fa-spin\':waiting==true}')
         .clearfix

@@ -129,7 +129,8 @@ module.exports=function(params,repeat,stop,notifier){
             }else{
                 console.log(error);
                 notifier({
-                    error:error
+                    action:'error'
+                  , error:error
                 });
             }
             stop();
