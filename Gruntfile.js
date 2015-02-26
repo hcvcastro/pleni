@@ -193,6 +193,8 @@ module.exports=function(grunt){
                   : 'quickstarts/sites/views/pages/map.jade'
                   , 'quickstarts/sites/dist/sites.html'
                   : 'quickstarts/sites/views/pages/sites.jade'
+                  , 'quickstarts/sites/dist/about.html'
+                  : 'quickstarts/sites/views/pages/about.jade'
                 }
             }
         }
@@ -215,8 +217,8 @@ module.exports=function(grunt){
                         'quickstarts/sites/public/js/app.js'
                       , 'quickstarts/sites/public/js/controllers/sites.js'
                       , 'quickstarts/sites/public/js/controllers/map.js'
+                      , 'quickstarts/sites/public/js/controllers/menu.js'
                       , 'master/public/js/visual/site.js'
-                      , 'master/public/js/factories/socket.js'
                       , 'master/public/js/factories/visual.js'
                     ]
                 },{
@@ -235,10 +237,6 @@ module.exports=function(grunt){
                 },{
                     'quickstarts/sites/dist/js/angular-route.min.js':[
                         'bower_components/angular-route/angular-route.min.js'
-                    ]
-                },{
-                    'quickstarts/sites/dist/js/angular-socket-io.min.js':[
-                        'bower_components/angular-socket-io/socket.min.js'
                     ]
                 },{
                     'quickstarts/sites/dist/js/d3.min.js':[
