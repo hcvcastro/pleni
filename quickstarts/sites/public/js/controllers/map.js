@@ -25,7 +25,7 @@ console.log('map');
             }
         });
     }else{
-        return $location.path('sites');
+        $location.path('sites');
     }
 
     $scope.socket=io.connect('',{
@@ -33,7 +33,6 @@ console.log('map');
       , 'forceNew':true
     });
     $scope.socket.on('notifier',function(pkg){
-        console.log($scope.message);
         console.log(pkg);
         switch(pkg.action){
             case 'start':
@@ -68,7 +67,7 @@ console.log('map');
                 $scope.message=pkg.msg;
                 break;
         }
+        $scope.$apply();
     });
 }]);
-
 

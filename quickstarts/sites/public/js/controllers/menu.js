@@ -41,7 +41,7 @@ console.log('menu');
             pushy.togglePushy();
             $http.delete('/').success(function(){
                 $location.path('sites');
-//                $window.location.reload();
+                $window.location.reload();
             });
         };
 

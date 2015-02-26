@@ -5,7 +5,7 @@
     .c2 {{total}}
     .msg
         .wrapper {{message}}
-    .status
+    .status(ng-click='refresh()')
         span.fa.fa-circle-o-notch(ng-class='{\'fa-spin\':waiting==true}')
     .clearfix
 
