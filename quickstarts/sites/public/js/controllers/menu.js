@@ -3,21 +3,21 @@
 pleni.controller('MenuController',
     ['$scope','$rootScope','$http','$location','$window',
     function($scope,$rootScope,$http,$location,$window){
-console.log('menu');
-        $scope.items=[0,0,0,0,0,1];
+
+        $scope.items=[1,0,0,0,0,0,1];
 
         $scope.menu=function(){
             var hash=window.location.hash.substring(1);
 
             switch(hash){
                 case '/about':
-                    $scope.items=[0,0,0,0,1,0];
+                    $scope.items=[1,0,0,0,0,1,0];
                     break;
                 case '/map':
-                    $scope.items=[1,1,1,1,0,1];
+                    $scope.items=[1,0,0,0,1,0,1];
                     break;
                 case '/sites':
-                    $scope.items=[0,0,0,0,0,1];
+                    $scope.items=[1,0,0,0,0,0,1];
             }
 
             pushy.togglePushy();
@@ -48,5 +48,9 @@ console.log('menu');
         $scope.report=function(){}
         $scope.export=function(){}
         $scope.more=function(){}
+
+        $scope.refresh=function(){
+            $window.location.reload();
+        }
 }]);
 

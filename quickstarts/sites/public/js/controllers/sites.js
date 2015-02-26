@@ -3,7 +3,7 @@
 pleni.controller('SitesController',
     ['$scope','$rootScope','$http','$location',
     function($scope,$rootScope,$http,$location){
-console.log('sites');
+
     $scope.message='';
     $scope.url='';
 
