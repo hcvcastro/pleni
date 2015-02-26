@@ -6,14 +6,12 @@ div(ng-controller='MenuController')
             li(ng-show='items[1]')
                 a(ng-click='more()') +20 pages
             li(ng-show='items[2]')
-                a(ng-click='export()') Export mapsite
-            li(ng-show='items[3]')
                 a(ng-click='report()') Generate report
-            li(ng-show='items[4]')
+            li(ng-show='items[3]')
                 a(ng-click='close()') Close session
-            li(ng-show='items[5]')
+            li(ng-show='items[4]')
                 a(ng-click='home()') Return home
-            li(ng-show='items[6]')
+            li(ng-show='items[5]')
                 a(ng-click='about()') About pleni
     .site-overlay(ng-click='hide()')
         .close.fa.fa-close

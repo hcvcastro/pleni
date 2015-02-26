@@ -148,6 +148,14 @@ app.put('/sites',function(request,response){
     }
 });
 
+app.put('/more',function(request,response){
+    var url='http://localhost:'+app.get('port')+'/q/'+request.sessionID;
+
+    monitor.getplanner(url,function(msg){
+        response.status(200).json(msg);
+    });
+});
+
 app.post('/mapsite',function(request,response){
     if(request.session.mapsite){
         mapsite(request.session.db,function(args){
@@ -265,6 +273,61 @@ app.post('/p/:id',function(request,response){
         });
 
         create(planner,session.db,session.url,function(args){
+        },function(error){
+            notifier(id,{
+                action:'error'
+              , msg:error
+            });
+        });
+    });
+
+    response.status(200).json(_success.ok);
+});
+
+app.post('/q/:id',function(request,response){
+    var id=request.params.id
+      , sessionID='sites:'+request.params.id
+      , planner=request.body.planner
+
+    get_session(sessionID,function(session){
+        var socket=ioc.connect(planner,{
+            reconnect:true
+          , 'forceNew':true
+        });
+        socket.on('notifier',function(msg){
+            switch(msg.action){
+                case 'task':
+                    notifier(id,msg);
+                    break;
+                case 'stop':
+                    get_session(sessionID,function(session){
+                        socket.disconnect();
+                        notifier(id,{
+                            action:'stop'
+                          , msg:'requested pages in site completed'
+                        });
+
+                        free(planner,function(args){
+                            monitor.freeplanner('http://localhost:'+
+                                app.get('port')+'/q/'+id);
+                        },function(error){
+                            notifier(id,{
+                                action:'error'
+                              , msg:error
+                            });
+                        });
+                    });
+                    break;
+                case 'error':
+                    notifier(id,{
+                        action:'stop'
+                      , msg:'the site is not available'
+                    });
+                    break;
+            }
+        });
+
+        fetch(planner,session.db,session.agent,function(args){
         },function(error){
             notifier(id,{
                 action:'error'
