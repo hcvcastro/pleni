@@ -1,7 +1,9 @@
 'use strict';
 
-pleni.controller('MenuController',['$scope','$rootScope','$http','$location',
-    function($scope,$rootScope,$http,$location){
+pleni.controller('MenuController',
+    ['$scope','$rootScope','$http','$location','$window',
+    function($scope,$rootScope,$http,$location,$window){
+console.log('menu');
         $scope.items=[0,0,0,0,0,1];
 
         $scope.menu=function(){
@@ -27,16 +29,20 @@ pleni.controller('MenuController',['$scope','$rootScope','$http','$location',
 
         $scope.about=function(){
             pushy.togglePushy();
-            return $location.path('/about');
+            $location.path('about');
         }
 
         $scope.home=function(){
             pushy.togglePushy();
-            return $location.path('/');
+            $location.path('');
         }
 
         $scope.close=function(){
-            console.log('close session');
+            pushy.togglePushy();
+            $http.delete('/').success(function(){
+                $location.path('sites');
+//                $window.location.reload();
+            });
         };
 
         $scope.report=function(){}

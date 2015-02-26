@@ -86,11 +86,6 @@ app.use(cookiesession({
 }));
 
 app.get('/',function(request,response){
-    if(request.session.url){
-        response.cookie('pleni.url',request.session.url);
-    }else{
-        response.cookie('pleni.url','');
-    }
     if(env=='production'){
         response.sendFile(join(__dirname,'dist','index.html'));
     }else{
@@ -99,6 +94,11 @@ app.get('/',function(request,response){
 });
 
 app.get('/sites',function(request,response){
+    if(request.session.url){
+        response.cookie('pleni.url',request.session.url);
+    }else{
+        response.cookie('pleni.url','');
+    }
     if(env=='production'){
         response.sendFile(join(__dirname,'dist','sites.html'));
     }else{
@@ -107,6 +107,11 @@ app.get('/sites',function(request,response){
 });
 
 app.get('/map',function(request,response){
+    if(request.session.url){
+        response.cookie('pleni.url',request.session.url);
+    }else{
+        response.cookie('pleni.url','');
+    }
     if(env=='production'){
         response.sendFile(join(__dirname,'dist','map.html'));
     }else{
@@ -157,6 +162,14 @@ app.post('/mapsite',function(request,response){
     }else{
         response.status(200).json(_success.ok);
     }
+});
+
+app.delete('/',function(request,response){
+    for(var i in sockets[request.sessionID]){
+        sockets[request.sessionID][i].disconnect();
+    }
+    request.session.destroy();
+    response.status(200).json(_success.ok);
 });
 
 var get_session=function(id,done){

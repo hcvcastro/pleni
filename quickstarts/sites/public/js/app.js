@@ -3,7 +3,7 @@
 var pushy=new pushy();
 
 var pleni=angular
-    .module('PleniApp',['ngRoute','btford.socket-io'])
+    .module('PleniApp',['ngRoute'])
     .config(['$routeProvider',function($routeProvider){
         var match=/pleni.url=(.+)/.exec(document.cookie)
           , site='/sites'

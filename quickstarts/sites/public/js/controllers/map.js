@@ -1,9 +1,9 @@
 'use strict';
 
 pleni.controller('MapController',
-    ['$scope','$rootScope','$http','$location','Socket','Visual',
-    function($scope,$rootScope,$http,$location,Socket,Visual){
-
+    ['$scope','$rootScope','$http','$location','Visual',
+    function($scope,$rootScope,$http,$location,Visual){
+console.log('map');
     $scope.completed=0;
     $scope.total=0;
     $scope.message=$rootScope.monitor;
@@ -13,7 +13,7 @@ pleni.controller('MapController',
     var match=/pleni.url=(.+)/.exec(document.cookie)
     if(match&&match.length==2){
         $scope.url=decodeURIComponent(match[1]);
-        $http.post('/mapsite').success(function(data,status){
+        $http.post('/mapsite').success(function(data){
             Visual.clean();
             if(data&&data.ok){
                 Visual.render();
@@ -23,13 +23,17 @@ pleni.controller('MapController',
                 $scope.waiting=false;
                 Visual.render(data);
             }
-        }).error(function(error,status){
         });
     }else{
         return $location.path('sites');
     }
 
-    Socket.on('notifier',function(pkg){
+    $scope.socket=io.connect('',{
+        reconnect:true
+      , 'forceNew':true
+    });
+    $scope.socket.on('notifier',function(pkg){
+        console.log($scope.message);
         console.log(pkg);
         switch(pkg.action){
             case 'start':
