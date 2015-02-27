@@ -145,6 +145,7 @@ module.exports=function(grunt){
                 file:'monitor/app.js'
               , env:{
                     PORT:grunt.option('port')||3004
+                  , ENV:'development'
                 }
             }
         }

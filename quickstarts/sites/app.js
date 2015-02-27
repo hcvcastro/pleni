@@ -173,16 +173,22 @@ app.post('/mapsite',function(request,response){
 });
 
 app.delete('/',function(request,response){
-    for(var i in sockets[request.sessionID]){
-        sockets[request.sessionID][i].disconnect();
+    if(sockets[request.sessionID]){
+        for(var i in sockets[request.sessionID]){
+            sockets[request.sessionID][i].disconnect();
+        }
+        request.session.destroy();
     }
-    request.session.destroy();
     response.status(200).json(_success.ok);
 });
 
-var get_session=function(id,done){
+var get_session=function(id,done,fail){
         redisclient.get(id,function(err,reply){
-            done(JSON.parse(reply));
+            if(reply){
+                done(JSON.parse(reply));
+            }else if(fail){
+                fail();
+            }
         });
     }
   , save_session=function(id,session,done){
@@ -279,9 +285,16 @@ app.post('/p/:id',function(request,response){
               , msg:error
             });
         });
-    });
 
-    response.status(200).json(_success.ok);
+        response.status(200).json(_success.ok);
+    },function(){
+        free(planner,function(args){
+            monitor.freeplanner('http://localhost:'+
+                app.get('port')+'/p/'+id);
+        },function(error){});
+
+        response.status(403).json(_error.notfound);
+    });
 });
 
 app.post('/q/:id',function(request,response){
@@ -334,9 +347,16 @@ app.post('/q/:id',function(request,response){
               , msg:error
             });
         });
-    });
 
-    response.status(200).json(_success.ok);
+        response.status(200).json(_success.ok);
+    },function(){
+        free(planner,function(args){
+            monitor.freeplanner('http://localhost:'+
+                app.get('port')+'/q/'+id);
+        },function(error){});
+
+        response.status(403).json(_error.notfound);
+    });
 });
 
 var sockets={}

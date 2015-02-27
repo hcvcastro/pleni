@@ -58,7 +58,12 @@ var http=require('http')
 app.set('port',process.env.PORT||3004);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
-app.use(morgan('dev'));
+
+if(env=='production'){
+    app.use(morgan('combined'));
+}else{
+    app.use(morgan('dev'));
+}
 
 redisclient.del('monitor:planners');
 redisclient.del('monitor:free');
