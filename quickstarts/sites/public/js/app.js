@@ -24,6 +24,10 @@ var pleni=angular
             .when('/about',{
                 templateUrl:'/about'
             })
+            .when('/report',{
+                templateUrl:'/report'
+              , controller:'ReportController'
+            })
             .otherwise({
                 redirectTo:site
             });

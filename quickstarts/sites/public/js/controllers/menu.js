@@ -14,7 +14,7 @@ pleni.controller('MenuController',
                     $scope.items=[1,0,0,0,1,0];
                     break;
                 case '/map':
-                    $scope.items=[1,1,0,1,0,1];
+                    $scope.items=[1,1,1,1,0,1];
                     break;
                 case '/sites':
                     $scope.items=[1,0,0,0,0,1];
@@ -45,8 +45,11 @@ pleni.controller('MenuController',
             });
         };
 
-        $scope.report=function(){}
-        $scope.export=function(){}
+        $scope.report=function(){
+            pushy.togglePushy();
+            $location.path('report');
+        }
+
         $scope.more=function(){
             pushy.togglePushy();
             $http.put('/more').success(function(data){

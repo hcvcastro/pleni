@@ -76,7 +76,7 @@ app.use(cookiesession({
         path:'/'
       , httpOnly:true
       , secure:false
-      , maxAge:3600000
+      , maxAge:3600000*3
     }
   , name:'pleni.sid'
   , resave:false
@@ -124,6 +124,14 @@ app.get('/about',function(request,response){
         response.sendFile(join(__dirname,'dist','about.html'));
     }else{
         response.render('pages/about');
+    }
+});
+
+app.get('/report',function(request,response){
+    if(env=='production'){
+        response.sendFile(join(__dirname,'dist','report.html'));
+    }else{
+        response.render('pages/report');
     }
 });
 

@@ -59,37 +59,37 @@ button {
   margin: 0 auto;
 }
 .font1 {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.96rem;
   font-weight: lighter;
 }
 .font2 {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 1.9rem;
   font-weight: normal;
 }
 .font3 {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.97rem;
   font-weight: normal;
 }
 .font4 {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.92rem;
   font-weight: lighter;
 }
 .font5 {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.6rem;
   font-weight: lighter;
 }
 .font6 {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.75rem;
   font-weight: normal;
 }
 .font7 {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.65rem;
   font-weight: normal;
 }
@@ -173,7 +173,7 @@ button {
 }
 #canvas svg:nth-child(2) text {
   fill: #100c17;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.6rem;
   font-weight: lighter;
 }
@@ -222,14 +222,14 @@ button {
 }
 .tooltip div.title {
   margin: 5px 10px 0px 10px;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.75rem;
   font-weight: normal;
 }
 .tooltip div.subtle {
   float: left;
   margin: 0px 0px 5px 10px;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.65rem;
   font-weight: normal;
 }
@@ -290,7 +290,7 @@ button {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-decoration: none;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.97rem;
   font-weight: normal;
 }
@@ -426,7 +426,7 @@ body {
 }
 @media (min-width: 600px) {
   .message {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.97rem;
     font-weight: normal;
     width: 20.0rem;
@@ -436,7 +436,7 @@ body {
 }
 @media (max-width: 599px) {
   .message {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.92rem;
     font-weight: lighter;
     width: 100vw;
@@ -517,7 +517,7 @@ body {
 }
 @media (min-width: 700px) {
   .main .central form input[type='text'] {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 1.9rem;
     font-weight: normal;
     width: 20.0rem;
@@ -526,7 +526,7 @@ body {
 }
 @media (min-width: 600px) and (max-width: 699px) {
   .main .central form input[type='text'] {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.97rem;
     font-weight: normal;
     width: 16.0rem;
@@ -535,7 +535,7 @@ body {
 }
 @media (max-width: 599px) {
   .main .central form input[type='text'] {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.97rem;
     font-weight: normal;
     width: 75vw;
@@ -555,7 +555,7 @@ body {
 }
 @media (min-width: 700px) {
   .main .central form button[type='submit'] {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 1.9rem;
     font-weight: normal;
     padding: 10px;
@@ -563,7 +563,7 @@ body {
 }
 @media (max-width: 699px) {
   .main .central form button[type='submit'] {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.97rem;
     font-weight: normal;
     padding: 10px;
@@ -684,7 +684,7 @@ footer ul li a {
 @media (min-width: 641px) {
   .statusbar .url {
     width: 220px;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.92rem;
     font-weight: lighter;
     padding: 1px 5px 0 5px;
@@ -693,7 +693,7 @@ footer ul li a {
 @media (min-width: 600px) and (max-width: 640px) {
   .statusbar .url {
     width: 190px;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.75rem;
     font-weight: normal;
     padding: 4px 5px 0 5px;
@@ -702,7 +702,7 @@ footer ul li a {
 @media (max-width: 599px) {
   .statusbar .url {
     flex: 1 1 auto;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.75rem;
     font-weight: normal;
     padding: 4px 5px 0 5px;
@@ -718,7 +718,7 @@ footer ul li a {
 @media (min-width: 641px) {
   .statusbar .c1,
   .statusbar .c2 {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.92rem;
     font-weight: lighter;
     padding: 1px 5px 0 6px;
@@ -727,7 +727,7 @@ footer ul li a {
 @media (max-width: 640px) {
   .statusbar .c1,
   .statusbar .c2 {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.75rem;
     font-weight: normal;
     padding: 4px 9px 0 9px;
@@ -746,7 +746,7 @@ footer ul li a {
 }
 @media (min-width: 641px) {
   .statusbar .msg {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.92rem;
     font-weight: lighter;
     padding: 1px 5px 0 6px;
@@ -754,7 +754,7 @@ footer ul li a {
 }
 @media (min-width: 600px) and (max-width: 640px) {
   .statusbar .msg {
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: 'Helvetica Neue LT Com', sans-serif;
     font-size: 0.75rem;
     font-weight: normal;
     padding: 4px 9px 0 9px;
@@ -776,7 +776,7 @@ footer ul li a {
 }
 .static {
   overflow: auto;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.96rem;
   font-weight: lighter;
   margin-bottom: 26px;
@@ -811,7 +811,7 @@ footer ul li a {
   text-align: center;
 }
 .static p button {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
   font-size: 0.97rem;
   font-weight: normal;
   padding: 10px;
@@ -819,4 +819,33 @@ footer ul li a {
   border: 1px solid #355c0b;
   border-radius: 10px;
   color: #ffffff;
+}
+.report {
+  overflow: auto;
+  font-family: 'Helvetica Neue LT Com', sans-serif;
+  font-size: 0.97rem;
+  font-weight: normal;
+  margin-bottom: 26px;
+  box-sizing: border-box;
+  max-width: 960px;
+  width: 100%;
+  height: 100vh;
+  background-color: #ffffff;
+}
+.report h1 {
+  border-bottom: 3px solid #100c17;
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin: 0;
+  text-align: right;
+}
+.report h2 {
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin: 0;
+}
+.report p {
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin: 0;
 }
