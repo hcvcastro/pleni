@@ -137,6 +137,7 @@ app.put('/sites',function(request,response){
         request.session.agent=agent;
         request.session.action='';
         request.session.db=monitor.getrepository();
+        request.session.more=false;
         request.session.save();
 
         monitor.getplanner(url,function(msg){
@@ -149,11 +150,15 @@ app.put('/sites',function(request,response){
 });
 
 app.put('/more',function(request,response){
-    var url='http://localhost:'+app.get('port')+'/q/'+request.sessionID;
-
-    monitor.getplanner(url,function(msg){
-        response.status(200).json(msg);
-    });
+    if(request.session.more){
+        monitor.getplanner(
+            'http://localhost:'+app.get('port')+'/q/'+request.sessionID,
+            function(msg){
+                response.status(200).json(msg);
+        });
+    }else{
+        response.status(403).json(_error.busy);
+    }
 });
 
 app.post('/mapsite',function(request,response){
@@ -266,6 +271,9 @@ app.post('/p/:id',function(request,response){
                                   , msg:error
                                 });
                             });
+
+                            session.more=true;
+                            save_session(sessionID,session);
                         }
                     });
                     break;

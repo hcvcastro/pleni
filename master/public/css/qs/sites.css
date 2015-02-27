@@ -133,6 +133,9 @@ button {
 #canvas svg:nth-child(1) .node.m-text-css {
   fill: #0c73b8;
 }
+#canvas svg:nth-child(1) .node.m-text-javascript {
+  fill: #e5a228;
+}
 #canvas svg:nth-child(1) .node.m-application-javascript {
   fill: #e5a228;
 }
@@ -154,6 +157,12 @@ button {
 #canvas svg:nth-child(1) .node.m-image-x-icon {
   fill: #ff69b4;
 }
+#canvas svg:nth-child(1) .node.m-application-rsd {
+  fill: #ccff00;
+}
+#canvas svg:nth-child(1) .node.m-application-xml {
+  fill: #ccff00;
+}
 #canvas svg:nth-child(2) {
   position: absolute;
   z-index: 10;
@@ -173,6 +182,9 @@ button {
 }
 #canvas svg:nth-child(2) rect.m-text-css {
   fill: #0c73b8;
+}
+#canvas svg:nth-child(2) rect.m-text-javascript {
+  fill: #e5a228;
 }
 #canvas svg:nth-child(2) rect.m-application-javascript {
   fill: #e5a228;
@@ -194,6 +206,12 @@ button {
 }
 #canvas svg:nth-child(2) rect.m-image-x-icon {
   fill: #ff69b4;
+}
+#canvas svg:nth-child(2) rect.m-application-rsd {
+  fill: #ccff00;
+}
+#canvas svg:nth-child(2) rect.m-application-xml {
+  fill: #ccff00;
 }
 .tooltip {
   background: rgba(16, 12, 23, 0.5);
