@@ -146,6 +146,8 @@ app.put('/sites',function(request,response){
         request.session.action='';
         request.session.db=monitor.getrepository();
         request.session.more=false;
+        request.session.summarize=false;
+        request.session.report=false;
         request.session.save();
 
         monitor.getplanner(url,function(msg){
@@ -159,8 +161,23 @@ app.put('/sites',function(request,response){
 
 app.put('/more',function(request,response){
     if(request.session.more){
+        var url='http://localhost:'+app.get('port')+'/q/'+request.sessionID
+
+        request.session.more=false;
+        request.session.save();
+
+        monitor.getplanner(url,function(msg){
+            response.status(200).json(msg);
+        });
+    }else{
+        response.status(403).json(_error.busy);
+    }
+});
+
+app.put('/report',function(request,response){
+    if(request.session.report){
         monitor.getplanner(
-            'http://localhost:'+app.get('port')+'/q/'+request.sessionID,
+            'http://localhost:'+app.get('port')+'/r'+request.sessionID,
             function(msg){
                 response.status(200).json(msg);
         });
@@ -281,6 +298,8 @@ app.post('/p/:id',function(request,response){
                             });
 
                             session.more=true;
+                            session.summarize=true;
+                            session.report=true;
                             save_session(sessionID,session);
                         }
                     });
@@ -345,6 +364,9 @@ app.post('/q/:id',function(request,response){
                               , msg:error
                             });
                         });
+
+                        session.summarize=true;
+                        save_session(sessionID,session);
                     });
                     break;
                 case 'error':
@@ -369,6 +391,30 @@ app.post('/q/:id',function(request,response){
         free(planner,function(args){
             monitor.freeplanner('http://localhost:'+
                 app.get('port')+'/q/'+id);
+        },function(error){});
+
+        response.status(403).json(_error.notfound);
+    });
+});
+
+app.post('/r/:id',function(request,response){
+    var id=request.params.id
+      , sessionID='sites:'+request.params.id
+      , planner=request.body.planner
+
+    get_session(sessionID,function(session){
+        var socket=ioc.connect(planner,{
+            reconnect:true
+          , 'forceNew':true
+        });
+        socket.on('notifier',function(msg){
+        });
+
+        response.status(200).json(_success.ok);
+    },function(){
+        free(planner,function(args){
+            monitor.freeplanner('http://localhost:'+
+                app.get('port')+'/r/'+id);
         },function(error){});
 
         response.status(403).json(_error.notfound);
