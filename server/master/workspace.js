@@ -1,11 +1,11 @@
 'use strict';
 
-var validate=require('../../planners/utils/validators')
-  , _success=require('../../planners/utils/json-response').success
-  , _error=require('../../planners/utils/json-response').error
-  , test=require('../../planners/functions/databases/test')
-  , auth=require('../../planners/functions/databases/auth')
-  , viewers='../../planners/functions/repositories/sites'
+var validate=require('../../core/validators')
+  , _success=require('../../core/json-response').success
+  , _error=require('../../core/json-response').error
+  , test=require('../../core/functions/databases/test')
+  , auth=require('../../core/functions/databases/auth')
+  , viewers='../../core/functions/repositories/sites'
   , getsummary=require(viewers+'/view/getsummary')
   , getmapsite=require(viewers+'/view/getmapsite')
   , get_element=function(needle,haystack){

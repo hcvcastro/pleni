@@ -1,14 +1,14 @@
 'use strict';
 
-var validate=require('../../../planners/utils/validators')
-  , _success=require('../../../planners/utils/json-response').success
-  , _error=require('../../../planners/utils/json-response').error
-  , test=require('../../../planners/functions/databases/test')
-  , auth=require('../../../planners/functions/databases/auth')
-  , list=require('../../../planners/functions/databases/list')
-  , infodbs=require('../../../planners/functions/databases/infodbs')
+var validate=require('../../../core/validators')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
+  , test=require('../../../core/functions/databases/test')
+  , auth=require('../../../core/functions/databases/auth')
+  , list=require('../../../core/functions/databases/list')
+  , infodbs=require('../../../core/functions/databases/infodbs')
   , pretty=require('prettysize')
-  , schema=require('../../utils/schema')
+  , schema=require('../../../core/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){

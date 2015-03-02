@@ -50,7 +50,7 @@ app.get('/id',function(request,response){
 });
 
 app.get('/msg.html',function(request,response){
-    response.sendFile(join(__dirname,'public','msg.html'));
+    response.sendFile(join(__dirname,'..','client','notifiers','msg.html'));
 });
 
 app.get('/notifier',function(request,response){

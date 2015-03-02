@@ -1,18 +1,18 @@
 'use strict';
 
 var extend=require('underscore').extend
-  , validate=require('../../../planners/utils/validators')
-  , _success=require('../../../planners/utils/json-response').success
-  , _error=require('../../../planners/utils/json-response').error
-  , test=require('../../../planners/functions/planners/test')
-  , status=require('../../../planners/functions/planners/status')
-  , api=require('../../../planners/functions/planners/api')
-  , set=require('../../../planners/functions/planners/set')
-  , get=require('../../../planners/functions/planners/get')
-  , unset=require('../../../planners/functions/planners/unset')
-  , run=require('../../../planners/functions/planners/run')
-  , stop=require('../../../planners/functions/planners/stop')
-  , schema=require('../../utils/schema')
+  , validate=require('../../../core/validators')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
+  , test=require('../../../core/functions/planners/test')
+  , status=require('../../../core/functions/planners/status')
+  , api=require('../../../core/functions/planners/api')
+  , set=require('../../../core/functions/planners/set')
+  , get=require('../../../core/functions/planners/get')
+  , unset=require('../../../core/functions/planners/unset')
+  , run=require('../../../core/functions/planners/run')
+  , stop=require('../../../core/functions/planners/stop')
+  , schema=require('../../../core/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){

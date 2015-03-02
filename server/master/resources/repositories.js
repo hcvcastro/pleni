@@ -1,12 +1,12 @@
 'use strict';
 
-var validate=require('../../../planners/utils/validators')
-  , _success=require('../../../planners/utils/json-response').success
-  , _error=require('../../../planners/utils/json-response').error
-  , test=require('../../../planners/functions/databases/test')
-  , auth=require('../../../planners/functions/databases/auth')
-  , infodb=require('../../../planners/functions/databases/infodb')
-  , schema=require('../../utils/schema')
+var validate=require('../../../core/validators')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
+  , test=require('../../../core/functions/databases/test')
+  , auth=require('../../../core/functions/databases/auth')
+  , infodb=require('../../../core/functions/databases/infodb')
+  , schema=require('../../../core/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){

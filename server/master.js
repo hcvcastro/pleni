@@ -7,7 +7,7 @@ var http=require('http')
   , morgan=require('morgan')
   , lessmiddleware=require('less-middleware')
   , join=require('path').join
-  , loadconfig=require('./utils/loadconfig')
+  , loadconfig=require('../core/loadconfig')
   , app=express()
   , server=http.Server(app)
   , ios=require('socket.io')(server)
@@ -17,11 +17,11 @@ var http=require('http')
   , projects=new Array()
 
 // sync methods
-resources.dbservers=loadconfig(join(__dirname,'config','dbservers.json'));
-resources.repositories=loadconfig(join(__dirname,'config','repositories.json'));
-resources.planners=loadconfig(join(__dirname,'config','planners.json'));
-resources.notifiers=loadconfig(join(__dirname,'config','notifiers.json'));
-projects=loadconfig(join(__dirname,'config','projects.json'));
+resources.dbservers=loadconfig(join(__dirname,'..','config','dbservers.json'));
+resources.repositories=loadconfig(join(__dirname,'..','config','repositories.json'));
+resources.planners=loadconfig(join(__dirname,'..','config','planners.json'));
+resources.notifiers=loadconfig(join(__dirname,'..','config','notifiers.json'));
+projects=loadconfig(join(__dirname,'..','config','projects.json'));
 
 app.set('resources',resources);
 app.set('notifier',notifier);
@@ -29,10 +29,10 @@ app.set('projects',projects);
 
 // async methods
 app.set('port',process.env.PORT||3000);
-app.set('views',join(__dirname,'views'));
+app.set('views',join(__dirname,'..','client','master','views'));
 app.set('view engine','jade');
 app.disable('x-powered-by');
-app.use(favicon(join(__dirname,'public','img','favicon.ico')));
+app.use(favicon(join(__dirname,'..','client','master','img','favicon.ico')));
 app.use(bodyparser.json());
 app.use(morgan('dev'));
 
@@ -46,15 +46,15 @@ app.use(express.static(join(__dirname,'public')));
 app.use(express.static(join(__dirname,'..','bower_components')));
 app.locals.pretty=true;
 
-require('./controllers/home')(app);
-require('./controllers/resources')(app);
-require('./controllers/resources/dbservers')(app);
-require('./controllers/resources/repositories')(app);
-require('./controllers/resources/planners')(app);
-require('./controllers/resources/notifiers')(app);
-require('./controllers/notifier')(app,ios,ioc);
-require('./controllers/projects')(app);
-require('./controllers/workspace')(app);
+require('./master/home')(app);
+require('./master/resources')(app);
+require('./master/resources/dbservers')(app);
+require('./master/resources/repositories')(app);
+require('./master/resources/planners')(app);
+require('./master/resources/notifiers')(app);
+require('./master/notifier')(app,ios,ioc);
+require('./master/projects')(app);
+require('./master/workspace')(app);
 
 app.use(function(request,response){
     response.status(404).render('404.jade',{

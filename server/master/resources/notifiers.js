@@ -1,15 +1,15 @@
 'use strict';
 
 var extend=require('underscore').extend
-  , validate=require('../../../planners/utils/validators')
-  , _success=require('../../../planners/utils/json-response').success
-  , _error=require('../../../planners/utils/json-response').error
-  , test=require('../../../planners/functions/notifiers/test')
-  , get=require('../../../planners/functions/notifiers/get')
-  , add=require('../../../planners/functions/notifiers/add')
-  , remove=require('../../../planners/functions/notifiers/remove')
-  , clean=require('../../../planners/functions/notifiers/clean')
-  , schema=require('../../utils/schema')
+  , validate=require('../../../core/validators')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
+  , test=require('../../../core/functions/notifiers/test')
+  , get=require('../../../core/functions/notifiers/get')
+  , add=require('../../../core/functions/notifiers/add')
+  , remove=require('../../../core/functions/notifiers/remove')
+  , clean=require('../../../core/functions/notifiers/clean')
+  , schema=require('../../../core/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
