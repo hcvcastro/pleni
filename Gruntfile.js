@@ -154,20 +154,23 @@ module.exports=function(grunt){
             options:{
                 reporter:'spec'
               , bail:true
+              , env:{
+                    ENV:'test'
+                }
             }
           , functions:[
-                'test/planners/functions/**/*.js'
-              , 'test/planners/utils/**/*.js'
+                'tests/planners/functions/**/*.js'
+              , 'tests/planners/utils/**/*.js'
             ]
-          , dumb:['test/planners/dumb/server.js']
-          , planner:[
-                'test/planners/planner/server.js'
-              , 'test/planners/planner/scheduler.js'
+          , dumb:['tests/planners/dumb/server.js']
+          , planners:[
+                'tests/planners/planner/server.js'
+              , 'tests/planners/planner/scheduler.js'
             ]
-          , notifier:['test/notifiers/**/*.js']
-          , master:['test/master/**/*.js']
-          , qs_sites:['test/quickstarts/sites/*.js']
-          , monitor:['test/monitor/server.js']
+          , notifier:['tests/notifiers/**/*.js']
+          , master:['tests/master/**/*.js']
+          , sites:['tests/quickstarts/sites/*.js']
+          , monitor:['tests/monitor/server.js']
         }
 
       , clean:{
@@ -300,15 +303,15 @@ module.exports=function(grunt){
         }
     });
 
-    grunt.registerTask('test:dumb',['mochacli:dumb']);
+    grunt.registerTask('test:master',['mochacli:master']);
     grunt.registerTask('test:planner',[
-        'mochacli:functions'
-      , 'mochacli:planner'
+        'mochacli:dumb'
+      , 'mochacli:functions'
+      , 'mochacli:planners'
     ]);
     grunt.registerTask('test:notifier',['mochacli:notifier']);
-    grunt.registerTask('test:master',['mochacli:master']);
-    grunt.registerTask('test:qs:sites',['mochacli:qs_sites']);
     grunt.registerTask('test:monitor',['mochacli:monitor']);
+    grunt.registerTask('test:sites',['mochacli:sites']);
 
     grunt.config.requires('watch.master.files');
     grunt.config.requires('watch.qs_sites.files');
