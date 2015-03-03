@@ -8,7 +8,7 @@ var request=require('supertest')
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
   , planner='http://localhost:3001'
-  , task='http://localhost:3004/'
+  , task='http://localhost:3003/'
 
 describe('monitor controller functions',function(){
     before(function(done){

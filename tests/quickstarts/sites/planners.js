@@ -19,7 +19,7 @@ describe('quickstart sites planners tasks functions',function(){
               , pass:'asdf'
             };
         planners.create(planner,db,'http://galao.local',function(){
-            setTimeout(done,5000);
+            setTimeout(done,1000);
         });
     });
 
@@ -32,7 +32,7 @@ describe('quickstart sites planners tasks functions',function(){
               , pass:'asdf'
             };
         planners.fetch(planner,db,'',function(){
-            setTimeout(done,10000);
+            setTimeout(done,4000);
         });
     });
 });

@@ -15,25 +15,27 @@ module.exports=function(grunt){
       , watch:{
 /* -------- planners watching ----------------------------------------------- */
             dumb:{
-                files:['planners/dumb.js']
+                files:['server/planners/dumb.js']
               , tasks:['develop:dumb']
             }
           , planner:{
                 files:[
-                    'planners/planner.js'
-                  , 'planners/planner.io.js'
-                  , 'planners/planner.ion.js'
-                  , 'planners/abstracts/*.js'
-                  , 'planners/functions/**/*.js'
+                    'server/planner.js'
+                  , 'server/planner.io.js'
+                  , 'server/planner.ion.js'
+                  , 'server/planners/**/*.js'
                 ]
               , tasks:['develop:planner']
             }
 /* -------- notifier watching ----------------------------------------------- */
           , notifier:{
-                files:[
-                    'notifiers/notifier.io.js'
-                ]
+                files:['server/notifier.io.js']
               , tasks:['develop:notifier']
+            }
+/* -------- monitor watching ------------------------------------------------ */
+          , monitor:{
+                files:['server/monitor.js']
+              , tasks:['develop:monitor']
             }
 /* -------- frontend watching ----------------------------------------------- */
           , js:{
@@ -74,37 +76,6 @@ module.exports=function(grunt){
                 ]
               , options:{livereload:reloadPort}
             }
-/* -------- monitor watching ------------------------------------------------ */
-          , monitor:{
-                files:[
-                    'monitor/app.js'
-                ]
-              , tasks:[
-                    'develop:monitor'
-                ]
-              , options:{livereload:reloadPort}
-            }
-/* -------- testing watching ------------------------------------------------ */
-          , test_dumb:{
-                files:['test/planners/dumb/server.js']
-              , tasks:['mochacli:dumb']
-            }
-          , test_functions:{
-                files:['test/planners/functions/**/*.js']
-              , tasks:['mochacli:functions']
-            }
-          , test_planner:{
-                files:['test/planners/planner/**/*.js']
-              , tasks:['mochacli:planner']
-            }
-          , test_notifier:{
-                files:['test/notifiers/**/*.js']
-              , tasks:['mochacli:notifier']
-            }
-          , test_master:{
-                files:['test/master/**/*.js']
-              , tasks:['mochacli:master']
-            }
 /* -------- documentation watching ------------------------------------------ */
           , tex:{
                 files:['docs/perfil.tex']
@@ -114,35 +85,56 @@ module.exports=function(grunt){
 
       , develop:{
             dumb:{
-                file:'planners/dumb.js'
+                file:'server/planners/dumb.js'
               , env:{
                     PORT:grunt.option('port')||3001
+                  , ENV:'development'
                 }
             }
           , planner:{
-                file:'planners/planner.io.js'
+                file:'server/planner.js'
               , env:{
                     PORT:grunt.option('port')||3001
+                  , ENV:'development'
+                }
+            }
+          , planner_io:{
+                file:'server/planner.io.js'
+              , env:{
+                    PORT:grunt.option('port')||3001
+                  , ENV:'development'
+                }
+            }
+          , planner_ion:{
+                file:'server/planner.ion.js'
+              , env:{
+                    PORT:grunt.option('port')||3001
+                  , ENV:'development'
                 }
             }
           , notifier:{
-                file:'notifiers/notifier.io.js'
+                file:'server/notifier.io.js'
               , env:{
                     PORT:grunt.option('port')||3002
+                  , ENV:'development'
                 }
             }
-          , master:{
-                file:'master/app.js'
-            }
-          , qs_sites:{
-                file:'quickstarts/sites/app.js'
+          , monitor:{
+                file:'server/monitor.js'
               , env:{
                     PORT:grunt.option('port')||3003
                   , ENV:'development'
                 }
             }
-          , monitor:{
-                file:'monitor/app.js'
+          , master:{
+                file:'server/master.js'
+              , env:{
+                    PORT:grunt.option('port')||3000
+                  , ENV:'development'
+                }
+            }
+          , sites:{
+                file:'server/sites.js'
               , env:{
                     PORT:grunt.option('port')||3004
                   , ENV:'development'
@@ -154,7 +146,7 @@ module.exports=function(grunt){
             options:{
                 reporter:'spec'
               , bail:true
-              , debug:true
+              , timeout:5000
               , env:{
                     ENV:'test'
                 }
@@ -350,29 +342,34 @@ module.exports=function(grunt){
     grunt.registerTask('serve:dumb',[
         'develop:dumb'
       , 'watch:dumb'
-      , 'watch:test_dumb'
     ]);
     grunt.registerTask('serve:planner',[
         'develop:planner'
       , 'watch:planner'
-      , 'watch:test_functions'
-      , 'watch:test_planner'
+    ]);
+    grunt.registerTask('serve:planner:io',[
+        'develop:planner_io'
+      , 'watch:planner'
+    ]);
+    grunt.registerTask('serve:planner:ion',[
+        'develop:planner_ion'
+      , 'watch:planner'
     ]);
     grunt.registerTask('serve:notifier',[
         'develop:notifier'
       , 'watch:notifier'
     ]);
+    grunt.registerTask('serve:monitor',[
+        'develop:monitor'
+      , 'watch:monitor'
+    ]);
     grunt.registerTask('serve:master',[
         'develop:master'
       , 'watch'
     ]);
-    grunt.registerTask('serve:qs:sites',[
+    grunt.registerTask('serve:sites',[
         'develop:qs_sites'
       , 'watch'
-    ]);
-    grunt.registerTask('serve:monitor',[
-        'develop:monitor'
-      , 'watch:monitor'
     ]);
 
     grunt.registerTask('build:qs:sites',[

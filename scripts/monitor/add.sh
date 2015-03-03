@@ -7,7 +7,7 @@ where:
     -h          show this help text
     -p planner  the planner location (host:port)"
 
-HOST='http://localhost:3004'
+HOST='http://localhost:3003'
 
 while getopts 'hp:' OPTION; do
     case "$OPTION" in

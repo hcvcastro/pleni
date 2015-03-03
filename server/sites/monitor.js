@@ -5,7 +5,7 @@ var generator=require('../../core/functions/utils/random').sync
 
 exports.getplanner=function(task,done){
     request.put({
-        url:'http://localhost:3004/tasks'
+        url:'http://localhost:3003/tasks'
       , json:{task:task}
     },function(error,response){
         if(!error){
@@ -18,7 +18,7 @@ exports.getplanner=function(task,done){
 
 exports.freeplanner=function(task){
     request.del({
-        url:'http://localhost:3004/tasks'
+        url:'http://localhost:3003/tasks'
       , json:{task:task}
     },function(error,response){
         if(error){

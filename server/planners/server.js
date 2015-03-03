@@ -35,7 +35,7 @@ exports.set=function(port,signature){
 
     var destroy=function(){
         http.close(function(){
-            fs.unlink(join(__dirname,'..','run',port),function(err){
+            fs.unlink(join(__dirname,'..','..','run',port),function(err){
                 if(err) throw err;
             });
         });

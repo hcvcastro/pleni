@@ -29,7 +29,7 @@ var http=require('http')
   , secret='pleni'
   , env=process.env.ENV||'production'
 
-app.set('port',process.env.PORT||3003);
+app.set('port',process.env.PORT||3004);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 

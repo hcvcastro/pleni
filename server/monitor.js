@@ -55,7 +55,7 @@ var http=require('http')
         }
     }
 
-app.set('port',process.env.PORT||3004);
+app.set('port',process.env.PORT||3003);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 
