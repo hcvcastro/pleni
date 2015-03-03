@@ -2,9 +2,9 @@
 
 var request=require('supertest')
   , should=require('should')
-  , app=require('../../../quickstarts/sites/app')
-  , _success=require('../../../planners/utils/json-response').success
-  , _error=require('../../../planners/utils/json-response').error
+  , app=require('../../../server/sites')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
 
 describe('quickstart sites controller functions',function(){
     it('GET /',function(done){

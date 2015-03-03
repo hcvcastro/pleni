@@ -1,11 +1,12 @@
 'use strict';
 
-var test=require('../../../planners/functions/planners/test')
-  , set=require('../../../planners/functions/planners/set')
-  , unset=require('../../../planners/functions/planners/unset')
-  , run=require('../../../planners/functions/planners/run')
-  , auth=require('../../../planners/functions/databases/auth')
-  , mapsite=require('../../../planners/functions/repositories/sites/view/getmapsite')
+var base='../../core/functions'
+  , test=require(base+'/planners/test')
+  , set=require(base+'/planners/set')
+  , unset=require(base+'/planners/unset')
+  , run=require(base+'/planners/run')
+  , auth=require(base+'/databases/auth')
+  , mapsite=require(base+'/repositories/sites/view/getmapsite')
   , tid=undefined
 
 exports.create=function(planner,db,url,success,fail){

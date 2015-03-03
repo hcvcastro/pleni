@@ -13,14 +13,15 @@ var should=require('should')
     },{
         script:'../../../server/master'
       , url:'http://localhost:3000'
-    ]
+    }]
 
 notifiers.forEach(function(element){
-    before(function(){
-    
-    });
-
     describe('notifier functions',function(){
+        before(function(done){
+            require(element.script);
+            done();
+        });
+
         it('notifier server sucess connection',function(done){
             test({
                 notifier:{
@@ -28,7 +29,7 @@ notifiers.forEach(function(element){
                 }
             })
             .done(function(args){
-                args.notifier.host.should.equal(url);
+                args.notifier.host.should.equal(element.url);
                 done();
             });
         });
@@ -36,7 +37,7 @@ notifiers.forEach(function(element){
         it('notifier server connection error',function(done){
             test({
                 notifier:{
-                    host:host+':'+(port-3)
+                    host:element.url+'0'
                 }
             })
             .fail(function(error){
@@ -50,7 +51,7 @@ notifiers.forEach(function(element){
         it('clean in notifier server',function(done){
             clean({
                 notifier:{
-                    host:url
+                    host:element.url
                 }
             })
             .done(function(args){
@@ -64,7 +65,7 @@ notifiers.forEach(function(element){
         it('get planners in notifier server',function(done){
             get({
                 notifier:{
-                    host:url
+                    host:element.url
                 }
             })
             .done(function(args){
@@ -79,7 +80,7 @@ notifiers.forEach(function(element){
         it('add planner in notifier server',function(done){
             add({
                 notifier:{
-                    host:url
+                    host:element.url
                 }
               , planner:{
                     host:'http://localhost'
@@ -96,7 +97,7 @@ notifiers.forEach(function(element){
         it('get planners in notifier server',function(done){
             get({
                 notifier:{
-                    host:url
+                    host:element.url
                 }
             })
             .done(function(args){
@@ -114,7 +115,7 @@ notifiers.forEach(function(element){
         it('remove planner in notifier server',function(done){
             remove({
                 notifier:{
-                    host:url
+                    host:element.url
                   }
                 , planner:{
                     host:'http://localhost'
@@ -131,7 +132,7 @@ notifiers.forEach(function(element){
         it('get planners in notifier server',function(done){
             get({
                 notifier:{
-                    host:url
+                    host:element.url
                 }
             })
             .done(function(args){
@@ -146,7 +147,7 @@ notifiers.forEach(function(element){
         it('clean in notifier server',function(done){
             clean({
                 notifier:{
-                    host:url
+                    host:element.url
                 }
             })
             .done(function(args){
@@ -157,4 +158,4 @@ notifiers.forEach(function(element){
             });
         });
     });
-
+});

@@ -1,6 +1,6 @@
 'use strict';
 
-var generator=require('../../../planners/functions/utils/random').sync
+var generator=require('../../core/functions/utils/random').sync
   , request=require('request')
 
 exports.getplanner=function(task,done){

@@ -14,6 +14,17 @@ PORT=3000 node master/app.js
 PORT=3001 node planners/planner.io.js
 ```
 
+## Port asignation
+For testing purposes, we defined the default ports for every serve in pleni.
+
+- **3000:** master server.
+- **3001:** planner.io server.
+- **3002:** notifier.io server.
+- **3003:** sites server.
+- **3004:** monitor server.
+- **3005:** planner server.
+- **3006:** planner.ion server.
+
 ## How test
 If you want to run the tests, you need mocha, the test needed a couchdb instance
 in localhost, and webserver.

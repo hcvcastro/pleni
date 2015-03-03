@@ -154,6 +154,7 @@ module.exports=function(grunt){
             options:{
                 reporter:'spec'
               , bail:true
+              , debug:true
               , env:{
                     ENV:'test'
                 }
@@ -306,12 +307,18 @@ module.exports=function(grunt){
     grunt.registerTask('test:master',['mochacli:master']);
     grunt.registerTask('test:planner',[
         'mochacli:dumb'
-      , 'mochacli:functions'
       , 'mochacli:planners'
+      , 'mochacli:functions'
     ]);
     grunt.registerTask('test:notifier',['mochacli:notifier']);
     grunt.registerTask('test:monitor',['mochacli:monitor']);
     grunt.registerTask('test:sites',['mochacli:sites']);
+    grunt.registerTask('test',[
+        'test:planner'
+      , 'test:notifier'
+      , 'test:monitor'
+      , 'test:sites'
+    ]);
 
     grunt.config.requires('watch.master.files');
     grunt.config.requires('watch.qs_sites.files');

@@ -18,21 +18,20 @@ var http=require('http')
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , sessionsocketio=require('session.socket.io')
-  , validate=require('../../planners/utils/validators')
-  , _success=require('../../planners/utils/json-response').success
-  , _error=require('../../planners/utils/json-response').error
-  , monitor=require('./common/monitor')
-  , create=require('./common/planners').create
-  , fetch=require('./common/planners').fetch
-  , mapsite=require('./common/planners').mapsite
-  , free=require('./common/planners').free
+  , validate=require('../core/validators')
+  , _success=require('../core/json-response').success
+  , _error=require('../core/json-response').error
+  , monitor=require('./sites/monitor')
+  , create=require('./sites/planners').create
+  , fetch=require('./sites/planners').fetch
+  , mapsite=require('./sites/planners').mapsite
+  , free=require('./sites/planners').free
   , secret='pleni'
   , env=process.env.ENV||'production'
 
 app.set('port',process.env.PORT||3003);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
-
 
 if(env=='production'){
     app.use(favicon(
@@ -41,8 +40,8 @@ if(env=='production'){
     app.use(morgan('combined'));
 }else{
     app.use(favicon(
-        join(__dirname,'..','..','master','public','img','favicon.ico')));
-    app.set('views',join(__dirname,'views'));
+        join(__dirname,'..','client','master','img','favicon.ico')));
+    app.set('views',join(__dirname,'..','client','sites','views'));
     app.set('view engine','jade');
 
     app.use(lessmiddleware('/less',{
