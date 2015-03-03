@@ -2,7 +2,7 @@
 
 var request=require('supertest')
   , should=require('should')
-  , app=require('../../master/app')
+  , app=require('../../server/master')
 
 describe('home controller functions',function(){
     it('GET /',function(done){

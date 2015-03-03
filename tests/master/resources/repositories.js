@@ -3,10 +3,10 @@
 var request=require('supertest')
   , should=require('should')
   , join=require('path').join
-  , app=require('../../../master/app')
-  , _success=require('../../../planners/utils/json-response').success
-  , _error=require('../../../planners/utils/json-response').error
-  , loadconfig=require('../../../master/utils/loadconfig')
+  , app=require('../../../server/master')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
+  , loadconfig=require('../../../core/loadconfig')
 
 describe('repositories controller functions',function(){
     describe('rest functions for collection',function(){
@@ -200,7 +200,7 @@ describe('repositories controller functions',function(){
             request(app)
                 .put('/resources/repositories')
                 .send(loadconfig(
-                    join(__dirname,'..','..','..','master','config',
+                    join(__dirname,'..','..','..','config',
                         'repositories.json')))
                 .end(function(err,res){
                     done();

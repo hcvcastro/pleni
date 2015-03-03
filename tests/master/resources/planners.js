@@ -3,12 +3,17 @@
 var request=require('supertest')
   , should=require('should')
   , join=require('path').join
-  , app=require('../../../master/app')
-  , _success=require('../../../planners/utils/json-response').success
-  , _error=require('../../../planners/utils/json-response').error
-  , loadconfig=require('../../../master/utils/loadconfig')
+  , app=require('../../../server/master')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
+  , loadconfig=require('../../../core/loadconfig')
 
 describe('planners controller functions',function(){
+    before(function(done){
+        require('../../../server/planner.io');
+        done();
+    });
+
     describe('rest functions for collection',function(){
         it('GET /resources/view',function(done){
             request(app)
@@ -201,7 +206,7 @@ describe('planners controller functions',function(){
             request(app)
                 .put('/resources/planners')
                 .send(loadconfig(
-                    join(__dirname,'..','..','..','master','config',
+                    join(__dirname,'..','..','..','config',
                         'planners.json')))
                 .end(function(err,res){
                     done();

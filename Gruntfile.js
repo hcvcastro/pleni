@@ -318,6 +318,7 @@ module.exports=function(grunt){
       , 'test:notifier'
       , 'test:monitor'
       , 'test:sites'
+      , 'test:master'
     ]);
 
     grunt.config.requires('watch.master.files');

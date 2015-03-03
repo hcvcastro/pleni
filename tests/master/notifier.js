@@ -2,9 +2,9 @@
 
 var request=require('supertest')
   , should=require('should')
-  , app=require('../../master/app')
-  , _success=require('../../planners/utils/json-response').success
-  , _error=require('../../planners/utils/json-response').error
+  , app=require('../../server/master')
+  , _success=require('../../core/json-response').success
+  , _error=require('../../core/json-response').error
 
 describe('notifiers controller functions',function(){
     describe('notifier server basic pages',function(){

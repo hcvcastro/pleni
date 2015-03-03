@@ -2,12 +2,12 @@
 
 var should=require('should')
   , path=require('path')
-  , loadconfig=require('../../../master/utils/loadconfig')
+  , loadconfig=require('../../../core/loadconfig')
 
 describe('loading the config files',function(){
     it('loading dbservers.js',function(done){
         var config=loadconfig(path.join(
-            __dirname,'..','..','..','master','config','dbservers.json'));
+            __dirname,'..','..','..','config','dbservers.json'));
 
         config.should.be.Array;
         for(var a in config){
@@ -24,7 +24,7 @@ describe('loading the config files',function(){
 
     it('loading repositories.js',function(done){
         var config=loadconfig(path.join(
-            __dirname,'..','..','..','master','config','repositories.json'));
+            __dirname,'..','..','..','config','repositories.json'));
 
         config.should.be.Array;
         for(var a in config){
@@ -38,7 +38,7 @@ describe('loading the config files',function(){
 
     it('loading planners.js',function(done){
         var config=loadconfig(path.join(
-            __dirname,'..','..','..','master','config','planners.json'));
+            __dirname,'..','..','..','config','planners.json'));
 
         config.should.be.Array;
         for(var a in config){
@@ -53,7 +53,7 @@ describe('loading the config files',function(){
 
     it('loading notifiers.js',function(done){
         var config=loadconfig(path.join(
-            __dirname,'..','..','..','master','config','notifiers.json'));
+            __dirname,'..','..','..','config','notifiers.json'));
 
         config.should.be.Array;
         for(var a in config){
@@ -69,7 +69,7 @@ describe('loading the config files',function(){
 
     it('loading projects.js',function(done){
         var config=loadconfig(path.join(
-            __dirname,'..','..','..','master','config','projects.json'));
+            __dirname,'..','..','..','config','projects.json'));
 
         config.should.be.Array;
         for(var a in config){
