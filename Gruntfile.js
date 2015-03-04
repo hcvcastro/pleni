@@ -23,7 +23,7 @@ module.exports=function(grunt){
                     'server/planner.js'
                   , 'server/planner.io.js'
                   , 'server/planner.ion.js'
-                  , 'server/planners/**/*.js'
+                  , 'server/planners/*.js'
                 ]
               , tasks:['develop:planner']
             }
@@ -37,43 +37,39 @@ module.exports=function(grunt){
                 files:['server/monitor.js']
               , tasks:['develop:monitor']
             }
-/* -------- frontend watching ----------------------------------------------- */
-          , js:{
-                files:['master/public/js/**/*.js']
-              , options:{livereload:reloadPort}
-            }
-          , less:{
-                files:['master/public/less/**/*.less']
-              , options:{livereload:reloadPort}
-            }
-          , jade:{
-                files:['master/views/**/*.jade']
-              , options:{livereload:reloadPort}
-            }
 /* -------- master watching ------------------------------------------------- */
           , master:{
                 files:[
-                    'master/config/**/*.json'
+                    'server/master.js'
+                  , 'master/config/**/*.json'
                   , 'master/controllers/**/*.js'
                   , 'master/utils/**/*.js'
-                  , 'master/app.js'
-                  , 'planners/functions/**/*.js'
                 ]
-              , tasks:[
-                    'develop:master'
+              , tasks:['develop:master']
+            }
+/* -------- sites watching -------------------------------------------------- */
+          , sites:{
+                files:[
+                    'server/sites.js'
+                  , 'server/sites/*.js'
                 ]
+              , tasks:['develop:sites']
+            }
+/* -------- frontend watching ----------------------------------------------- */
+          , js:{
+                files:['client/js/**/*.js']
               , options:{livereload:reloadPort}
             }
-/* -------- quickstarts watching -------------------------------------------- */
-          , qs_sites:{
-                files:[
-                    'quickstarts/sites/app.js'
-                  , 'quickstarts/sites/public/js/**/*.js'
-                  , 'quickstarts/sites/views/**/*.jade'
-                ]
-              , tasks:[
-                    'develop:qs_sites'
-                ]
+          , less:{
+                files:['client/less/**/*.less']
+              , options:{livereload:reloadPort}
+            }
+          , svg:{
+                files:['client/svg/**/*.svg']
+              , options:{livereload:reloadPort}
+            }
+          , views:{
+                files:['client/views/**/*.jade']
               , options:{livereload:reloadPort}
             }
 /* -------- documentation watching ------------------------------------------ */
@@ -167,117 +163,120 @@ module.exports=function(grunt){
         }
 
       , clean:{
-            qs_sites:'quickstarts/sites/dist'
+            sites:'dist/sites'
         }
       , concurrent:{
-            qs_sites:[
-                'jade:qs_sites'
-              , 'less:qs_sites'
-              , 'uglify:qs_sites'
-              , 'copy:qs_sites'
-              , 'svgmin:qs_sites'
+            sites:[
+                'jade:sites'
+              , 'less:sites'
+              , 'uglify:sites'
+              , 'copy:sites'
+              , 'svgmin:sites'
             ]
         }
       , jade:{
-            qs_sites:{
+            sites:{
                 options:{
                     pretty:false
                 }
               , files:{
-                    'quickstarts/sites/dist/index.html'
-                  : 'quickstarts/sites/views/prod.jade'
-                  , 'quickstarts/sites/dist/map.html'
-                  : 'quickstarts/sites/views/pages/map.jade'
-                  , 'quickstarts/sites/dist/sites.html'
-                  : 'quickstarts/sites/views/pages/sites.jade'
-                  , 'quickstarts/sites/dist/about.html'
-                  : 'quickstarts/sites/views/pages/about.jade'
+                    'dist/sites/index.html'
+                  : 'client/views/sites/prod.jade'
+                  , 'dist/sites/map.html'
+                  : 'client/views/sites/pages/map.jade'
+                  , 'dist/sites/sites.html'
+                  : 'client/views/sites/pages/sites.jade'
+                  , 'dist/sites/about.html'
+                  : 'client/views/sites/pages/about.jade'
+                  , 'dist/sites/report.html'
+                  : 'client/views/sites/pages/report.jade'
                 }
             }
         }
       , less:{
-            qs_sites:{
+            sites:{
                 options:{
                     cleancss:true
                   , paths:['bower_components']
                 }
               , files:{
-                    'quickstarts/sites/dist/style.css'
-                  : 'master/public/less/sites.less'
+                    'dist/sites/style.css'
+                  : 'client/less/sites.less'
                 }
             }
         }
       , uglify:{
-            qs_sites:{
+            sites:{
                 files:[{
-                    'quickstarts/sites/dist/js/qs.min.js':[
-                        'quickstarts/sites/public/js/app.js'
-                      , 'quickstarts/sites/public/js/controllers/sites.js'
-                      , 'quickstarts/sites/public/js/controllers/map.js'
-                      , 'quickstarts/sites/public/js/controllers/menu.js'
-                      , 'master/public/js/visual/site.js'
-                      , 'master/public/js/factories/visual.js'
-                    ]
-                },{
-                    'quickstarts/sites/dist/js/jquery.min.js':[
+                    'dist/sites/js/jquery.min.js':[
                         'bower_components/jquery/dist/jquery.min.js'
                       , 'bower_components/pushy-dyn/js/pushy.js'
                     ]
                 },{
-                    'quickstarts/sites/dist/js/socket.io.min.js':[
+                    'dist/sites/js/socket.io.min.js':[
                         'bower_components/socket.io-client/socket.io.js'
                     ]
                 },{
-                    'quickstarts/sites/dist/js/angular.min.js':[
+                    'dist/sites/js/angular.min.js':[
                         'bower_components/angular/angular.min.js'
                     ]
                 },{
-                    'quickstarts/sites/dist/js/angular-route.min.js':[
+                    'dist/sites/js/angular-route.min.js':[
                         'bower_components/angular-route/angular-route.min.js'
                     ]
                 },{
-                    'quickstarts/sites/dist/js/d3.min.js':[
+                    'dist/sites/js/d3.min.js':[
                         'bower_components/d3/d3.min.js'
                       , 'bower_components/d3-tip/index.js'
+                    ]
+                },{
+                    'dist/sites/js/sites.min.js':[
+                        'client/js/sites.js'
+                      , 'client/js/controllers/sites/sites.js'
+                      , 'client/js/controllers/sites/map.js'
+                      , 'client/js/controllers/sites/menu.js'
+                      , 'client/js/controllers/sites/report.js'
+                      , 'client/js/visual/site.js'
+                      , 'client/js/factories/visual.js'
                     ]
                 }]
             }
         }
       , copy:{
-            qs_sites:{
+            sites:{
                 files:[{
-                    src:'master/public/img/favicon.ico'
-                  , dest:'quickstarts/sites/dist/favicon.ico'
+                    src:'client/favicon.ico'
+                  , dest:'dist/sites/favicon.ico'
                 },{
                     expand:true
                   , flatten:true
                   , cwd:'bower_components/font-awesome/'
                   , src:'fonts/fontawesome-webfont.*'
-                  , dest:'quickstarts/sites/dist/fonts/'
+                  , dest:'dist/sites/fonts/'
+                }]
+            }
+        }
+      , svgmin:{
+            sites:{
+                files:[{
+                    src:'client/svg/canvas.svg'
+                  , dest:'dist/sites/svg/canvas.svg'
+                },{
+                    src:'client/svg/hiperborea.svg'
+                  , dest:'dist/sites/svg/hiperborea.svg'
+                },{
+                    src:'client/svg/pleni.sites.svg'
+                  , dest:'dist/sites/svg/pleni.sites.svg'
                 }]
             }
         }
       , cssmin:{
-            qs_sites:{
+            sites:{
                 files:{
-                    'quickstarts/sites/dist/style.css':[
-                        'quickstarts/sites/dist/style.css'
+                    'dist/sites/style.css':[
+                        'dist/sites/style.css'
                     ]
                 }
-            }
-        }
-      , svgmin:{
-            qs_sites:{
-                files:[{
-                    src:'master/public/img/canvas.svg'
-                  , dest:'quickstarts/sites/dist/img/canvas.svg'
-                },{
-                    src:'master/public/img/hiperborea.svg'
-                  , dest:'quickstarts/sites/dist/img/hiperborea.svg'
-                },{
-                    src:'master/public/img/pleni.sites.svg'
-                  , dest:'quickstarts/sites/dist/img/pleni.sites.svg'
-                }]
             }
         }
 
@@ -314,9 +313,7 @@ module.exports=function(grunt){
     ]);
 
     grunt.config.requires('watch.master.files');
-    grunt.config.requires('watch.qs_sites.files');
-    filescontrol=grunt.config('watch.master.files').concat(
-        grunt.config('watch.qs_sites.files'));
+    filescontrol=grunt.config('watch.master.files');
     filescontrol=grunt.file.expand(filescontrol);
 
     grunt.registerTask('delayed-livereload',
@@ -368,14 +365,14 @@ module.exports=function(grunt){
       , 'watch'
     ]);
     grunt.registerTask('serve:sites',[
-        'develop:qs_sites'
+        'develop:sites'
       , 'watch'
     ]);
 
-    grunt.registerTask('build:qs:sites',[
-        'clean:qs_sites'
-      , 'concurrent:qs_sites'
-      , 'cssmin:qs_sites'
+    grunt.registerTask('build:sites',[
+        'clean:sites'
+      , 'concurrent:sites'
+      , 'cssmin:sites'
     ]);
 };
 

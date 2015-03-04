@@ -15,6 +15,7 @@ var http=require('http')
   , resources={}
   , notifier=new Array()
   , projects=new Array()
+  , env=process.env.ENV||'production'
 
 // sync methods
 resources.dbservers=loadconfig(join(__dirname,'..','config','dbservers.json'));
@@ -29,22 +30,30 @@ app.set('projects',projects);
 
 // async methods
 app.set('port',process.env.PORT||3000);
-app.set('views',join(__dirname,'..','client','master','views'));
-app.set('view engine','jade');
 app.disable('x-powered-by');
-app.use(favicon(join(__dirname,'..','client','master','img','favicon.ico')));
 app.use(bodyparser.json());
-app.use(morgan('dev'));
 
-app.use(lessmiddleware('/less',{
-    dest:'/css'
-  , pathRoot:join(__dirname,'public')
-  , compress:true
-}));
+if(env=='production'){
+    app.use(favicon(join(__dirname,'..','dist','master','favicon.ico')));
+    app.use(express.static(join(__dirname,'..','dist','master')));
+    app.use(morgan('combined'));
+}else{
+    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+    app.set('views',join(__dirname,'..','client','views','master'));
+    app.set('view engine','jade');
 
-app.use(express.static(join(__dirname,'public')));
-app.use(express.static(join(__dirname,'..','bower_components')));
-app.locals.pretty=true;
+    app.use(lessmiddleware('/less',{
+        dest:'/css'
+      , pathRoot:join(__dirname,'..','client')
+      , compress:true
+    }));
+
+    app.use(express.static(join(__dirname,'..','client')));
+    app.use(express.static(join(__dirname,'..','bower_components')));
+    app.locals.pretty=true;
+
+    app.use(morgan('dev'));
+}
 
 require('./master/home')(app);
 require('./master/resources')(app);

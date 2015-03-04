@@ -34,28 +34,25 @@ app.disable('x-powered-by');
 app.use(bodyparser.json());
 
 if(env=='production'){
-    app.use(favicon(
-        join(__dirname,'dist','favicon.ico')));
-    app.use(express.static(join(__dirname,'dist')));
+    app.use(favicon(join(__dirname,'..','dist','sites','favicon.ico')));
+    app.use(express.static(join(__dirname,'..','dist','sites')));
     app.use(morgan('combined'));
 }else{
-    app.use(favicon(
-        join(__dirname,'..','client','master','img','favicon.ico')));
-    app.set('views',join(__dirname,'..','client','sites','views'));
+    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+    app.set('views',join(__dirname,'..','client','views','sites'));
     app.set('view engine','jade');
 
     app.use(lessmiddleware('/less',{
         dest:'/css'
-      , pathRoot:join(__dirname,'..','..','master','public')
-      , parser:{
+      , pathRoot:join(__dirname,'..','client')
+/*      , parser:{
             paths:[join(__dirname,'..','..','bower_components')]
-        }
+        }*/
       , compress:false
     }));
 
-    app.use(express.static(join(__dirname,'public')));
-    app.use(express.static(join(__dirname,'..','..','master','public')));
-    app.use(express.static(join(__dirname,'..','..','bower_components')));
+    app.use(express.static(join(__dirname,'..','client')));
+    app.use(express.static(join(__dirname,'..','bower_components')));
     app.locals.pretty=true;
 
     app.use(morgan('dev'));
@@ -86,7 +83,7 @@ app.use(cookiesession({
 
 app.get('/',function(request,response){
     if(env=='production'){
-        response.sendFile(join(__dirname,'dist','index.html'));
+        response.sendFile(join(__dirname,'..','dist','sites','index.html'));
     }else{
         response.render('dev');
     }
@@ -99,7 +96,7 @@ app.get('/sites',function(request,response){
         response.cookie('pleni.url','');
     }
     if(env=='production'){
-        response.sendFile(join(__dirname,'dist','sites.html'));
+        response.sendFile(join(__dirname,'..','dist','sites','sites.html'));
     }else{
         response.render('pages/sites');
     }
@@ -112,7 +109,7 @@ app.get('/map',function(request,response){
         response.cookie('pleni.url','');
     }
     if(env=='production'){
-        response.sendFile(join(__dirname,'dist','map.html'));
+        response.sendFile(join(__dirname,'..','dist','sites','map.html'));
     }else{
         response.render('pages/map');
     }
@@ -120,7 +117,7 @@ app.get('/map',function(request,response){
 
 app.get('/about',function(request,response){
     if(env=='production'){
-        response.sendFile(join(__dirname,'dist','about.html'));
+        response.sendFile(join(__dirname,'..','dist','sites','about.html'));
     }else{
         response.render('pages/about');
     }
@@ -128,7 +125,7 @@ app.get('/about',function(request,response){
 
 app.get('/report',function(request,response){
     if(env=='production'){
-        response.sendFile(join(__dirname,'dist','report.html'));
+        response.sendFile(join(__dirname,'..','dist','sites','report.html'));
     }else{
         response.render('pages/report');
     }

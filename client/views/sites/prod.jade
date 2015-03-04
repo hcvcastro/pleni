@@ -1,0 +1,15 @@
+extends ./base.jade
+
+block link
+    link(rel='stylesheet',href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300&subset=latin,latin-ext')
+    link(rel='stylesheet',href='/style.css')
+
+block script
+    script(src='/js/jquery.min.js')
+    script(src='/js/socket.io.min.js')
+    script(src='/js/angular.min.js')
+    script(src='/js/angular-route.min.js')
+    script(src='/js/d3.min.js')
+    script(src='/js/sites.min.js')
+    include statcounter.html
+

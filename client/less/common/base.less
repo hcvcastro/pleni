@@ -1,0 +1,52 @@
+.full {
+    height: 100%;
+    background-color: fade(@color5,60%);
+    display: flex;
+    flex-direction: row;
+}
+
+.flex_menu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    align-content: space-beetwen;
+}
+
+.fa-hiperborea {
+    background-image: url('/svg/hiperborea.svg');
+    background-size: 100%;
+
+    &.big {
+        width: 53px;
+        height: 53px;
+    }
+    &.medium {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.last {
+    flex-grow: 1;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clearfix {
+    clear: both;
+}
+
+.grid {
+    max-width: 960px;
+    width: 100%;
+    margin: 0 auto;
+}
+
