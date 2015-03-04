@@ -3,13 +3,16 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-NAME=planner1
+NAME=planner.planner
 ROOT=/var/www/pleni
 USER=jacobian
 GROUP=jacobian
 DAEMON=/usr/bin/node
-ARGS="$ROOT/planners/planner.io.js"
+ARGS="$ROOT/server/planner.io.js"
 PIDFILE=/var/run/$NAME.pid
+
+LOGFILE=/var/log/pleni/planner.log
+ERRFILE=/var/log/pleni/planner.err
 
 export NODE_ENV=production
 export PORT=3001
@@ -21,11 +24,13 @@ depend() {
 start() {
     start-stop-daemon --start --quiet \
         --chuid $USER:$GROUP --chdir $ROOT --background \
-        --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+        --pidfile $PIDFILE --stdout $LOGFILE --stderr $ERRFILE \
+        --exec $DAEMON --test > /dev/null \
     || return 1
     start-stop-daemon --start --quiet \
         --chuid $USER:$GROUP --chdir $ROOT --background \
-        --make-pidfile --pidfile $PIDFILE --exec $DAEMON -- $ARGS \
+        --make-pidfile --pidfile $PIDFILE --stdout $LOGFILE \
+        --stderr $ERRFILE --exec $DAEMON -- $ARGS \
     || return 2
 }
 

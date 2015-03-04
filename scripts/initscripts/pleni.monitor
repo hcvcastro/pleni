@@ -1,0 +1,53 @@
+#!/sbin/runscript
+# Copyright 1999-2014 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Header: $
+
+NAME=pleni.monitor
+ROOT=/var/www/pleni
+USER=jacobian
+GROUP=jacobian
+DAEMON=/usr/bin/node
+ARGS="$ROOT/server/monitor.js"
+PIDFILE=/var/run/$NAME.pid
+LOGFILE=/var/log/pleni/monitor.log
+ERRFILE=/var/log/pleni/monitor.err
+
+export NODE_ENV=production
+export PORT=3003
+
+depend() {
+    need net
+}
+
+start() {
+    start-stop-daemon --start --quiet \
+        --chuid $USER:$GROUP --chdir $ROOT --background \
+        --pidfile $PIDFILE --stdout $LOGFILE --stderr $ERRFILE \
+        --exec $DAEMON --test > /dev/null \
+    || return 1
+    start-stop-daemon --start --quiet \
+        --chuid $USER:$GROUP --chdir $ROOT --background \
+        --make-pidfile --pidfile $PIDFILE --stdout $LOGFILE \
+        --stderr $ERRFILE --exec $DAEMON -- $ARGS \
+    || return 2
+}
+
+stop() {
+    start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 \
+        --pidfile $PIDFILE --exec $DAEMON
+    RETVAL="$?"
+    [ "$RETVAL" = 2 ] && return 2
+    start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 \
+        --exec $DAEMON
+    [ "$?" = 2 ] && return 2
+    rm -f $PIDFILE
+    return "$RETVAL"
+}
+
+reload() {
+    start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE \
+        --exec $DAEMON
+    return 0
+}
+
