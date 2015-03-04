@@ -24,7 +24,7 @@ For execute master ui.
 
 ```sh
 # start the sites ui
-PORT=3000 node server/server.js &
+PORT=3000 node server/master.js &
 ```
 
 For execute sites ui.
