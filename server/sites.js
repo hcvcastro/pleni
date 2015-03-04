@@ -45,9 +45,6 @@ if(env=='production'){
     app.use(lessmiddleware('/less',{
         dest:'/css'
       , pathRoot:join(__dirname,'..','client')
-/*      , parser:{
-            paths:[join(__dirname,'..','..','bower_components')]
-        }*/
       , compress:false
     }));
 

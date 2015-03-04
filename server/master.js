@@ -33,11 +33,11 @@ app.set('port',process.env.PORT||3000);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 
-if(env=='production'){
+/*if(env=='production'){
     app.use(favicon(join(__dirname,'..','dist','master','favicon.ico')));
     app.use(express.static(join(__dirname,'..','dist','master')));
     app.use(morgan('combined'));
-}else{
+}else{*/
     app.use(favicon(join(__dirname,'..','client','favicon.ico')));
     app.set('views',join(__dirname,'..','client','views','master'));
     app.set('view engine','jade');
@@ -53,7 +53,7 @@ if(env=='production'){
     app.locals.pretty=true;
 
     app.use(morgan('dev'));
-}
+/*}*/
 
 require('./master/home')(app);
 require('./master/resources')(app);
