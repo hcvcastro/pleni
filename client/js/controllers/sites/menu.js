@@ -3,6 +3,11 @@
 pleni.controller('MenuController',
     ['$scope','$rootScope','$http','$location','$window',
     function($scope,$rootScope,$http,$location,$window){
+        $scope.$on('$locationChangeStart',function(event,next,current){
+            if(current.indexOf('/#/map')!=-1&&next.indexOf('/#/sites')!=-1){
+                $scope.close(true);
+            }
+        });
 
         $scope.items=[1,0,0,0,0,1];
 
@@ -37,8 +42,10 @@ pleni.controller('MenuController',
             $location.path('');
         }
 
-        $scope.close=function(){
-            pushy.togglePushy();
+        $scope.close=function(pushy){
+            if(!pushy){
+                pushy.togglePushy();
+            }
             $http.delete('/').success(function(){
                 $location.path('sites');
                 $window.location.reload();

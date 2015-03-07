@@ -34,13 +34,12 @@ exports.create=function(planner,db,url,success,fail){
     test(pkg)
     .then(set)
     .then(run)
-    .fail(fail)
     .done(function(args){
         if(args&&args.planner&&args.planner.tid){
             tid=args.planner.tid;
             success(args);
         }
-    });
+    },fail);
 };
 
 exports.fetch=function(planner,db,agent,success,fail){
@@ -66,13 +65,12 @@ exports.fetch=function(planner,db,agent,success,fail){
     test(pkg)
     .then(set)
     .then(run)
-    .fail(fail)
     .done(function(args){
         if(args&&args.planner&&args.planner.tid){
             tid=args.planner.tid;
             success(args);
         }
-    });
+    },fail);
 };
 
 exports.free=function(planner,success,fail){
@@ -84,10 +82,9 @@ exports.free=function(planner,success,fail){
     };
 
     unset(pkg)
-    .fail(fail)
     .done(function(args){
         success(args);
-    });
+    },fail);
 };
 
 exports.mapsite=function(db,success,fail){
@@ -102,9 +99,8 @@ exports.mapsite=function(db,success,fail){
 
     auth(pkg)
     .then(mapsite)
-    .fail(fail)
     .done(function(args){
         success(args);
-    });
+    },fail);
 };
 
