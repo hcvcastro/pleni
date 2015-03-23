@@ -164,6 +164,7 @@ module.exports=function(grunt){
 
       , clean:{
             sites:'dist/sites'
+          , master:'dist/master'
         }
       , concurrent:{
             sites:[
@@ -172,6 +173,13 @@ module.exports=function(grunt){
               , 'uglify:sites'
               , 'copy:sites'
               , 'svgmin:sites'
+            ]
+          , master:[
+                'jade:master'
+              , 'less:master'
+              , 'uglify:master'
+              , 'copy:master'
+              , 'svgmin:master'
             ]
         }
       , jade:{
@@ -369,6 +377,11 @@ module.exports=function(grunt){
       , 'watch'
     ]);
 
+    grunt.registerTask('build:master',[
+        'clean:master'
+      , 'concurrent:master'
+      , 'cssmin:master'
+    ]);
     grunt.registerTask('build:sites',[
         'clean:sites'
       , 'concurrent:sites'

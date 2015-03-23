@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Network</title>
+        <link rel='stylesheet' href='/font-awesome/css/font-awesome.css' />
+        <link rel='stylesheet' href='/css/sites-dev.css' />
+        <style>
+            #canvas {
+                width:100vw;
+                height: 100vh;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="canvas"></div>
+        <script src='/d3/d3.min.js'></script>
+        <script src='/d3-tip/index.js'></script>
+        <script src='/js/visual/site.js'></script>
+        <script>
+            var force={
+                count:1
+              , nodes:[{
+                    page:'oep.org.bo.'
+                  , status:'unknown'
+                  , mime:'unknown'
+                  , get:false
+                  , type:'unknown'
+                },{
+                    page:'_autodiscover._tcp.oep.org.bo.'
+                  , status:'unknown'
+                  , mime:'unknown'
+                  , get:false
+                  , type:'unknown'
+                },{
+                    page:'actas2014.oep.org.bo.'
+                  , status:'unknown'
+                  , mime:'unknown'
+                  , get:false
+                  , type:'unknown'
+                }]
+              , links:[{
+                    source:0,target:1
+                },{
+                    source:0,target:2
+                }]
+            }
+
+            visual.init();
+            visual.set(force.count,force.nodes,force.links);
+            visual.draw();
+            visual.panel();
+        </script>
+    </body>
+</html>
+
