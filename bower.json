@@ -20,6 +20,7 @@
     "angular-socket-io": "~0.7.0",
     "d3": "~3.5.3",
     "d3-tip": "~0.6.6",
-    "pushy-dyn": "~0.9.3"
+    "pushy-dyn": "~0.9.3",
+    "angular-ui-router": "~0.2.13"
   }
 }

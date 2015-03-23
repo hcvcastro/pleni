@@ -1,0 +1,11 @@
+.statusbar
+    .menu.fa.fa-bars(ng-click='menu.open()')
+    .url {{status.url}}
+    .c1 {{status.completed}}
+    .c2 {{status.total}}
+    .msg
+        .wrapper {{status.message}}
+    .status
+        span.fa.fa-circle-o-notch(ng-class='{\'fa-spin\':waiting==true}')
+    .clearfix
+

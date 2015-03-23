@@ -89,45 +89,18 @@ app.get('/',function(request,response){
     }
 });
 
-app.get('/sites',function(request,response){
-    if(request.session.url){
-        response.cookie('pleni.url',request.session.url);
-    }else{
-        response.cookie('pleni.url','');
-    }
-    if(env=='production'){
-        response.sendFile(join(__dirname,'..','dist','sites','sites.html'));
-    }else{
-        response.render('pages/sites');
-    }
-});
+app.get('/pages/:page',function(request,response){
+    var pages=['search','sitemap','about','report']
+      , page=request.params.page
 
-app.get('/map',function(request,response){
-    if(request.session.url){
-        response.cookie('pleni.url',request.session.url);
-    }else{
-        response.cookie('pleni.url','');
+    if(!pages.some(function(element){return element==page;})){
+        response.status(404).json(_error.notfound);
     }
-    if(env=='production'){
-        response.sendFile(join(__dirname,'..','dist','sites','map.html'));
-    }else{
-        response.render('pages/map');
-    }
-});
 
-app.get('/about',function(request,response){
     if(env=='production'){
-        response.sendFile(join(__dirname,'..','dist','sites','about.html'));
+        response.sendFile(join(__dirname,'..','dist','sites',page+'.html'));
     }else{
-        response.render('pages/about');
-    }
-});
-
-app.get('/report',function(request,response){
-    if(env=='production'){
-        response.sendFile(join(__dirname,'..','dist','sites','report.html'));
-    }else{
-        response.render('pages/report');
+        response.render('pages/'+page);
     }
 });
 

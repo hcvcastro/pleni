@@ -8,8 +8,9 @@ html(lang='en')
         meta(name='description',content='Visualize the map and performs a basic analysis of a website')
         link(rel='shortcut icon',href='/favicon.ico')
         block link
-    body(ng-app='PleniApp')
-        include ./blocks/menu
-        #content.blocked(ng-view)
+    body(ng-app='PleniApp',ng-controller='SitesController')
+        #content.blocked(ui-view)
+        include ./blocks/sidebar
+        include ./blocks/statusbar
         block script
 

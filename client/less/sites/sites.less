@@ -206,27 +206,6 @@ footer {
 }
 
 @height: 24px;
-
-.menubar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 20;
-
-    height: @height;
-
-    .menu {
-        width: 26px;
-        height: @height;
-        font-size: (@height - 7.5);
-        box-sizing: border-box;
-        padding: 5px;
-        cursor: pointer;
-        background-color: @info_frg;
-        color: @white;
-    }
-}
-
 .statusbar {
     position: fixed;
     bottom: 0;
@@ -235,7 +214,7 @@ footer {
 
     width: 100vw;
     height: @height;
-    padding: 0 0 0 26px;
+    padding: 0;
 
     color: @white;
     box-sizing: border-box;
@@ -247,12 +226,21 @@ footer {
     align-items: flex-start;
     align-content: stretch;
 
-    &>:nth-child(1){ background-color: darken(@color2,06%); }
-    &>:nth-child(2){ background-color: darken(@color2,12%); }
-    &>:nth-child(3){ background-color: darken(@color2,18%); }
-    &>:nth-child(4){ background-color: darken(@color2,24%); }
-    &>:nth-child(5){ background-color: darken(@color2,30%); }
+    &>:nth-child(1){ background-color: @info_frg; }
+    &>:nth-child(2){ background-color: darken(@color2,06%); }
+    &>:nth-child(3){ background-color: darken(@color2,12%); }
+    &>:nth-child(4){ background-color: darken(@color2,18%); }
+    &>:nth-child(5){ background-color: darken(@color2,24%); }
+    &>:nth-child(6){ background-color: darken(@color2,30%); }
 
+    .menu {
+        width: 26px;
+        height: @height;
+        font-size: (@height - 7.5);
+        box-sizing: border-box;
+        padding: 5px;
+        cursor: pointer;
+    }
     .status {
         width: 24px;
         height: @height;
