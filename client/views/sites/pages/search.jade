@@ -2,8 +2,8 @@
 section.main
     .logo
     .central
-        form(ng-submit='send()')
-            input(type='text',placeholder='Enter the url to analyze',ng-model='url')
+        form(ng-submit='search.send()')
+            input(type='text',placeholder='Enter the url to analyze',ng-model='search.url')
             button(type='submit')
                 i.fa.fa-cloud-download
     .clearfix

@@ -12,5 +12,9 @@ var pleni=angular
                 url:'/search'
               , templateUrl:'pages/search'
             })
+            .state('mapsite',{
+                url:'/mapsite'
+              , templateUrl:'pages/mapsite'
+            })
     });
 

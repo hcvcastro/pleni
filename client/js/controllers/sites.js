@@ -33,7 +33,19 @@ pleni.controller('SitesController',
             pushy.togglePushy();
         }
       , close:function(){
-            pushy.tooglePushy();
+            pushy.togglePushy();
+        }
+    };
+
+    $scope.search={
+        url:''
+      , send:function(){
+            utils.clean();
+            if($scope.search.url!=''){
+                utils.show('error','The URL is not a valid host');
+            }else{
+                utils.show('error','The URL is empty');
+            }
         }
     };
 
@@ -45,4 +57,37 @@ pleni.controller('SitesController',
         console.log(pkg);
     });
 }]);
+/*
+    $('input[type=\'text\']').focus();
 
+    $scope.send=function(){
+        utils.clean();
+        if($scope.url!=''){
+            $http.put('/sites',{
+                site:$scope.url
+              , agent:navigator.userAgent
+            }).success(function(data){
+                $('footer').fadeOut('slow',function(){
+                    $('.main').fadeOut('slow',function(){
+                        $('#content').removeClass('blocked');
+                        $(this).remove();
+                    });
+                    $(this).remove();
+                });
+
+                $rootScope.monitor=data.msg+' ';
+                if(data.queue==0){
+                    $rootScope.monitor+='. starting ...';
+                }else{
+                    $rootScope.monitor+='(aprox:'+data.queue+' minutes)';
+                }
+
+                $location.path('/map');
+            }).error(function(error){
+                utils.show('error','The url is not a valid host');
+            });
+        }else{
+            utils.show('error','The url is empty');
+        }
+    }
+*/
