@@ -17,9 +17,10 @@ var utils={
 };
 
 pleni.controller('SitesController',
-    ['$scope','$rootScope','$http','$location',
-    function($scope,$rootScope,$http,$location){
+    ['$scope','$state','$http','$location','Visual',
+    function($scope,$state,$http,$location,Visual){
 
+    $scope.$state=$state;
     $scope.status={
         url:''
       , completed:''
@@ -29,12 +30,72 @@ pleni.controller('SitesController',
     };
 
     $scope.menu={
-        open:function(){
+        settings:[1,0,0,0,0,1]
+      , open:function(){
             pushy.togglePushy();
         }
-      , close:function(){
+      , hide:function(){
             pushy.togglePushy();
         }
+      , about:function(){
+            pushy.togglePushy();
+            $state.go('about');
+        }
+
+/*      , menu=function(){
+            var hash=window.location.hash.substring(1);
+
+            switch(hash){
+                case '/about':
+                    $scope.items=[1,0,0,0,1,0];
+                    break;
+                case '/map':
+                    $scope.items=[1,1,1,1,0,1];
+                    break;
+                case '/sites':
+                    $scope.items=[1,0,0,0,0,1];
+            }
+
+            pushy.togglePushy();
+        }
+
+        $scope.home=function(){
+            pushy.togglePushy();
+            $location.path('');
+        }
+
+        $scope.close=function(pushy){
+            if(!pushy){
+                pushy.togglePushy();
+            }
+            $http.delete('/').success(function(){
+                $location.path('sites');
+                $window.location.reload();
+            });
+        };
+
+        $scope.report=function(){
+            pushy.togglePushy();
+            $location.path('report');
+        }
+
+        $scope.more=function(){
+            pushy.togglePushy();
+            $http.put('/more').success(function(data){
+                $rootScope.monitor=data.msg+' ';
+                if(data.queue==0){
+                    $rootScope.monitor+='. starting ...';
+                }else{
+                    $rootScope.monitor+='(aprox:'+data.queue+' minutes)';
+                }
+
+                $location.path('/map');
+            });
+        }
+
+        $scope.refresh=function(){
+            $window.location.reload();
+        }*/
     };
 
     $scope.search={
@@ -42,7 +103,31 @@ pleni.controller('SitesController',
       , send:function(){
             utils.clean();
             if($scope.search.url!=''){
-                utils.show('error','The URL is not a valid host');
+                $http.put('/sites',{
+                    site:$scope.search.url
+                  , agent:navigator.userAgent
+                }).success(function(data){
+                    $('footer').fadeOut('slow',function(){
+                        $('.main').fadeOut('slow',function(){
+                            $('#content').removeClass('blocked');
+                            $(this).remove();
+
+                            $scope.status.waiting=true;
+                            $scope.status.message=data.msg+' ';
+                            if(data.queue==0){
+                                $scope.status.message+='. starting ...';
+                            }else{
+                                $scope.status.message+='(aprox:'+data.queue
+                                    +' minutes)';
+                            }
+
+                            $state.go('sitemap')
+                        });
+                        $(this).remove();
+                    });
+                }).error(function(error){
+                    utils.show('error','The url is not a valid host');
+                });
             }else{
                 utils.show('error','The URL is empty');
             }
@@ -55,39 +140,67 @@ pleni.controller('SitesController',
     });
     $scope.socket.on('notifier',function(pkg){
         console.log(pkg);
+        switch(pkg.action){
+            case 'start':
+                $scope.message=pkg.msg;
+                break;
+            case 'create':
+                $scope.message=pkg.msg;
+                break;
+            case 'task':
+                if(pkg.task.id=='site/fetch'){
+                    if(pkg.task.msg.node){
+                        Visual.add({
+                            page:pkg.task.msg.node.page
+                          , status:pkg.task.msg.node.status
+                          , mime:pkg.task.msg.node.mime
+                          , get:pkg.task.msg.node.get
+                          , type:pkg.task.msg.node.type
+                        },pkg.task.msg.node.rel);
+                        $scope.message='GET '+pkg.task.msg.node.page+' '+
+                            pkg.task.msg.node.status+'. links founded: '+
+                            pkg.task.msg.node.rel.length;
+                        $scope.completed++;
+                        $scope.total=visual.nodes.length;
+                    }else if(pkg.task.msg=='completed'){
+                        $scope.waiting=false;
+                        $scope.waiting='site completed';
+                    }
+                }
+                break;
+            case 'stop':
+                $scope.waiting=false;
+                $scope.message=pkg.msg;
+                break;
+        }
+        $scope.$apply();
     });
 }]);
 /*
     $('input[type=\'text\']').focus();
 
-    $scope.send=function(){
-        utils.clean();
-        if($scope.url!=''){
-            $http.put('/sites',{
-                site:$scope.url
-              , agent:navigator.userAgent
-            }).success(function(data){
-                $('footer').fadeOut('slow',function(){
-                    $('.main').fadeOut('slow',function(){
-                        $('#content').removeClass('blocked');
-                        $(this).remove();
-                    });
-                    $(this).remove();
-                });
 
-                $rootScope.monitor=data.msg+' ';
-                if(data.queue==0){
-                    $rootScope.monitor+='. starting ...';
-                }else{
-                    $rootScope.monitor+='(aprox:'+data.queue+' minutes)';
-                }
+    $scope.completed=0;
+    $scope.total=0;
+    $scope.waiting=true;
 
-                $location.path('/map');
-            }).error(function(error){
-                utils.show('error','The url is not a valid host');
-            });
-        }else{
-            utils.show('error','The url is empty');
-        }
+    $('#content').removeClass('blocked');
+    var match=/pleni.url=(.+)/.exec(document.cookie)
+    if(match&&match.length==2){
+        $scope.url=decodeURIComponent(match[1]);
+        $http.post('/mapsite').success(function(data){
+            Visual.clean();
+            if(data&&data.ok){
+                Visual.render();
+            }else{
+                $scope.completed=data.count;
+                $scope.total=data.total;
+                $scope.waiting=false;
+                Visual.render(data);
+            }
+        });
+    }else{
+        $location.path('sites');
     }
+
 */

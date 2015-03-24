@@ -1,18 +1,16 @@
-div
+.sidebar
     nav.pushy.pushy-left
         ul
-            li
-                a Refresh
-            li
+            li(ng-click='menu.refresh()')
+                a Refresh page
+            li(ng-click='menu.more()')
                 a +20 pages
-            li
+            li(ng-click='menu.report()')
                 a Generate report
-            li
+            li(ng-click='menu.close()')
                 a Close session
-            li
-                a Return home
-            li
+            li(ng-click='menu.about()')
                 a About pleni
-    .site-overlay(ng-click='menu.close()')
-        .close.fa.fa-close(ng-click='menu.close()')
+    .site-overlay(ng-click='menu.hide()')
+        .close.fa.fa-close(ng-click='menu.hide()')
 
