@@ -17,8 +17,8 @@ var utils={
 };
 
 pleni.controller('SitesController',
-    ['$scope','$state','$http','$location','Visual',
-    function($scope,$state,$http,$location,Visual){
+    ['$scope','$state','$http','$window','$location','Visual',
+    function($scope,$state,$http,$window,$location,Visual){
 
     $scope.$state=$state;
     $scope.status={
@@ -30,40 +30,30 @@ pleni.controller('SitesController',
     };
 
     $scope.menu={
-        settings:[1,0,0,0,0,1]
+        settings:[1,0,0,0,1]
+      , show:function(index){
+            return $scope.menu.settings[index];
+        }
       , open:function(){
             pushy.togglePushy();
         }
       , hide:function(){
             pushy.togglePushy();
         }
+      , refresh:function(){
+            $window.location.reload();
+        }
       , about:function(){
             pushy.togglePushy();
+            $scope.menu.settings=[1,0,0,0,1];
             $state.go('about');
         }
-
-/*      , menu=function(){
-            var hash=window.location.hash.substring(1);
-
-            switch(hash){
-                case '/about':
-                    $scope.items=[1,0,0,0,1,0];
-                    break;
-                case '/map':
-                    $scope.items=[1,1,1,1,0,1];
-                    break;
-                case '/sites':
-                    $scope.items=[1,0,0,0,0,1];
-            }
-
-            pushy.togglePushy();
+      , home:function(){
+            $scope.menu.settings=[1,0,0,0,1];
+            $state.go('search');
         }
 
-        $scope.home=function(){
-            pushy.togglePushy();
-            $location.path('');
-        }
-
+/*
         $scope.close=function(pushy){
             if(!pushy){
                 pushy.togglePushy();
@@ -92,10 +82,7 @@ pleni.controller('SitesController',
                 $location.path('/map');
             });
         }
-
-        $scope.refresh=function(){
-            $window.location.reload();
-        }*/
+*/
     };
 
     $scope.search={
@@ -121,6 +108,7 @@ pleni.controller('SitesController',
                                     +' minutes)';
                             }
 
+                            $scope.menu.settings=[1,1,1,1,1];
                             $state.go('sitemap')
                         });
                         $(this).remove();

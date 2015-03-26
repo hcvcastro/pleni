@@ -782,7 +782,7 @@ footer ul li a {
   margin-bottom: 26px;
   box-sizing: border-box;
   max-width: 480px;
-  background-color: #ffffff;
+  background-color: rgba(101, 128, 104, 0.35);
 }
 @media (min-width: 481px) {
   .static {
