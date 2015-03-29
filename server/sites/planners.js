@@ -7,6 +7,7 @@ var base='../../core/functions'
   , run=require(base+'/planners/run')
   , auth=require(base+'/databases/auth')
   , mapsite=require(base+'/repositories/sites/view/getmapsite')
+  , config=require('../../config/sites')
   , tid=undefined
 
 exports.create=function(planner,db,url,success,fail){
@@ -23,12 +24,16 @@ exports.create=function(planner,db,url,success,fail){
       , task:{
             name:'site/create'
           , count:1
-          , interval:1000
+          , interval:config.sites.interval
         }
     };
 
     if(tid){
         pkg.planner.tid=tid;
+    }
+
+    if(!fail){
+        var fail=function(){}
     }
 
     test(pkg)
@@ -37,7 +42,9 @@ exports.create=function(planner,db,url,success,fail){
     .done(function(args){
         if(args&&args.planner&&args.planner.tid){
             tid=args.planner.tid;
-            success(args);
+            if(success){
+                success(args);
+            }
         }
     },fail);
 };
@@ -57,10 +64,14 @@ exports.fetch=function(planner,db,agent,success,fail){
         }
       , task:{
             name:'site/fetch'
-          , count: 20
-          , interval: 1000
+          , count:config.sites.count
+          , interval:config.sites.interval
         }
     };
+
+    if(!fail){
+        var fail=function(){}
+    }
 
     test(pkg)
     .then(set)
@@ -68,7 +79,9 @@ exports.fetch=function(planner,db,agent,success,fail){
     .done(function(args){
         if(args&&args.planner&&args.planner.tid){
             tid=args.planner.tid;
-            success(args);
+            if(success){
+                success(args);
+            }
         }
     },fail);
 };
@@ -81,9 +94,15 @@ exports.free=function(planner,success,fail){
         }
     };
 
+    if(!fail){
+        var fail=function(){}
+    }
+
     unset(pkg)
     .done(function(args){
-        success(args);
+        if(success){
+            success(args);
+        }
     },fail);
 };
 
@@ -97,10 +116,16 @@ exports.mapsite=function(db,success,fail){
         }
     };
 
+    if(!fail){
+        var fail=function(){};
+    }
+
     auth(pkg)
     .then(mapsite)
     .done(function(args){
-        success(args);
+        if(success){
+            success(args);
+        }
     },fail);
 };
 

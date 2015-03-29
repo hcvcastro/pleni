@@ -60,7 +60,7 @@ module.exports=function(port,notifier){
                     notifier({
                         action:'create'
                       , task:{
-                            name:this.name
+                            id:this.name
                           , count:count
                           , interval:interval
                         }

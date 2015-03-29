@@ -11,10 +11,16 @@ var pleni=angular
             .state('search',{
                 url:'/search'
               , templateUrl:'pages/search'
+              , data:{
+                    view:'search'
+                }
             })
             .state('sitemap',{
                 url:'/sitemap'
               , templateUrl:'pages/sitemap'
+              , data:{
+                    view:'sitemap'
+                }
             })
             .state('about',{
                 url:'/about'

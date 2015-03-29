@@ -1,11 +1,12 @@
 'use strict';
 
-var generator=require('../../core/functions/utils/random').sync
-  , request=require('request')
+var request=require('request')
+  , generator=require('../../core/functions/utils/random').sync
+  , config=require('../../config/sites')
 
 exports.getplanner=function(task,done){
     request.put({
-        url:'http://localhost:3003/tasks'
+        url:config.monitor.host+':'+config.monitor.port+'/tasks'
       , json:{task:task}
     },function(error,response){
         if(!error){
@@ -18,7 +19,7 @@ exports.getplanner=function(task,done){
 
 exports.freeplanner=function(task){
     request.del({
-        url:'http://localhost:3003/tasks'
+        url:config.monitor.host+':'+config.monitor.port+'/tasks'
       , json:{task:task}
     },function(error,response){
         if(error){
@@ -29,10 +30,10 @@ exports.freeplanner=function(task){
 
 exports.getrepository=function(){
     return {
-        host:'http://localhost:5984'
-      , user:'jacobian'
-      , pass:'asdf'
-      , name:'pleni_site_qs_'+generator()
+        host:config.db.host+':'+config.db.port
+      , user:config.db.user
+      , pass:config.db.pass
+      , name:config.db.prefix+generator()
     }
 }
 

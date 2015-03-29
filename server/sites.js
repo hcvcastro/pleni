@@ -26,14 +26,13 @@ var http=require('http')
   , fetch=require('./sites/planners').fetch
   , mapsite=require('./sites/planners').mapsite
   , free=require('./sites/planners').free
-  , secret='pleni'
-  , env=process.env.ENV||'production'
+  , config=require('../config/sites')
 
-app.set('port',process.env.PORT||3004);
+app.set('port',config.sites.port);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 
-if(env=='production'){
+if(config.env=='production'){
     app.use(favicon(join(__dirname,'..','dist','sites','favicon.ico')));
     app.use(express.static(join(__dirname,'..','dist','sites')));
     app.use(morgan('combined'));
@@ -55,128 +54,28 @@ if(env=='production'){
     app.use(morgan('dev'));
 }
 
-var parser=cookieparser(secret);
+var parser=cookieparser(config.cookie.secret);
 app.use(parser);
 
 var store=new redisstore({
     client:redisclient
-  , host:'localhost'
-  , port:6379
-  , prefix:'sites:'
+  , host:config.redis.host
+  , port:config.redis.port
+  , prefix:config.redis.prefix
 });
 app.use(cookiesession({
     cookie:{
         path:'/'
       , httpOnly:true
       , secure:false
-      , maxAge:3600000*3
+      , maxAge:config.cookie.maxAge
     }
-  , name:'pleni.sid'
+  , name:config.cookie.name
   , resave:false
   , saveUninitialized:false
-  , secret:secret
+  , secret:config.cookie.secret
   , store:store
 }));
-
-app.get('/',function(request,response){
-    if(env=='production'){
-        response.sendFile(join(__dirname,'..','dist','sites','index.html'));
-    }else{
-        response.render('dev');
-    }
-});
-
-app.get('/pages/:page',function(request,response){
-    var pages=['search','sitemap','about','report']
-      , page=request.params.page
-
-    if(!pages.some(function(element){return element==page;})){
-        response.status(404).json(_error.notfound);
-    }
-
-    if(env=='production'){
-        response.sendFile(join(__dirname,'..','dist','sites',page+'.html'));
-    }else{
-        response.render('pages/'+page);
-    }
-});
-
-app.put('/sites',function(request,response){
-    if(validate.validHost(request.body.site)){
-        var site=validate.toValidHost(request.body.site)
-          , agent=validate.toString(request.body.agent)
-          , url='http://localhost:'+app.get('port')+'/p/'+request.sessionID
-
-        request.session.url=site;
-        request.session.agent=agent;
-        request.session.action='';
-        request.session.db=monitor.getrepository();
-        request.session.more=false;
-        request.session.summarize=false;
-        request.session.report=false;
-        request.session.save();
-
-        monitor.getplanner(url,function(msg){
-            response.cookie('pleni.url',site);
-            response.status(200).json(msg);
-        });
-    }else{
-        response.status(403).json(_error.json);
-    }
-});
-
-app.put('/more',function(request,response){
-    if(request.session.more){
-        var url='http://localhost:'+app.get('port')+'/q/'+request.sessionID
-
-        request.session.more=false;
-        request.session.save();
-
-        monitor.getplanner(url,function(msg){
-            response.status(200).json(msg);
-        });
-    }else{
-        response.status(403).json(_error.busy);
-    }
-});
-
-app.put('/report',function(request,response){
-    if(request.session.report){
-        monitor.getplanner(
-            'http://localhost:'+app.get('port')+'/r'+request.sessionID,
-            function(msg){
-                response.status(200).json(msg);
-        });
-    }else{
-        response.status(403).json(_error.busy);
-    }
-});
-
-app.post('/mapsite',function(request,response){
-    if(request.session.mapsite){
-        mapsite(request.session.db,function(args){
-            if(args&&args.site&&args.site.mapsite){
-                response.status(200).json(args.site.mapsite);
-            }else{
-                response.status(404).json(_error.notfound);
-            }
-        },function(error){
-            response.status(404).json(_error.json);
-        });
-    }else{
-        response.status(200).json(_success.ok);
-    }
-});
-
-app.delete('/',function(request,response){
-    if(sockets[request.sessionID]){
-        for(var i in sockets[request.sessionID]){
-            sockets[request.sessionID][i].disconnect();
-        }
-        request.session.destroy();
-    }
-    response.status(200).json(_success.ok);
-});
 
 var get_session=function(id,done,fail){
         redisclient.get(id,function(err,reply){
@@ -194,111 +93,229 @@ var get_session=function(id,done,fail){
             }
         });
     }
+
+var sockets={}
+  , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
   , notifier=function(id,msg){
         for(var i in sockets[id]){
             sockets[id][i].emit('notifier',msg);
         }
     }
 
-app.post('/p/:id',function(request,response){
-    var id=request.params.id
-      , sessionID='sites:'+request.params.id
-      , planner=request.body.planner
+sessionsockets.on('connection',function(err,socket,session){
+    var sid=socket.handshake.signedCookies[config.cookie.name];
+    if(!(sid in sockets)){
+        sockets[sid]={};
+        console.log('SOCKET.IO new connection',sid);
+    }
 
-    get_session(sessionID,function(session){
+    sockets[sid][socket.id]=socket;
+    console.log('SOCKET.IO new client',socket.id);
+
+    socket.on('disconnect',function(){
+        delete sockets[sid][socket.id];
+        console.log('SOCKET.IO remove client',socket.id);
+
+        if(Object.keys(sockets[sid]).length==0){
+            delete sockets[sid];
+            console.log('SOCKET.IO remove connection',sid);
+        }
+    });
+});
+
+var connect_planner=function(planner,listener){
         var socket=ioc.connect(planner,{
             reconnect:true
           , 'forceNew':true
         });
         socket.on('notifier',function(msg){
-            switch(msg.action){
-                case 'create':
-                    get_session(sessionID,function(session){
-                        session.action=msg.task.name;
-                        save_session(sessionID,session);
-                    });
-                    break;
-                case 'run':
-                    break;
-                case 'task':
-                    if(msg.task.id=='site/create'){
-                        get_session(sessionID,function(session){
-                            session.mapsite=true;
-                            save_session(sessionID,session,function(){
-                                fetch(planner,session.db,session.agent,
-                                function(args){
-                                },function(error){
-                                    notifier(id,{
-                                        action:'error'
-                                      , msg:error
-                                    });
-                                });
+            listener(socket,msg);
+        });
+    }
+  , free_planner=function(planner,id){
+        free(planner,function(args){
+            monitor.freeplanner(config.sites.host+':'+config.sites.port+'/i/'
+                +id);
+        },function(error){
+            console.log('ERROR','cannot free the planner');
+        });
+    }
 
-                                notifier(id,{
-                                    action:'create'
-                                  , msg:'Created site repository ...'
-                                });
-                            });
-                        });
-                    }else if(msg.task.id=='site/fetch'){
-                        notifier(id,msg);
-                    }
-                    break;
-                case 'stop':
-                    get_session(sessionID,function(session){
-                        if(session.action=='site/fetch'){
-                            socket.disconnect();
-                            notifier(id,{
-                                action:'stop'
-                              , msg:'requested pages in site completed'
-                            });
+app.get('/',function(request,response){
+    request.session.state='search';
+    request.session.save();
 
-                            free(planner,function(args){
-                                monitor.freeplanner('http://localhost:'+
-                                    app.get('port')+'/p/'+id);
-                            },function(error){
-                                notifier(id,{
-                                    action:'error'
-                                  , msg:error
-                                });
-                            });
+    if(config.env=='production'){
+        response.sendFile(join(__dirname,'..','dist','sites','index.html'));
+    }else{
+        response.render('dev');
+    }
+});
 
-                            session.more=true;
-                            session.summarize=true;
-                            session.report=true;
-                            save_session(sessionID,session);
-                        }
-                    });
-                    break;
-                case 'error':
+app.get('/pages/:page',function(request,response){
+    var pages=['search','sitemap','about','report']
+      , page=request.params.page
+
+    if(!pages.some(function(element){return element==page;})){
+        response.status(404).json(_error.notfound);
+    }
+
+    if(config.env=='production'){
+        response.sendFile(join(__dirname,'..','dist','sites',page+'.html'));
+    }else{
+        response.render('pages/'+page);
+    }
+});
+
+app.put('/sites',function(request,response){
+    if(validate.validHost(request.body.site)){
+        var site=validate.toValidHost(request.body.site)
+          , agent=validate.toString(request.body.agent)
+          , url=config.sites.host+':'+config.sites.port+'/i/'+request.sessionID
+
+        request.session.state='init';
+        request.session.action='';
+        request.session.url=site;
+        request.session.agent=agent;
+        request.session.db=monitor.getrepository();
+        request.session.save();
+
+        monitor.getplanner(url,function(msg){
+            response.cookie('pleni.url',site);
+            response.status(200).json(msg);
+        });
+    }else{
+        response.status(403).json(_error.json);
+    }
+});
+
+app.post('/i/:id',function(request,response){
+    var id=request.params.id
+      , sessionID='sites:'+request.params.id
+      , planner=request.body.planner
+
+    get_session(sessionID,function(session){
+        connect_planner(planner,function(socket,msg){
+            console.log(JSON.stringify(msg));
+            if(msg.action=='connection'){
+                notifier(id,{
+                    action:'connection'
+                  , msg:'Planner process connected'
+                });
+            }else if(msg.action=='create'&&msg.task&&msg.task.id
+                    &&msg.task.id=='site/create'){
+                get_session(sessionID,function(session){
+                    session.state='fetch';
+                    session.action=msg.task.id;
+                    save_session(sessionID,session);
+                });
+                notifier(id,{
+                    action:'create'
+                  , msg:'Creating repository'
+                });
+            }else if(msg.action=='task'&&msg.task&&msg.task.id
+                    &&msg.task.id=='site/create'){
+                get_session(sessionID,function(session){
+                    fetch(planner,session.db,session.agent);
                     notifier(id,{
-                        action:'stop'
-                      , msg:'the site is not available'
+                        action:'create'
+                      , msg:'Repository created successfully'
                     });
-                    break;
+                });
+            }else if(msg.action=='create'&&msg.task&&msg.task.id
+                    &&msg.task.id=='site/fetch'){
+                get_session(sessionID,function(session){
+                    session.action=msg.task.id;
+                    save_session(sessionID,session);
+                });
+                notifier(id,{
+                    action:'create'
+                  , msg:'Starting fetching site'
+                });
+            }else if(msg.action=='task'&&msg.task&&msg.task.id
+                    &&msg.task.id=='site/fetch'){
+                notifier(id,msg);
+            }else if(msg.action=='stop'){
+                get_session(sessionID,function(session){
+                    if(session.action=='site/fetch'){
+                        socket.disconnect();
+                        free_planner(planner,id);
+
+                        session.state='sitemap';
+                        session.action='';
+                        save_session(sessionID,session);
+
+                        notifier(id,{
+                            action:'stop'
+                          , msg:'requested pages in site completed'
+                        });
+                    }
+                });
             }
         });
 
-        create(planner,session.db,session.url,function(args){
-        },function(error){
-            notifier(id,{
-                action:'error'
-              , msg:error
-            });
-        });
-
+        create(planner,session.db,session.url);
         response.status(200).json(_success.ok);
     },function(){
-        free(planner,function(args){
-            monitor.freeplanner('http://localhost:'+
-                app.get('port')+'/p/'+id);
-        },function(error){});
-
+        free_planner(planner,id);
         response.status(403).json(_error.notfound);
     });
 });
 
-app.post('/q/:id',function(request,response){
+/*app.put('/more',function(request,response){
+    if(request.session.more){
+        var url='http://localhost:'+app.get('port')+'/q/'+request.sessionID
+
+        request.session.more=false;
+        request.session.save();
+
+        monitor.getplanner(url,function(msg){
+            response.status(200).json(msg);
+        });
+    }else{
+        response.status(403).json(_error.busy);
+    }
+});*/
+
+/*app.put('/report',function(request,response){
+    if(request.session.report){
+        monitor.getplanner(
+            'http://localhost:'+app.get('port')+'/r'+request.sessionID,
+            function(msg){
+                response.status(200).json(msg);
+        });
+    }else{
+        response.status(403).json(_error.busy);
+    }
+});*/
+
+/*app.post('/mapsite',function(request,response){
+    if(request.session.mapsite){
+        mapsite(request.session.db,function(args){
+            if(args&&args.site&&args.site.mapsite){
+                response.status(200).json(args.site.mapsite);
+            }else{
+                response.status(404).json(_error.notfound);
+            }
+        },function(error){
+            response.status(404).json(_error.json);
+        });
+    }else{
+        response.status(200).json(_success.ok);
+    }
+});*/
+
+/*app.delete('/',function(request,response){
+    if(sockets[request.sessionID]){
+        for(var i in sockets[request.sessionID]){
+            sockets[request.sessionID][i].disconnect();
+        }
+        request.session.destroy();
+    }
+    response.status(200).json(_success.ok);
+});*/
+
+/*app.post('/q/:id',function(request,response){
     var id=request.params.id
       , sessionID='sites:'+request.params.id
       , planner=request.body.planner
@@ -361,9 +378,9 @@ app.post('/q/:id',function(request,response){
 
         response.status(403).json(_error.notfound);
     });
-});
+});*/
 
-app.post('/r/:id',function(request,response){
+/*app.post('/r/:id',function(request,response){
     var id=request.params.id
       , sessionID='sites:'+request.params.id
       , planner=request.body.planner
@@ -385,25 +402,7 @@ app.post('/r/:id',function(request,response){
 
         response.status(403).json(_error.notfound);
     });
-});
-
-var sockets={}
-  , sessionsockets=new sessionsocketio(ios,store,parser,'pleni.sid');
-
-sessionsockets.on('connection',function(err,socket,session){
-    var sid=socket.handshake.signedCookies['pleni.sid'];
-    if(!(sid in sockets)){
-        sockets[sid]={};
-    }
-    sockets[sid][socket.id]=socket;
-
-    socket.on('disconnect',function(){
-        delete sockets[sid][socket.id];
-        if(Object.keys(sockets[sid]).length==0){
-            delete sockets[sid];
-        }
-    });
-});
+});*/
 
 server.listen(app.get('port'),'localhost',function(){
     console.log('pleni ✯ quickstart sites: listening on port '

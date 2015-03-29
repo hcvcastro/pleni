@@ -17,8 +17,8 @@ var utils={
 };
 
 pleni.controller('SitesController',
-    ['$scope','$state','$http','$window','$location','Visual',
-    function($scope,$state,$http,$window,$location,Visual){
+    ['$scope','$rootScope','$state','$http','$window','$location','Visual',
+    function($scope,$rootScope,$state,$http,$window,$location,Visual){
 
     $scope.$state=$state;
     $scope.status={
@@ -90,6 +90,8 @@ pleni.controller('SitesController',
       , send:function(){
             utils.clean();
             if($scope.search.url!=''){
+                $scope.status.message='Sending a request for fetch';
+
                 $http.put('/sites',{
                     site:$scope.search.url
                   , agent:navigator.userAgent
@@ -100,16 +102,15 @@ pleni.controller('SitesController',
                             $(this).remove();
 
                             $scope.status.waiting=true;
-                            $scope.status.message=data.msg+' ';
-                            if(data.queue==0){
-                                $scope.status.message+='. starting ...';
-                            }else{
-                                $scope.status.message+='(aprox:'+data.queue
-                                    +' minutes)';
+                            $scope.status.message=data.msg;
+                            if(data.queue!=0){
+                                $scope.status.message+=' (waiting for :'
+                                    +data.queue+' tasks)';
                             }
 
                             $scope.menu.settings=[1,1,1,1,1];
-                            $state.go('sitemap')
+                            $state.go('sitemap');
+//                            $scope.sitemap.load(false);
                         });
                         $(this).remove();
                     });
@@ -122,13 +123,49 @@ pleni.controller('SitesController',
         }
     };
 
+    $scope.sitemap={
+        load:function(flag){
+            var match=/pleni.url=(.+)/.exec(document.cookie)
+            $scope.status.url=decodeURIComponent(match[1]);
+
+            if(flag){
+/*                $http.post('/mapsite').success(function(data){
+                    Visual.clean();
+                    if(data&&data.ok){
+                        Visual.render();
+                    }else{
+                        $scope.completed=data.count;
+                        $scope.total=data.total;
+                        $scope.waiting=false;
+                        Visual.render(data);
+                    }
+                });*/
+            }else{
+/*                Visual.clean();
+                Visual.render();*/
+            }
+        }
+    };
+
+    $rootScope.$on('$stateChangeStart',function(event,toState){
+        if(toState.data&&toState.data.view){
+            switch(toState.data.view){
+                case 'search':
+                    $('input[type=\'text\']').focus();
+                    break;
+                case 'sitemap':
+                    break;
+            }
+        }
+    });
+
     $scope.socket=io.connect('',{
         reconnect:true
       , 'forceNew':true
     });
     $scope.socket.on('notifier',function(pkg){
         console.log(pkg);
-        switch(pkg.action){
+/*        switch(pkg.action){
             case 'start':
                 $scope.message=pkg.msg;
                 break;
@@ -161,34 +198,7 @@ pleni.controller('SitesController',
                 $scope.message=pkg.msg;
                 break;
         }
-        $scope.$apply();
+        $scope.$apply();*/
     });
 }]);
-/*
-    $('input[type=\'text\']').focus();
 
-
-    $scope.completed=0;
-    $scope.total=0;
-    $scope.waiting=true;
-
-    $('#content').removeClass('blocked');
-    var match=/pleni.url=(.+)/.exec(document.cookie)
-    if(match&&match.length==2){
-        $scope.url=decodeURIComponent(match[1]);
-        $http.post('/mapsite').success(function(data){
-            Visual.clean();
-            if(data&&data.ok){
-                Visual.render();
-            }else{
-                $scope.completed=data.count;
-                $scope.total=data.total;
-                $scope.waiting=false;
-                Visual.render(data);
-            }
-        });
-    }else{
-        $location.path('sites');
-    }
-
-*/
