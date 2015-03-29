@@ -145,10 +145,13 @@ app.get('/',function(request,response){
     request.session.state='search';
     request.session.save();
 
+    response.cookie('pleni.url','');
+
     if(config.env=='production'){
-        response.sendFile(join(__dirname,'..','dist','sites','index.html'));
+        response.status(200)
+            .sendFile(join(__dirname,'..','dist','sites','index.html'));
     }else{
-        response.render('dev');
+        response.status(200).render('dev');
     }
 });
 
@@ -196,7 +199,6 @@ app.post('/i/:id',function(request,response){
 
     get_session(sessionID,function(session){
         connect_planner(planner,function(socket,msg){
-            console.log(JSON.stringify(msg));
             if(msg.action=='connection'){
                 notifier(id,{
                     action:'connection'
@@ -205,20 +207,23 @@ app.post('/i/:id',function(request,response){
             }else if(msg.action=='create'&&msg.task&&msg.task.id
                     &&msg.task.id=='site/create'){
                 get_session(sessionID,function(session){
-                    session.state='fetch';
+                    session.state='prepare';
                     session.action=msg.task.id;
                     save_session(sessionID,session);
                 });
                 notifier(id,{
-                    action:'create'
+                    action:'preparing'
                   , msg:'Creating repository'
                 });
             }else if(msg.action=='task'&&msg.task&&msg.task.id
                     &&msg.task.id=='site/create'){
                 get_session(sessionID,function(session){
+                    session.state='fetch';
+                    save_session(sessionID,session);
+
                     fetch(planner,session.db,session.agent);
                     notifier(id,{
-                        action:'create'
+                        action:'created'
                       , msg:'Repository created successfully'
                     });
                 });
@@ -229,7 +234,7 @@ app.post('/i/:id',function(request,response){
                     save_session(sessionID,session);
                 });
                 notifier(id,{
-                    action:'create'
+                    action:'starting'
                   , msg:'Starting fetching site'
                 });
             }else if(msg.action=='task'&&msg.task&&msg.task.id
@@ -241,7 +246,7 @@ app.post('/i/:id',function(request,response){
                         socket.disconnect();
                         free_planner(planner,id);
 
-                        session.state='sitemap';
+                        session.state='ready';
                         session.action='';
                         save_session(sessionID,session);
 
@@ -260,6 +265,27 @@ app.post('/i/:id',function(request,response){
         free_planner(planner,id);
         response.status(403).json(_error.notfound);
     });
+});
+
+app.post('/mapsite',function(request,response){
+    switch(request.session.state){
+        case 'init':
+        case 'prepare':
+            response.status(200).json(_success.ok);
+            break
+        case 'fetch':
+        case 'ready':
+            mapsite(request.session.db,function(args){
+                if(args&&args.site&&args.site.mapsite){
+                    response.status(200).json(args.site.mapsite);
+                }else{
+                    response.status(404).json(_error.notfound);
+                }
+            },function(error){
+                response.status(404).json(_error.json);
+            });
+            break;
+    }
 });
 
 /*app.put('/more',function(request,response){
@@ -286,22 +312,6 @@ app.post('/i/:id',function(request,response){
         });
     }else{
         response.status(403).json(_error.busy);
-    }
-});*/
-
-/*app.post('/mapsite',function(request,response){
-    if(request.session.mapsite){
-        mapsite(request.session.db,function(args){
-            if(args&&args.site&&args.site.mapsite){
-                response.status(200).json(args.site.mapsite);
-            }else{
-                response.status(404).json(_error.notfound);
-            }
-        },function(error){
-            response.status(404).json(_error.json);
-        });
-    }else{
-        response.status(200).json(_success.ok);
     }
 });*/
 

@@ -110,7 +110,6 @@ pleni.controller('SitesController',
 
                             $scope.menu.settings=[1,1,1,1,1];
                             $state.go('sitemap');
-//                            $scope.sitemap.load(false);
                         });
                         $(this).remove();
                     });
@@ -124,36 +123,33 @@ pleni.controller('SitesController',
     };
 
     $scope.sitemap={
-        load:function(flag){
+        load:function(){
             var match=/pleni.url=(.+)/.exec(document.cookie)
             $scope.status.url=decodeURIComponent(match[1]);
 
-            if(flag){
-/*                $http.post('/mapsite').success(function(data){
-                    Visual.clean();
-                    if(data&&data.ok){
-                        Visual.render();
-                    }else{
-                        $scope.completed=data.count;
-                        $scope.total=data.total;
-                        $scope.waiting=false;
-                        Visual.render(data);
-                    }
-                });*/
-            }else{
-/*                Visual.clean();
-                Visual.render();*/
-            }
+            $http.post('/mapsite').success(function(data){
+                Visual.clean();
+                if(data&&data.ok){
+                    Visual.render();
+                }else{
+                    $scope.status.completed=data.count;
+                    $scope.status.total=data.total;
+                    Visual.render(data);
+                }
+            });
         }
     };
 
-    $rootScope.$on('$stateChangeStart',function(event,toState){
+    $rootScope.$on('$stateChangeSuccess',function(event,toState){
         if(toState.data&&toState.data.view){
             switch(toState.data.view){
                 case 'search':
-                    $('input[type=\'text\']').focus();
+                    setTimeout(function(){
+                        $('input[type=\'text\']').focus();
+                    },500);
                     break;
                 case 'sitemap':
+                    $scope.sitemap.load();
                     break;
             }
         }
@@ -164,14 +160,10 @@ pleni.controller('SitesController',
       , 'forceNew':true
     });
     $scope.socket.on('notifier',function(pkg){
-        console.log(pkg);
-/*        switch(pkg.action){
-            case 'start':
-                $scope.message=pkg.msg;
-                break;
-            case 'create':
-                $scope.message=pkg.msg;
-                break;
+        if(pkg.msg){
+            $scope.status.message=pkg.msg;
+        }
+        switch(pkg.action){
             case 'task':
                 if(pkg.task.id=='site/fetch'){
                     if(pkg.task.msg.node){
@@ -182,23 +174,21 @@ pleni.controller('SitesController',
                           , get:pkg.task.msg.node.get
                           , type:pkg.task.msg.node.type
                         },pkg.task.msg.node.rel);
-                        $scope.message='GET '+pkg.task.msg.node.page+' '+
-                            pkg.task.msg.node.status+'. links founded: '+
-                            pkg.task.msg.node.rel.length;
-                        $scope.completed++;
-                        $scope.total=visual.nodes.length;
+                        $scope.status.message='GET '+pkg.task.msg.node.page+' '
+                            +pkg.task.msg.node.status+'. links founded: '
+                            +pkg.task.msg.node.rel.length;
+                        $scope.status.completed++;
+                        $scope.status.total=visual.nodes.length;
                     }else if(pkg.task.msg=='completed'){
-                        $scope.waiting=false;
-                        $scope.waiting='site completed';
+                        $scope.status.waiting=false;
                     }
                 }
                 break;
             case 'stop':
-                $scope.waiting=false;
-                $scope.message=pkg.msg;
+                $scope.status.waiting=false;
                 break;
         }
-        $scope.$apply();*/
+        $scope.$apply();
     });
 }]);
 
