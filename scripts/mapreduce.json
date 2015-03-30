@@ -1,15 +1,19 @@
 {
-    "_id":"_design/default"
+    "_id":"_design/reports"
   , "language":"javascript"
   , "views":{
         "headers":{
-            "map":"function(doc) {
-                if(doc.request_get.headers){
-                    var header=doc.request_get.headers;
-                    var head=[header.server,header['x-powered-by'],doc.request_get.status,header['content-type']];
-                    emit(head);
-                }
-            }"
+            "map":"
+function(doc){
+    if(doc.head&&doc.head.headers){
+        emit([
+            doc.head.headers['server']
+          , doc.head.headers['x-powered-by']
+          , doc.head.headers['content-type']
+        ]);
+    }
+}
+"
         }
       , "status":{
             "map":"function(doc){
