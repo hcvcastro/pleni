@@ -28,7 +28,7 @@ notifiers.forEach(function(element){
                     });
             });
 
-            if(element==notifiers[0]){
+/*            if(element==notifiers[0]){
                 it('GET /msg.html',function(done){
                     request(app)
                         .get('/msg.html')
@@ -39,7 +39,7 @@ notifiers.forEach(function(element){
                             done();
                         });
                 });
-            }
+            }*/
         });
 
         describe('rest functions for notifier server collections',function(){

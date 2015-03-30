@@ -9,7 +9,7 @@ var should=require('should')
   , rootsite=require(base+'/repositories/sites/create/rootsite')
   , design=require(base+'/repositories/sites/create/designdocument')
   , getsummary=require(base+'/repositories/sites/view/getsummary')
-  , getmapsite=require(base+'/repositories/sites/view/getmapsite')
+  , getsitemap=require(base+'/repositories/sites/view/getsitemap')
 
 var host='http://localhost:5984'
   , user='jacobian'
@@ -49,14 +49,14 @@ describe('viewer functions for site repository',function(){
         });
     });
 
-    it('testing function getmapsite',function(done){
-        getmapsite(packet)
+    it('testing function getsitemap',function(done){
+        getsitemap(packet)
         .done(function(args){
             args.should.have.property('site');
-            args.site.should.have.property('mapsite');
-            args.site.mapsite.should.have.property('count');
-            args.site.mapsite.should.have.property('nodes').and.be.Array;
-            args.site.mapsite.should.have.property('links').and.be.Array;
+            args.site.should.have.property('sitemap');
+            args.site.sitemap.should.have.property('count');
+            args.site.sitemap.should.have.property('nodes').and.be.Array;
+            args.site.sitemap.should.have.property('links').and.be.Array;
             done();
         });
     });

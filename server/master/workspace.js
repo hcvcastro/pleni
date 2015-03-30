@@ -7,7 +7,7 @@ var validate=require('../../core/validators')
   , auth=require('../../core/functions/databases/auth')
   , viewers='../../core/functions/repositories/sites'
   , getsummary=require(viewers+'/view/getsummary')
-  , getmapsite=require(viewers+'/view/getmapsite')
+  , getsitemap=require(viewers+'/view/getsitemap')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
@@ -78,10 +78,10 @@ module.exports=function(app){
         });
     });
 
-    app.get('/workspace/:project/:repository/mapsite',
+    app.get('/workspace/:project/:repository/sitemap',
     function(request,response){
-        return generic_document(request,response,getmapsite,function(args){
-            response.status(200).json(args.site.mapsite);
+        return generic_document(request,response,getsitemap,function(args){
+            response.status(200).json(args.site.sitemap);
         });
     });
 };

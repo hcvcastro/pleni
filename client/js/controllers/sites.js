@@ -22,7 +22,8 @@ pleni.controller('SitesController',
 
     $scope.$state=$state;
     $scope.status={
-        url:''
+        view:''
+      , url:''
       , completed:''
       , total:''
       , message:''
@@ -127,7 +128,7 @@ pleni.controller('SitesController',
             var match=/pleni.url=(.+)/.exec(document.cookie)
             $scope.status.url=decodeURIComponent(match[1]);
 
-            $http.post('/mapsite').success(function(data){
+            $http.post('/sitemap').success(function(data){
                 Visual.clean();
                 if(data&&data.ok){
                     Visual.render();
@@ -144,11 +145,13 @@ pleni.controller('SitesController',
         if(toState.data&&toState.data.view){
             switch(toState.data.view){
                 case 'search':
+                    $scope.status.view='search';
                     setTimeout(function(){
                         $('input[type=\'text\']').focus();
                     },500);
                     break;
                 case 'sitemap':
+                    $scope.status.view='sitemap';
                     $scope.sitemap.load();
                     break;
             }

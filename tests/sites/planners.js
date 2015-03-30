@@ -2,11 +2,11 @@
 
 var request=require('supertest')
   , should=require('should')
-  , planners=require('../../../server/sites/planners')
+  , planners=require('../../server/sites/planners')
 
 describe('quickstart sites planners tasks functions',function(){
     before(function(done){
-        require('../../../server/planner.io');
+        require('../../server/planner.io');
         done();
     });
 

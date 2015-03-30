@@ -246,11 +246,11 @@ pleni.factory('Resources',['$sessionStorage',
                       , document:'summary'
                     },success,failure);
                 }
-              , mapsite:function(project,repository,success,failure){
+              , sitemap:function(project,repository,success,failure){
                     bind(Workspace.get,{
                         project:project
                       , repository:repository
-                      , document:'mapsite'
+                      , document:'sitemap'
                     },success,failure);
                 }
             }

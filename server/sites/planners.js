@@ -6,7 +6,7 @@ var base='../../core/functions'
   , unset=require(base+'/planners/unset')
   , run=require(base+'/planners/run')
   , auth=require(base+'/databases/auth')
-  , mapsite=require(base+'/repositories/sites/view/getmapsite')
+  , sitemap=require(base+'/repositories/sites/view/getsitemap')
   , config=require('../../config/sites')
   , tid=undefined
 
@@ -106,7 +106,7 @@ exports.free=function(planner,success,fail){
     },fail);
 };
 
-exports.mapsite=function(db,success,fail){
+exports.sitemap=function(db,success,fail){
     var pkg={
         db:{
             host:db.host
@@ -121,7 +121,7 @@ exports.mapsite=function(db,success,fail){
     }
 
     auth(pkg)
-    .then(mapsite)
+    .then(sitemap)
     .done(function(args){
         if(success){
             success(args);

@@ -14,11 +14,11 @@ var request=require('request')
  *
  * args output
  *      site
- *          mapsite
+ *          sitemap
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , view='/_design/sites/_view/mapsite'
+      , view='/_design/sites/_view/sitemap'
       , url=args.db.host+'/'+args.db.name+view
       , headers={
             'Cookie':args.auth.cookie
@@ -26,7 +26,7 @@ module.exports=function(args){
         }
 
     if(args.debug){
-        console.log('get a mapsite document');
+        console.log('get a sitemap document');
     }
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
@@ -72,7 +72,7 @@ module.exports=function(args){
                     }
                 });
 
-                args.site.mapsite={
+                args.site.sitemap={
                     count:count
                   , total:parse.total_rows
                   , nodes:nodes

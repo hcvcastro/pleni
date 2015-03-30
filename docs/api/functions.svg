@@ -3045,7 +3045,7 @@
          sodipodi:role="line"
          id="tspan3558"
          x="1240"
-         y="362.36218">getmapsite</tspan></text>
+         y="362.36218">getsitemap</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:89.99999762%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Liberation Mono;-inkscape-font-specification:Liberation Mono"
@@ -3067,7 +3067,7 @@
          sodipodi:role="line"
          id="tspan3567"
          x="1240"
-         y="372.36218">repositories/sites/summarize/getmapsite.js</tspan></text>
+         y="372.36218">repositories/sites/summarize/getsitemap.js</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3569"
@@ -3100,7 +3100,7 @@
          sodipodi:role="line"
          x="1490"
          y="352.36218"
-         id="tspan3579">site.mapsite.count</tspan></text>
+         id="tspan3579">site.sitemap.count</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3583"
@@ -3111,7 +3111,7 @@
          id="tspan3585"
          y="372.21118"
          x="1490"
-         sodipodi:role="line">site.mapsite.nodes</tspan></text>
+         sodipodi:role="line">site.sitemap.nodes</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3587"
@@ -3122,7 +3122,7 @@
          id="tspan3589"
          y="382.21118"
          x="1490"
-         sodipodi:role="line">site.mapsite.links</tspan></text>
+         sodipodi:role="line">site.sitemap.links</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3595"
@@ -3199,6 +3199,6 @@
          id="tspan3901"
          y="362.33743"
          x="1490"
-         sodipodi:role="line">site.mapsite.total</tspan></text>
+         sodipodi:role="line">site.sitemap.total</tspan></text>
   </g>
 </svg>

@@ -32,9 +32,9 @@ describe('workspace controller functions',function(){
                 });
         });
 
-        it('GET /workspace/:project/:repository/mapsite',function(done){
+        it('GET /workspace/:project/:repository/sitemap',function(done){
             request(app)
-                .get('/workspace/test/test/mapsite')
+                .get('/workspace/test/test/sitemap')
                 .expect('Content-Type',/json/)
                 .expect(200)
                 .end(function(err,res){

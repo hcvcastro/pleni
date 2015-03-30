@@ -158,7 +158,7 @@ module.exports=function(grunt){
             ]
           , notifier:['tests/notifiers/**/*.js']
           , master:['tests/master/**/*.js']
-          , sites:['tests/quickstarts/sites/*.js']
+          , sites:['tests/sites/*.js']
           , monitor:['tests/monitor/server.js']
         }
 
@@ -286,12 +286,6 @@ module.exports=function(grunt){
                     ]
                 }
             }
-        }
-
-      , jshint:{
-            qs_sites:[
-                'quickstarts/sites/common/planners.js'
-            ]
         }
 
       , latex:{

@@ -45,7 +45,7 @@ module.exports=function(args){
                             +'Math.max.apply(null,values),\'count\':'
                             +'values.length}}}'
                 }
-              , 'mapsite':{
+              , 'sitemap':{
                     'map':'function(doc){if(doc.type&&doc.type==\'page\'){'
                          +'if(doc.status==\'complete\'){'
                          +'var m=doc.head.headers[\'content-type\']'

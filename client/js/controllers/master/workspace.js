@@ -425,7 +425,7 @@ pleni.controller('WorkspaceController',
                     $scope.storage.workspace.repositories[index].loading=true;
                     $scope.storage.workspace.visual=
                         $scope.storage.workspace.repositories[index].name;
-                    $scope.visual.mapsite(index);
+                    $scope.visual.sitemap(index);
                 }else{
                     utils.show('error',
                         'The repository does not have a valid format');
@@ -449,17 +449,17 @@ pleni.controller('WorkspaceController',
                     $scope.storage.workspace.repositories[index]=undefined;
                 });
             }
-          , mapsite:function(index){
+          , sitemap:function(index){
                 var project=$scope.storage.workspace.name
                   , repository=$scope.storage.workspace.repositories[index].name
 
-                Resources.workspace.mapsite(project,repository,function(data){
+                Resources.workspace.sitemap(project,repository,function(data){
                     Visual.clean();
                     Visual.render(data);
                     $scope.storage.workspace.repositories[index].loading=false;
                 },function(error){
                     utils.show('error',
-                        'The repository does not have a valid mapsite');
+                        'The repository does not have a valid sitemap');
                     $scope.storage.workspace.repositories[index].loading=false;
                 });
             }

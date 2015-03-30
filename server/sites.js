@@ -24,7 +24,7 @@ var http=require('http')
   , monitor=require('./sites/monitor')
   , create=require('./sites/planners').create
   , fetch=require('./sites/planners').fetch
-  , mapsite=require('./sites/planners').mapsite
+  , sitemap=require('./sites/planners').sitemap
   , free=require('./sites/planners').free
   , config=require('../config/sites')
 
@@ -142,10 +142,16 @@ var connect_planner=function(planner,listener){
     }
 
 app.get('/',function(request,response){
-    request.session.state='search';
-    request.session.save();
+    if(!request.session.state){
+        request.session.state='search';
+        request.session.save();
+    }
 
-    response.cookie('pleni.url','');
+    if(request.session.url){
+        response.cookie('pleni.url',request.session.url);
+    }else{
+        response.cookie('pleni.url','');
+    }
 
     if(config.env=='production'){
         response.status(200)
@@ -267,17 +273,18 @@ app.post('/i/:id',function(request,response){
     });
 });
 
-app.post('/mapsite',function(request,response){
+app.post('/sitemap',function(request,response){
     switch(request.session.state){
+        case 'search':
         case 'init':
         case 'prepare':
             response.status(200).json(_success.ok);
             break
         case 'fetch':
         case 'ready':
-            mapsite(request.session.db,function(args){
-                if(args&&args.site&&args.site.mapsite){
-                    response.status(200).json(args.site.mapsite);
+            sitemap(request.session.db,function(args){
+                if(args&&args.site&&args.site.sitemap){
+                    response.status(200).json(args.site.sitemap);
                 }else{
                     response.status(404).json(_error.notfound);
                 }
