@@ -123,27 +123,89 @@ sessionsockets.on('connection',function(err,socket,session){
     });
 });
 
-var connect_planner=function(planner,listener){
+var connect_planner=function(id,sessionID,planner,type){
         var socket=ioc.connect(planner,{
             reconnect:true
           , 'forceNew':true
         });
         socket.on('notifier',function(msg){
-            listener(socket,msg);
+            socket_listener(socket,id,sessionID,planner,type,msg);
         });
     }
-  , free_planner=function(planner,id){
+  , free_planner=function(planner,id,type){
         free(planner,function(args){
-            monitor.freeplanner(config.sites.host+':'+config.sites.port+'/i/'
-                +id);
+            monitor.freeplanner(config.sites.host+':'+config.sites.port
+                +'/'+type+'/'+id);
         },function(error){
             console.log('ERROR','cannot free the planner');
         });
     }
+  , socket_listener=function(socket,id,sessionID,planner,type,msg){
+        if(msg.action=='connection'){
+            notifier(id,{
+                action:'connection'
+              , msg:'Planner process connected'
+            });
+        }else if(msg.action=='create'&&msg.task&&msg.task.id
+                &&msg.task.id=='site/create'){
+            get_session(sessionID,function(session){
+                session.state='prepare';
+                session.action=msg.task.id;
+                save_session(sessionID,session);
+            });
+            notifier(id,{
+                action:'preparing'
+              , msg:'Creating repository'
+            });
+        }else if(msg.action=='task'&&msg.task&&msg.task.id
+                &&msg.task.id=='site/create'){
+            get_session(sessionID,function(session){
+                session.state='fetch';
+                save_session(sessionID,session);
+
+                fetch(planner,session.db,session.agent);
+                notifier(id,{
+                    action:'created'
+                  , msg:'Repository created successfully'
+                });
+            });
+        }else if(msg.action=='create'&&msg.task&&msg.task.id
+                &&msg.task.id=='site/fetch'){
+            get_session(sessionID,function(session){
+                session.action=msg.task.id;
+                save_session(sessionID,session);
+            });
+            notifier(id,{
+                action:'starting'
+              , msg:'Starting fetching website'
+            });
+        }else if(msg.action=='task'&&msg.task&&msg.task.id
+                &&msg.task.id=='site/fetch'){
+            notifier(id,msg);
+        }else if(msg.action=='stop'){
+            get_session(sessionID,function(session){
+                if(session.action=='site/fetch'){
+                    socket.disconnect();
+                    free_planner(planner,id,type);
+
+                    session.state='ready';
+                    session.semaphore=0;
+                    session.action='';
+                    save_session(sessionID,session);
+
+                    notifier(id,{
+                        action:'stop'
+                      , msg:'Requested pages in site completed'
+                    });
+                }
+            });
+        }
+    };
 
 app.get('/',function(request,response){
     if(!request.session.state){
         request.session.state='search';
+        request.session.semaphore=0;
         request.session.save();
     }
 
@@ -182,19 +244,24 @@ app.put('/sites',function(request,response){
           , agent=validate.toString(request.body.agent)
           , url=config.sites.host+':'+config.sites.port+'/i/'+request.sessionID
 
-        request.session.state='init';
-        request.session.action='';
-        request.session.url=site;
-        request.session.agent=agent;
-        request.session.db=monitor.getrepository();
-        request.session.save();
+        if(request.session.semaphore===0){
+            request.session.state='init';
+            request.session.semaphore=1;
+            request.session.action='';
+            request.session.url=site;
+            request.session.agent=agent;
+            request.session.db=monitor.getrepository();
+            request.session.save();
 
-        monitor.getplanner(url,function(msg){
-            response.cookie('pleni.url',site);
-            response.status(200).json(msg);
-        });
+            monitor.getplanner(url,function(msg){
+                response.cookie('pleni.url',site);
+                response.status(200).json(msg);
+            });
+        }else{
+            response.status(403).json(_error.busy);
+        }
     }else{
-        response.status(403).json(_error.json);
+        response.status(403).json(_error.validation);
     }
 });
 
@@ -204,71 +271,11 @@ app.post('/i/:id',function(request,response){
       , planner=request.body.planner
 
     get_session(sessionID,function(session){
-        connect_planner(planner,function(socket,msg){
-            if(msg.action=='connection'){
-                notifier(id,{
-                    action:'connection'
-                  , msg:'Planner process connected'
-                });
-            }else if(msg.action=='create'&&msg.task&&msg.task.id
-                    &&msg.task.id=='site/create'){
-                get_session(sessionID,function(session){
-                    session.state='prepare';
-                    session.action=msg.task.id;
-                    save_session(sessionID,session);
-                });
-                notifier(id,{
-                    action:'preparing'
-                  , msg:'Creating repository'
-                });
-            }else if(msg.action=='task'&&msg.task&&msg.task.id
-                    &&msg.task.id=='site/create'){
-                get_session(sessionID,function(session){
-                    session.state='fetch';
-                    save_session(sessionID,session);
-
-                    fetch(planner,session.db,session.agent);
-                    notifier(id,{
-                        action:'created'
-                      , msg:'Repository created successfully'
-                    });
-                });
-            }else if(msg.action=='create'&&msg.task&&msg.task.id
-                    &&msg.task.id=='site/fetch'){
-                get_session(sessionID,function(session){
-                    session.action=msg.task.id;
-                    save_session(sessionID,session);
-                });
-                notifier(id,{
-                    action:'starting'
-                  , msg:'Starting fetching site'
-                });
-            }else if(msg.action=='task'&&msg.task&&msg.task.id
-                    &&msg.task.id=='site/fetch'){
-                notifier(id,msg);
-            }else if(msg.action=='stop'){
-                get_session(sessionID,function(session){
-                    if(session.action=='site/fetch'){
-                        socket.disconnect();
-                        free_planner(planner,id);
-
-                        session.state='ready';
-                        session.action='';
-                        save_session(sessionID,session);
-
-                        notifier(id,{
-                            action:'stop'
-                          , msg:'requested pages in site completed'
-                        });
-                    }
-                });
-            }
-        });
-
+        connect_planner(id,sessionID,planner,'i');
         create(planner,session.db,session.url);
         response.status(200).json(_success.ok);
     },function(){
-        free_planner(planner,id);
+        free_planner(planner,id,'i');
         response.status(403).json(_error.notfound);
     });
 });
@@ -295,11 +302,21 @@ app.post('/sitemap',function(request,response){
     }
 });
 
-/*app.put('/more',function(request,response){
-    if(request.session.more){
-        var url='http://localhost:'+app.get('port')+'/q/'+request.sessionID
+app.delete('/',function(request,response){
+    if(sockets[request.sessionID]){
+        for(var i in sockets[request.sessionID]){
+            sockets[request.sessionID][i].disconnect();
+        }
+        request.session.destroy();
+    }
+    response.status(200).json(_success.ok);
+});
 
-        request.session.more=false;
+app.put('/more',function(request,response){
+    var url=config.sites.host+':'+config.sites.port+'/j/'+request.sessionID
+
+    if(request.session.semaphore===0){
+        request.session.semaphore=1;
         request.session.save();
 
         monitor.getplanner(url,function(msg){
@@ -308,7 +325,22 @@ app.post('/sitemap',function(request,response){
     }else{
         response.status(403).json(_error.busy);
     }
-});*/
+});
+
+app.post('/j/:id',function(request,response){
+    var id=request.params.id
+      , sessionID='sites:'+request.params.id
+      , planner=request.body.planner
+
+    get_session(sessionID,function(session){
+        connect_planner(id,sessionID,planner,'j');
+        fetch(planner,session.db,session.agent);
+        response.status(200).json(_success.ok);
+    },function(){
+        free_planner(planner,id,'j');
+        response.status(403).json(_error.notfound);
+    });
+});
 
 /*app.put('/report',function(request,response){
     if(request.session.report){
@@ -320,81 +352,6 @@ app.post('/sitemap',function(request,response){
     }else{
         response.status(403).json(_error.busy);
     }
-});*/
-
-/*app.delete('/',function(request,response){
-    if(sockets[request.sessionID]){
-        for(var i in sockets[request.sessionID]){
-            sockets[request.sessionID][i].disconnect();
-        }
-        request.session.destroy();
-    }
-    response.status(200).json(_success.ok);
-});*/
-
-/*app.post('/q/:id',function(request,response){
-    var id=request.params.id
-      , sessionID='sites:'+request.params.id
-      , planner=request.body.planner
-
-    get_session(sessionID,function(session){
-        var socket=ioc.connect(planner,{
-            reconnect:true
-          , 'forceNew':true
-        });
-        socket.on('notifier',function(msg){
-            switch(msg.action){
-                case 'task':
-                    notifier(id,msg);
-                    break;
-                case 'stop':
-                    get_session(sessionID,function(session){
-                        socket.disconnect();
-                        notifier(id,{
-                            action:'stop'
-                          , msg:'requested pages in site completed'
-                        });
-
-                        free(planner,function(args){
-                            monitor.freeplanner('http://localhost:'+
-                                app.get('port')+'/q/'+id);
-                        },function(error){
-                            notifier(id,{
-                                action:'error'
-                              , msg:error
-                            });
-                        });
-
-                        session.summarize=true;
-                        save_session(sessionID,session);
-                    });
-                    break;
-                case 'error':
-                    notifier(id,{
-                        action:'stop'
-                      , msg:'the site is not available'
-                    });
-                    break;
-            }
-        });
-
-        fetch(planner,session.db,session.agent,function(args){
-        },function(error){
-            notifier(id,{
-                action:'error'
-              , msg:error
-            });
-        });
-
-        response.status(200).json(_success.ok);
-    },function(){
-        free(planner,function(args){
-            monitor.freeplanner('http://localhost:'+
-                app.get('port')+'/q/'+id);
-        },function(error){});
-
-        response.status(403).json(_error.notfound);
-    });
 });*/
 
 /*app.post('/r/:id',function(request,response){

@@ -24,8 +24,8 @@ pleni.controller('SitesController',
     $scope.status={
         view:''
       , url:''
-      , completed:''
-      , total:''
+      , completed:0
+      , total:0
       , message:''
       , waiting:false
     };
@@ -50,39 +50,44 @@ pleni.controller('SitesController',
             $state.go('about');
         }
       , home:function(){
-            $scope.menu.settings=[1,0,0,0,1];
-            $state.go('search');
-        }
-
-/*
-        $scope.close=function(pushy){
-            if(!pushy){
-                pushy.togglePushy();
+            switch($scope.status.view){
+                case 'search':
+                    $scope.menu.settings=[1,0,0,0,1];
+                    break;
+                case 'sitemap':
+                    $scope.menu.settings=[1,1,1,1,1];
+                    break;
             }
-            $http.delete('/').success(function(){
-                $location.path('sites');
-                $window.location.reload();
-            });
-        };
+            $state.go($scope.status.view);
+        }
+      , close:function(){
+            pushy.togglePushy();
+            $state.go('search');
 
-        $scope.report=function(){
+            $http.delete('/').success(function(){
+                $scope.menu.refresh();
+            });
+        }
+      , more:function(){
+            pushy.togglePushy();
+            if($scope.status.completed==$scope.status.total){
+                $scope.status.messsage=
+                    'You have already completed the analysis of the site';
+            }else{
+                $http.put('/more').success(function(data){
+                    $scope.status.waiting=true;
+                    $scope.status.message=data.msg;
+                }).error(function(error){
+                    $scope.status.message=
+                        'Waiting for the completion of previous tasks';
+                });
+            }
+        }
+/*        $scope.report=function(){
             pushy.togglePushy();
             $location.path('report');
         }
 
-        $scope.more=function(){
-            pushy.togglePushy();
-            $http.put('/more').success(function(data){
-                $rootScope.monitor=data.msg+' ';
-                if(data.queue==0){
-                    $rootScope.monitor+='. starting ...';
-                }else{
-                    $rootScope.monitor+='(aprox:'+data.queue+' minutes)';
-                }
-
-                $location.path('/map');
-            });
-        }
 */
     };
 
@@ -109,13 +114,20 @@ pleni.controller('SitesController',
                                     +data.queue+' tasks)';
                             }
 
-                            $scope.menu.settings=[1,1,1,1,1];
                             $state.go('sitemap');
                         });
                         $(this).remove();
                     });
                 }).error(function(error){
-                    utils.show('error','The url is not a valid host');
+                    switch(error.message){
+                        case 'Validation error':
+                            utils.show('error','The url is not a valid host');
+                            break;
+                        case 'Resource is busy':
+                            utils.show('error',
+                                'Waiting for the completion of previous tasks');
+                            break;
+                    }
                 });
             }else{
                 utils.show('error','The URL is empty');
@@ -126,6 +138,13 @@ pleni.controller('SitesController',
     $scope.sitemap={
         load:function(){
             var match=/pleni.url=(.+)/.exec(document.cookie)
+
+            if(!match){
+                utils.show('error','The url is not a valid host');
+                $scope.status.message='You have not set a website to analyze';
+                return;
+            }
+
             $scope.status.url=decodeURIComponent(match[1]);
 
             $http.post('/sitemap').success(function(data){
@@ -146,12 +165,14 @@ pleni.controller('SitesController',
             switch(toState.data.view){
                 case 'search':
                     $scope.status.view='search';
+                    $scope.menu.settings=[1,0,0,0,1];
                     setTimeout(function(){
                         $('input[type=\'text\']').focus();
                     },500);
                     break;
                 case 'sitemap':
                     $scope.status.view='sitemap';
+                    $scope.menu.settings=[1,1,1,1,1];
                     $scope.sitemap.load();
                     break;
             }
