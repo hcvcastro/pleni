@@ -7,15 +7,10 @@ var validate=require('../../core/validators')
   , jayschema=require('jayschema')
   , fs=require('fs')
   , join=require('path').join
+  , config=require('../../config/planner')
 
 module.exports=function(port,notifier){
-    this.valid_tasks=[
-        'exclusive'
-      , 'site/create'
-      , 'site/fetch'
-      , 'site/remove'
-      , 'site/summarize'
-    ];
+    this.valid_tasks=config.tasks;
 
     this.tid;
     this.name;

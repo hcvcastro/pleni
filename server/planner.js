@@ -3,15 +3,15 @@
 var planner=require('./planners/planner')
   , scheduler=require('./planners/scheduler')
   , server=require('./planners/server')
-  , port=process.env.PORT||3001
+  , config=require('../config/planner')
   , notifier=function(msg){
         console.log(JSON.stringify(msg));
     }
 
 planner.prototype=new scheduler(notifier);
 
-server.set(port,'none');
-server.listen(new planner(port,notifier));
+server.set(config.planner.port,'none');
+server.listen(new planner(config.planner.port,notifier));
 server.run();
 
 module.exports=planner;

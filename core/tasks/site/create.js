@@ -9,7 +9,7 @@ var base='../../functions'
   , design=require(base+'/repositories/sites/create/designdocument')
 
 /*
- * Task for creation of a repository of site
+ * Task for creation of a site repository
  * args input
  *      db
  *          host

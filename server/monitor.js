@@ -4,15 +4,15 @@ var http=require('http')
   , express=require('express')
   , bodyparser=require('body-parser')
   , app=express()
-  , server=http.Server(app)
+  , server=http.createServer(app)
   , morgan=require('morgan')
-  , request=require('request')
   , redis=require('redis')
   , redisclient=redis.createClient()
+  , request=require('request')
   , validate=require('../core/validators')
   , _success=require('../core/json-response').success
   , _error=require('../core/json-response').error
-  , env=process.env.ENV||'production'
+  , config=require('../config/monitor')
   , assign=function(planner,done){
         redisclient.zrange('monitor:queue',0,0,function(err,task){
             if(task.length!=0){
@@ -38,7 +38,7 @@ var http=require('http')
         });
     }
   , notify=function(task,planner,success,fail){
-        if(env=='test'){
+        if(config.env=='test'){
             console.log('ASSIGN '+task+' -> '+planner);
             success();
         }else{
@@ -55,11 +55,11 @@ var http=require('http')
         }
     }
 
-app.set('port',process.env.PORT||3003);
+app.set('port',config.monitor.port);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 
-if(env=='production'){
+if(config.env=='production'){
     app.use(morgan('combined'));
 }else{
     app.use(morgan('dev'));

@@ -6,7 +6,7 @@ var app=require('express')()
   , morgan=require('morgan')
   , fs=require('fs')
   , join=require('path').join
-  , env=process.env.ENV||'production'
+  , config=require('../../config/planner')
   , type=''
 
 exports.set=function(port,signature){
@@ -14,7 +14,7 @@ exports.set=function(port,signature){
     app.disable('x-powered-by');
     app.use(bodyparser.json());
 
-    if(env=='production'){
+    if(config.env=='production'){
         app.use(morgan('combined'));
     }else{
         app.use(morgan('dev'));
