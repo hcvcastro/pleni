@@ -55,7 +55,7 @@ pleni.controller('SitesController',
                     $scope.menu.settings=[1,0,0,0,1];
                     break;
                 case 'sitemap':
-                    $scope.menu.settings=[1,1,1,1,1];
+                    $scope.menu.settings=[1,1,0,1,1];
                     break;
             }
             $state.go($scope.status.view);
@@ -180,7 +180,7 @@ pleni.controller('SitesController',
                     break;
                 case 'sitemap':
                     $scope.status.view='sitemap';
-                    $scope.menu.settings=[1,1,1,1,1];
+                    $scope.menu.settings=[1,1,0,1,1];
                     $scope.sitemap.load();
                     break;
             }
