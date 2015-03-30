@@ -129,3 +129,42 @@ exports.sitemap=function(db,success,fail){
     },fail);
 };
 
+exports.summarize=function(planner,db,success,fail){
+    var pkg={
+        planner:{
+            host:planner
+          , tid:tid
+        }
+      , targs:{
+            db:db
+        }
+      , task:{
+            name:'site/summarize'
+          , count:1
+          , interval:config.sites.interval
+        }
+    };
+
+    if(!fail){
+        var fail=function(){};
+    }
+
+    test(pkg)
+    .then(set)
+    .then(run)
+    .done(function(args){
+        if(args&&args.planner&&args.planner.tid){
+            tid=args.planner.tid;
+            if(success){
+                success(args);
+            }
+        }
+    },fail);
+};
+
+exports.report=function(planner,db,success,fail){
+    var pkg={
+
+    };
+};
+

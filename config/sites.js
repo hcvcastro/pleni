@@ -5,7 +5,7 @@ module.exports={
   , cookie:{
         secret:'pleni'
       , maxAge:3*60*60*1000
-      , name:'pleni.sid'
+      , name:'pleni.site.sid'
     }
   , redis:{
         host:'localhost'

@@ -83,12 +83,20 @@ pleni.controller('SitesController',
                 });
             }
         }
-/*        $scope.report=function(){
+      , report:function(){
             pushy.togglePushy();
-            $location.path('report');
-        }
+            $scope.menu.settings=[1,0,0,0,1];
 
-*/
+            $http.put('/report').success(function(data){
+                $scope.status.waiting=true;
+                $scope.status.message=data.msg;
+
+                $state.go('report');
+            }).error(function(error){
+                    $scope.status.message=
+                        'Waiting for the completion of previous tasks';
+                });
+        }
     };
 
     $scope.search={
@@ -137,7 +145,7 @@ pleni.controller('SitesController',
 
     $scope.sitemap={
         load:function(){
-            var match=/pleni.url=(.+)/.exec(document.cookie)
+            var match=/pleni.site.url=(.+)/.exec(document.cookie)
 
             if(!match){
                 utils.show('error','The url is not a valid host');

@@ -26,6 +26,8 @@ var http=require('http')
   , fetch=require('./sites/planners').fetch
   , sitemap=require('./sites/planners').sitemap
   , free=require('./sites/planners').free
+  , summarize=require('./sites/planners').summarize
+  , report=require('./sites/planners').report
   , config=require('../config/sites')
 
 app.set('port',config.sites.port);
@@ -199,6 +201,25 @@ var connect_planner=function(id,sessionID,planner,type){
                     });
                 }
             });
+        }else if(msg.action=='create'&&msg.task&&msg.task.id
+                &&msg.task.id=='site/summarize'){
+            get_session(sessionID,function(session){
+                session.action=msg.task.id;
+                save_session(sessionID,session);
+            });
+            notifier(id,{
+                action:'preparing'
+              , msg:'Summarizing the repository information'
+            });
+        }else if(msg.action=='task'&&msg.task&&msg.task.id
+                &&msg.task.id=='site/summarize'){
+            get_session(sessionID,function(session){
+                report(planner,session.db);
+                notifier(id,{
+                    action:'created'
+                  , msg:'Website summary created'
+                });
+            });
         }
     };
 
@@ -210,9 +231,9 @@ app.get('/',function(request,response){
     }
 
     if(request.session.url){
-        response.cookie('pleni.url',request.session.url);
+        response.cookie('pleni.site.url',request.session.url);
     }else{
-        response.cookie('pleni.url','');
+        response.cookie('pleni.site.url','');
     }
 
     if(config.env=='production'){
@@ -254,7 +275,7 @@ app.put('/sites',function(request,response){
             request.session.save();
 
             monitor.getplanner(url,function(msg){
-                response.cookie('pleni.url',site);
+                response.cookie('pleni.site.url',site);
                 response.status(200).json(msg);
             });
         }else{
@@ -342,41 +363,35 @@ app.post('/j/:id',function(request,response){
     });
 });
 
-/*app.put('/report',function(request,response){
-    if(request.session.report){
-        monitor.getplanner(
-            'http://localhost:'+app.get('port')+'/r'+request.sessionID,
-            function(msg){
-                response.status(200).json(msg);
+app.put('/report',function(request,response){
+    var url=config.sites.host+':'+config.sites.port+'/k/'+request.sessionID
+
+    if(request.session.semaphore===0){
+        request.session.semaphore=1;
+        request.session.save();
+
+        monitor.getplanner(url,function(msg){
+            response.status(200).json(msg);
         });
     }else{
         response.status(403).json(_error.busy);
     }
-});*/
+});
 
-/*app.post('/r/:id',function(request,response){
+app.post('/k/:id',function(request,response){
     var id=request.params.id
       , sessionID='sites:'+request.params.id
       , planner=request.body.planner
 
     get_session(sessionID,function(session){
-        var socket=ioc.connect(planner,{
-            reconnect:true
-          , 'forceNew':true
-        });
-        socket.on('notifier',function(msg){
-        });
-
+        connect_planner(id,sessionID,planner,'k');
+        summarize(planner,session.db);
         response.status(200).json(_success.ok);
     },function(){
-        free(planner,function(args){
-            monitor.freeplanner('http://localhost:'+
-                app.get('port')+'/r/'+id);
-        },function(error){});
-
+        free_planner(planner,id,'k');
         response.status(403).json(_error.notfound);
     });
-});*/
+});
 
 server.listen(app.get('port'),'localhost',function(){
     console.log('pleni ✯ quickstart sites: listening on port '
