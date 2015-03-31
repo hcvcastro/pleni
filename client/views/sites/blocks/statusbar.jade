@@ -1,10 +1,10 @@
 .statusbar
     .menu.fa.fa-bars(ng-click='menu.open()')
-    .url {{status.url}}
-    .c1 {{status.completed}}
-    .c2 {{status.total}}
+    .url(ng-bind='status.url')
+    .c1(ng-bind='status.completed')
+    .c2(ng-bind='status.total')
     .msg
-        .wrapper {{status.message}}
+        .wrapper(ng-bind='status.message')
     .status
         span.fa.fa-gear(ng-class='{\'fa-spin\':status.waiting==true}')
     .clearfix

@@ -4,7 +4,8 @@ var pushy=new pushy();
 
 var pleni=angular
     .module('PleniApp',['ui.router'])
-    .config(function($stateProvider,$urlRouterProvider){
+    .config(['$stateProvider','$urlRouterProvider'
+        ,function($stateProvider,$urlRouterProvider){
         $urlRouterProvider.otherwise('/search');
 
         $stateProvider
@@ -30,5 +31,5 @@ var pleni=angular
                 url:'/report'
               , templateUrl:'pages/report'
             })
-    });
+    }]);
 
