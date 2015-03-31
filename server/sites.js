@@ -221,27 +221,30 @@ var connect_planner=function(id,sessionID,planner,type){
                 });
             });
         }
-    };
+    }
+  , init_session_vars=function(request,response,template){
+        if(!request.session.state){
+            request.session.state='search';
+            request.session.semaphore=0;
+            request.session.save();
+        }
+
+        if(request.session.url){
+            response.cookie('pleni.site.url',request.session.url);
+        }else{
+            response.cookie('pleni.site.url','');
+        }
+
+        if(config.env=='production'){
+            response.status(200)
+                .sendFile(join(__dirname,'..','dist','sites',template+'.html'));
+        }else{
+            response.status(200).render('dev');
+        }
+    }
 
 app.get('/',function(request,response){
-    if(!request.session.state){
-        request.session.state='search';
-        request.session.semaphore=0;
-        request.session.save();
-    }
-
-    if(request.session.url){
-        response.cookie('pleni.site.url',request.session.url);
-    }else{
-        response.cookie('pleni.site.url','');
-    }
-
-    if(config.env=='production'){
-        response.status(200)
-            .sendFile(join(__dirname,'..','dist','sites','index.html'));
-    }else{
-        response.status(200).render('dev');
-    }
+    init_session_vars(request,response,'index');
 });
 
 app.get('/pages/:page',function(request,response){
@@ -252,11 +255,7 @@ app.get('/pages/:page',function(request,response){
         response.status(404).json(_error.notfound);
     }
 
-    if(config.env=='production'){
-        response.sendFile(join(__dirname,'..','dist','sites',page+'.html'));
-    }else{
-        response.render('pages/'+page);
-    }
+    init_session_vars(request,response,page);
 });
 
 app.put('/sites',function(request,response){
