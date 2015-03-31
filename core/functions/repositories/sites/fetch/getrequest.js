@@ -33,7 +33,9 @@ module.exports=function(args){
       , headers={}
 
     if(args.headers){
-        headers=args.headers;
+        args.headers.forEach(function(header){
+            headers[header.name]=header.value;
+        });
     }
 
     if(!args.task.head.get){

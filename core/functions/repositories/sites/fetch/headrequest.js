@@ -25,7 +25,10 @@ module.exports=function(args){
       , headers={}
 
     if(args.headers){
-        headers=args.headers;
+        console.log(args.headers);
+        args.headers.forEach(function(header){
+            headers[header.name]=header.value;
+        });
     }
 
     if(args.debug){

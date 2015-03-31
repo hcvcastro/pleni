@@ -57,7 +57,9 @@ module.exports=function(args){
         }
 
     if(args.headers){
-        body.headers=args.headers;
+        args.headers.forEach(function(header){
+            headers[header.name]=header.value;
+        });
     }
     body.head=args.task.head;
     if(args.task.head.get){
