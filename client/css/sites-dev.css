@@ -810,7 +810,7 @@ footer ul li a {
 .static p.center {
   text-align: center;
 }
-.static p button {
+.static p .button {
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 0.97rem;
   font-weight: normal;

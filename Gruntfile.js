@@ -190,10 +190,10 @@ module.exports=function(grunt){
               , files:{
                     'dist/sites/index.html'
                   : 'client/views/sites/prod.jade'
-                  , 'dist/sites/map.html'
-                  : 'client/views/sites/pages/map.jade'
-                  , 'dist/sites/sites.html'
-                  : 'client/views/sites/pages/sites.jade'
+                  , 'dist/sites/search.html'
+                  : 'client/views/sites/pages/search.jade'
+                  , 'dist/sites/sitemap.html'
+                  : 'client/views/sites/pages/sitemap.jade'
                   , 'dist/sites/about.html'
                   : 'client/views/sites/pages/about.jade'
                   , 'dist/sites/report.html'
@@ -229,8 +229,9 @@ module.exports=function(grunt){
                         'bower_components/angular/angular.min.js'
                     ]
                 },{
-                    'dist/sites/js/angular-route.min.js':[
-                        'bower_components/angular-route/angular-route.min.js'
+                    'dist/sites/js/angular.ui.router.min.js':[
+                        'bower_components/angular-ui-router/release/'
+                            +'angular-ui-router.min.js'
                     ]
                 },{
                     'dist/sites/js/d3.min.js':[
@@ -240,10 +241,7 @@ module.exports=function(grunt){
                 },{
                     'dist/sites/js/sites.min.js':[
                         'client/js/sites.js'
-                      , 'client/js/controllers/sites/sites.js'
-                      , 'client/js/controllers/sites/map.js'
-                      , 'client/js/controllers/sites/menu.js'
-                      , 'client/js/controllers/sites/report.js'
+                      , 'client/js/controllers/sites.js'
                       , 'client/js/visual/site.js'
                       , 'client/js/factories/visual.js'
                     ]

@@ -1,5 +1,5 @@
 doctype html
-html(lang='en')
+html(lang='en',ng-app='PleniApp')
     head
         title ⤻ ᴾᴸᴱᴺᴵ ₛᵢₜₑₛ ⤻ ⛁
         meta(charset='utf-8')
@@ -8,7 +8,7 @@ html(lang='en')
         meta(name='description',content='Visualize the map and performs a basic analysis of a website')
         link(rel='shortcut icon',href='/favicon.ico')
         block link
-    body(ng-app='PleniApp',ng-controller='SitesController')
+    body(ng-controller='SitesController')
         #content(ui-view,ng-class='{\'blocked\':$state.current.name==\'search\'}')
         include ./blocks/sidebar
         include ./blocks/statusbar
