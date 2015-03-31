@@ -27,9 +27,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9195959"
-     inkscape:cx="1511.7768"
-     inkscape:cy="672.92378"
+     inkscape:zoom="2.428125"
+     inkscape:cx="1393.8977"
+     inkscape:cy="680.17814"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -112,7 +112,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -174,7 +174,7 @@
        style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#000000"
        id="rect3621"
        width="560"
-       height="120"
+       height="170"
        x="1080"
        y="-15.000003" />
   </g>
@@ -3200,5 +3200,77 @@
          y="362.33743"
          x="1490"
          sodipodi:role="line">site.sitemap.total</tspan></text>
+    <path
+       sodipodi:nodetypes="cc"
+       inkscape:connector-curvature="0"
+       id="path3901"
+       d="m 1080,392.53899 560,0"
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3903"
+       y="412.53897"
+       x="1240"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         y="412.53897"
+         x="1240"
+         id="tspan3905"
+         sodipodi:role="line">getreportbasic</tspan></text>
+    <text
+       sodipodi:linespacing="89.999998%"
+       id="text3907"
+       y="402.53897"
+       x="1090"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan3909"
+         y="402.53897"
+         x="1090"
+         sodipodi:role="line">db.host</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3911"
+       y="422.53897"
+       x="1240"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         y="422.53897"
+         x="1240"
+         id="tspan3913"
+         sodipodi:role="line">repositories/report/summarize/getsitemap.js</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="1090"
+       y="412.53897"
+       id="text3915"
+       sodipodi:linespacing="89.999998%"><tspan
+         sodipodi:role="line"
+         x="1090"
+         y="412.53897"
+         id="tspan3917">db.name</tspan></text>
+    <text
+       sodipodi:linespacing="89.999998%"
+       id="text3919"
+       y="422.53897"
+       x="1090"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan3921"
+         y="422.53897"
+         x="1090"
+         sodipodi:role="line">auth.cookie</tspan></text>
+    <text
+       sodipodi:linespacing="89.999998%"
+       id="text3923"
+       y="402.53897"
+       x="1490"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan3925"
+         y="402.53897"
+         x="1490"
+         sodipodi:role="line">report</tspan></text>
   </g>
 </svg>

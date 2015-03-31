@@ -2,75 +2,44 @@
     "_id":"_design/reports"
   , "language":"javascript"
   , "views":{
-        "headers":{
-            "map":"
-function(doc){
-    if(doc.head&&doc.head.headers){
-        emit([
-            doc.head.headers['server']
-          , doc.head.headers['x-powered-by']
-          , doc.head.headers['content-type']
-        ]);
-    }
-}
-"
+        "hserver":{
+            "map":"function(doc){if(doc.head&&doc.head.headers){emit(doc.head.header['server']);}}"
+          , "reduce":"_count"
         }
-      , "status":{
-            "map":"function(doc){
-                if(doc.request_get.headers){
-                    var header=doc.request_get.headers;
-                    var head=[header.server,header['x-powered-by'],doc.request_get.status,header['content-type']];
-                    for(var i in head){
-                        if(head[i]==404){
-                            emit(head[i]);
-                        }
-                    }
-                }
-            }"
+      , "hpoweredby":{
+            "map":"function(doc){if(doc.head&&doc.head.headers){emit(doc.head.header['x-powered-by']);}}"
+          , "reduce":"_count"
         }
-      , "forms":{
-            "map":"function(doc){
-                if(doc.links.form){
-                    for(var i in doc.links.form){
-                        emit(doc.links.form[i].pathname);
-                    }
-                }
-            }"
+      , "hcontenttype":{
+            "map":"function(doc){if(doc.head&&doc.head.headers){emit(doc.head.header['content-type']);}}"
+          , "reduce":"_count"
         }
-      , "javascripts":{
-            "map":"function(doc){
-                if(doc.links.script){
-                    for(var i in doc.links.script){
-                        emit(doc.links.script[i].pathname);
-                    }
-                }
-            }"
+      , "hstatus":{
+            "map":"function(doc){if(doc.head&&doc.head.headers){emit(doc.head.status);}}"
+          , "reduce":"_count"
         }
-      , "redirects":{
-            "map":"function(doc){
-                if(doc.links.a){
-                    for(var i in doc.links.a){
-                        emit(doc.links.a[i].pathname);
-                    }
-                }
-            }"
+      , "bhashes":{
+            "map":"function(doc){if(doc.get&&doc.get.sha1){emit(doc._id.substring(5),[doc.get.sha1,doc.get.md5]);}}"
         }
-      , "images":{
-            "map":"function(doc){
-                if(doc.links.img){
-                    for(var i in doc.links.img){
-                        emit(doc.links.img[i].pathname);
-                    }
-                }
-            }"
+      , "bscript":{
+            "map":"function(doc){if(doc.ref&&doc.ref.links&&doc.ref.links.script){for(var i in doc.ref.links.script){emit(doc.ref.links.script[i]);}}}"
+          , "reduce":"_count"
         }
-      , "hashes":{
-            "map":"function(doc){
-                if(doc.request_get.sha1){
-                    var a=[doc._id,doc.request_get.sha1,doc.request_get.md5];
-                    emit(a);
-                }
-            }"
+      , "blink":{
+            "map":"function(doc){if(doc.ref&&doc.ref.links&&doc.ref.links.link){for(var i in doc.ref.links.link){emit(doc.ref.links.link[i]);}}}"
+          , "reduce":"_count"
+        }
+      , "ba":{
+            "map":"function(doc){if(doc.ref&&doc.ref.links&&doc.ref.links.a){for(var i in doc.ref.links.a){emit(doc.ref.links.a[i]);}}}"
+          , "reduce":"_count"
+        }
+      , "bimg":{
+            "map":"function(doc){if(doc.ref&&doc.ref.links&&doc.ref.links.img){for(var i in doc.ref.links.img){emit(doc.ref.links.img[i]);}}}"
+          , "reduce":"_count"
+        }
+      , "bform":{
+            "map":"function(doc){if(doc.ref&&doc.ref.links&&doc.ref.links.form){for(var i in doc.ref.links.form){emit(doc.ref.links.form[i]);}}}"
+          , "reduce":"_count"
         }
     }
 }
