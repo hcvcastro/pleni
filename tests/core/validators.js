@@ -1,7 +1,7 @@
 'use strict';
 
 var should=require('should')
-  , validate=require('../../../core/validators')
+  , validate=require('../../core/validators')
 
 describe('validators functions',function(){
     it('empty validation',function(done){
