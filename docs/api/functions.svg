@@ -27,11 +27,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.428125"
-     inkscape:cx="1393.8977"
-     inkscape:cy="680.17814"
+     inkscape:zoom="1.4889121"
+     inkscape:cx="1353.7326"
+     inkscape:cy="608.64553"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer2"
      showgrid="true"
      inkscape:showpageshadow="false"
      showguides="true"
@@ -177,6 +177,79 @@
        height="170"
        x="1080"
        y="-15.000003" />
+    <rect
+       y="196.2688"
+       x="1080"
+       height="80"
+       width="560"
+       id="rect4010"
+       style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#000000" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="1089.6642"
+       y="206.34802"
+       id="text3561-4"
+       sodipodi:linespacing="89.999998%"><tspan
+         sodipodi:role="line"
+         x="1089.6642"
+         y="206.34802"
+         id="tspan3563-9">db.host</tspan></text>
+    <text
+       sodipodi:linespacing="89.999998%"
+       id="text3569-3"
+       y="216.34802"
+       x="1089.6642"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan3571-9"
+         y="216.34802"
+         x="1089.6642"
+         sodipodi:role="line">db.name</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="1089.6642"
+       y="226.34802"
+       id="text3573-6"
+       sodipodi:linespacing="89.999998%"><tspan
+         sodipodi:role="line"
+         x="1089.6642"
+         y="226.34802"
+         id="tspan3575-7">auth.cookie</tspan></text>
+    <text
+       sodipodi:linespacing="89.999998%"
+       id="text3984"
+       y="246.22929"
+       x="1089.6642"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan3986"
+         y="246.22929"
+         x="1089.6642"
+         sodipodi:role="line">db.host</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="1089.6642"
+       y="256.22928"
+       id="text3988"
+       sodipodi:linespacing="89.999998%"><tspan
+         sodipodi:role="line"
+         x="1089.6642"
+         y="256.22928"
+         id="tspan3990">db.name</tspan></text>
+    <text
+       sodipodi:linespacing="89.999998%"
+       id="text3992"
+       y="266.22928"
+       x="1089.6642"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan3994"
+         y="266.22928"
+         x="1089.6642"
+         sodipodi:role="line">auth.cookie</tspan></text>
   </g>
   <g
      inkscape:label="letters"
@@ -3272,5 +3345,77 @@
          y="402.53897"
          x="1490"
          sodipodi:role="line">report</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="1239.7795"
+       y="503.52002"
+       id="text3696"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3698"
+         x="1239.7795"
+         y="503.52002">check</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="1239.7795"
+       y="513.52002"
+       id="text3700"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3702"
+         x="1239.7795"
+         y="513.52002">reports/check/basic.js</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       x="1490"
+       y="493.51999"
+       id="text3704"
+       sodipodi:linespacing="89.999998%"><tspan
+         sodipodi:role="line"
+         x="1490"
+         y="493.51999"
+         id="tspan3706">report.basic.check</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3709-5"
+       y="543.52271"
+       x="1239.6119"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:26px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         y="543.52271"
+         x="1239.6119"
+         id="tspan3711-7"
+         sodipodi:role="line">designdocument</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text3713-0"
+       y="553.52271"
+       x="1239.7794"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         y="553.52271"
+         x="1239.7794"
+         id="tspan3715-3"
+         sodipodi:role="line">reports/design/basic.js</tspan></text>
+    <text
+       sodipodi:linespacing="89.999998%"
+       id="text3717-0"
+       y="533.65338"
+       x="1490"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"
+       xml:space="preserve"><tspan
+         id="tspan3719-4"
+         y="533.65338"
+         x="1490"
+         sodipodi:role="line">report.basic._rev</tspan></text>
+    <path
+       style="display:inline;fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 1080,523.80778 560,0"
+       id="path4008"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
   </g>
 </svg>
