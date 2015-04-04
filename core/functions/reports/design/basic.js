@@ -34,7 +34,7 @@ module.exports=function(args){
                 }
               , 'hpoweredby':{
                     'map':'function(doc){if(doc.head&&doc.head.headers){emit('
-                         +'doc.head.headers['\x-powered-by\']);}}'
+                         +'doc.head.headers[\'x-powered-by\']);}}'
                   , 'reduce':'_count'
                 }
               , 'hcontenttype':{
