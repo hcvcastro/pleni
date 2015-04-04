@@ -9,6 +9,7 @@ module.exports={
       , pass:'asdf'
       , prefix:'test_'
     }
+  , url:'http://galao.local'
   , notifiers:[{
         script:'server/notifier.io'
       , host:'http://localhost'

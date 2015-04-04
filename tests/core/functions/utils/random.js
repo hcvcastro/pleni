@@ -1,13 +1,13 @@
 'use strict';
 
 var should=require('should')
-  , base='../../../core/functions'
-  , generator=require(base+'/utils/random')
+  , base='../../../../core/functions'
+  , random=require(base+'/utils/random')
 
 describe('random functions',function(){
     describe('testing random generator',function(){
         it('random generator',function(done){
-            generator({})
+            random({})
             .done(function(args){
                 args.should.be.an.Object;
                 args.should.have.property('random');
