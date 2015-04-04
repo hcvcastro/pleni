@@ -2,7 +2,6 @@
 
 var should=require('should')
   , base='../../../../core/functions'
-  , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
   , create=require(base+'/databases/create')
   , summary=require(base+'/repositories/sites/create/summary')
@@ -16,12 +15,6 @@ var should=require('should')
   , complete=require(base+'/repositories/sites/fetch/completedocument')
   , spread=require(base+'/repositories/sites/fetch/spreadrefs')
   , remove=require(base+'/databases/remove')
-
-var host='http://localhost:5984'
-  , user='jacobian'
-  , pass='asdf'
-  , name='test'
-  , url='http://galao.local'
 
 describe('site fetcher pages functions',function(){
     var packet;
