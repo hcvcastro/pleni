@@ -12,7 +12,6 @@ module.exports={
       , 'site/fetch'
       , 'site/remove'
       , 'site/summarize'
-      , 'report/basic'
     ]
 };
 

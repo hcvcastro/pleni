@@ -8,9 +8,8 @@ var should=require('should')
   , auth=require(base+'/databases/auth')
   , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
   , getsummary=require(base+'/repositories/sites/view/getsummary')
-  , summarize=require(base+'/repositories/sites/summarize/summarize')
   , config=require('../../../../../../config/tests')
-  , db_name='summarize_gettimestampdocument'
+  , db_name='view_getsummary'
   , repeat=function(){}
   , stop=function(){}
 
@@ -41,7 +40,6 @@ describe('site fetcher pages functions',function(){
                     fetch(packet,repeat,stop,function(params){
                         auth(packet)
                         .then(timestamp)
-                        .then(getsummary)
                         .then(function(args){
                             packet=args;
                             done();
@@ -52,12 +50,18 @@ describe('site fetcher pages functions',function(){
         });
     });
 
-    describe('testing for summarize a site',function(){
-        it('summarizing site',function(done){
-            summarize(packet)
+    describe('testing for summary reader',function(){
+        it('getsummary function',function(done){
+            getsummary(packet)
             .done(function(args){
+                args.should.have.property('site');
                 args.site.should.have.property('summary');
+                args.site.summary.should.have.property('_id');
                 args.site.summary.should.have.property('_rev');
+                args.site.summary.should.have.property('ts_created');
+                args.site.summary.should.have.property('ts_modified');
+                args.site.summary.should.have.property('type');
+                args.site.summary.should.have.property('url');
                 done();
             });
         });
