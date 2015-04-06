@@ -53,7 +53,7 @@ describe('site initial scaffolding functions',function(){
             })
             .done(function(args){
                 args.site.should.have.property('design');
-                args.site.design.should.have.property('sites');
+                args.site.design.should.have.property('_rev');
                 done();
             });
         });

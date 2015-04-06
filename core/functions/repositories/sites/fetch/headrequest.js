@@ -45,13 +45,19 @@ module.exports=function(args){
               , r_body=valid_headers.some(function(element){
                     return element.test(r_headers['content-type']);
                 })
-              , s_body=(response.statusCode==200)
+              , status=Math.floor(response.statusCode/100)
+              , s_body=(status==2)
+              , head={
+                    'status':response.statusCode
+                  , 'headers':r_headers
+                  , 'get':(r_body & s_body)
+                }
 
-            args.task.head={
-                'status':response.statusCode
-              , 'headers':r_headers
-              , 'get':(r_body & s_body)
+            if(status==3){
+                head.location=r_headers['location'];
             }
+
+            args.task.head=head;
             deferred.resolve(args);
         }else{
             deferred.reject(error);

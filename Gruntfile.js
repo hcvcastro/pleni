@@ -150,6 +150,7 @@ module.exports=function(grunt){
           , core:[
                 'tests/core/validators.js'
               , 'tests/core/functions/**/*.js'
+              , 'tests/core/tasks/**/*.js'
             ]
 //         , dumb:['tests/planners/dumb/server.js']
 //         , planners:[

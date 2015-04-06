@@ -2,9 +2,10 @@
 
 var request=require('request')
   , Q=require('q')
+  , validator=require('../../../../validators')
 
 /*
- * Function for checking of a desing document _design/reports
+ * Function for creation of report document in site repository
  * args input
  *      db
  *          host
@@ -15,20 +16,23 @@ var request=require('request')
  * args output
  *      site
  *          report
- *              check
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/_design/report'
+      , url=args.db.host+'/'+args.db.name+'/report'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
-        };
+        }
+      , body={
+            ts_created:Date.now()
+          , ts_modified:Date.now()
+        }
 
     if(args.debug){
-        console.log('checking a design document for basic report');
+        console.log('create a report document for site repository');
     }
-    request.head({url:url,headers:headers},function(error,response){
+    request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
             if(!args.site){
                 args.site={};
@@ -36,11 +40,7 @@ module.exports=function(args){
             if(!args.site.report){
                 args.site.report={};
             }
-            if(response.statusCode==200){
-                args.site.report.check=true;
-            }else{
-                args.site.report.check=false;
-            }
+            args.site.report._rev=response.body.rev;
             deferred.resolve(args);
         }else{
             deferred.reject(error);

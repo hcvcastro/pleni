@@ -36,7 +36,7 @@ module.exports=function(params,repeat,stop,notifier){
             action:'task'
           , task:{
                 id:'site/summarize'
-              , msg:'repository summarized ('+args.db.name+')'
+              , msg:'site repository summarized ('+args.db.name+')'
             }
         });
         stop();

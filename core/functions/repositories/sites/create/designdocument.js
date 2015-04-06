@@ -15,8 +15,7 @@ var request=require('request')
  * args output
  *      site
  *          design
- *              sites
- *                  _rev
+ *              _rev
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -73,10 +72,7 @@ module.exports=function(args){
             if(!args.site.design){
                 args.site.design={};
             }
-            if(!args.site.design.sites){
-                args.site.design.sites={};
-            }
-            args.site.design.sites._rev=response.body.rev;
+            args.site.design._rev=response.body.rev;
             deferred.resolve(args);
         }else{
             deferred.reject(error);
