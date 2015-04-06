@@ -18,6 +18,7 @@ var request=require('request')
  *              status
  *              headers
  *              get
+ *              location (*)
  */
 module.exports=function(args){
     var deferred=Q.defer()
