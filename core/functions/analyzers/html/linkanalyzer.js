@@ -26,8 +26,13 @@ module.exports=function(args){
         }
 
         var $=cheerio.load(args.body)
+          , base=$('base')
 
-        $('base')
+        console.log(args.body);
+        console.log(base.length);
+
+        deferred.resolve({
+        });
     }else{
         deferred.resolve({
             refs:refs
