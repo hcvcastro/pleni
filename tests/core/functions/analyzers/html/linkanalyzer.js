@@ -11,6 +11,9 @@ describe('test link analyzer',function(){
         'test01.html'
       , 'test02.html'
       , 'test03.html'
+      , 'test04.html'
+      , 'test05.html'
+      , 'test06.html'
     ].forEach(function(item){
         var body='';
 
@@ -28,11 +31,11 @@ describe('test link analyzer',function(){
 
         it('test spreading links',function(done){
             analyzer({
-                url:'http://localhost'
+                site:'http://localhost'
+              , url:'http://localhost/data/'+item
               , body:body
             })
             .done(function(args){
-                console.log(args);
                 done();
             });
         });

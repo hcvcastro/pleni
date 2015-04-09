@@ -8,6 +8,7 @@ var request=require('request')
 /*
  * Function for links extraction in a text/html document
  * args input
+ *      site
  *      url
  *      body
  *
@@ -20,16 +21,23 @@ module.exports=function(args){
       , refs=[]
       , rels=[]
 
-    if(args.url&&args.body){
+    if(args.site&&args.url&&args.body){
         if(args.debug){
             console.log('analyzing text/html document');
         }
 
         var $=cheerio.load(args.body)
-          , base=$('base')
+          , _base=$('base')
+          , base='.'
+          , parent=''
 
-        console.log(args.body);
-        console.log(base.length);
+        if(_base.length>0){
+            base=$(_base[0]).attr('href');
+        }
+
+        parent=_url.resolve(args.url,base);
+
+        console.log(parent);
 
         deferred.resolve({
         });
