@@ -40,9 +40,18 @@ module.exports=function(args){
             };
 
         [
-            ['link','href']
+            ['a','href']
+          , ['area','href']
+          , ['audio','src']
+          , ['embed','src']
+          , ['form','action']
+          , ['iframe','src']
+          , ['img','src']
+          , ['input','src']
+          , ['link','href']
+          , ['object','data']
           , ['script','src']
-          , ['a','href']
+          , ['video','src']
         ].forEach(function(element){
             extract(element[0],element[1]).forEach(function(resource){
                 var path=_url.resolve(root,resource)
