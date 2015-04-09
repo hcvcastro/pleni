@@ -14,6 +14,10 @@ describe('test link analyzer',function(){
       , 'test04.html'
       , 'test05.html'
       , 'test06.html'
+      , 'test07.html'
+      , 'test08.html'
+      , 'test09.html'
+      , 'test10.html'
     ].forEach(function(item){
         var body='';
 
@@ -36,6 +40,7 @@ describe('test link analyzer',function(){
               , body:body
             })
             .done(function(args){
+                console.log(args);
                 done();
             });
         });
