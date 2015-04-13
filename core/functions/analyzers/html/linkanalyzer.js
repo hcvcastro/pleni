@@ -45,6 +45,7 @@ module.exports=function(args){
           , ['audio','src']
           , ['embed','src']
           , ['form','action']
+          , ['frame','src']
           , ['iframe','src']
           , ['img','src']
           , ['input','src']
