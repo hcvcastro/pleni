@@ -54,9 +54,8 @@ describe('site fetcher pages functions',function(){
             body(packet)
             .done(function(args){
                 if(args.task.head.get){
-                    args.task.should.have.property('ref');
-                    args.task.ref.should.have.property('links');
-                    args.task.ref.should.have.property('related');
+                    args.task.should.have.property('refs').and.be.Array;
+                    args.task.should.have.property('rels').and.be.Array;
                 }
                 packet=args;
                 done();

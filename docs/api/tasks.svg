@@ -27,11 +27,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.5170712"
-     inkscape:cx="717.99082"
-     inkscape:cy="686.63266"
+     inkscape:zoom="1.3155852"
+     inkscape:cx="648.63582"
+     inkscape:cy="581.17659"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:showpageshadow="false"
      showguides="false"
@@ -266,7 +266,7 @@
          sodipodi:role="line"
          x="770"
          y="452.36218"
-         id="tspan5324">task.ref.links</tspan></text>
+         id="tspan5324">task.refs</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text5332"
@@ -277,7 +277,7 @@
          id="tspan5334"
          y="462.36218"
          x="770"
-         sodipodi:role="line">task.ref.related</tspan></text>
+         sodipodi:role="line">task.rels</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text5376"
@@ -354,7 +354,7 @@
          y="542.36218"
          x="560"
          id="tspan3710"
-         sodipodi:role="line">spreadrefs</tspan></text>
+         sodipodi:role="line">spreadrels</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text3716"
@@ -365,7 +365,7 @@
          y="552.36218"
          x="560"
          id="tspan3718"
-         sodipodi:role="line">repositories/sites/fetch/spreadrefs.js</tspan></text>
+         sodipodi:role="line">repositories/sites/fetch/spreadrels.js</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10px;line-height:89.99999762%;font-family:'Liberation Mono';-inkscape-font-specification:'Liberation Mono';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000000;fill-opacity:1;stroke:none"

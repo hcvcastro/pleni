@@ -28,9 +28,8 @@ var request=require('request')
  *              body
  *              sha1
  *              md5
- *          ref
- *              links
- *              related
+ *          refs
+ *          rels
  *      headers(*)
  *      
  * args output
@@ -64,7 +63,8 @@ module.exports=function(args){
     body.head=args.task.head;
     if(args.task.head.get){
         body.get=args.task.get;
-        body.ref=args.task.ref;
+        body.refs=args.task.refs;
+        body.rels=args.task.rels;
     }
 
     if(args.debug){

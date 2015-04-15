@@ -4,6 +4,8 @@ var request=require('request')
   , Q=require('q')
   , cheerio=require('cheerio')
   , _url=require('url')
+  , base='../../../../../core/functions/analyzers/'
+  , htmlanalyzer=require(base+'/html/linkanalyzer')
 
 /*
  * Function for links analysis in HTML BODY
@@ -26,9 +28,8 @@ var request=require('request')
  *
  * args output
  *      task
- *          ref
- *              links
- *              related
+ *          refs
+ *          rels
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -36,54 +37,25 @@ module.exports=function(args){
     if(!args.task.head.get){
         deferred.resolve(args);
     }else{
-        // HTML analyzer
-        if(/text\/html/i.test(args.task.head.headers['content-type'])){
-            if(args.debug){
-                console.log('analyzing the body for request');
-            }
-
-            var $=cheerio.load(args.task.get.body)
-              , links={script:[],link:[],a:[],img:[],form:[]}
-              , samedomain=[]
-              , base=_url.parse(args.task.wait.url+args.task.wait.id.substr(5))
-              , register_link=function(link,haystack){
-                    if(link==undefined){return}
-
-                    var url=_url.resolve(base,link)
-                      , parse=_url.parse(url)
-
-                    if(parse.host===base.host){
-                        samedomain.push(parse.path);
-                    }
-
-                    haystack.push(url);
-                }
-
-            // body analysis (TODO)
-            $('script').each(function(i,element){
-                register_link($(this).attr('src'),links.script);
-            });
-            $('link').each(function(i,element){
-                register_link($(this).attr('href'),links.link);
-            });
-            $('a').each(function(i,element){
-                register_link($(this).attr('href'),links.a);
-            });
-            $('img').each(function(i,element){
-                register_link($(this).attr('src'),links.img);
-            });
-            $('form').each(function(i,element){
-                register_link($(this).attr('action'),links.form);
-            });
-
-            if(!args.task.ref){
-                args.task.ref={};
-            }
-            args.task.ref.links=links;
-            args.task.ref.related=samedomain;
+        if(args.debug){
+            console.log('analyzing the body for request');
         }
 
-        deferred.resolve(args);
+        // HTML analyzer
+        if(/text\/html/i.test(args.task.head.headers['content-type'])){
+            htmlanalyzer({
+                site:args.task.wait.url
+              , url:_url.parse(args.task.wait.url+args.task.wait.id.substr(5))
+              , body:args.task.get.body
+            })
+            .done(function(args2){
+                args.task.refs=args2.refs;
+                args.task.rels=args2.rels;
+                deferred.resolve(args);
+            });
+        }else{
+            deferred.resolve(args);
+        }
     }
 
     return deferred.promise;

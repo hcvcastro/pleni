@@ -1,6 +1,7 @@
 'use strict';
 
-var base='../../functions'
+var _url=require('url')
+  , base='../../functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
   , init=require(base+'/repositories/sites/fetch/init')
@@ -10,7 +11,7 @@ var base='../../functions'
   , get=require(base+'/repositories/sites/fetch/getrequest')
   , body=require(base+'/repositories/sites/fetch/bodyanalyzer')
   , complete=require(base+'/repositories/sites/fetch/completedocument')
-  , spread=require(base+'/repositories/sites/fetch/spreadrefs')
+  , spread=require(base+'/repositories/sites/fetch/spreadrels')
 
 /*
  * Task for fetch os pages in a site repository
@@ -47,9 +48,8 @@ var base='../../functions'
  *              body
  *              sha1
  *              md5
- *          ref
- *              links
- *              related
+ *          rels
+ *          refs
  *          complete
  *              ok
  *              id
@@ -101,8 +101,10 @@ module.exports=function(params,repeat,stop,notifier){
                                 }
                             })(url,m)
                           , rel:(function(x){
-                                if(x.ref&&x.ref.related){
-                                    return x.ref.related;
+                                if(x.rels){
+                                    return x.rels.map(function(item){
+                                        return (_url.parse(item.url)).pathname;
+                                    });
                                 }else{
                                     return [];
                                 }

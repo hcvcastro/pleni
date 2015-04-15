@@ -2,10 +2,11 @@
 
 var request=require('request')
   , Q=require('q')
+  , _url=require('url')
   , validator=require('../../../../validators')
 
 /*
- * Function for propagate refs in site repository
+ * Function for propagate rels in site repository
  * args input
  *      db
  *          host
@@ -15,8 +16,7 @@ var request=require('request')
  *      task
  *          wait
  *              url
- *          ref
- *              related
+ *          rels
  *
  * args output
  *      task
@@ -37,14 +37,15 @@ module.exports=function(args){
           , ts_modified:Date.now()
         }
 
-    if(args.task && args.task.ref && args.task.ref.related){
-        Q.all(args.task.ref.related.map(function(element){
+    if(args.task&&args.task.rels){
+        Q.all(args.task.rels.map(function(element){
             var deferred2=Q.defer()
-              , doc='/page_'+encodeURIComponent(element)
+              , parse=_url.parse(element.url)
+              , doc='/page_'+encodeURIComponent(parse.pathname)
 
             request.put({url:url+doc,json:body},function(error,response){
                 if(!error){
-                    deferred2.resolve(element);
+                    deferred2.resolve(element.url);
                }else{
                    deferred2.reject(error);
                }
