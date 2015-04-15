@@ -152,15 +152,12 @@ module.exports=function(grunt){
               , 'tests/core/functions/**/*.js'
               , 'tests/core/tasks/**/*.js'
             ]
-//         , dumb:['tests/planners/dumb/server.js']
-//         , planners:[
-//               'tests/planners/planner/server.js'
-//             , 'tests/planners/planner/scheduler.js'
-//           ]
-//         , notifier:['tests/notifiers/**/*.js']
-//         , master:['tests/master/**/*.js']
-//         , sites:['tests/sites/*.js']
-//         , monitor:['tests/monitor/server.js']
+          , dumb:['tests/planners/dumb/server.js']
+          , planners:['tests/planners/planner/*.js']
+          , notifier:['tests/notifiers/**/*.js']
+          , master:['tests/master/**/*.js']
+          , sites:['tests/sites/*.js']
+          , monitor:['tests/monitor/server.js']
         }
 
       , clean:{
@@ -297,23 +294,19 @@ module.exports=function(grunt){
     });
 
     grunt.registerTask('test:core',['mochacli:core']);
-
-    /*grunt.registerTask('test:master',['mochacli:master']);
-    grunt.registerTask('test:planner',[
-        'mochacli:dumb'
-      , 'mochacli:planners'
-      , 'mochacli:functions'
-    ]);
+    grunt.registerTask('test:master',['mochacli:master']);
+    grunt.registerTask('test:planner',['mochacli:dumb','mochacli:planners']);
     grunt.registerTask('test:notifier',['mochacli:notifier']);
     grunt.registerTask('test:monitor',['mochacli:monitor']);
     grunt.registerTask('test:sites',['mochacli:sites']);
     grunt.registerTask('test',[
-        'test:planner'
+        'test:core'
+      , 'test:master'
+      , 'test:planner'
       , 'test:notifier'
       , 'test:monitor'
       , 'test:sites'
-      , 'test:master'
-    ]);*/
+    ]);
 
     grunt.config.requires('watch.master.files');
     filescontrol=grunt.config('watch.master.files');

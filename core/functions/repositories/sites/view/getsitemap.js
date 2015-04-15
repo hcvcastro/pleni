@@ -2,6 +2,7 @@
 
 var request=require('request')
   , Q=require('q')
+  , _url=require('url')
 
 /*
  * Function for getting the map site schema in a site repository
@@ -55,13 +56,16 @@ module.exports=function(args){
                           , type:'unknown'
                         };
                     }else{
-                        count++;
                         node.value.rel.forEach(function(link){
-                            links.push({
-                                source:dict[node.key]
-                              , target:dict[link]
-                            })
+                            var parse=_url.parse(link)
+                            if(dict[parse.pathname]){
+                                links.push({
+                                    source:dict[node.key]
+                                  , target:dict[parse.pathname]
+                                })
+                            }
                         });
+                        count++;
                         return {
                             page:node.key
                           , status:node.value.status

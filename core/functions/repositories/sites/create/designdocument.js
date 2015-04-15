@@ -45,17 +45,16 @@ module.exports=function(args){
                             +'values.length}}}'
                 }
               , 'sitemap':{
-                    'map':'function(doc){if(doc.type&&doc.type==\'page\'){'
-                         +'if(doc.status==\'complete\'){'
-                         +'var m=doc.head.headers[\'content-type\']'
-                         +'.match(/[a-z]+\\/[a-z-]+/i)[0];'
+                    'map':'function(doc){if(doc.type&&doc.type==\'page\'){if('
+                         +'doc.status==\'complete\'){var m=doc.head.headers'
+                         +'[\'content-type\'].match(/[a-z]+\\/[a-z-]+/i)[0];'
                          +'emit(doc._id.substring(5),{status:doc.head.status'
-                         +',mime:m,get:doc.head.get,type:(function(x,y){'
-                         +'if(x==\'page_/\'){return \'root\';}else{'
-                         +'if(y.indexOf(\'text/html\')==0){return \'page\';'
-                         +'}else{return \'extra\';}}})(doc._id,m)'
-                         +',rel:(function(x){if(x.rels){return x.rels.map('
-                         +'function(i){return i.url;});}else{return [];}})'
+                         +',mime:m,get:doc.head.get,type:(function(x,y){if('
+                         +'x==\'page_/\'){return \'root\';}else{if(y.indexOf('
+                         +'\'text/html\')==0){return \'page\';}else{return '
+                         +'\'extra\';}}})(doc._id,m),rel:(function(x){if(x.rels'
+                         +'){return x.rels.map(function(i){return '
+                         +'i.url.substring(x.url.length);});}else{return [];}})'
                          +'(doc)});}else{emit(doc._id.substring(5),{});}}}'
                 }
             }

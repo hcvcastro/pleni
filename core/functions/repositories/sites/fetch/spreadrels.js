@@ -43,16 +43,20 @@ module.exports=function(args){
               , parse=_url.parse(element.url)
               , doc='/page_'+encodeURIComponent(parse.pathname)
 
-            request.put({url:url+doc,json:body},function(error,response){
-                if(!error){
-                    deferred2.resolve(element.url);
-               }else{
-                   deferred2.reject(error);
-               }
-           });
-           return deferred2.promise;
-       }))
-       .spread(function(){
+            if(validator.validHost(element.url)){
+                request.put({url:url+doc,json:body},function(error,response){
+                    if(!error){
+                        deferred2.resolve(element.url);
+                   }else{
+                       deferred2.reject({});
+                   }
+               });
+            }else{
+                deferred2.reject({});
+            }
+            return deferred2.promise;
+        }))
+        .spread(function(){
             var spread=new Array();
             for(var i in arguments){
                 spread.push(arguments[i]);
@@ -64,7 +68,7 @@ module.exports=function(args){
 
             args.task.spread=spread;
             deferred.resolve(args);
-       });
+        });
     }else{
         deferred.resolve(args);
     }
