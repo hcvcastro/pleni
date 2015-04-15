@@ -6,7 +6,8 @@ var should=require('should')
   , _url=require('url')
   , base='../../../../../core/functions/'
   , analyzer=require(base+'analyzers/html/linkanalyzer')
-  , res01=function(args,done){
+  , res=[
+    function(args,done){
         args.should.have.property('refs').and.be.empty;
         args.should.have.property('rels').and.not.be.empty;
         args.rels.should.have.length(13);
@@ -19,7 +20,7 @@ var should=require('should')
         }).should.be.true;
         done();
     }
-  , res02=function(args,done){
+  , function(args,done){
         args.should.have.property('refs').and.be.empty;
         args.should.have.property('rels').and.not.be.empty;
         args.rels.should.have.length(12);
@@ -32,7 +33,7 @@ var should=require('should')
         }).should.be.true;
         done();
     }
-  , res03=function(args,done){
+  , function(args,done){
         args.should.have.property('refs').and.not.be.empty;
         args.refs.should.have.length(1);
         args.refs.map(function(item){
@@ -53,19 +54,118 @@ var should=require('should')
         }).should.be.true;
         done();
     }
+  , function(args,done){
+        args.should.have.property('refs').and.be.empty;
+        args.should.have.property('rels').and.not.be.empty;
+        args.rels.should.have.length(5);
+        args.rels.map(function(item){
+            return item.tag;
+        }).should.be.eql(
+            ['img','img','img','img','img']);
+        args.rels.every(function(item){
+            return _url.resolve(item.url,'.')==='http://localhost/data/';
+        }).should.be.true;
+        done();
+    }
+  , function(args,done){
+        args.should.have.property('refs').and.be.empty;
+        args.should.have.property('rels').and.not.be.empty;
+        args.rels.should.have.length(5);
+        args.rels.map(function(item){
+            return item.tag;
+        }).should.be.eql(
+            ['object','object','object','object','object']);
+        args.rels.every(function(item){
+            return _url.resolve(item.url,'.')==='http://localhost/sata/';
+        }).should.be.true;
+        done();
+    }
+  , function(args,done){
+        args.should.have.property('refs').and.not.be.empty;
+        args.refs.should.have.length(2);
+        args.refs.map(function(item){
+            return item.tag;
+        }).should.be.eql(['frame','iframe']);
+        args.refs.every(function(item){
+            return _url.resolve(item.url,'.')==='http://galao.local/';
+        }).should.be.true;
+        args.should.have.property('rels').and.not.be.empty;
+        args.rels.should.have.length(8);
+        args.rels.map(function(item){
+            return item.tag;
+        }).should.be.eql(
+            ['frame','frame','frame','frame','iframe','iframe','iframe'
+                ,'iframe']);
+        args.rels.every(function(item){
+            return _url.resolve(item.url,'.')==='http://localhost/';
+        }).should.be.true;
+        done();
+    }
+  , function(args,done){
+        args.should.have.property('refs').and.be.empty;
+        args.should.have.property('rels').and.not.be.empty;
+        args.rels.should.have.length(3);
+        args.rels.map(function(item){
+            return item.tag;
+        }).should.be.eql(
+            ['a','a','a']);
+        args.rels.every(function(item){
+            return _url.resolve(item.url,'.')==='http://localhost/';
+        }).should.be.true;
+        done();
+    }
+  , function(args,done){
+        args.should.have.property('refs').and.not.be.empty;
+        args.refs.should.have.length(3);
+        args.refs.map(function(item){
+            return item.tag;
+        }).should.be.eql(
+            ['a','a','a']);
+        args.refs.every(function(item){
+            return _url.resolve(item.url,'.')==='http://galao.local/sub/';
+        }).should.be.true;
+        args.should.have.property('rels').and.be.empty;
+        done();
+    }
+  , function(args,done){
+        args.should.have.property('refs').and.be.empty;
+        args.should.have.property('rels').and.not.be.empty;
+        args.rels.should.have.length(3);
+        args.rels.map(function(item){
+            return item.tag;
+        }).should.be.eql(
+            ['a','a','a']);
+        args.rels.every(function(item){
+            return _url.resolve(item.url,'.')==='http://localhost/data/';
+        }).should.be.true;
+        done();
+    }
+  , function(args,done){
+        args.should.have.property('refs').and.not.be.empty;
+        args.refs.should.have.length(3);
+        args.refs.map(function(item){
+            return item.tag;
+        }).should.be.eql(
+            ['a','a','a']);
+        args.refs.every(function(item){
+            return _url.resolve(item.url,'.')==='http://galao.local/';
+        }).should.be.true;
+        args.should.have.property('rels').and.be.empty;
+        done();
+    }];
 
 describe('test link analyzer',function(){
     [
-        ['test01.html',res01]
-      , ['test02.html',res02]
-      , ['test03.html',res03]
-      , ['test04.html']
-      , ['test05.html']
-      , ['test06.html']
-      , ['test07.html']
-      , ['test08.html']
-      , ['test09.html']
-      , ['test10.html']
+        ['test01.html',res[0]]
+      , ['test02.html',res[1]]
+      , ['test03.html',res[2]]
+      , ['test04.html',res[3]]
+      , ['test05.html',res[4]]
+      , ['test06.html',res[5]]
+      , ['test07.html',res[6]]
+      , ['test08.html',res[7]]
+      , ['test09.html',res[8]]
+      , ['test10.html',res[9]]
     ].forEach(function(item){
         var body='';
 
