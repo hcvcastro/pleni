@@ -239,7 +239,11 @@ var connect_planner=function(id,sessionID,planner,type){
             response.status(200)
                 .sendFile(join(__dirname,'..','dist','sites',template+'.html'));
         }else{
-            response.status(200).render('dev');
+            if(template=='index'){
+                response.status(200).render('dev');
+            }else{
+                response.status(200).render('pages/'+template);
+            }
         }
     }
 

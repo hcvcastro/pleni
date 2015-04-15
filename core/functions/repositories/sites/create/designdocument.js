@@ -53,9 +53,9 @@ module.exports=function(args){
                          +'x==\'page_/\'){return \'root\';}else{if(y.indexOf('
                          +'\'text/html\')==0){return \'page\';}else{return '
                          +'\'extra\';}}})(doc._id,m),rel:(function(x){if(x.rels'
-                         +'){return x.rels.map(function(i){return '
-                         +'i.url.substring(x.url.length);});}else{return [];}})'
-                         +'(doc)});}else{emit(doc._id.substring(5),{});}}}'
+                         +'){return x.rels.map(function(i){return i.url;});}'
+                         +'else{return [];}})(doc)});}else{emit('
+                         +'doc._id.substring(5),{});}}}'
                 }
             }
         };
