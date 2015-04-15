@@ -52,6 +52,8 @@ module.exports=function(args){
           , ['link','href']
           , ['object','data']
           , ['script','src']
+          , ['source','src']
+          , ['track','src']
           , ['video','src']
         ].forEach(function(element){
             extract(element[0],element[1]).forEach(function(resource){

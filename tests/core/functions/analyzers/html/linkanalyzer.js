@@ -32,12 +32,33 @@ var should=require('should')
         }).should.be.true;
         done();
     }
+  , res03=function(args,done){
+        args.should.have.property('refs').and.not.be.empty;
+        args.refs.should.have.length(1);
+        args.refs.map(function(item){
+            return item.tag;
+        }).should.be.eql(['link']);
+        args.refs.every(function(item){
+            return _url.resolve(item.url,'.')==='http://galao.local/';
+        }).should.be.true;
+        args.should.have.property('rels').and.not.be.empty;
+        args.rels.should.have.length(12);
+        args.rels.map(function(item){
+            return item.tag;
+        }).should.be.eql(
+            ['audio','audio','embed','embed','link','script','script','source'
+                ,'source','source','video','video']);
+        args.rels.every(function(item){
+            return _url.resolve(item.url,'.')==='http://localhost/';
+        }).should.be.true;
+        done();
+    }
 
 describe('test link analyzer',function(){
     [
         ['test01.html',res01]
       , ['test02.html',res02]
-      , ['test03.html']
+      , ['test03.html',res03]
       , ['test04.html']
       , ['test05.html']
       , ['test06.html']
