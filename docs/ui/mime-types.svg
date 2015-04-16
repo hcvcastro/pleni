@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.2140625"
-     inkscape:cx="36.583322"
-     inkscape:cy="647.84395"
+     inkscape:zoom="1.8259844"
+     inkscape:cx="486.36238"
+     inkscape:cy="834.36564"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -62,7 +62,7 @@
      id="layer1"
      transform="translate(0,-62.3622)">
     <circle
-       style="opacity:1;fill:#658068;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#f1672c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4138"
        cx="48"
        cy="108.5197"
@@ -83,7 +83,7 @@
        cy="172.35497"
        cx="48"
        id="circle4144"
-       style="opacity:1;fill:#0c73b8;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#30a9dc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <text
        sodipodi:linespacing="125%"
        id="text4146"
@@ -96,7 +96,7 @@
          id="tspan4148"
          sodipodi:role="line">text/css</tspan></text>
     <circle
-       style="opacity:1;fill:#e5a228;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="opacity:1;fill:#f1bf26;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="circle4150"
        cx="48"
        cy="236.51218"
@@ -139,7 +139,7 @@
        cy="363.48199"
        cx="48"
        id="circle4183"
-       style="opacity:1;fill:#ee1c29;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+       style="opacity:1;fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <text
        sodipodi:linespacing="125%"
        id="text4185"
@@ -235,5 +235,90 @@
          x="95.708786"
          id="tspan4217"
          sodipodi:role="line">application/rsd</tspan></text>
+    <circle
+       style="opacity:1;fill:#c83737;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="circle3365"
+       cx="48"
+       cy="715.86896"
+       r="16" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:condensed;font-size:26.25px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com, Light Condensed';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="95.708786"
+       y="723.08771"
+       id="text3367"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3369"
+         x="95.708786"
+         y="723.08771">application/x-shockwave-flash</tspan></text>
+    <circle
+       r="16"
+       cy="108.5197"
+       cx="463.11856"
+       id="circle4168"
+       style="opacity:1;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <circle
+       style="opacity:1;fill:#ffff00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="circle4170"
+       cx="463.11856"
+       cy="172.35497"
+       r="16" />
+    <circle
+       r="16"
+       cy="236.51218"
+       cx="463.11856"
+       id="circle4172"
+       style="opacity:1;fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <circle
+       style="opacity:1;fill:#000080;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="circle4174"
+       cx="463.11856"
+       cy="301.04993"
+       r="16" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4176"
+       y="117.89095"
+       x="511.61194"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:condensed;font-size:26.25px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com, Light Condensed';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="117.89095"
+         x="511.61194"
+         id="tspan4178"
+         sodipodi:role="line">2xx</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:condensed;font-size:26.25px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com, Light Condensed';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="511.61194"
+       y="181.78668"
+       id="text4180"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4182"
+         x="511.61194"
+         y="181.78668">3xx</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4184"
+       y="246.45691"
+       x="511.61194"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:condensed;font-size:26.25px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com, Light Condensed';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="246.45691"
+         x="511.61194"
+         id="tspan4186"
+         sodipodi:role="line">4xx</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:condensed;font-size:26.25px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com, Light Condensed';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="511.61194"
+       y="311.90164"
+       id="text4188"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4190"
+         x="511.61194"
+         y="311.90164">5xx</tspan></text>
   </g>
 </svg>

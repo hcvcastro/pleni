@@ -1,9 +1,7 @@
 [
     {
         "id":"test"
-      , "_repositories":[
-            "test"
-        ]
+      , "_repositories":[]
     }
 ]
 

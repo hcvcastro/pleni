@@ -1,13 +1,15 @@
 #canvas {
     .mime() {
-        &.m-text-html { fill: @color2; }
-        &.m-text-css { fill: #0c73b8; }
+        &.m-text-html { fill: #f1672c; }
+        &.m-text-css { fill: #30a9dc; }
 
-        &.m-text-javascript { fill: #e5a228; }
-        &.m-application-javascript { fill: #e5a228; }
-        &.m-application-x-javascript { fill: #e5a228; }
+        &.m-text-javascript { fill: #f1bf26; }
+        &.m-application-javascript { fill: #f1bf26; }
+        &.m-application-x-javascript { fill: #f1bf26; }
 
-        &.m-application-pdf { fill: #ee1c29; }
+        &.m-application-pdf { fill: #ff0000; }
+
+        &.m-application-x-shockwave-flash { fill: #c83737; }
 
         &.m-image-jpeg { fill: #32cd32; }
         &.m-image-png { fill: #32cd32; }
@@ -41,12 +43,12 @@
         }
 
         .node {
-            stroke-width: 2px;
+            stroke-width: 3px;
 
-            &.s-2 { stroke: @success_frg; }
-            &.s-3 { stroke: @warning_frg; }
-            &.s-4 { stroke: @error_frg; }
-            &.s-5 { stroke: @error_frg; }
+            &.s-2 { stroke: #008000; }
+            &.s-3 { stroke: #ffff00; }
+            &.s-4 { stroke: #ff0000; }
+            &.s-5 { stroke: #000080; }
 
             .mime();
         }

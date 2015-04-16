@@ -35,7 +35,11 @@ module.exports=function(args){
     if(args.debug){
         console.log('make a HEAD request ... '+url);
     }
-    request.head({url:url,headers:headers},function(error,response){
+    request.head({
+        url:url
+      , headers:headers
+      , followRedirect:false
+    },function(error,response){
         if(!error){
             var r_headers=response.headers
               , valid_headers=[
