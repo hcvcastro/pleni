@@ -10,7 +10,7 @@ var should=require('should')
   , designdocument=require(base+'/repositories/sites/report/designdocument')
   , assemble=require(base+'/repositories/sites/report/assemble')
   , config=require('../../../../../../config/tests')
-  , db_name='report_assemble'
+  , db_name='report_report'
   , repeat=function(){}
   , stop=function(){}
 

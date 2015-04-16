@@ -6,6 +6,7 @@ var should=require('should')
   , remove=require(base+'/../tasks/site/remove')
   , fetch=require(base+'/../tasks/site/fetch')
   , auth=require(base+'/databases/auth')
+  , check=require(base+'/repositories/sites/report/check')
   , designdocument=require(base+'/repositories/sites/report/designdocument')
   , config=require('../../../../../../config/tests')
   , db_name='report_designdocument'
@@ -20,6 +21,7 @@ describe('site fetcher pages functions',function(){
           , user:config.db.user
           , pass:config.db.pass
         }
+      , debug:true
     };
 
     before(function(done){
@@ -53,6 +55,18 @@ describe('site fetcher pages functions',function(){
             .done(function(args){
                 args.site.should.have.property('design');
                 args.site.design.should.have.property('_rev');
+                done();
+            });
+        });
+    });
+
+    describe('testing check action in reports functions for a site',function(){
+        it('check function',function(done){
+            check(packet)
+            .done(function(args){
+                args.site.should.have.property('report');
+                args.site.report.should.have.property('check')
+                    .and.be.eql(true);
                 done();
             });
         });

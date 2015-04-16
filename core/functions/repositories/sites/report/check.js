@@ -4,7 +4,7 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for checking of a desing document _design/reports
+ * Function for checking of a design document _design/report
  * args input
  *      db
  *          host

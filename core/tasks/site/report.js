@@ -1,9 +1,12 @@
 'use strict';
 
 var base='../../functions'
+  , base1=base+'/repositories/sites/report'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
-  , design=require(base+'/repositories/sites/report/designdocument')
+  , check=require(base1+'/check')
+  , design=require(base1+'/designdocument')
+  , headerserver=require(base1+'/header/server')
 
 /*
  * Task for generation for base report of a site repository
@@ -26,8 +29,9 @@ var base='../../functions'
 module.exports=function(params,repeat,stop,notifier){
     test(params)
     .then(auth)
+    .then(check)
     .then(design)
-    .then(report)
+    .then(headerserver)
     .then(function(args){
         notifier({
             action:'task'

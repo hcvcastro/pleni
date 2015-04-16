@@ -11,6 +11,9 @@ var request=require('request')
  *          name
  *      auth
  *          cookie
+ *      site
+ *          report
+ *              check
  *
  * args output
  *      site
@@ -20,6 +23,7 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/_design/report'
+      , flag=true
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -27,22 +31,22 @@ module.exports=function(args){
       , body={
             'language':'javascript'
           , 'views':{
-                'headerserver':{
+                'header-server':{
                     'map':'function(doc){if(doc.head&&doc.head.headers){emit('
                          +'doc.head.headers[\'server\']);}}'
                   , 'reduce':'_count'
                 }
-              , 'headerpoweredby':{
+              , 'header-poweredby':{
                     'map':'function(doc){if(doc.head&&doc.head.headers){emit('
                          +'doc.head.headers[\'x-powered-by\']);}}'
                   , 'reduce':'_count'
                 }
-              , 'headercontenttype':{
+              , 'header-contenttype':{
                     'map':'function(doc){if(doc.head&&doc.head.headers){emit('
                          +'doc.head.headers[\'content-type\']);}}'
                   , 'reduce':'_count'
                 }
-              , 'headerstatus':{
+              , 'header-status':{
                     'map':'function(doc){if(doc.head&&doc.head.headers){emit('
                          +'doc.head.status);}}'
                   , 'reduce':'_count'
@@ -51,59 +55,49 @@ module.exports=function(args){
                     'map':'function(doc){if(doc.get&&doc.get.sha1){emit('
                          +'doc._id.substring(5),[doc.get.sha1,doc.get.md5]);}}'
                 }
-              , 'script':{
-                    'map':'function(doc){if(doc.ref&&doc.ref.links&&'
-                         +'doc.ref.links.script){'
-                         +'for(var i in doc.ref.links.script){emit('
-                         +'doc.ref.links.script[i]);}}}'
+              , 'rels':{
+                    'map':'function(doc){if(doc.rels){for(var i in doc.rels){'
+                         +'emit([doc.rels[i].tag,doc.rels[i].url]);}}}'
                   , 'reduce':'_count'
                 }
-              , 'link':{
-                    'map':'function(doc){if(doc.ref&&doc.ref.links&&'
-                         +'doc.ref.links.link){'
-                         +'for(var i in doc.ref.links.link){emit('
-                         +'doc.ref.links.link[i]);}}}'
-                  , 'reduce':'_count'
-                }
-              , 'a':{
-                    'map':'function(doc){if(doc.ref&&doc.ref.links&&'
-                         +'doc.ref.links.a){for(var i in doc.ref.links.a){emit('
-                         +'doc.ref.links.a[i]);}}}'
-                  , 'reduce':'_count'
-                }
-              , 'img':{
-                    'map':'function(doc){if(doc.ref&&doc.ref.links&&'
-                         +'doc.ref.links.img){for(var i in doc.ref.links.img){'
-                         +'emit(doc.ref.links.img[i]);}}}'
-                  , 'reduce':'_count'
-                }
-              , 'form':{
-                    'map':'function(doc){if(doc.ref&&doc.ref.links&&'
-                         +'doc.ref.links.form){'
-                         +'for(var i in doc.ref.links.form){emit('
-                         +'doc.ref.links.form[i]);}}}'
+              , 'refs':{
+                    'map':'function(doc){if(doc.refs){for(var i in doc.refs){'
+                         +'emit([doc.refs[i].tag,doc.refs[i].url]);}}}'
                   , 'reduce':'_count'
                 }
             }
         };
 
-    if(args.debug){
-        console.log('create a design document for basic report');
+
+    if(args.site&&args.site.report&&args.site.report.check){
+        flag=args.site.report.check
     }
-    request.put({url:url,headers:headers,json:body},function(error,response){
-        if(!error){
-            if(!args.site){
-                args.site={};
-            }
-            if(!args.site.design){
-                args.site.design={};
-            }
-            args.site.design._rev=response.body.rev;
-            deferred.resolve(args);
-        }else{
-            deferred.reject(error);
+
+    if(flag){
+        if(args.debug){
+            console.log('create a design document for basic report');
         }
-    });
+        request.put({
+            url:url
+          , headers:headers
+          , json:body
+        },function(error,response){
+            if(!error){
+                if(!args.site){
+                    args.site={};
+                }
+                if(!args.site.design){
+                    args.site.design={};
+                }
+                args.site.design._rev=response.body.rev;
+                deferred.resolve(args);
+            }else{
+                deferred.reject(error);
+            }
+        });
+    }else{
+        deferred.resolve(args);
+    }
 
     return deferred.promise;
 };
