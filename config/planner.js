@@ -11,6 +11,7 @@ module.exports={
       , 'site/create'
       , 'site/fetch'
       , 'site/remove'
+      , 'site/report'
       , 'site/summarize'
     ]
 };

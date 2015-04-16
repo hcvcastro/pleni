@@ -3,8 +3,7 @@
 var base='../../functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
-  , design=require(base+'/reports/design/basic')
-  , report=require(base+'/reports/document/basic')
+  , design=require(base+'/repositories/sites/report/designdocument')
 
 /*
  * Task for generation for base report of a site repository
