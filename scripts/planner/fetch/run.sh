@@ -8,7 +8,7 @@ where:
     -p planner  the planner location (host:port)
     -t tid      identifier for task in planner
     -s dbhost   host for couchdb server
-    -n dbname   database name for creation"
+    -n dbname   database name for fetching"
 
 HOST='http://localhost:3001'
 

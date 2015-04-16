@@ -49,14 +49,27 @@ module.exports=function(args){
               , parse=_url.parse(item.url)
               , doc='/page_'+encodeURIComponent(parse.pathname)
 
-            deferred2.resolve(1);
-console.log(item.url);
+            request.put({url:url+doc,json:body},function(error,response){
+                if(!error){
+                    deferred2.resolve(item.url);
+                }else{
+                    deferred2.reject({});
+                }
+            });
+
             return deferred2.promise;
         }))
-        .spread(function(args){
-console.log('spread');
-console.log(args);
-            args.task.spread=[];
+        .spread(function(){
+            var spread=new Array();
+            for(var i in arguments){
+                spread.push(arguments[i]);
+            }
+ 
+            if(args.debug){
+                console.log('spread the founded links: '+spread.join(' '));
+            }
+ 
+            args.task.spread=spread;
             deferred.resolve(args);
         });
     }else{
@@ -66,22 +79,3 @@ console.log(args);
     return deferred.promise;
 };
 
-//
-//           request.put({url:url+doc,json:body},function(error,response){
-//               if(!error){
-//                   deferred2.resolve(element.url);
-//               }else{
-//                   deferred2.reject({});
-//               }
-//           });
-
-//           var spread=new Array();
-//           for(var i in arguments){
-//               spread.push(arguments[i]);
-//           }
-//
-//           if(args.debug){
-//               console.log('spread the founded links: '+spread.join(' '));
-//           }
-//
-//           args.task.spread=spread;

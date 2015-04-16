@@ -59,7 +59,6 @@ describe('site fetcher pages functions',function(){
             spread(packet)
             .done(function(args){
                 args.task.should.have.property('spread').and.be.Array;
-                packet=args;
                 done();
             });
         });

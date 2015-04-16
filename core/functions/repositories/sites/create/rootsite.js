@@ -2,6 +2,7 @@
 
 var request=require('request')
   , Q=require('q')
+  , _url=require('url')
   , validator=require('../../../../validators')
 
 /*
@@ -22,7 +23,9 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/'+encodeURIComponent('page_/')
+      , parse=_url.parse(args.site.url)
+      , url=args.db.host+'/'+args.db.name+'/page_'
+            +encodeURIComponent(parse.pathname)
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -30,7 +33,7 @@ module.exports=function(args){
       , body={
             status:'wait'
           , type:'page'
-          , url:validator.toValidHost(args.site.url)
+          , url:validator.toValidUrl(args.site.url)
           , ts_created:Date.now()
           , ts_modified:Date.now()
         }

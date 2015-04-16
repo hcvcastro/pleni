@@ -21,6 +21,7 @@ exports.validHost=function(host){
     return notEmpty(host)
         && (validator.isIP(host)||validator.isURL(host));
 };
+
 exports.toValidHost=function(host){
     var parse=url.parse(host)
     if(parse.protocol==null){
@@ -28,6 +29,15 @@ exports.toValidHost=function(host){
     }
 
     return url.resolve(host,'/').slice(0,-1);
+}
+
+exports.toValidUrl=function(host){
+    var parse=url.parse(host)
+    delete parse.search;
+    delete parse.query;
+    delete parse.hash;
+
+    return url.format(parse);
 }
 
 exports.validPort=function(port){

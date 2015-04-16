@@ -264,7 +264,7 @@ app.get('/pages/:page',function(request,response){
 
 app.put('/sites',function(request,response){
     if(validate.validHost(request.body.site)){
-        var site=validate.toValidHost(request.body.site)
+        var site=validate.toValidUrl(request.body.site)
           , agent=validate.toString(request.body.agent)
           , url=config.sites.host+':'+config.sites.port+'/i/'+request.sessionID
 

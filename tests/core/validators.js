@@ -28,10 +28,29 @@ describe('validators functions',function(){
             .should.be.equal('http://localhost');
         validate.toValidHost('http://localhost/')
             .should.be.equal('http://localhost');
+        validate.toValidHost('http://localhost////')
+            .should.be.equal('http://localhost');
         validate.toValidHost('http://localhost')
             .should.be.equal('http://localhost');
         validate.toValidHost('localhost')
             .should.be.equal('http://localhost');
+
+        validate.toValidHost('http://localhost/a.html')
+            .should.be.equal('http://localhost');
+        validate.toValidHost('http://localhost/a/b/c.html')
+            .should.be.equal('http://localhost');
+        done();
+    });
+
+    it('url filtering',function(done){
+        validate.toValidUrl('http://localhost/a/b/c/d.php')
+            .should.be.equal('http://localhost/a/b/c/d.php');
+        validate.toValidUrl('http://localhost/a/b/c/d.php#e')
+            .should.be.equal('http://localhost/a/b/c/d.php');
+        validate.toValidUrl('http://localhost/a/b/c/d.php?e=f')
+            .should.be.equal('http://localhost/a/b/c/d.php');
+        validate.toValidUrl('http://localhost/a/b/c/d.php?e=f&g=h')
+            .should.be.equal('http://localhost/a/b/c/d.php');
         done();
     });
 
