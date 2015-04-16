@@ -10,8 +10,8 @@ var _url=require('url')
   , head=require(base+'/repositories/sites/fetch/headrequest')
   , get=require(base+'/repositories/sites/fetch/getrequest')
   , body=require(base+'/repositories/sites/fetch/bodyanalyzer')
-  , complete=require(base+'/repositories/sites/fetch/completedocument')
   , spread=require(base+'/repositories/sites/fetch/spreadrels')
+  , complete=require(base+'/repositories/sites/fetch/completedocument')
 
 /*
  * Task for fetch os pages in a site repository
@@ -65,8 +65,8 @@ module.exports=function(params,repeat,stop,notifier){
     .then(head)
     .then(get)
     .then(body)
-    .then(complete)
     .then(spread)
+    .then(complete)
     .then(function(args){
         if(args.task.complete){
             var url=args.task.complete.id.substr(5)

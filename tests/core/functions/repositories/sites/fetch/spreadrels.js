@@ -10,10 +10,9 @@ var should=require('should')
   , head=require(base+'/repositories/sites/fetch/headrequest')
   , get=require(base+'/repositories/sites/fetch/getrequest')
   , body=require(base+'/repositories/sites/fetch/bodyanalyzer')
-  , complete=require(base+'/repositories/sites/fetch/completedocument')
   , spread=require(base+'/repositories/sites/fetch/spreadrels')
   , config=require('../../../../../../config/tests')
-  , db_name='fetch_lock'
+  , db_name='fetch_spreadrels'
   , repeat=function(){}
   , stop=function(){}
 
@@ -25,6 +24,7 @@ describe('site fetcher pages functions',function(){
           , user:config.db.user
           , pass:config.db.pass
         }
+      , debug:true
     };
 
     before(function(done){
@@ -39,14 +39,15 @@ describe('site fetcher pages functions',function(){
                 url:config.url
             }
         },repeat,stop,function(){
+            console.log('created repository');
             auth(packet)
             .then(wait)
             .then(lock)
             .then(head)
             .then(get)
             .then(body)
-            .then(complete)
             .then(function(args){
+                console.log('ready for spreading...');
                 packet=args;
                 done();
             });
