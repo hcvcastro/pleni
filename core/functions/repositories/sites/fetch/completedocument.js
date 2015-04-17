@@ -63,7 +63,11 @@ module.exports=function(args){
     body.head=args.task.head;
     if(args.task.head.get){
         body.get=args.task.get;
+    }
+    if(args.task.refs){
         body.refs=args.task.refs;
+    }
+    if(args.task.rels){
         body.rels=args.task.rels;
     }
 

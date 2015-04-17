@@ -11,6 +11,16 @@ var should=require('should')
   , stop=function(){}
 
 describe('testing task site/fetch',function(){
+    var packet={
+        db:{
+            host:config.db.host+':'+config.db.port
+          , name:config.db.prefix+db_name
+          , user:config.db.user
+          , pass:config.db.pass
+        }
+      , debug:true
+    }
+
     before(function(done){
         create({
             db:{
@@ -28,14 +38,7 @@ describe('testing task site/fetch',function(){
     });
 
     it('loop 0',function(done){
-        fetch({
-            db:{
-                host:config.db.host+':'+config.db.port
-              , name:config.db.prefix+db_name
-              , user:config.db.user
-              , pass:config.db.pass
-            }
-        },repeat,stop,function(params){
+        fetch(packet,repeat,stop,function(params){
             params.should.have.an.Object;
             params.should.have.property('action')
                 .and.be.eql('task');
@@ -48,14 +51,7 @@ describe('testing task site/fetch',function(){
     });
 
     it('loop 1',function(done){
-        fetch({
-            db:{
-                host:config.db.host+':'+config.db.port
-              , name:config.db.prefix+db_name
-              , user:config.db.user
-              , pass:config.db.pass
-            }
-        },repeat,stop,function(params){
+        fetch(packet,repeat,stop,function(params){
             params.should.have.an.Object;
             params.should.have.property('action')
                 .and.be.eql('task');
@@ -68,14 +64,7 @@ describe('testing task site/fetch',function(){
     });
 
     it('loop 2',function(done){
-        fetch({
-            db:{
-                host:config.db.host+':'+config.db.port
-              , name:config.db.prefix+db_name
-              , user:config.db.user
-              , pass:config.db.pass
-            }
-        },repeat,stop,function(params){
+        fetch(packet,repeat,stop,function(params){
             params.should.have.an.Object;
             params.should.have.property('action')
                 .and.be.eql('task');

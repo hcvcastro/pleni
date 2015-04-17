@@ -1,26 +1,30 @@
 .grid.full.last
     nav.menu
         ul.items
-            li(ng-click='dbservers.show()')
-                a Database Servers
-                .right
-                    span {{storage.dbservers.length}}
-                    a.fa.fa-refresh(ng-click='dbservers.refresh()')
-            li(ng-click='repositories.show()')
-                a Repositories
-                .right
-                    span {{storage.repositories.length}}
-                    a.fa.fa-refresh(ng-click='repositories.refresh()')
-            li(ng-click='planners.show()')
-                a Planners
-                .right
-                    span {{storage.planners.length}}
-                    a.fa.fa-refresh(ng-click='planners.refresh()')
-            li(ng-click='notifiers.show()')
-                a Notifiers
-                .right
-                    span {{storage.notifiers.length}}
-                    a.fa.fa-refresh(ng-click='notifiers.refresh()')
+            li
+                .title(ng-click='dbservers.show()')
+                    a Database Servers
+                    .right
+                        span {{storage.dbservers.length}}
+                        a.fa.fa-refresh(ng-click='dbservers.refresh()')
+            li
+                .title(ng-click='repositories.show()')
+                    a Repositories
+                    .right
+                        span {{storage.repositories.length}}
+                        a.fa.fa-refresh(ng-click='repositories.refresh()')
+            li
+                .title(ng-click='planners.show()')
+                    a Planners
+                    .right
+                        span {{storage.planners.length}}
+                        a.fa.fa-refresh(ng-click='planners.refresh()')
+            li
+                .title(ng-click='notifiers.show()')
+                    a Notifiers
+                    .right
+                        span {{storage.notifiers.length}}
+                        a.fa.fa-refresh(ng-click='notifiers.refresh()')
         include ../blocks/footer/bottom
     .main
         .messages

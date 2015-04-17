@@ -2,6 +2,7 @@
 
 var request=require('request')
   , Q=require('q')
+  , _url=require('url')
 
 /*
  * Function for make a HTTP HEAD request to url
@@ -60,6 +61,21 @@ module.exports=function(args){
 
             if(status==3){
                 head.location=r_headers['location'];
+                var path=_url.resolve(url,head.location)
+                  , _h1=_url.parse(url)
+                  , _h2=_url.parse(path)
+
+                if(_h1.host===_h2.host){
+                    args.task.rels=[{
+                        tag:'header'
+                      , url:path
+                    }]
+                }else{
+                    args.tasks.refs=[{
+                        tag:'header'
+                      , url:path
+                    }]
+                }
             }
 
             args.task.head=head;

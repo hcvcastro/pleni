@@ -9,7 +9,8 @@ module.exports={
       , pass:'asdf'
       , prefix:'test_'
     }
-  , url:'http://galao.local'
+//  , url:'http://galao.local'
+  , url:'http://cruzero.net/'
   , notifiers:[{
         script:'server/notifier.io'
       , host:'http://localhost'
