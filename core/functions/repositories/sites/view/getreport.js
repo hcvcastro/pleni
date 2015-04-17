@@ -4,7 +4,7 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for getting a summary document in a site repository
+ * Function for getting a report document in a site repository
  * args input
  *      db
  *          host
@@ -14,24 +14,18 @@ var request=require('request')
  *
  * args output
  *      site
- *          summary
- *              _id
- *              _rev
- *              ts_created
- *              ts_modified
- *              type
- *              url
+ *          report
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/summary'
+      , url=args.db.host+'/'+args.db.name+'/report'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
     if(args.debug){
-        console.log('get a summary document');
+        console.log('get a report document');
     }
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
@@ -40,7 +34,7 @@ module.exports=function(args){
                 if(!args.site){
                     args.site={};
                 }
-                args.site.summary=parse;
+                args.site.report=parse;
                 deferred.resolve(args);
             }else{
                 deferred.reject(response);

@@ -8,6 +8,7 @@ var validate=require('../../core/validators')
   , viewers='../../core/functions/repositories/sites'
   , getsummary=require(viewers+'/view/getsummary')
   , getsitemap=require(viewers+'/view/getsitemap')
+  , getreport=require(viewers+'/view/getreport')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
@@ -75,6 +76,13 @@ module.exports=function(app){
     function(request,response){
         return generic_document(request,response,getsummary,function(args){
             response.status(200).json(args.site.summary);
+        });
+    });
+
+    app.get('/workspace/:project/:repository/report',
+    function(request,response){
+        return generic_document(request,response,getreport,function(args){
+            response.status(200).json(args.site.report);
         });
     });
 

@@ -18,11 +18,17 @@ pleni.controller('WorkspaceController',
           , enabled:{}
           , apis:{}
           , visual:''
+          , viewer:'none'
         };
 
         $scope.ui={
             planner:[]
           , task:{}
+        }
+
+        $scope.viewers={
+            summary:{}
+          , report:{}
         }
 
         $scope.workspace={
@@ -421,6 +427,7 @@ pleni.controller('WorkspaceController',
                 Visual.clean();
             }
           , open:function(index){
+                $scope.storage.workspace.viewer='none';
                 if($scope.storage.workspace.repositories[index]){
                     $scope.storage.workspace.repositories[index].loading=true;
                     $scope.storage.workspace.visual=
@@ -432,10 +439,12 @@ pleni.controller('WorkspaceController',
                 }
             }
           , summary:function(index){
-                console.log('get summary');
+                $scope.storage.workspace.viewer='summary';
             }
           , report:function(index){
-                console.log('get report');
+                $scope.storage.workspace.viewer='report';
+                $scope.storage.workspace.repositories[index].loading=true;
+                $scope.visual.report(index);
             }
         };
 
@@ -451,8 +460,23 @@ pleni.controller('WorkspaceController',
 
                 Resources.workspace.summary(project,repository,function(data){
                     $scope.storage.workspace.repositories[index].summary=data;
+                    $scope.viewers.summary=
+                        $scope.storage.workspace.repositories[index].summary;
                 },function(error){
                     $scope.storage.workspace.repositories[index]=undefined;
+                });
+            }
+          , report:function(index){
+                var project=$scope.storage.workspace.name
+                  , repository=$scope.storage.workspace.repositories[index].name
+
+                Resources.workspace.report(project,repository,function(data){
+                    $scope.storage.workspace.repositories[index].report=data;
+                    $scope.viewers.report=
+                        $scope.storage.workspace.repositories[index].report;
+                    $scope.storage.workspace.repositories[index].loading=false;
+                },function(error){
+                    $scope.storage.workspace.repositories[index].loading=false;
                 });
             }
           , sitemap:function(index){

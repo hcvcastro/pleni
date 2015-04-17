@@ -5,8 +5,8 @@
                 .title
                     a Project: {{storage.workspace.name}}
         ul.items
-            li(ng-repeat='repository in storage.workspace.repositories',ng-click='repositories.open($index)',ng-class='{\'active\':storage.workspace.visual==storage.workspace.repositories[$index].name}')
-                .title
+            li(ng-repeat='repository in storage.workspace.repositories',ng-class='{\'active\':storage.workspace.visual==storage.workspace.repositories[$index].name}')
+                .title(ng-click='repositories.open($index)')
                     a {{repository.name|truncate:24}}
                     .right
                         a.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading==true')
@@ -37,5 +37,6 @@
             include ../blocks/workspace/settings
             include ../blocks/workspace/repositories
             include ../blocks/workspace/tasks
+            include ../blocks/workspace/viewer
             #canvas
 

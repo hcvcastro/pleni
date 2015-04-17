@@ -1,0 +1,17 @@
+.viewer(ng-show='storage.workspace.viewer!=\'none\'')
+    .summary(ng-show='storage.workspace.viewer==\'summary\'')
+        h1 summary
+        dl
+            dt revision
+                dd {{viewer.summary._rev}}
+            dt url
+                dd {{viewers.summary.url}}
+            dt type
+                dd {{viewers.summary.type}}
+            dt created
+                dd {{viewers.summary.ts_created}}
+            dt modified
+                dd {{viewers.summary.ts_modified}}
+    .report(ng-show='storage.workspace.viewer==\'report\'')
+        h1 report
+
