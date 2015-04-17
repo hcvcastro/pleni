@@ -13,6 +13,7 @@ var base='../../functions'
   , bodyrels=require(base1+'/body/rels')
   , bodyrefs=require(base1+'/body/refs')
   , bodyhashes=require(base1+'/body/hashes')
+  , report=require(base1+'/report')
 
 /*
  * Task for generation for base report of a site repository
@@ -30,7 +31,7 @@ var base='../../functions'
  *          cookie
  *      site
  *          design
- *              reports
+ *              _rev
  *      report
  *          header
  *              server
@@ -53,8 +54,8 @@ module.exports=function(params,repeat,stop,notifier){
     .then(bodyrels)
     .then(bodyrefs)
     .then(bodyhashes)
+    .then(report)
     .then(function(args){
-        console.log(JSON.stringify(args));
         notifier({
             action:'task'
           , task:{

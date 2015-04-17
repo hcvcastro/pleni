@@ -12,6 +12,20 @@ var request=require('request')
  *          name
  *      auth
  *          cookie
+ *      site
+ *          design
+ *              _rev
+ *          report
+ *              _rev
+ *      report
+ *          header
+ *              server
+ *              status
+ *              contenttype
+ *              poweredby
+ *          rels
+ *          refs
+ *          hashes
  *
  * args output
  *      site
@@ -26,7 +40,13 @@ module.exports=function(args){
         }
       , body={
             ts_created:Date.now()
-          , ts_modified:Date.now()
+          , header_server:args.report.header.server
+          , header_status:args.report.header.status
+          , header_contenttype:args.report.header.contenttype
+          , header_poweredby:args.report.header.poweredby
+          , rels:args.report.rels
+          , refs:args.report.refs
+          , hashes:args.report.hashes
         }
 
     if(args.debug){
