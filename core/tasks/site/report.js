@@ -7,6 +7,12 @@ var base='../../functions'
   , check=require(base1+'/check')
   , design=require(base1+'/designdocument')
   , headerserver=require(base1+'/header/server')
+  , headerstatus=require(base1+'/header/status')
+  , headercontenttype=require(base1+'/header/contenttype')
+  , headerpoweredby=require(base1+'/header/poweredby')
+  , bodyrels=require(base1+'/body/rels')
+  , bodyrefs=require(base1+'/body/refs')
+  , bodyhashes=require(base1+'/body/hashes')
 
 /*
  * Task for generation for base report of a site repository
@@ -25,6 +31,15 @@ var base='../../functions'
  *      site
  *          design
  *              reports
+ *      report
+ *          header
+ *              server
+ *              status
+ *              contenttype
+ *              poweredby
+ *          rels
+ *          refs
+ *          hashes
  */
 module.exports=function(params,repeat,stop,notifier){
     test(params)
@@ -32,7 +47,14 @@ module.exports=function(params,repeat,stop,notifier){
     .then(check)
     .then(design)
     .then(headerserver)
+    .then(headerstatus)
+    .then(headercontenttype)
+    .then(headerpoweredby)
+    .then(bodyrels)
+    .then(bodyrefs)
+    .then(bodyhashes)
     .then(function(args){
+        console.log(JSON.stringify(args));
         notifier({
             action:'task'
           , task:{

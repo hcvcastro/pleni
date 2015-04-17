@@ -4,7 +4,7 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for execute map/reduce for server header extraction
+ * Function for execute map/reduce for hashed information in repository
  * args input
  *      db
  *          host
@@ -14,21 +14,20 @@ var request=require('request')
  *
  * args output
  *      report
- *          header
- *              server
+ *          hashes
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , view='/_design/report/_view/header-server'
+      , view='/_design/report/_view/hashes'
       , url=args.db.host+'/'+args.db.name+view
-      , params='?reduce=true&group=true&group_level=1'
+      , params=''
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
     if(args.debug){
-        console.log('get header server information ... ');
+        console.log('get header status information ... ');
     }
     request.get({url:url+params,headers:headers},function(error,response){
         if(!error){
@@ -37,10 +36,7 @@ module.exports=function(args){
                 if(!args.report){
                     args.report={};
                 }
-                if(!args.report.header){
-                    args.report.header={};
-                }
-                args.report.header.server=json.rows;
+                args.report.hashes=json.rows;
                 deferred.resolve(args);
             }else{
                 deferred.reject(response.body);

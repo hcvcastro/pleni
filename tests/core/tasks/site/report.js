@@ -36,7 +36,23 @@ describe('testing task site/report',function(){
             fetch(packet,repeat,stop,function(params){
                 fetch(packet,repeat,stop,function(params){
                     fetch(packet,repeat,stop,function(params){
-                        done();
+                        fetch(packet,repeat,stop,function(params){
+                            fetch(packet,repeat,stop,function(params){
+                                fetch(packet,repeat,stop,function(params){
+                                    fetch(packet,repeat,stop,function(params){
+                                fetch(packet,repeat,stop,function(params){
+                            fetch(packet,repeat,stop,function(params){
+                        fetch(packet,repeat,stop,function(params){
+                    fetch(packet,repeat,stop,function(params){
+                done();
+                    });
+                        });
+                            });
+                                });
+                                    });
+                                });
+                            });
+                        });
                     });
                 });
             });
@@ -52,7 +68,6 @@ describe('testing task site/report',function(){
               , pass:config.db.pass
             }
         },repeat,stop,function(params){
-            console.log(params);
 //           params.should.have.an.Object;
 //           params.should.have.property('action')
 //               .and.be.eql('task');

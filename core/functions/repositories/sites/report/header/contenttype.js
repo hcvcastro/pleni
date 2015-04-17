@@ -4,7 +4,7 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for execute map/reduce for server header extraction
+ * Function for execute map/reduce for content-type header extraction
  * args input
  *      db
  *          host
@@ -15,11 +15,11 @@ var request=require('request')
  * args output
  *      report
  *          header
- *              server
+ *              contenttype
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , view='/_design/report/_view/header-server'
+      , view='/_design/report/_view/header-contenttype'
       , url=args.db.host+'/'+args.db.name+view
       , params='?reduce=true&group=true&group_level=1'
       , headers={
@@ -28,7 +28,7 @@ module.exports=function(args){
         }
 
     if(args.debug){
-        console.log('get header server information ... ');
+        console.log('get header content-type information ... ');
     }
     request.get({url:url+params,headers:headers},function(error,response){
         if(!error){
@@ -40,7 +40,7 @@ module.exports=function(args){
                 if(!args.report.header){
                     args.report.header={};
                 }
-                args.report.header.server=json.rows;
+                args.report.header.contenttype=json.rows;
                 deferred.resolve(args);
             }else{
                 deferred.reject(response.body);
