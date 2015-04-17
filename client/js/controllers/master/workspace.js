@@ -431,6 +431,12 @@ pleni.controller('WorkspaceController',
                         'The repository does not have a valid format');
                 }
             }
+          , summary:function(index){
+                console.log('get summary');
+            }
+          , report:function(index){
+                console.log('get report');
+            }
         };
 
         $scope.visual={

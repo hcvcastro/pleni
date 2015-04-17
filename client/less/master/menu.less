@@ -12,57 +12,87 @@ nav.menu {
         width: 100%;
         margin: 10px 0 0 0;
         list-style: none;
+
         &>li {
             float: left;
             z-index: 10;
-            height: 40px;
-            background-color: fade(@color2,50%);
             margin-bottom: 5px;
-            &>a, &>span {
-                float: left;
-                padding: 0.36rem 0 0 0.6rem;
-                .font1;
-            }
 
-            .right {
-                color: @color1;
-                margin: 7px 7px 0 0;
-                z-index: 10;
-                span {
+            .title {
+                float: left;
+                width: 100%;
+                height: 40px;
+
+                background-color: fade(@color2,50%);
+
+                &>a, &>span {
                     float: left;
-                    .font3;
-                    width: 25px;
-                    text-align: right;
+                    padding: 0.36rem 0 0 0.6rem;
+                    .font1;
                 }
-                a {
-                    margin: 4px 0 0 4px;
+
+                .right {
+                    color: @color1;
+                    margin: 7px 7px 0 0;
+                    z-index: 10;
+                    span {
+                        float: left;
+                        .font3;
+                        width: 25px;
+                        text-align: right;
+                    }
+                    a {
+                        margin: 4px 0 0 4px;
+                    }
                 }
             }
         }
 
         li.active {
             width: 240px;
-            background-color: @color2;
-            background-repeat: no-repeat;
-            background-position: top right;
-            color: @color5;
 
             &:not(.header) {
-                background-image: url('/svg/arrow.svg');
+                .title {
+                    background-image: url('/svg/arrow.svg');
+                }
             }
 
-            .right {
-                span {
-                    padding-right: 15px;
-                    color: @color5;
+            .title {
+                background-color: @color2;
+                background-repeat: no-repeat;
+                background-position: top right;
+                color: @color5;
+
+                .right {
+                    span {
+                        padding-right: 15px;
+                        color: @color5;
+                    }
+                    a {
+                        margin: 4px 10px 0 4px;
+                    }
                 }
-                a {
-                    margin: 4px 10px 0 4px;
+            }
+
+            .options {
+                float: left;
+                width: 100%;
+
+                ul {
+                    li {
+                        padding: 0.3rem 0 0.3rem 1.0rem;
+                        .font6;
+                    }
                 }
             }
         }
+
         li:not(.active) {
             width: 230px;
+
+            .options {
+                display: none;
+            }
         }
     }
 
