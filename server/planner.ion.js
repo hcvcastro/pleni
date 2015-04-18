@@ -7,6 +7,7 @@ var planner=require('./planners/planner')
   , io=require('socket.io')(server.http)
   , join=require('path').join
   , config=require('../config/planner')
+  , port=process.env.PORT||config.planner.port
   , notifier=function(msg){
         io.emit('notifier',msg);
     }
@@ -19,8 +20,8 @@ server.app.get('/msg.html',function(request,response){
     response.sendFile(join(__dirname,'public','msg.html'));
 });
 
-server.set(config.planner.port,'ion');
-server.listen(new planner(config.planner.port,notifier));
+server.set(port,'ion');
+server.listen(new planner(port,notifier));
 
 io.on('connection',function(socket){
     socket.emit('notifier',{

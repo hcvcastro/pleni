@@ -113,37 +113,40 @@ button {
   stroke: #d8000c;
 }
 #canvas svg:nth-child(1) .node {
-  stroke-width: 2px;
+  stroke-width: 3px;
 }
 #canvas svg:nth-child(1) .node.s-2 {
-  stroke: #4f8a10;
+  stroke: #008000;
 }
 #canvas svg:nth-child(1) .node.s-3 {
-  stroke: #9f6000;
+  stroke: #ffff00;
 }
 #canvas svg:nth-child(1) .node.s-4 {
-  stroke: #d8000c;
+  stroke: #ff0000;
 }
 #canvas svg:nth-child(1) .node.s-5 {
-  stroke: #d8000c;
+  stroke: #000080;
 }
 #canvas svg:nth-child(1) .node.m-text-html {
-  fill: #658068;
+  fill: #f1672c;
 }
 #canvas svg:nth-child(1) .node.m-text-css {
-  fill: #0c73b8;
+  fill: #30a9dc;
 }
 #canvas svg:nth-child(1) .node.m-text-javascript {
-  fill: #e5a228;
+  fill: #f1bf26;
 }
 #canvas svg:nth-child(1) .node.m-application-javascript {
-  fill: #e5a228;
+  fill: #f1bf26;
 }
 #canvas svg:nth-child(1) .node.m-application-x-javascript {
-  fill: #e5a228;
+  fill: #f1bf26;
 }
 #canvas svg:nth-child(1) .node.m-application-pdf {
-  fill: #ee1c29;
+  fill: #ff0000;
+}
+#canvas svg:nth-child(1) .node.m-application-x-shockwave-flash {
+  fill: #c83737;
 }
 #canvas svg:nth-child(1) .node.m-image-jpeg {
   fill: #32cd32;
@@ -181,22 +184,25 @@ button {
   font-weight: lighter;
 }
 #canvas svg:nth-child(2) rect.m-text-html {
-  fill: #658068;
+  fill: #f1672c;
 }
 #canvas svg:nth-child(2) rect.m-text-css {
-  fill: #0c73b8;
+  fill: #30a9dc;
 }
 #canvas svg:nth-child(2) rect.m-text-javascript {
-  fill: #e5a228;
+  fill: #f1bf26;
 }
 #canvas svg:nth-child(2) rect.m-application-javascript {
-  fill: #e5a228;
+  fill: #f1bf26;
 }
 #canvas svg:nth-child(2) rect.m-application-x-javascript {
-  fill: #e5a228;
+  fill: #f1bf26;
 }
 #canvas svg:nth-child(2) rect.m-application-pdf {
-  fill: #ee1c29;
+  fill: #ff0000;
+}
+#canvas svg:nth-child(2) rect.m-application-x-shockwave-flash {
+  fill: #c83737;
 }
 #canvas svg:nth-child(2) rect.m-image-jpeg {
   fill: #32cd32;

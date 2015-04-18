@@ -13,6 +13,7 @@ var http=require('http')
   , _success=require('../core/json-response').success
   , _error=require('../core/json-response').error
   , config=require('../config/monitor')
+  , port=process.env.PORT||config.monitor.port
   , assign=function(planner,done){
         redisclient.zrange('monitor:queue',0,0,function(err,task){
             if(task.length!=0){
@@ -55,7 +56,7 @@ var http=require('http')
         }
     }
 
-app.set('port',config.monitor.port);
+app.set('port',port);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 
