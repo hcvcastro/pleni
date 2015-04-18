@@ -10,7 +10,7 @@ module.exports={
       , prefix:'test_'
     }
 //  , url:'http://galao.local'
-  , url:'http://cruzero.net/'
+  , url:'http://wasanga.com'
   , notifiers:[{
         script:'server/notifier.io'
       , host:'http://localhost'

@@ -2,6 +2,7 @@
 
 var request=require('request')
   , Q=require('q')
+  , _url=require('url')
   , sha1=require('sha1')
   , md5=require('MD5')
 
@@ -29,7 +30,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.task.wait.url+args.task.wait.id.substr(5)
+      , url=_url.resolve(args.task.wait.url,args.task.wait.id.substr(5))
       , headers={}
 
     if(args.headers){

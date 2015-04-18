@@ -49,6 +49,7 @@ describe('site fetcher pages functions',function(){
         it('head request',function(done){
             head(packet)
             .done(function(args){
+                console.log(args);
                 args.task.should.have.property('head');
                 packet=args;
                 done();
