@@ -26,15 +26,11 @@ node_modules
 bower_components
 
 # dist files
-quickstarts/sites/dist
+dist
 
 # latex files
 docs/*.log
 docs/*.aux
 docs/*.dvi
 docs/*.toc
-
-#additional scripts
-scripts/site_creator_*.sh
-scripts/site_fetcher_*.sh
 

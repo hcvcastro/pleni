@@ -186,15 +186,15 @@ module.exports=function(grunt){
                     pretty:false
                 }
               , files:{
-                    'dist/sites/index.html'
+                    'dist/sites/client/index.html'
                   : 'client/views/sites/prod.jade'
-                  , 'dist/sites/search.html'
+                  , 'dist/sites/client/search.html'
                   : 'client/views/sites/pages/search.jade'
-                  , 'dist/sites/sitemap.html'
+                  , 'dist/sites/client/sitemap.html'
                   : 'client/views/sites/pages/sitemap.jade'
-                  , 'dist/sites/about.html'
+                  , 'dist/sites/client/about.html'
                   : 'client/views/sites/pages/about.jade'
-                  , 'dist/sites/report.html'
+                  , 'dist/sites/client/report.html'
                   : 'client/views/sites/pages/report.jade'
                 }
             }
@@ -206,7 +206,7 @@ module.exports=function(grunt){
                   , paths:['bower_components']
                 }
               , files:{
-                    'dist/sites/style.css'
+                    'dist/sites/client/style.css'
                   : 'client/less/sites.less'
                 }
             }
@@ -214,30 +214,30 @@ module.exports=function(grunt){
       , uglify:{
             sites:{
                 files:[{
-                    'dist/sites/js/jquery.min.js':[
+                    'dist/sites/client/js/jquery.min.js':[
                         'bower_components/jquery/dist/jquery.min.js'
                       , 'bower_components/pushy-dyn/js/pushy.js'
                     ]
                 },{
-                    'dist/sites/js/socket.io.min.js':[
+                    'dist/sites/client/js/socket.io.min.js':[
                         'bower_components/socket.io-client/socket.io.js'
                     ]
                 },{
-                    'dist/sites/js/angular.min.js':[
+                    'dist/sites/client/js/angular.min.js':[
                         'bower_components/angular/angular.min.js'
                     ]
                 },{
-                    'dist/sites/js/angular.ui.router.min.js':[
+                    'dist/sites/client/js/angular.ui.router.min.js':[
                         'bower_components/angular-ui-router/release/'
                             +'angular-ui-router.min.js'
                     ]
                 },{
-                    'dist/sites/js/d3.min.js':[
+                    'dist/sites/client/js/d3.min.js':[
                         'bower_components/d3/d3.min.js'
                       , 'bower_components/d3-tip/index.js'
                     ]
                 },{
-                    'dist/sites/js/sites.min.js':[
+                    'dist/sites/client/js/sites.min.js':[
                         'client/js/sites.js'
                       , 'client/js/controllers/sites.js'
                       , 'client/js/visual/site.js'
@@ -250,13 +250,28 @@ module.exports=function(grunt){
             sites:{
                 files:[{
                     src:'client/favicon.ico'
-                  , dest:'dist/sites/favicon.ico'
+                  , dest:'dist/sites/client/favicon.ico'
                 },{
                     expand:true
                   , flatten:true
                   , cwd:'bower_components/font-awesome/'
                   , src:'fonts/fontawesome-webfont.*'
-                  , dest:'dist/sites/fonts/'
+                  , dest:'dist/sites/client/fonts/'
+                },{
+                    expand:true
+                  , src:['core/**']
+                  , dest:'dist/sites/'
+                },{
+                    src:'server/sites.js'
+                  , dest:'dist/sites/server/sites.js'
+                },{
+                    expand:true
+                  , cwd:'server/'
+                  , src:['sites/*']
+                  , dest:'dist/sites/server/'
+                },{
+                    src:'config/sites.js'
+                  , dest:'dist/sites/config/sites.js'
                 }]
             }
         }
@@ -264,21 +279,21 @@ module.exports=function(grunt){
             sites:{
                 files:[{
                     src:'client/svg/canvas.svg'
-                  , dest:'dist/sites/svg/canvas.svg'
+                  , dest:'dist/sites/client/svg/canvas.svg'
                 },{
                     src:'client/svg/hiperborea.svg'
-                  , dest:'dist/sites/svg/hiperborea.svg'
+                  , dest:'dist/sites/client/svg/hiperborea.svg'
                 },{
                     src:'client/svg/pleni.sites.svg'
-                  , dest:'dist/sites/svg/pleni.sites.svg'
+                  , dest:'dist/sites/client/svg/pleni.sites.svg'
                 }]
             }
         }
       , cssmin:{
             sites:{
                 files:{
-                    'dist/sites/style.css':[
-                        'dist/sites/style.css'
+                    'dist/sites/client/style.css':[
+                        'dist/sites/client/style.css'
                     ]
                 }
             }

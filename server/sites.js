@@ -35,8 +35,8 @@ app.disable('x-powered-by');
 app.use(bodyparser.json());
 
 if(config.env=='production'){
-    app.use(favicon(join(__dirname,'..','dist','sites','favicon.ico')));
-    app.use(express.static(join(__dirname,'..','dist','sites')));
+    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+    app.use(express.static(join(__dirname,'..','client')));
     app.use(morgan('combined'));
 }else{
     app.use(favicon(join(__dirname,'..','client','favicon.ico')));
@@ -237,7 +237,7 @@ var connect_planner=function(id,sessionID,planner,type){
 
         if(config.env=='production'){
             response.status(200)
-                .sendFile(join(__dirname,'..','dist','sites',template+'.html'));
+                .sendFile(join(__dirname,'..','client',template+'.html'));
         }else{
             if(template=='index'){
                 response.status(200).render('dev');
