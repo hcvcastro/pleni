@@ -20,7 +20,7 @@ module.exports={
     }
   , monitor:{
         host:'http://localhost'
-      , port:3003
+      , port:process.env.MPORT||3003
     }
   , db:{
         host:'http://localhost'

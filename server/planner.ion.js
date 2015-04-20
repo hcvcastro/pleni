@@ -4,24 +4,46 @@ var planner=require('./planners/planner')
   , scheduler=require('./planners/scheduler')
   , server=require('./planners/server')
   , express=require('express')
+  , favicon=require('serve-favicon')
+  , lessmiddleware=require('less-middleware')
   , io=require('socket.io')(server.http)
   , join=require('path').join
   , config=require('../config/planner')
-  , port=process.env.PORT||config.planner.port
   , notifier=function(msg){
         io.emit('notifier',msg);
     }
 
 planner.prototype=new scheduler(notifier);
 
-server.app.use(express.static(join(__dirname,'public')));
-server.app.use(express.static(join(__dirname,'..','bower_components')));
-server.app.get('/msg.html',function(request,response){
-    response.sendFile(join(__dirname,'public','msg.html'));
+if(config.env=='production'){
+    server.app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+    server.app.use(express.static(join(__dirname,'..','client')));
+}else{
+    server.app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+    server.app.set('views',join(__dirname,'..','client','views','planners'));
+    server.app.set('view engine','jade');
+
+    server.app.use(lessmiddleware('/less',{
+        dest:'/css'
+      , pathRoot:join(__dirname,'..','client')
+      , compress:false
+    }));
+
+    server.app.use(express.static(join(__dirname,'..','client')));
+    server.app.use(express.static(join(__dirname,'..','bower_components')));
+    server.app.locals.pretty=true;
+}
+
+server.app.get('/',function(request,response){
+    if(config.env=='production'){
+        response.status(200).sendFile(join(__dirname,'public','msg.html'));
+    }else{
+        response.status(200).render('dev');
+    }
 });
 
-server.set(port,'ion');
-server.listen(new planner(port,notifier));
+server.set(config.planner.port,'ion');
+server.listen(new planner(config.planner.port,notifier));
 
 io.on('connection',function(socket){
     socket.emit('notifier',{

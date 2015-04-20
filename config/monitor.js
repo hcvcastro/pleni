@@ -4,7 +4,7 @@ module.exports={
     env:process.env.ENV||'production'
   , monitor:{
         host:'http://localhost'
-      , port:3003
+      , port:process.env.PORT||3003
     }
 };
 

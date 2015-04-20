@@ -161,23 +161,27 @@ module.exports=function(grunt){
         }
 
       , clean:{
-            sites:'dist/sites'
-          , master:'dist/master'
+            master:'dist/master'
+          , planner:'dist/planner'
+          , sites:'dist/sites'
         }
       , concurrent:{
-            sites:[
-                'jade:sites'
-              , 'less:sites'
-              , 'uglify:sites'
-              , 'copy:sites'
-              , 'svgmin:sites'
-            ]
-          , master:[
+            master:[
                 'jade:master'
               , 'less:master'
               , 'uglify:master'
               , 'copy:master'
               , 'svgmin:master'
+            ]
+          , planner:[
+                'jade:planner'
+            ]
+          , sites:[
+                'jade:sites'
+              , 'less:sites'
+              , 'uglify:sites'
+              , 'copy:sites'
+              , 'svgmin:sites'
             ]
         }
       , jade:{
@@ -384,6 +388,10 @@ module.exports=function(grunt){
         'clean:master'
       , 'concurrent:master'
       , 'cssmin:master'
+    ]);
+    grunt.registerTask('build:planner',[
+        'clean:planner'
+      , 'concurrent:planner'
     ]);
     grunt.registerTask('build:sites',[
         'clean:sites'
