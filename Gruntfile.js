@@ -175,6 +175,9 @@ module.exports=function(grunt){
             ]
           , planner:[
                 'jade:planner'
+              , 'less:planner'
+              , 'uglify:planner'
+              , 'copy:planner'
             ]
           , sites:[
                 'jade:sites'
@@ -185,7 +188,16 @@ module.exports=function(grunt){
             ]
         }
       , jade:{
-            sites:{
+            planner:{
+                options:{
+                    pretty:false
+                }
+              , files:{
+                    'dist/planner/client/index.html'
+                  : 'client/views/planner/prod.jade'
+                }
+            }
+          , sites:{
                 options:{
                     pretty:false
                 }
@@ -204,7 +216,17 @@ module.exports=function(grunt){
             }
         }
       , less:{
-            sites:{
+            planner:{
+                optiions:{
+                    cleancss:true
+                  , paths:['bower_components']
+                }
+              , files:{
+                    'dist/planner/client/style.css'
+                  : 'client/less/planner.less'
+                }
+            }
+          , sites:{
                 options:{
                     cleancss:true
                   , paths:['bower_components']
@@ -216,7 +238,22 @@ module.exports=function(grunt){
             }
         }
       , uglify:{
-            sites:{
+            planner:{
+                files:[{
+                    'dist/planner/client/js/jquery.min.js':[
+                        'bower_components/jquery/dist/jquery.min.js'
+                    ]
+                },{
+                    'dist/planner/client/js/socket.io.min.js':[
+                        'bower_components/socket.io-client/socket.io.js'
+                    ]
+                },{
+                    'dist/planner/client/js/planner.min.js':[
+                        'client/js/planner.js'
+                    ]
+                }]
+            }
+          , sites:{
                 files:[{
                     'dist/sites/client/js/jquery.min.js':[
                         'bower_components/jquery/dist/jquery.min.js'
@@ -251,7 +288,37 @@ module.exports=function(grunt){
             }
         }
       , copy:{
-            sites:{
+            planner:{
+                files:[{
+                    src:'client/favicon.ico'
+                  , dest:'dist/planner/client/favicon.ico'
+                },{
+                    expand:true
+                  , src:['core/**']
+                  , dest:'dist/planner/'
+                },{
+                    src:'run'
+                  , dest:'dist/planner/'
+                },{
+                    src:'server/planner.js'
+                  , dest:'dist/planner/server/planner.js'
+                },{
+                    src:'server/planner.io.js'
+                  , dest:'dist/planner/server/planner.io.js'
+                },{
+                    src:'server/planner.ion.js'
+                  , dest:'dist/planner/server/planner.ion.js'
+                },{
+                    expand:true
+                  , cwd:'server/'
+                  , src:['planners/*']
+                  , dest:'dist/planner/server/'
+                },{
+                    src:'config/planner.js'
+                  , dest:'dist/planner/config/planner.js'
+                }]
+            }
+          , sites:{
                 files:[{
                     src:'client/favicon.ico'
                   , dest:'dist/sites/client/favicon.ico'
@@ -327,6 +394,26 @@ module.exports=function(grunt){
       , 'test:sites'
     ]);
 
+    grunt.registerTask('build:master',[
+        'clean:master'
+      , 'concurrent:master'
+      , 'cssmin:master'
+    ]);
+    grunt.registerTask('build:planner',[
+        'clean:planner'
+      , 'concurrent:planner'
+    ]);
+    grunt.registerTask('build:sites',[
+        'clean:sites'
+      , 'concurrent:sites'
+      , 'cssmin:sites'
+    ]);
+    grunt.registerTask('build',[
+        'build:master'
+      , 'build:planner'
+      , 'build:sites'
+    ]);
+
     grunt.config.requires('watch.master.files');
     filescontrol=grunt.config('watch.master.files');
     filescontrol=grunt.file.expand(filescontrol);
@@ -382,21 +469,6 @@ module.exports=function(grunt){
     grunt.registerTask('serve:sites',[
         'develop:sites'
       , 'watch'
-    ]);
-
-    grunt.registerTask('build:master',[
-        'clean:master'
-      , 'concurrent:master'
-      , 'cssmin:master'
-    ]);
-    grunt.registerTask('build:planner',[
-        'clean:planner'
-      , 'concurrent:planner'
-    ]);
-    grunt.registerTask('build:sites',[
-        'clean:sites'
-      , 'concurrent:sites'
-      , 'cssmin:sites'
     ]);
 };
 

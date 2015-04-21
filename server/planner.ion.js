@@ -20,7 +20,7 @@ if(config.env=='production'){
     server.app.use(express.static(join(__dirname,'..','client')));
 }else{
     server.app.use(favicon(join(__dirname,'..','client','favicon.ico')));
-    server.app.set('views',join(__dirname,'..','client','views','planners'));
+    server.app.set('views',join(__dirname,'..','client','views','planner'));
     server.app.set('view engine','jade');
 
     server.app.use(lessmiddleware('/less',{
@@ -36,7 +36,7 @@ if(config.env=='production'){
 
 server.app.get('/',function(request,response){
     if(config.env=='production'){
-        response.status(200).sendFile(join(__dirname,'public','msg.html'));
+        response.status(200).sendFile(join(__dirname,'..','client','index.html'));
     }else{
         response.status(200).render('dev');
     }

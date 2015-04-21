@@ -20,7 +20,7 @@ $(function(){
         var message='<p><strong>'+new Date().print()+':</strong> ';
         message+=JSON.stringify(msg);
         message+='</p>';
-        $('body>section').append(message);
+        $('#content').append(message);
         $(document).scrollTop($(document).height());
     });
 });
