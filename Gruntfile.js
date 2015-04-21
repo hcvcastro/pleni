@@ -163,6 +163,7 @@ module.exports=function(grunt){
       , clean:{
             master:'dist/master'
           , planner:'dist/planner'
+          , monitor:'dist/monitor'
           , sites:'dist/sites'
         }
       , concurrent:{
@@ -178,6 +179,9 @@ module.exports=function(grunt){
               , 'less:planner'
               , 'uglify:planner'
               , 'copy:planner'
+            ]
+          , monitor:[
+                'copy:monitor'
             ]
           , sites:[
                 'jade:sites'
@@ -318,6 +322,19 @@ module.exports=function(grunt){
                   , dest:'dist/planner/config/planner.js'
                 }]
             }
+          , monitor:{
+                files:[{
+                    expand:true
+                  , src:['core/**']
+                  , dest:'dist/monitor/'
+                },{
+                    src:'server/monitor.js'
+                  , dest:'dist/monitor/server/monitor.js'
+                },{
+                    src:'config/monitor.js'
+                  , dest:'dist/monitor/config/monitor.js'
+                }]
+            }
           , sites:{
                 files:[{
                     src:'client/favicon.ico'
@@ -403,14 +420,18 @@ module.exports=function(grunt){
         'clean:planner'
       , 'concurrent:planner'
     ]);
+    grunt.registerTask('build:monitor',[
+        'clean:monitor'
+      , 'concurrent:monitor'
+    ]);
     grunt.registerTask('build:sites',[
         'clean:sites'
       , 'concurrent:sites'
       , 'cssmin:sites'
     ]);
     grunt.registerTask('build',[
-        'build:master'
-      , 'build:planner'
+        'build:planner'
+      , 'build:monitor'
       , 'build:sites'
     ]);
 
