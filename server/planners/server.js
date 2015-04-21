@@ -9,7 +9,8 @@ var app=require('express')()
   , config=require('../../config/planner')
   , type=''
 
-exports.set=function(port,signature){
+exports.set=function(host,port,signature){
+    app.set('host',host);
     app.set('port',port);
     app.disable('x-powered-by');
     app.use(bodyparser.json());
@@ -74,9 +75,9 @@ exports.listen=function(planner){
 };
 
 exports.run=function(){
-    return http.listen(app.get('port'),'localhost',function(){
-        console.log('pleni ✯ planner '+type+': listening on port '
-            +app.get('port')+'\n');
+    return http.listen(app.get('port'),app.get('host'),function(){
+        console.log('pleni ✯ planner '+type+': listening on '
+            +app.get('host')+':'+app.get('port')+'\n');
     });
 };
 

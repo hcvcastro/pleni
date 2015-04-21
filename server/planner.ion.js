@@ -42,7 +42,7 @@ server.app.get('/',function(request,response){
     }
 });
 
-server.set(config.planner.port,'ion');
+server.set(config.planner.host,config.planner.port,'ion');
 server.listen(new planner(config.planner.port,notifier));
 
 io.on('connection',function(socket){

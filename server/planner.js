@@ -10,7 +10,7 @@ var planner=require('./planners/planner')
 
 planner.prototype=new scheduler(notifier);
 
-server.set(config.planner.port,'none');
+server.set(config.planner.host,config.planner.port,'none');
 server.listen(new planner(config.planner.port,notifier));
 server.run();
 

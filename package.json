@@ -1,20 +1,19 @@
 {
   "name": "pleni",
   "version": "0.0.1",
-  "private": true,
   "author": "Hiperborea",
   "license": "GPLv3",
   "description": "",
-  "homepage": "https://github.com/ccaballero/pleni",
+  "homepage": "https://github.com/hiperborea/pleni",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ccaballero/pleni.git"
+    "url": "https://github.com/hiperborea/pleni.git"
   },
   "bugs": {
-    "url": "https://github.com/ccaballero/pleni/issues"
+    "url": "https://github.com/hiperborea/pleni/issues"
   },
   "scripts": {
-    "start": "node app"
+    "start": "node server/master"
   },
   "dependencies": {
     "MD5": "^1.2.1",
@@ -41,7 +40,6 @@
     "sha1": "^1.1.0",
     "socket.io": "~1.1.0",
     "socket.io-client": "~1.1.0",
-    "stylus": "^0.47.3",
     "underscore": "^1.7.0",
     "validator": "^3.16.1"
   },

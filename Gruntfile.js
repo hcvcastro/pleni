@@ -301,7 +301,8 @@ module.exports=function(grunt){
                   , src:['core/**']
                   , dest:'dist/planner/'
                 },{
-                    src:'run'
+                    expand:true
+                  , src:['run/.*']
                   , dest:'dist/planner/'
                 },{
                     src:'server/planner.js'
@@ -320,6 +321,9 @@ module.exports=function(grunt){
                 },{
                     src:'config/planner.js'
                   , dest:'dist/planner/config/planner.js'
+                },{
+                    src:'package/planner.json'
+                  , dest:'dist/planner/package.json'
                 }]
             }
           , monitor:{

@@ -3,8 +3,8 @@
 module.exports={
     env:process.env.ENV||'production'
   , planner:{
-        host:'http://localhost'
-      , port:process.env.PORT||3001
+        host:process.env.OPENSHIFT_NODEJS_IP||'localhost'
+      , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3001
     }
   , tasks:[
         'exclusive'
