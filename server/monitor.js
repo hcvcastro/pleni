@@ -39,8 +39,8 @@ var http=require('http')
         });
     }
   , notify=function(task,planner,success,fail){
+        console.log('ASSIGN '+task+' -> '+planner);
         if(config.env=='test'){
-            console.log('ASSIGN '+task+' -> '+planner);
             success();
         }else{
             request.post({

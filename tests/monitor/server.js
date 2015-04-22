@@ -96,7 +96,7 @@ describe('monitor controller functions',function(){
             });
     });
 
-/*    it('DELETE /planners',function(done){
+    it('DELETE /planners',function(done){
         request(app)
             .delete('/planners')
             .send({
@@ -351,6 +351,6 @@ describe('monitor controller functions',function(){
                 res.body.should.eql(_success.ok);
                 done();
             });
-    });*/
+    });
 });
 

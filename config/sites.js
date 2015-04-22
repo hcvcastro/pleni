@@ -17,7 +17,8 @@ module.exports={
         }
     }
   , sites:{
-        host:process.env.OPENSHIFT_NODEJS_IP||'localhost'
+        protocol:'http'
+      , host:process.env.OPENSHIFT_NODEJS_IP||'localhost'
       , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3004
       , count:20
       , interval:1500

@@ -3,7 +3,7 @@
 module.exports={
     env:process.env.ENV||'test'
   , db:{
-      host:'http://localhost'
+        host:'http://localhost'
       , port:5984
       , user:'pleni'
       , pass:'~~@[@ł€¶→}][þß~łĸ«»””n[þø||@#~½@~~~'

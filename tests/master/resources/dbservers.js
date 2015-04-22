@@ -6,6 +6,7 @@ var request=require('supertest')
   , app=require('../../../server/master')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
+  , config=require('../../../config/tests')
   , loadconfig=require('../../../core/loadconfig')
 
 describe('dbservers controller functions',function(){
@@ -202,13 +203,7 @@ describe('dbservers controller functions',function(){
             },expected:_error.auth,status:401}
           , {test :{
                 id:'test'
-              , db:{
-                    host:'http://localhost'
-                  , port:5984
-                  , user:'jacobian'
-                  , pass:'asdf'
-                  , prefix:''
-                }
+              , db:config.db
             },expected:_success.ok,status:200}
         ]
         .forEach(function(element){

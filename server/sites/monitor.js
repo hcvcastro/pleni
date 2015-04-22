@@ -6,16 +6,18 @@ var request=require('request')
 
 exports.getplanner=function(task,done){
     var url=config.monitor.host+':'+config.monitor.port+'/tasks'
+console.log('sending PUT request to',url);
     request.put({
         url:url
       , json:{task:task}
     },function(error,response){
+        console.log('return from request');
         if(error){
             console.log(error);
             done({});
-            return;
+        }else{
+            done(response.body);
         }
-        done(response.body);
     });
 }
 

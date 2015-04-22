@@ -268,7 +268,9 @@ app.put('/sites',function(request,response){
     if(validate.validHost(request.body.site)){
         var site=validate.toValidUrl(request.body.site)
           , agent=validate.toString(request.body.agent)
-          , url=config.sites.host+':'+config.sites.port+'/i/'+request.sessionID
+          , url=config.sites.protocol+'://'
+                +config.sites.host+':'
+                +config.sites.port+'/i/'+request.sessionID
 
         if(request.session.semaphore===0){
             request.session.state='init';
