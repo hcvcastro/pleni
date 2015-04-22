@@ -427,6 +427,9 @@ module.exports=function(grunt){
                 },{
                     src:'config/sites.js'
                   , dest:'dist/sites/config/sites.js'
+                },{
+                    src:'package/sites.json'
+                  , dest:'dist/sites/package.json'
                 }]
             }
         }
