@@ -59,8 +59,8 @@ module.exports=function(params,repeat,stop,notifier){
         notifier({
             action:'task'
           , task:{
-                id:'report/basic'
-              , msg:'basic report generated ('+args.db.name+')'
+                id:'site/report'
+              , msg:'report generated ('+args.db.name+')'
             }
         });
         stop();

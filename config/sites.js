@@ -11,22 +11,26 @@ module.exports={
         host:'localhost'
       , port:6379
       , prefix:'sites:'
+      , options:{
+            no_ready_check:true
+          , auth_pass:'~~{{~~æßðđł[¶]æßðŋħ]]]}}}}~~'
+        }
     }
   , sites:{
-        host:'http://localhost'
-      , port:process.env.PORT||3004
+        host:process.env.OPENSHIFT_NODEJS_IP||'localhost'
+      , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3004
       , count:20
-      , interval:1000
+      , interval:1500
     }
   , monitor:{
         host:'http://localhost'
-      , port:process.env.MPORT||3003
+      , port:3003
     }
   , db:{
         host:'http://localhost'
       , port:5984
-      , user:'jacobian'
-      , pass:'asdf'
+      , user:'pleni'
+      , pass:'~~@[@ł€¶→}][þß~łĸ«»””n[þø||@#~½@~~~'
       , prefix:'pleni_sites_'
     }
 };

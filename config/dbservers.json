@@ -4,8 +4,8 @@
       , "db":{
             "host":"http://127.0.0.1"
           , "port":5984
-          , "user":"jacobian"
-          , "pass":"asdf"
+          , "user":"pleni"
+          , "pass":"~~@[@ł€¶→}][þß~łĸ«»””n[þø||@#~½@~~~"
           , "prefix":"pleni_"
         }
     }

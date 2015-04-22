@@ -5,15 +5,17 @@ var request=require('request')
   , config=require('../../config/sites')
 
 exports.getplanner=function(task,done){
+    var url=config.monitor.host+':'+config.monitor.port+'/tasks'
     request.put({
-        url:config.monitor.host+':'+config.monitor.port+'/tasks'
+        url:url
       , json:{task:task}
     },function(error,response){
-        if(!error){
-            done(response.body);
-        }else{
+        if(error){
             console.log(error);
+            done({});
+            return;
         }
+        done(response.body);
     });
 }
 

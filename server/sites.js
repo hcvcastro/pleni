@@ -9,12 +9,14 @@ var http=require('http')
   , url=require('url')
   , app=express()
   , server=http.createServer(app)
+  , config=require('../config/sites')
   , morgan=require('morgan')
   , redis=require('redis')
   , cookieparser=require('cookie-parser')
   , cookiesession=require('express-session')
   , redisstore=require('connect-redis')(cookiesession)
-  , redisclient=redis.createClient()
+  , redisclient=redis.createClient(
+        config.redis.port,config.redis.host,config.redis.options)
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , sessionsocketio=require('session.socket.io')
@@ -28,7 +30,6 @@ var http=require('http')
   , free=require('./sites/planners').free
   , summarize=require('./sites/planners').summarize
   , report=require('./sites/planners').report
-  , config=require('../config/sites')
 
 app.set('host',config.sites.host);
 app.set('port',config.sites.port);
@@ -397,9 +398,9 @@ app.post('/k/:id',function(request,response){
     });
 });
 
-server.listen(app.get('port'),'localhost',function(){
+server.listen(app.get('port'),app.get('host'),function(){
     console.log('pleni ✯ quickstart sites: listening on port '
-        +app.get('port')+'\n');
+        +app.get('host')+':'+app.get('port')+'\n');
 });
 
 module.exports=app;

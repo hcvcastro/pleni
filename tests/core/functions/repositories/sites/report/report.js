@@ -8,7 +8,19 @@ var should=require('should')
   , fetch=require(base+'/../tasks/site/fetch')
   , auth=require(base+'/databases/auth')
   , designdocument=require(base+'/repositories/sites/report/designdocument')
-  , assemble=require(base+'/repositories/sites/report/assemble')
+  , report=require(base+'/repositories/sites/report/report')
+  , base1=base+'/repositories/sites/report'
+  , test=require(base+'/databases/test')
+  , auth=require(base+'/databases/auth')
+  , check=require(base1+'/check')
+  , design=require(base1+'/designdocument')
+  , headerserver=require(base1+'/header/server')
+  , headerstatus=require(base1+'/header/status')
+  , headercontenttype=require(base1+'/header/contenttype')
+  , headerpoweredby=require(base1+'/header/poweredby')
+  , bodyrels=require(base1+'/body/rels')
+  , bodyrefs=require(base1+'/body/refs')
+  , bodyhashes=require(base1+'/body/hashes')
   , config=require('../../../../../../config/tests')
   , db_name='report_report'
   , repeat=function(){}
@@ -39,9 +51,19 @@ describe('site fetcher pages functions',function(){
             fetch(_.clone(packet),repeat,stop,function(params){
                 fetch(_.clone(packet),repeat,stop,function(params){
                     fetch(_.clone(packet),repeat,stop,function(params){
-                        auth(packet)
-                        .then(designdocument)
+                        test(packet)
+                        .then(auth)
+                        .then(check)
+                        .then(design)
+                        .then(headerserver)
+                        .then(headerstatus)
+                        .then(headercontenttype)
+                        .then(headerpoweredby)
+                        .then(bodyrels)
+                        .then(bodyrefs)
+                        .then(bodyhashes)
                         .then(function(args){
+                            packet=args;
                             done();
                         });
                     });
@@ -52,9 +74,12 @@ describe('site fetcher pages functions',function(){
 
     describe('testing design document insertion for a site',function(){
         it('designdocument function',function(done){
-            assemble(packet)
+            report(packet)
             .done(function(args){
-                console.log(args);
+                args.should.have.property('site');
+                args.site.should.have.property('report');
+                args.site.report.should.have.property('check').and.be.false;
+                args.site.report.should.have.property('_rev');
                 done();
             });
         });

@@ -12,16 +12,16 @@ var should=require('should')
   , stop=function(){}
 
 describe('testing task site/report',function(){
-    before(function(done){
-        var packet={
-            db:{
-                host:config.db.host+':'+config.db.port
-              , name:config.db.prefix+db_name
-              , user:config.db.user
-              , pass:config.db.pass
-            }
-        };
+    var packet={
+        db:{
+            host:config.db.host+':'+config.db.port
+          , name:config.db.prefix+db_name
+          , user:config.db.user
+          , pass:config.db.pass
+        }
+    };
 
+    before(function(done){
         create({
             db:{
                 host:config.db.host+':'+config.db.port
@@ -68,15 +68,15 @@ describe('testing task site/report',function(){
               , pass:config.db.pass
             }
         },repeat,stop,function(params){
-//           params.should.have.an.Object;
-//           params.should.have.property('action')
-//               .and.be.eql('task');
-//           params.should.have.property('task')
-//           params.task.should.have.property('id')
-//               .and.be.eql('site/summarize');
-//           params.task.should.have.property('msg')
-//               .and.be.eql('site repository summarized ('
-//                   +config.db.prefix+db_name+')');
+            params.should.have.an.Object;
+            params.should.have.property('action')
+                .and.be.eql('task');
+            params.should.have.property('task')
+            params.task.should.have.property('id')
+                .and.be.eql('site/report');
+            params.task.should.have.property('msg')
+                .and.be.eql('report generated ('
+                    +config.db.prefix+db_name+')');
             done();
         });
     });

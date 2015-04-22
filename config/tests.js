@@ -3,11 +3,20 @@
 module.exports={
     env:process.env.ENV||'test'
   , db:{
-        host:'http://localhost'
+      host:'http://localhost'
       , port:5984
-      , user:'jacobian'
-      , pass:'asdf'
+      , user:'pleni'
+      , pass:'~~@[@ł€¶→}][þß~łĸ«»””n[þø||@#~½@~~~'
       , prefix:'test_'
+    }
+  , redis:{
+        host:'localhost'
+      , port:6379
+      , prefix:'sites:'
+      , options:{
+            no_ready_check:true
+          , auth_pass:'~~{{~~æßðđł[¶]æßðŋħ]]]}}}}~~'
+        }
     }
   , url:'http://galao.local'
   , notifiers:[{
