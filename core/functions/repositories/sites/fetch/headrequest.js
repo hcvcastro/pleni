@@ -27,7 +27,6 @@ module.exports=function(args){
       , headers={}
 
     if(args.headers){
-        console.log(args.headers);
         args.headers.forEach(function(header){
             headers[header.name]=header.value;
         });
@@ -64,15 +63,10 @@ module.exports=function(args){
                 var path=_url.resolve(url,head.location)
                   , _h1=_url.parse(url)
                   , _h2=_url.parse(path)
-console.log('pre host');
-console.log(url,path);
                 if(_h1.host===_h2.host){
-console.log('pre path');
-console.log(_h1.host,_h2.host);
                     if(_h1.pathname==_h2.pathname){
                         head.get=true
                     }else{
-console.log(_h1.pathname,_h2.pathname);
                         args.task.rels=[{
                             tag:'header'
                           , url:path

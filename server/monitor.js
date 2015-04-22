@@ -130,7 +130,6 @@ app.put('/tasks',function(request,response){
 app.delete('/tasks',function(request,response){
     if(validate.validHost(request.body.task)){
         var task=request.body.task;
-
         redisclient.hget('monitor:tasks',task,function(err,planner){
             if(planner){
                 redisclient.hdel('monitor:tasks',task,function(){

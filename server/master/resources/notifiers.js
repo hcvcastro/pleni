@@ -232,7 +232,7 @@ module.exports=function(app){
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
                 }else{
-                    //console.log(error);
+                    console.log(error);
                     response.status(403).json(_error.badrequest);
                 }
             })

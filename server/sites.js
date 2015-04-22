@@ -138,7 +138,9 @@ var connect_planner=function(id,sessionID,planner,type){
     }
   , free_planner=function(planner,id,type){
         free(planner,function(args){
-            monitor.freeplanner(config.sites.host+':'+config.sites.port
+            monitor.freeplanner(
+                config.sites.protocol+'://'
+                +config.sites.host+':'+config.sites.port
                 +'/'+type+'/'+id);
         },function(error){
             console.log('ERROR','cannot free the planner');
@@ -341,7 +343,8 @@ app.delete('/',function(request,response){
 });
 
 app.put('/more',function(request,response){
-    var url=config.sites.host+':'+config.sites.port+'/j/'+request.sessionID
+    var url=config.sites.protocol+'://'
+        +config.sites.host+':'+config.sites.port+'/j/'+request.sessionID
 
     if(request.session.semaphore===0){
         request.session.semaphore=1;
@@ -371,7 +374,8 @@ app.post('/j/:id',function(request,response){
 });
 
 app.put('/report',function(request,response){
-    var url=config.sites.host+':'+config.sites.port+'/k/'+request.sessionID
+    var url=config.sites.protocol+'://'
+        +config.sites.host+':'+config.sites.port+'/k/'+request.sessionID
 
     if(request.session.semaphore===0){
         request.session.semaphore=1;
