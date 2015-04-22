@@ -163,6 +163,7 @@ module.exports=function(grunt){
       , clean:{
             master:'dist/master'
           , planner:'dist/planner'
+          , notifier:'dist/notifier'
           , monitor:'dist/monitor'
           , sites:'dist/sites'
         }
@@ -179,6 +180,12 @@ module.exports=function(grunt){
               , 'less:planner'
               , 'uglify:planner'
               , 'copy:planner'
+            ]
+          , notifier:[
+                'jade:notifier'
+              , 'less:notifier'
+              , 'uglify:notifier'
+              , 'copy:notifier'
             ]
           , monitor:[
                 'copy:monitor'
@@ -201,6 +208,15 @@ module.exports=function(grunt){
                   : 'client/views/planner/prod.jade'
                 }
             }
+          , notifier:{
+                options:{
+                    pretty:false
+                }
+              , files:{
+                    'dist/notifier/client/index.html'
+                  : 'client/views/notifier/prod.jade'
+                }
+            }
           , sites:{
                 options:{
                     pretty:false
@@ -221,12 +237,22 @@ module.exports=function(grunt){
         }
       , less:{
             planner:{
-                optiions:{
+                options:{
                     cleancss:true
                   , paths:['bower_components']
                 }
               , files:{
                     'dist/planner/client/style.css'
+                  : 'client/less/planner.less'
+                }
+            }
+          , notifier:{
+                options:{
+                    cleancss:true
+                  , paths:['bower_components']
+                }
+              , files:{
+                    'dist/notifier/client/style.css'
                   : 'client/less/planner.less'
                 }
             }
@@ -253,6 +279,21 @@ module.exports=function(grunt){
                     ]
                 },{
                     'dist/planner/client/js/planner.min.js':[
+                        'client/js/planner.js'
+                    ]
+                }]
+            }
+          , notifier:{
+                files:[{
+                    'dist/notifier/client/js/jquery.min.js':[
+                        'bower_components/jquery/dist/jquery.min.js'
+                    ]
+                },{
+                    'dist/notifier/client/js/socket.io.min.js':[
+                        'bower_components/socket.io-client/socket.io.js'
+                    ]
+                },{
+                    'dist/notifier/client/js/notifier.min.js':[
                         'client/js/planner.js'
                     ]
                 }]
@@ -324,6 +365,25 @@ module.exports=function(grunt){
                 },{
                     src:'package/planner.json'
                   , dest:'dist/planner/package.json'
+                }]
+            }
+          , notifier:{
+                files:[{
+                    src:'client/favicon.ico'
+                  , dest:'dist/notifier/client/favicon.ico'
+                },{
+                    expand:true
+                  , src:['core/**']
+                  , dest:'dist/notifier/'
+                },{
+                    src:'server/notifier.io.js'
+                  , dest:'dist/notifier/server/notifier.io.js'
+                },{
+                    src:'config/notifier.js'
+                  , dest:'dist/notifier/config/notifier.js'
+                },{
+                    src:'package/notifier.json'
+                  , dest:'dist/notifier/package.json'
                 }]
             }
           , monitor:{
@@ -424,6 +484,10 @@ module.exports=function(grunt){
         'clean:planner'
       , 'concurrent:planner'
     ]);
+    grunt.registerTask('build:notifier',[
+        'clean:notifier'
+      , 'concurrent:notifier'
+    ]);
     grunt.registerTask('build:monitor',[
         'clean:monitor'
       , 'concurrent:monitor'
@@ -435,6 +499,7 @@ module.exports=function(grunt){
     ]);
     grunt.registerTask('build',[
         'build:planner'
+      , 'build:notifier'
       , 'build:monitor'
       , 'build:sites'
     ]);

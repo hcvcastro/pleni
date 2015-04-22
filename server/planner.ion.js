@@ -36,7 +36,8 @@ if(config.env=='production'){
 
 server.app.get('/',function(request,response){
     if(config.env=='production'){
-        response.status(200).sendFile(join(__dirname,'..','client','index.html'));
+        response.status(200)
+            .sendFile(join(__dirname,'..','client','index.html'));
     }else{
         response.status(200).render('dev');
     }

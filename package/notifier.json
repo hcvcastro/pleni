@@ -1,5 +1,5 @@
 {
-    "name":"pleni-planner"
+    "name":"pleni-notifier"
   , "version":"0.0.1"
   , "author":{
         "name":"Hiperbórea"
@@ -7,7 +7,7 @@
       , "url":"http://www.hiperborea.com.bo"
     }
   , "license":"GPLv3"
-  , "description":"Process for execution of automatic tasks"
+  , "description":"Process for view notification for planners"
   , "keywords":[
         "Pleni"
       , "Node.js"
@@ -21,29 +21,23 @@
         "url":"https://github.com/hiperborea/pleni/issues"
     }
   , "scripts":{
-        "start":"supervisor server/planner.io.js"
+        "start":"supervisor server/notifier.io.js"
     }
-  , "main":"server/planner.io.js"
+  , "main":"server/notifier.io.js"
   , "engines":{
         "node":">=0.6.0"
       , "npm":">=1.0.0"
     }
   , "dependencies":{
-        "MD5":"^1.2.1"
-      , "async":"^0.9.0"
-      , "body-parser":"^1.5.2"
-      , "cheerio":"^0.17.0"
+        "body-parser":"^1.5.2"
       , "express":"^4.6.1"
       , "jade":"^1.5.0"
-      , "jayschema":"^0.3.1"
       , "less-middleware":"^1.0.4"
       , "morgan":"^1.5.1"
-      , "node-uuid":"^1.4.2"
-      , "q":"^1.0.1"
       , "request":"^2.37.0"
       , "serve-favicon":"^2.0.1"
-      , "sha1":"^1.1.0"
       , "socket.io":"~1.1.0"
+      , "socket.io-client":"~1.1.0"
       , "validator":"^3.16.1"
     }
   , "devDependencies":{}

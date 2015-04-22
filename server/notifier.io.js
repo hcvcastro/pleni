@@ -4,7 +4,9 @@ var http=require('http')
   , express=require('express')
   , bodyparser=require('body-parser')
   , app=express()
-  , server=http.Server(app)
+  , server=http.createServer(app)
+  , favicon=require('serve-favicon')
+  , lessmiddleware=require('less-middleware')
   , morgan=require('morgan')
   , join=require('path').join
   , validate=require('../core/validators')
@@ -14,6 +16,7 @@ var http=require('http')
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , planners=new Array()
+  , config=require('../config/notifier')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].planner.host==needle.planner.host
@@ -33,14 +36,33 @@ var http=require('http')
     };
 
 app.set('planners',planners);
-app.set('port',process.env.PORT||3002);
-app.set('views',join(__dirname,'views'));
-app.disable('x-powered-by');
 
+app.set('host',config.notifier.host);
+app.set('port',config.notifier.port);
+app.disable('x-powered-by');
 app.use(bodyparser.json());
-app.use(morgan('dev'));
-app.use(express.static(join(__dirname,'public')));
-app.use(express.static(join(__dirname,'..','bower_components')));
+
+if(config.env=='production'){
+    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+    app.use(express.static(join(__dirname,'..','client')));
+    app.use(morgan('combined'));
+}else{
+    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+    app.set('views',join(__dirname,'..','client','views','notifier'));
+    app.set('view engine','jade');
+
+    app.use(lessmiddleware('/less',{
+        dest:'/css'
+      , pathRoot:join(__dirname,'..','client')
+      , compress:false
+    }));
+
+    app.use(express.static(join(__dirname,'..','client')));
+    app.use(express.static(join(__dirname,'..','bower_components')));
+    app.locals.pretty=true;
+
+    app.use(morgan('dev'));
+}
 
 app.get('/id',function(request,response){
     response.json({
@@ -49,8 +71,13 @@ app.get('/id',function(request,response){
     });
 });
 
-app.get('/msg.html',function(request,response){
-    response.sendFile(join(__dirname,'..','client','notifiers','msg.html'));
+app.get('/',function(request,response){
+    if(config.env=='production'){
+        response.status(200)
+            .sendFile(join(__dirname,'..','client','index.html'));
+    }else{
+        response.status(200).render('dev');
+    }
 });
 
 app.get('/notifier',function(request,response){
@@ -236,9 +263,9 @@ ios.sockets.on('connection',function(socket){
     });
 });
 
-server.listen(app.get('port'),'localhost',function(){
-    console.log('pleni ✯ notifier: listening on port '
-        +app.get('port')+'\n');
+server.listen(app.get('port'),app.get('host'),function(){
+    console.log('pleni ✯ notifier: listening on '
+        +app.get('host')+':'+app.get('port')+'\n');
 });
 
 module.exports=app;

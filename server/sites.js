@@ -30,6 +30,7 @@ var http=require('http')
   , report=require('./sites/planners').report
   , config=require('../config/sites')
 
+app.set('host',config.sites.host);
 app.set('port',config.sites.port);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
