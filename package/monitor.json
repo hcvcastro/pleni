@@ -1,5 +1,5 @@
 {
-    "name":"pleni-notifier"
+    "name":"pleni-monitor"
   , "version":"0.0.1"
   , "author":{
         "name":"Hiperbórea"
@@ -7,7 +7,7 @@
       , "url":"http://www.hiperborea.com.bo"
     }
   , "license":"GPLv3"
-  , "description":"Process for view notification for planners"
+  , "description":"Process for planner assignation and concurrent tasks"
   , "keywords":[
         "Pleni"
       , "Node.js"
@@ -21,9 +21,9 @@
         "url":"https://github.com/hiperborea/pleni/issues"
     }
   , "scripts":{
-        "start":"supervisor server/notifier.io.js"
+        "start":"supervisor server/monitor.js"
     }
-  , "main":"server/notifier.io.js"
+  , "main":"server/monitor.js"
   , "engines":{
         "node":">=0.6.0"
       , "npm":">=1.0.0"
@@ -31,12 +31,9 @@
   , "dependencies":{
         "body-parser":"^1.5.2"
       , "express":"^4.6.1"
-      , "jade":"^1.5.0"
-      , "less-middleware":"^1.0.4"
       , "morgan":"^1.5.1"
-      , "serve-favicon":"^2.0.1"
-      , "socket.io":"~1.1.0"
-      , "socket.io-client":"~1.1.0"
+      , "redis": "^0.12.1"
+      , "request": "^2.37.0"
       , "validator":"^3.16.1"
     }
   , "devDependencies":{}

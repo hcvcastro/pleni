@@ -6,14 +6,14 @@ var http=require('http')
   , app=express()
   , server=http.createServer(app)
   , morgan=require('morgan')
-  , redis=require('redis')
-  , redisclient=redis.createClient()
   , request=require('request')
   , validate=require('../core/validators')
   , _success=require('../core/json-response').success
   , _error=require('../core/json-response').error
   , config=require('../config/monitor')
-  , port=process.env.PORT||config.monitor.port
+  , redis=require('redis')
+  , redisclient=redis.createClient(
+        config.redis.port,config.redis.host,config.redis.options)
   , assign=function(planner,done){
         redisclient.zrange('monitor:queue',0,0,function(err,task){
             if(task.length!=0){
@@ -56,7 +56,8 @@ var http=require('http')
         }
     }
 
-app.set('port',port);
+app.set('host',config.monitor.host);
+app.set('port',config.monitor.port);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 
@@ -168,9 +169,9 @@ app.delete('/planners',function(request,response){
     }
 });
 
-server.listen(app.get('port'),'localhost',function(){
-    console.log('pleni ✯ planners monitor: listening on port '
-        +app.get('port')+'\n');
+server.listen(app.get('port'),app.get('host'),function(){
+    console.log('pleni ✯ planners monitor: listening on '
+        +app.get('host')+':'+app.get('port')+'\n');
 });
 
 module.exports=app;

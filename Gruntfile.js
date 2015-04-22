@@ -373,7 +373,7 @@ module.exports=function(grunt){
                   , dest:'dist/notifier/client/favicon.ico'
                 },{
                     expand:true
-                  , src:['core/**']
+                  , src:['core/*.js']
                   , dest:'dist/notifier/'
                 },{
                     src:'server/notifier.io.js'
@@ -389,7 +389,7 @@ module.exports=function(grunt){
           , monitor:{
                 files:[{
                     expand:true
-                  , src:['core/**']
+                  , src:['core/*.js']
                   , dest:'dist/monitor/'
                 },{
                     src:'server/monitor.js'
@@ -397,6 +397,9 @@ module.exports=function(grunt){
                 },{
                     src:'config/monitor.js'
                   , dest:'dist/monitor/config/monitor.js'
+                },{
+                    src:'package/monitor.json'
+                  , dest:'dist/monitor/package.json'
                 }]
             }
           , sites:{
