@@ -12,10 +12,16 @@ var http=require('http')
   , server=http.Server(app)
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
+  , config=require('../config/master')
+  , mongoose=require('mongoose')
+  , db=mongoose.connect(config.mongo.url)
+
   , resources={}
   , notifier=new Array()
   , projects=new Array()
-  , env=process.env.ENV||'production'
+  , user={
+        role:'guest'
+    }
 
 // sync methods
 resources.dbservers=loadconfig(join(__dirname,'..','config','dbservers.json'));
@@ -28,16 +34,16 @@ app.set('resources',resources);
 app.set('notifier',notifier);
 app.set('projects',projects);
 
-// async methods
-app.set('port',process.env.PORT||3000);
+app.set('host',config.master.host);
+app.set('port',config.master.port);
 app.disable('x-powered-by');
 app.use(bodyparser.json());
 
-/*if(env=='production'){
-    app.use(favicon(join(__dirname,'..','dist','master','favicon.ico')));
-    app.use(express.static(join(__dirname,'..','dist','master')));
+if(config.env=='production'){
+    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+    app.use(express.static(join(__dirname,'..','client')));
     app.use(morgan('combined'));
-}else{*/
+}else{
     app.use(favicon(join(__dirname,'..','client','favicon.ico')));
     app.set('views',join(__dirname,'..','client','views','master'));
     app.set('view engine','jade');
@@ -53,9 +59,9 @@ app.use(bodyparser.json());
     app.locals.pretty=true;
 
     app.use(morgan('dev'));
-/*}*/
+}
 
-require('./master/home')(app);
+require('./master/home')(app,user);
 require('./master/resources')(app);
 require('./master/resources/dbservers')(app);
 require('./master/resources/repositories')(app);
@@ -78,9 +84,9 @@ ios.sockets.on('connection',function(socket){
     });
 });
 
-server.listen(app.get('port'),'localhost',function(){
-    console.log('pleni ✯ master: listening on port '
-        +app.get('port')+'\n');
+server.listen(app.get('port'),app.get('host'),function(){
+    console.log('pleni ✯ master: listening on '
+        +app.get('host')+':'+app.get('port')+'\n');
 });
 
 module.exports=app;

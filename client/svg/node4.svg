@@ -10,11 +10,11 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="400"
-   height="400"
+   width="695"
+   height="695"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.5 r10040"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="node4.svg">
   <defs
      id="defs4">
@@ -209,15 +209,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="42.749145"
-     inkscape:cy="196.3867"
+     inkscape:zoom="4.9166018"
+     inkscape:cx="638.17808"
+     inkscape:cy="365.00158"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:showpageshadow="false"
      inkscape:window-width="1914"
-     inkscape:window-height="1055"
+     inkscape:window-height="1056"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -242,7 +242,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -250,42 +250,18 @@
      inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-1704.7233)">
-    <g
-       id="g3018"
-       transform="matrix(0.68879773,0,0,0.68879803,-17.327932,1221.1869)"
-       style="fill:#658068;fill-opacity:0.58823529">
-      <path
-         inkscape:export-ydpi="180"
-         inkscape:export-xdpi="180"
-         style="fill:#658068;fill-opacity:0.58823529;fill-rule:evenodd;stroke:none"
-         d="m 94.84342,992.3612 c 0,19.2434 -15.59988,34.8433 -34.843324,34.8433 -19.243422,0 -34.843317,-15.5999 -34.843317,-34.8433 0,-19.24343 15.599895,-34.84331 34.843317,-34.84331 19.243444,0 34.843324,15.59988 34.843324,34.84331 z"
-         id="path3800"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
-       style="fill:#658068;fill-opacity:0.58823529"
-       transform="matrix(0.22959924,0,0,0.22959934,0.72402299,1630.6278)"
-       id="g3019">
-      <path
-         inkscape:connector-curvature="0"
-         id="path3021"
-         d="m 94.84342,992.3612 c 0,19.2434 -15.59988,34.8433 -34.843324,34.8433 -19.243422,0 -34.843317,-15.5999 -34.843317,-34.8433 0,-19.24343 15.599895,-34.84331 34.843317,-34.84331 19.243444,0 34.843324,15.59988 34.843324,34.84331 z"
-         style="fill:#658068;fill-opacity:0.58823529;fill-rule:evenodd;stroke:none"
-         inkscape:export-xdpi="180"
-         inkscape:export-ydpi="180" />
-    </g>
-    <g
-       style="fill:#658068;fill-opacity:0.58823529"
-       transform="matrix(0.22959924,0,0,0.22959935,59.974023,1684.1279)"
-       id="g3027">
-      <path
-         inkscape:connector-curvature="0"
-         id="path3029"
-         d="m 94.84342,992.3612 c 0,19.2434 -15.59988,34.8433 -34.843324,34.8433 -19.243422,0 -34.843317,-15.5999 -34.843317,-34.8433 0,-19.24343 15.599895,-34.84331 34.843317,-34.84331 19.243444,0 34.843324,15.59988 34.843324,34.84331 z"
-         style="fill:#658068;fill-opacity:0.58823529;fill-rule:evenodd;stroke:none"
-         inkscape:export-xdpi="180"
-         inkscape:export-ydpi="180" />
-    </g>
+     transform="translate(0,-1409.7233)">
+    <circle
+       id="path4652"
+       style="display:inline;fill:#658068;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       cx="681.56244"
+       cy="1707.9166"
+       r="10" />
+    <path
+       id="path3491"
+       d="m 347.5,1419.3888 c -186.58093,0 -337.834687,151.2537 -337.834687,337.8346 0,186.5808 151.253757,337.8346 337.834687,337.8346 186.58093,0 337.83469,-151.2538 337.83469,-337.8346 0,-186.5809 -151.25376,-337.8346 -337.83469,-337.8346 z"
+       style="fill:none;stroke:#658068;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:2, 16;stroke-dashoffset:0;stroke-opacity:1;stroke-linecap:round;fill-opacity:1"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sssss" />
   </g>
 </svg>

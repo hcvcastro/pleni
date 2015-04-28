@@ -2,10 +2,15 @@ header
     nav.grid
         ul.left
             li: a(href='/#/home') Home
-            li: a(href='/#/resources') Resources
-            li: a(href='/#/projects') Projects
+            if user.role != 'guest'
+                li: a(href='/#/resources') Resources
+                li: a(href='/#/projects') Projects
         ul.right
-            li: a(href='/#/signin') Sign In
-            li: a(href='/#/signup') Sign Up
+            if user.role != 'guest'
+                li: a(href='/#/settings') Settings
+                li: a(href='/#/signout') Logout
+            else
+                li: a(href='/#/signin') Sign In
+                li: a(href='/#/signup') Sign Up
         .clearfix
 

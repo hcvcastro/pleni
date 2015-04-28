@@ -400,7 +400,7 @@ app.post('/k/:id',function(request,response){
 });
 
 server.listen(app.get('port'),app.get('host'),function(){
-    console.log('pleni ✯ quickstart sites: listening on port '
+    console.log('pleni ✯ quickstart sites: listening on '
         +app.get('host')+':'+app.get('port')+'\n');
 });
 
