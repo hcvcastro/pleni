@@ -62,6 +62,8 @@ if(config.env=='production'){
 }
 
 require('./master/home')(app,user);
+require('./master/auth')(app,user);
+
 require('./master/resources')(app);
 require('./master/resources/dbservers')(app);
 require('./master/resources/repositories')(app);

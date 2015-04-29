@@ -1,0 +1,30 @@
+.grid.full.last
+    nav.menu
+        include ../blocks/footer/bottom
+    .main
+        .messages
+        section.signup
+            h1 Sign up
+            article.form.animate
+                .body
+                    form(ng-submit='send()')
+                        p
+                            label Email
+                            input(type='text',placeholder='Your email for sending confirmation',required)
+                        p
+                            label Password
+                            input(type='password',placeholder='Your super safe password',required)
+                        p
+                            label Password confirmation
+                            input(type='password',placeholder='Repeat your super safe password',required)
+                        p.offset
+                            span.message
+                                | By signing up you agree to the 
+                                a(href='') Terms of Service
+                        p.offset
+                            span.message
+                                | and the 
+                                a(href='') Privacy Policy.
+                        p.offset
+                            button(type='submit') Register
+

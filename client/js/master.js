@@ -9,6 +9,14 @@ var pleni=angular
                 templateUrl:'/home'
               , controller:'HomeController'
             })
+            .when('/signin',{
+                templateUrl:'/signin'
+              , controller:'SigninController'
+            })
+            .when('/signup',{
+                templateUrl:'/signup'
+              , controller:'SignupController'
+            })
             .when('/resources',{
                 templateUrl:'/resources/view'
               , controller:'ResourcesController'

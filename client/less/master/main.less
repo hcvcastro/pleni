@@ -252,7 +252,7 @@ article.form, article.remove, article.view {
                 padding: 0;
 
                 label {
-                    .font3;
+                    .font4;
                     height: 32px;
 
                     &:not(.min){
@@ -268,9 +268,11 @@ article.form, article.remove, article.view {
                 }
 
                 input {
+                    .font6;
                     height: 32px;
                     box-sizing: border-box;
                     border: 1px solid @color2;
+                    padding: 0 10px;
 
                     &:not(.min) {
                         width: 340px;
@@ -308,7 +310,7 @@ article.form, article.remove, article.view {
                     background-color: @color2;
                     color: #ffffff;
                     margin-right: 5px;
-                    .font3;
+                    .font4;
                 }
             }
 
@@ -427,6 +429,11 @@ article.form, article.remove, article.view {
                     .font1;
                     padding: 5px 0 0 10px;
                     overflow: hidden;
+
+                    a {
+                        color: @color2;
+                        text-decoration: underline;
+                    }
                 }
 
                 button {

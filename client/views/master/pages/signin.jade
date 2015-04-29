@@ -1,0 +1,22 @@
+.grid.full.last
+    nav.menu
+        include ../blocks/footer/bottom
+    .main
+        .messages
+        section.signin
+            h1 Log in to Pleni
+            article.form.animate
+                .body
+                    form(ng-submit='send()')
+                        p
+                            label Email
+                            input(type='text',placeholder='Your email registered',required)
+                        p
+                            label Password
+                            input(type='password',placeholder='Your super safe password',required)
+                        p.offset
+                            span.message
+                                a(href='') Forgot your password?
+                        p.offset
+                            button(type='submit') Login
+
