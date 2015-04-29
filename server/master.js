@@ -1,20 +1,22 @@
 'use strict';
 
 var http=require('http')
+  , join=require('path').join
   , express=require('express')
-  , favicon=require('serve-favicon')
-  , bodyparser=require('body-parser')
   , morgan=require('morgan')
   , lessmiddleware=require('less-middleware')
-  , join=require('path').join
-  , loadconfig=require('../core/loadconfig')
+  , favicon=require('serve-favicon')
+  , csurf=require('csurf')
+  , bodyparser=require('body-parser')
+  , cookieparser=require('cookie-parser')
   , app=express()
   , server=http.Server(app)
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , config=require('../config/master')
-  , mongoose=require('mongoose')
-  , db=mongoose.connect(config.mongo.url)
+  , loadconfig=require('../core/loadconfig')
+//  , mongoose=require('mongoose')
+//  , db=mongoose.connect(config.mongo.url)
 
   , resources={}
   , notifier=new Array()
@@ -37,7 +39,13 @@ app.set('projects',projects);
 app.set('host',config.master.host);
 app.set('port',config.master.port);
 app.disable('x-powered-by');
-app.use(bodyparser.json());
+
+var bodyjson=bodyparser.json()
+  , parser=cookieparser(config.cookie.secret)
+  , csrf=csurf({cookie:true})
+
+app.use(bodyjson);
+app.use(parser);
 
 if(config.env=='production'){
     app.use(favicon(join(__dirname,'..','client','favicon.ico')));
@@ -62,7 +70,7 @@ if(config.env=='production'){
 }
 
 require('./master/home')(app,user);
-require('./master/auth')(app,user);
+require('./master/auth')(app,user,csrf,bodyjson);
 
 require('./master/resources')(app);
 require('./master/resources/dbservers')(app);

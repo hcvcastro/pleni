@@ -15,6 +15,7 @@
                             label Password
                             input(type='password',placeholder='Your super safe password',required)
                         p.offset
+                            input(type='hidden',name='_csrf',value='#{csrftoken}')
                             span.message
                                 a(href='') Forgot your password?
                         p.offset
