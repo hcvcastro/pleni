@@ -2,6 +2,7 @@
 
 var http=require('http')
   , join=require('path').join
+  , config=require('../config/master')
   , express=require('express')
   , morgan=require('morgan')
   , lessmiddleware=require('less-middleware')
@@ -9,16 +10,75 @@ var http=require('http')
   , csurf=require('csurf')
   , bodyparser=require('body-parser')
   , cookieparser=require('cookie-parser')
+  , cookiesession=require('express-session')
+  , redis=require('redis')
+  , redisstore=require('connect-redis')(cookiesession)
+  , redisclient=redis.createClient(
+        config.redis.port,config.redis.host,config.redis.options)
+  , passport=require('passport')
+  , localstrategy=require('passport-local').Strategy
+  , mongoose=require('mongoose')
+  , model_user=require('./master/models/user')
   , app=express()
   , server=http.Server(app)
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
-  , config=require('../config/master')
   , loadconfig=require('../core/loadconfig')
-//  , mongoose=require('mongoose')
-//  , db=mongoose.connect(config.mongo.url)
+  , store=new redisstore({
+        client:redisclient
+      , host:config.redis.host
+      , port:config.redis.port
+      , prefix:config.redis.prefix
+    })
 
-  , resources={}
+mongoose.connect(config.mongo.url);
+var mongodb=mongoose.connection;
+mongodb.on('error',console.error.bind(console,'connection error:'));
+mongodb.once('open',function callback(){
+    console.log('connection to mongo db: '+config.mongo.url);
+});
+
+passport.serializeUser(function(user,done){
+    done(null,user.id);
+});
+passport.deserializeUser(function(id,done){
+    model_user.findById(id,function(err,user){
+        done(err,user);
+    });
+});
+passport.use(new localstrategy({
+    usernameField:'email'
+  , passwordField:'password'
+  , passReqToCallback:true
+},function(request,email,password,done){
+    console.log('aspppp');
+    model_user.findOne({
+        email:email
+    },function(err,user){
+        if(err){
+            return done(err);
+        }
+        if(!user){
+            return done(null,false,{
+                message:'Unknown email: '+email
+            });
+        }
+        user.comparePassword(password,function(err,isMatch){
+            if(err){
+                return done(err);
+            }
+            if(isMatch){
+                return done(null,user);
+            }else{
+                return done(null,false,{
+                    message:'Invalid password'
+                });
+            }
+        });
+    });
+}));
+
+var resources={}
   , notifier=new Array()
   , projects=new Array()
   , user={
@@ -40,18 +100,29 @@ app.set('host',config.master.host);
 app.set('port',config.master.port);
 app.disable('x-powered-by');
 
-var bodyjson=bodyparser.json()
-  , parser=cookieparser(config.cookie.secret)
-  , csrf=csurf({cookie:true})
+app.use(cookieparser(config.cookie.secret));
+app.use(bodyparser.json());
+app.use(cookiesession({
+    cookie:{
+        path:'/'
+      , httpOnly:true
+      , secure:false
+      , maxAge:config.cookie.maxAge
+    }
+  , name:config.cookie.name
+  , resave:false
+  , saveUninitialized:false
+  , secret:config.cookie.secret
+  , store:store
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use(bodyjson);
-app.use(parser);
-
-if(config.env=='production'){
+/*if(config.env=='production'){
     app.use(favicon(join(__dirname,'..','client','favicon.ico')));
     app.use(express.static(join(__dirname,'..','client')));
     app.use(morgan('combined'));
-}else{
+}else{*/
     app.use(favicon(join(__dirname,'..','client','favicon.ico')));
     app.set('views',join(__dirname,'..','client','views','master'));
     app.set('view engine','jade');
@@ -67,11 +138,10 @@ if(config.env=='production'){
     app.locals.pretty=true;
 
     app.use(morgan('dev'));
-}
+//}
 
 require('./master/home')(app,user);
-require('./master/auth')(app,user,csrf,bodyjson);
-
+require('./master/auth')(app,passport);
 require('./master/resources')(app);
 require('./master/resources/dbservers')(app);
 require('./master/resources/repositories')(app);
@@ -81,6 +151,12 @@ require('./master/notifier')(app,ios,ioc);
 require('./master/projects')(app);
 require('./master/workspace')(app);
 
+app.use(function(error,request,response,next){
+    if(error.code!=='EBADCSRFTOKEN'){
+        return next(error);
+    }
+    response.status(403).send('forbidden');
+});
 app.use(function(request,response){
     response.status(404).render('404.jade',{
         title:'404',
