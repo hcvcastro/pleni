@@ -18,6 +18,18 @@ module.exports=function(app,passport){
         })(request,response,next);
     });
 
+    app.post('/user',function(request,response){
+        if(request.isAuthenticated()){
+            response.send({
+                user:true
+            });
+        }else{
+            response.send({
+                user:false
+            });
+        }
+    });
+
     app.get('/signup',function(request,response){
         response.render('pages/signup');
     });

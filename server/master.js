@@ -13,8 +13,6 @@ var http=require('http')
   , cookiesession=require('express-session')
   , redis=require('redis')
   , redisstore=require('connect-redis')(cookiesession)
-  , redisclient=redis.createClient(
-        config.redis.port,config.redis.host,config.redis.options)
   , passport=require('passport')
   , localstrategy=require('passport-local').Strategy
   , mongoose=require('mongoose')
@@ -31,10 +29,18 @@ var http=require('http')
       , prefix:config.redis.prefix
     })
 
+var redisclient=redis.createClient(
+    config.redis.port,config.redis.host,config.redis.options)
+redisclient.on('error',console.error.bind(console,'redis connection error:'));
+redisclient.on('ready',function(){
+    console.log('connection to redis db: '+config.redis.host+':'
+        +config.redis.port);
+})
+
 mongoose.connect(config.mongo.url);
 var mongodb=mongoose.connection;
-mongodb.on('error',console.error.bind(console,'connection error:'));
-mongodb.once('open',function callback(){
+mongodb.on('error',console.error.bind(console,'mongo connection error:'));
+mongodb.once('open',function(){
     console.log('connection to mongo db: '+config.mongo.url);
 });
 

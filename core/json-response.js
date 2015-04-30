@@ -1,6 +1,6 @@
 'use strict';
 
-exports.error = {
+exports.error={
     validation:     {ok:false,message:'Validation error'}
   , network:        {ok:false,message:'Network error'}
   , connection:     {ok:false,message:'Connection error'}
@@ -13,7 +13,7 @@ exports.error = {
   , notimplemented: {ok:false,message:'Not implemented service'}
 };
 
-exports.success = {
+exports.success={
     ok:         {ok:true}
   , connection: {ok:true,message:'Success connection'}
   , dbsave:     {ok:true,message:'CouchDB settings changed'}
