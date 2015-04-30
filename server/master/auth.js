@@ -19,6 +19,7 @@ module.exports=function(app,passport){
     });
 
     app.post('/user',function(request,response){
+        console.log(request.isAuthenticated());
         if(request.isAuthenticated()){
             response.send({
                 user:true

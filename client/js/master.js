@@ -20,20 +20,37 @@ var pleni=angular
             .when('/resources',{
                 templateUrl:'/resources/view'
               , controller:'ResourcesController'
-              , resolve:{factory:'Authed'}
             })
             .when('/projects',{
                 templateUrl:'/projects/view'
               , controller:'ProjectsController'
-              , resolve:{factory:'Authed'}
             })
             .when('/projects/:project',{
                 templateUrl:'/workspace/view'
               , controller:'WorkspaceController'
-              , resolve:{factory:'Authed'}
             })
             .otherwise({
                 redirectTo: '/home'
             });
     }]);
+
+/*var authed=function($q,$rootScope,$location,$http){
+    if($rootScope.user){
+        return true;
+    }else{
+        var deferred=$q.defer();
+
+        $http.post('/user')
+        .success(function(response){
+            $rootScope.user=response.user;
+            deferred.resolve(true);
+        })
+        .error(function(){
+            deferred.reject();
+            $location.path('/signin');
+        });
+
+        return deferred.promise;
+    }
+};*/
 
