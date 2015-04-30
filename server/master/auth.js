@@ -1,6 +1,7 @@
 'use strict';
 
-var csurf=require('csurf')
+var _success=require('../../core/json-response').success
+  , csurf=require('csurf')
   , csrf=csurf({cookie:true})
 
 module.exports=function(app,passport){
@@ -10,10 +11,10 @@ module.exports=function(app,passport){
         });
     });
 
-    app.post('/signin',csrf,passport.authenticate('local'),function(request,response,next){
+    app.post('/signin',csrf,passport.authenticate('local'),
+        function(request,response,next){
         passport.authenticate('local',function(err,user,info){
-            response.send('data is being processing');
-            console.log('loged');
+            response.status(200).send(_success.ok);
         })(request,response,next);
     });
 

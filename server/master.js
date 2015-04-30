@@ -42,16 +42,30 @@ passport.serializeUser(function(user,done){
     done(null,user.id);
 });
 passport.deserializeUser(function(id,done){
-    model_user.findById(id,function(err,user){
-        done(err,user);
-    });
+    if(config.master.admin&&id===0){
+        done(null,{
+            email:config.master.email
+        });
+    }else{
+        model_user.findById(id,function(err,user){
+            done(err,user);
+        });
+    }
 });
 passport.use(new localstrategy({
     usernameField:'email'
   , passwordField:'password'
   , passReqToCallback:true
 },function(request,email,password,done){
-    console.log('aspppp');
+    if(config.master.admin){
+        if(email===config.master.email&&password===config.master.password){
+            return done(null,{
+                id:0
+              , email:config.master.email
+            });
+        }
+    }
+
     model_user.findOne({
         email:email
     },function(err,user){
@@ -81,9 +95,6 @@ passport.use(new localstrategy({
 var resources={}
   , notifier=new Array()
   , projects=new Array()
-  , user={
-        role:'guest'
-    }
 
 // sync methods
 resources.dbservers=loadconfig(join(__dirname,'..','config','dbservers.json'));
@@ -140,7 +151,7 @@ app.use(passport.session());
     app.use(morgan('dev'));
 //}
 
-require('./master/home')(app,user);
+require('./master/home')(app);
 require('./master/auth')(app,passport);
 require('./master/resources')(app);
 require('./master/resources/dbservers')(app);

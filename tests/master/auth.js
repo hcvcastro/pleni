@@ -4,6 +4,7 @@ var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
   , app=require('../../server/master')
+  , config=require('../../config/master')
 
 describe('signin controller functions',function(){
     it('GET /signin',function(done){
@@ -45,13 +46,17 @@ describe('signin controller functions',function(){
                     .set('cookie',res.headers['set-cookie'])
                     .send({
                         _csrf:csrf
-                      , email:'cijkb.j@gmail.com'
-                      , password:'asdfqwerasdfzzxcv'
+                      , email:config.master.email
+                      , password:config.master.password
                     })
-                    .expect(200,done);
-//                    .end(function(err2,res2){
-//                        done();
-//                    });
+                    .expect(200)
+                    .end(function(err,res){
+                        res.body.should.have.property('id')
+                            .and.be.eql(0);
+                        res.body.should.have.property('email')
+                            .and.be.eql(config.master.email);
+                        done();
+                    });
             });
     });
 });

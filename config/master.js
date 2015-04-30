@@ -19,6 +19,9 @@ module.exports={
   , master:{
         host:process.env.OPENSHIFT_NODEJS_IP||'localhost'
       , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3004
+      , admin:true
+      , email:'admin@localhost'
+      , password:'asdf'
     }
   , mongo:{
         url:'mongodb://localhost/pleni'

@@ -7,13 +7,13 @@
             h1 Log in to Pleni
             article.form.animate
                 .body
-                    form(ng-submit='send()')
+                    form(ng-submit='signin()')
                         p
                             label Email
-                            input(type='text',placeholder='Your email registered',required)
+                            input(type='email',name='email',placeholder='Your email registered',required,ng-model='email')
                         p
                             label Password
-                            input(type='password',placeholder='Your super safe password',required)
+                            input(type='password',name='password',placeholder='Your super safe password',required,ng-model='password')
                         p.offset
                             input(type='hidden',name='_csrf',value='#{csrftoken}')
                             span.message
