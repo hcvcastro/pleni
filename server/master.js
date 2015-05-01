@@ -22,12 +22,6 @@ var http=require('http')
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , loadconfig=require('../core/loadconfig')
-  , store=new redisstore({
-        client:redisclient
-      , host:config.redis.host
-      , port:config.redis.port
-      , prefix:config.redis.prefix
-    })
 
 var redisclient=redis.createClient(
     config.redis.port,config.redis.host,config.redis.options)
@@ -35,6 +29,12 @@ redisclient.on('error',console.error.bind(console,'redis connection error:'));
 redisclient.on('ready',function(){
     console.log('connection to redis db: '+config.redis.host+':'
         +config.redis.port);
+})
+var store=new redisstore({
+    client:redisclient
+  , host:config.redis.host
+  , port:config.redis.port
+  , prefix:config.redis.prefix
 })
 
 mongoose.connect(config.mongo.url);
@@ -50,7 +50,8 @@ passport.serializeUser(function(user,done){
 passport.deserializeUser(function(id,done){
     if(config.master.admin&&id===0){
         done(null,{
-            email:config.master.email
+            id:0
+          , email:config.master.email
         });
     }else{
         model_user.findById(id,function(err,user){

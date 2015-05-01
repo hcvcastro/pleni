@@ -7,6 +7,8 @@ var request=require('supertest')
   , config=require('../../config/master')
 
 describe('signin controller functions',function(){
+    var cookie='';
+
     it('GET /signin',function(done){
         request(app)
             .get('/signin')
@@ -51,12 +53,24 @@ describe('signin controller functions',function(){
                     })
                     .expect(200)
                     .end(function(err,res){
-                        res.body.should.have.property('id')
-                            .and.be.eql(0);
-                        res.body.should.have.property('email')
-                            .and.be.eql(config.master.email);
+                        cookie=res.headers['set-cookie'];
+                        res.body.should.have.property('ok')
+                            .and.be.eql(true);
                         done();
                     });
+            });
+    });
+
+    it('GET /profile',function(done){
+        request(app)
+            .post('/profile')
+            .set('cookie',cookie)
+            .end(function(err,res){
+                res.body.should.have.property('id')
+                    .and.eql(0);
+                res.body.should.have.property('email')
+                    .and.eql(config.master.email);
+                done();
             });
     });
 });

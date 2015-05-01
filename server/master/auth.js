@@ -1,6 +1,7 @@
 'use strict';
 
 var _success=require('../../core/json-response').success
+  , _error=require('../../core/json-response').error
   , csurf=require('csurf')
   , csrf=csurf({cookie:true})
 
@@ -11,19 +12,28 @@ module.exports=function(app,passport){
         });
     });
 
-    app.post('/signin',csrf,passport.authenticate('local'),
-        function(request,response,next){
+    app.post('/signin',csrf,function(request,response,next){
         passport.authenticate('local',function(err,user,info){
-            response.status(200).send(_success.ok);
+            if(err){
+                return next(err);
+            }
+            if(!user){
+                response.status(401).send(_error.auth);
+            }else{
+                request.login(user,function(err){
+                    if(err){
+                        return next(err);
+                    }else{
+                        response.status(200).send(_success.ok);
+                    }
+                });
+            }
         })(request,response,next);
     });
 
-    app.post('/user',function(request,response){
-        console.log(request.isAuthenticated());
+    app.post('/profile',function(request,response){
         if(request.isAuthenticated()){
-            response.send({
-                user:true
-            });
+            response.send(request.user);
         }else{
             response.send({
                 user:false
