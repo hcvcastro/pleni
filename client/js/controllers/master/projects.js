@@ -3,15 +3,14 @@
 pleni.controller('ProjectsController',
     ['$scope','$location','$sessionStorage','Resources','$filter',
     function($scope,$location,$sessionStorage,Resources,$filter){
+        utils.set_tab(0,3);
+        utils.set_header(true);
+
         $scope.storage=$sessionStorage;
 
         if($scope.storage.workspace){
             $location.path('/projects/'+$scope.storage.workspace.name);
         }
-
-        $('header>nav>ul:nth-child(2)>li').removeClass('active')
-        $('header>nav>ul:nth-child(1)>li:nth-child(3)').addClass('active')
-            .siblings().removeClass('active');
 
         var get_element=function(needle,haystack){
                 for(var i in haystack){

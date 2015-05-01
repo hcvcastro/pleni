@@ -3,11 +3,10 @@
 pleni.controller('ResourcesController',
     ['$scope','$sessionStorage','Resources','Editor',
     function($scope,$sessionStorage,Resources,Editor){
-        $scope.storage=$sessionStorage;
+        utils.set_tab(0,2);
+        utils.set_header(true);
 
-        $('header>nav>ul:nth-child(2)>li').removeClass('active')
-        $('header>nav>ul:nth-child(1)>li:nth-child(2)').addClass('active')
-            .siblings().removeClass('active');
+        $scope.storage=$sessionStorage;
 
         var get_element=function(needle,haystack){
                 for(var i in haystack){

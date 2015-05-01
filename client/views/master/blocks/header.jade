@@ -1,4 +1,4 @@
-header
+header(ng-controller='HeaderController')
     nav.grid
         ul.left
             li: a(href='/#/home') Home
@@ -8,9 +8,9 @@ header
         ul.right
             if role != 'guest'
                 li: a(href='/#/settings') Settings
-                li: a(href='/#/signout') Logout
+                li: a(ng-click='signout()') Sign out
             else
-                li: a(href='/#/signin') Sign In
-                li: a(href='/#/signup') Sign Up
+                li: a(href='/#/signin') Sign in
+                li: a(href='/#/signup') Sign up
         .clearfix
 

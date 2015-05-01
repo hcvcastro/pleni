@@ -19,7 +19,9 @@ var validate=require('../../core/validators')
     };
 
 module.exports=function(app){
-    app.get('/workspace/view',function(request,response){
+    var auth=app.get('auth');
+
+    app.get('/workspace/view',auth,function(request,response){
         response.render('pages/workspace');
     });
 
@@ -72,21 +74,21 @@ module.exports=function(app){
         .done();
     };
 
-    app.get('/workspace/:project/:repository/summary',
+    app.get('/workspace/:project/:repository/summary',auth,
     function(request,response){
         return generic_document(request,response,getsummary,function(args){
             response.status(200).json(args.site.summary);
         });
     });
 
-    app.get('/workspace/:project/:repository/report',
+    app.get('/workspace/:project/:repository/report',auth,
     function(request,response){
         return generic_document(request,response,getreport,function(args){
             response.status(200).json(args.site.report);
         });
     });
 
-    app.get('/workspace/:project/:repository/sitemap',
+    app.get('/workspace/:project/:repository/sitemap',auth,
     function(request,response){
         return generic_document(request,response,getsitemap,function(args){
             response.status(200).json(args.site.sitemap);

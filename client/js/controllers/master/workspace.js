@@ -5,6 +5,9 @@ pleni.controller('WorkspaceController',
     'Resources','Editor','Visual',
     function($scope,$routeParams,$location,$sessionStorage,
         Resources,Editor,Visual){
+        utils.set_tab(0,3);
+        utils.set_header(false);
+
         $scope.storage=$sessionStorage;
 
         if(!$routeParams.project){

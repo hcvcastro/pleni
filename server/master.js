@@ -2,6 +2,7 @@
 
 var http=require('http')
   , join=require('path').join
+  , _error=require('../core/json-response').error
   , config=require('../config/master')
   , express=require('express')
   , morgan=require('morgan')
@@ -158,8 +159,17 @@ app.use(passport.session());
     app.use(morgan('dev'));
 //}
 
+app.set('passport',passport);
+app.set('auth',function(request,response,next){
+    if(request.isAuthenticated()){
+        return next();
+    }
+    
+    response.status(401).json(_error.auth);
+});
+
 require('./master/home')(app);
-require('./master/auth')(app,passport);
+require('./master/auth')(app);
 require('./master/resources')(app);
 require('./master/resources/dbservers')(app);
 require('./master/resources/repositories')(app);

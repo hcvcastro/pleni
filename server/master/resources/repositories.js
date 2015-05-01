@@ -17,7 +17,9 @@ var validate=require('../../../core/validators')
     };
 
 module.exports=function(app){
-    app.get('/resources/repositories',function(request,response){
+    var auth=app.get('auth');
+
+    app.get('/resources/repositories',auth,function(request,response){
         response.json(app.get('resources').repositories.map(
             function(repository){
                 return {
@@ -30,7 +32,7 @@ module.exports=function(app){
             }));
     });
 
-    app.put('/resources/repositories',function(request,response){
+    app.put('/resources/repositories',auth,function(request,response){
         if(schema.js.validate(request.body,schema.repositories).length==0){
             var resources=app.get('resources');
             resources.repositories=request.body.map(function(repository){
@@ -50,7 +52,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/repositories',function(request,response){
+    app.post('/resources/repositories',auth,function(request,response){
         if(schema.js.validate(request.body,schema.repository).length==0){
             var resources=app.get('resources')
               , repositories=resources.repositories
@@ -78,7 +80,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/repositories',function(request,response){
+    app.delete('/resources/repositories',auth,function(request,response){
         var resources=app.get('resources')
 
         resources.repositories=[];
@@ -86,7 +88,7 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
-    app.post('/resources/repositories/_check',function(request,response){
+    app.post('/resources/repositories/_check',auth,function(request,response){
         if(schema.js.validate(request.body,schema.repository).length==0){
             var dbserver=get_element(
                 request.body._dbserver,app.get('resources').dbservers);
@@ -124,7 +126,8 @@ module.exports=function(app){
         }
     });
 
-    app.get('/resources/repositories/:repository',function(request,response){
+    app.get('/resources/repositories/:repository',auth,
+        function(request,response){
         var id=validate.toString(request.params.repository)
           , repositories=app.get('resources').repositories
           , repository=get_element(id,repositories)
@@ -143,7 +146,8 @@ module.exports=function(app){
         response.status(404).json(_error.notfound);
     });
 
-    app.put('/resources/repositories/:repository',function(request,response){
+    app.put('/resources/repositories/:repository',auth,
+        function(request,response){
         var id=validate.toString(request.params.repository)
           , resources=app.get('resources')
           , repositories=resources.repositories
@@ -173,7 +177,8 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/repositories/:repository',function(request,response){
+    app.delete('/resources/repositories/:repository',auth,
+        function(request,response){
         var id=validate.toString(request.params.repository)
           , resources=app.get('resources')
           , repositories=resources.repositories
@@ -189,7 +194,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/repositories/:repository/_check',
+    app.post('/resources/repositories/:repository/_check',auth,
         function(request,response){
         var id=validate.toString(request.params.repository)
           , resources=app.get('resources')

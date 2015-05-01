@@ -1,9 +1,9 @@
 'use strict';
 
-var authed=require('./auth/authed')
-
 module.exports=function(app){
-    app.get('/resources/view',authed,function(request,response){
+    var auth=app.get('auth');
+
+    app.get('/resources/view',auth,function(request,response){
         response.render('pages/resources');
     });
 };

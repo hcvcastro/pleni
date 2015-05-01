@@ -5,7 +5,9 @@ var _success=require('../../core/json-response').success
   , csurf=require('csurf')
   , csrf=csurf({cookie:true})
 
-module.exports=function(app,passport){
+module.exports=function(app){
+    var passport=app.get('passport');
+
     app.get('/signin',csrf,function(request,response){
         response.render('pages/signin',{
             csrftoken:request.csrfToken()
@@ -35,9 +37,16 @@ module.exports=function(app,passport){
         if(request.isAuthenticated()){
             response.send(request.user);
         }else{
-            response.send({
+           response.send({
                 user:false
             });
+        }
+    });
+
+    app.post('/signout',function(request,response){
+        if(request.isAuthenticated()){
+            request.logout();
+            response.status(200).send(_success.ok);
         }
     });
 

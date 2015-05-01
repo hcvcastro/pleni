@@ -37,6 +37,8 @@ var validate=require('../../core/validators')
     }
 
 module.exports=function(app,ios,ioc){
+    var auth=app.get('auth');
+
     app.get('/id',function(request,response){
         response.json({
             master:'ready for action'
@@ -45,7 +47,7 @@ module.exports=function(app,ios,ioc){
         });
     });
 
-    app.get('/notifier',function(request,response){
+    app.get('/notifier',auth,function(request,response){
         var notifier=app.get('notifier')
 
         response.json(notifier.map(
@@ -61,7 +63,7 @@ module.exports=function(app,ios,ioc){
             }));
     });
 
-    app.put('/notifier',function(request,response){
+    app.put('/notifier',auth,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planners).length==0){
             app.get('notifier').forEach(function(notifier){
                 notifier.socket.disconnect();
@@ -100,7 +102,7 @@ module.exports=function(app,ios,ioc){
         }
     });
 
-    app.post('/notifier',function(request,response){
+    app.post('/notifier',auth,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
             var planner=get_element(request.body,app.get('notifier'))
 
@@ -136,7 +138,7 @@ module.exports=function(app,ios,ioc){
         }
     });
 
-    app.delete('/notifier',function(request,response){
+    app.delete('/notifier',auth,function(request,response){
         app.get('notifier').forEach(function(notifier){
             notifier.socket.disconnect();
         });
@@ -149,7 +151,7 @@ module.exports=function(app,ios,ioc){
         response.status(200).json(_success.ok);
     });
 
-    app.post('/notifier/_add',function(request,response){
+    app.post('/notifier/_add',auth,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
             var notifier=app.get('notifier')
               , planner=get_element(request.body,notifier)
@@ -195,7 +197,7 @@ module.exports=function(app,ios,ioc){
         }
     });
 
-    app.post('/notifier/_remove',function(request,response){
+    app.post('/notifier/_remove',auth,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
             var notifier=app.get('notifier')
               , planner=get_element(request.body,notifier)

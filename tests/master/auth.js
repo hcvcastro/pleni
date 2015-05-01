@@ -73,5 +73,16 @@ describe('signin controller functions',function(){
                 done();
             });
     });
+
+    it('POST /signout',function(done){
+        request(app)
+            .post('/signout')
+            .set('cookie',cookie)
+            .end(function(err,res){
+                res.body.should.have.property('ok')
+                    .and.be.eql(true);
+                done();
+            });
+    });
 });
 

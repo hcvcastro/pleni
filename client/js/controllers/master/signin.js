@@ -3,14 +3,10 @@
 pleni.controller('SigninController',
     ['$scope','$http','$window',
     function($scope,$http,$window){
-
-    $('header>nav>ul:nth-child(1)>li').removeClass('active');
-    $('header>nav>ul:nth-child(2)>li:nth-child(1)').addClass('active')
-        .siblings().removeClass('active');
-
-    $(function(){$('input[name=email]').focus();});
-
+    utils.set_tab(1,1);
     utils.set_active('signin',1);
+
+    $('input[name=email]').focus();
 
     $scope.email='';
     $scope.password='';

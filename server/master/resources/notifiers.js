@@ -20,7 +20,9 @@ var extend=require('underscore').extend
     };
 
 module.exports=function(app){
-    app.get('/resources/notifiers',function(request,response){
+    var auth=app.get('auth');
+
+    app.get('/resources/notifiers',auth,function(request,response){
         response.json(app.get('resources').notifiers.map(
             function(notifier){
                 return {
@@ -33,7 +35,7 @@ module.exports=function(app){
             }));
     });
 
-    app.put('/resources/notifiers',function(request,response){
+    app.put('/resources/notifiers',auth,function(request,response){
         if(schema.js.validate(request.body,schema.notifiers).length==0){
             var resources=app.get('resources');
             resources.notifiers=request.body.map(function(notifier){
@@ -53,7 +55,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/notifiers',function(request,response){
+    app.post('/resources/notifiers',auth,function(request,response){
         if(schema.js.validate(request.body,schema.notifier).length==0){
             var resources=app.get('resources')
               , notifiers=resources.notifiers
@@ -81,7 +83,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/notifiers',function(request,response){
+    app.delete('/resources/notifiers',auth,function(request,response){
         var resources=app.get('resources')
 
         resources.notifiers=[];
@@ -89,7 +91,7 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
-    app.post('/resources/notifiers/_check',function(request,response){
+    app.post('/resources/notifiers/_check',auth,function(request,response){
         if(schema.js.validate(request.body,schema.notifier).length==0){
             test({
                 notifier:{
@@ -115,7 +117,7 @@ module.exports=function(app){
         }
     });
 
-    app.get('/resources/notifiers/:notifier',function(request,response){
+    app.get('/resources/notifiers/:notifier',auth,function(request,response){
         var id=validate.toString(request.params.notifier)
           , notifiers=app.get('resources').notifiers
           , notifier=get_element(id,notifiers)
@@ -134,7 +136,7 @@ module.exports=function(app){
         response.status(404).json(_error.notfound);
     });
 
-    app.put('/resources/notifiers/:notifier',function(request,response){
+    app.put('/resources/notifiers/:notifier',auth,function(request,response){
         var id=validate.toString(request.params.notifier)
           , resources=app.get('resources')
           , notifiers=resources.notifiers
@@ -176,7 +178,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/notifiers/:notifier',function(request,response){
+    app.delete('/resources/notifiers/:notifier',auth,function(request,response){
         var id=validate.toString(request.params.notifier)
           , resources=app.get('resources')
           , notifiers=resources.notifiers
@@ -242,7 +244,8 @@ module.exports=function(app){
         }
     };
 
-    app.post('/resources/notifiers/:notifier/_check',function(request,response){
+    app.post('/resources/notifiers/:notifier/_check',auth,
+        function(request,response){
         return generic_action(request,response,null,[],
             function(resources,notifiers,notifier,args){
                 response.status(200).json({
@@ -254,7 +257,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_get',function(request,response){
+    app.post('/resources/notifiers/:notifier/_get',auth,
+        function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,notifiers,notifier,args){
                 notifiers[notifier[0]].notifier.planners=args.notifier.planners;
@@ -281,7 +285,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_add',function(request,response){
+    app.post('/resources/notifiers/:notifier/_add',auth,
+        function(request,response){
         var id=request.body.planner
           , resources=app.get('resources')
           , planners=resources.planners
@@ -305,7 +310,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_remove',function(
+    app.post('/resources/notifiers/:notifier/_remove',auth,function(
             request,response){
         var id=request.body.planner
           , resources=app.get('resources')
@@ -330,7 +335,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_clean',function(request,response){
+    app.post('/resources/notifiers/:notifier/_clean',auth,
+        function(request,response){
         return generic_action(request,response,null,[clean],
             function(resources,planners,planner,args){
                 response.status(200).json({

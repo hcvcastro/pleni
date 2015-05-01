@@ -23,7 +23,9 @@ var extend=require('underscore').extend
     };
 
 module.exports=function(app){
-    app.get('/resources/planners',function(request,response){
+    var auth=app.get('auth');
+
+    app.get('/resources/planners',auth,function(request,response){
         response.json(app.get('resources').planners.map(
             function(planner){
                 return {
@@ -36,7 +38,7 @@ module.exports=function(app){
             }));
     });
 
-    app.put('/resources/planners',function(request,response){
+    app.put('/resources/planners',auth,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
             var resources=app.get('resources');
             resources.planners=request.body.map(function(planner){
@@ -56,7 +58,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/planners',function(request,response){
+    app.post('/resources/planners',auth,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
             var resources=app.get('resources')
               , planners=resources.planners
@@ -84,7 +86,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/planners',function(request,response){
+    app.delete('/resources/planners',auth,function(request,response){
         var resources=app.get('resources')
 
         resources.planners=[];
@@ -92,7 +94,7 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
-    app.post('/resources/planners/_check',function(request,response){
+    app.post('/resources/planners/_check',auth,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
             test({
                 planner:{
@@ -118,7 +120,7 @@ module.exports=function(app){
         }
     });
 
-    app.get('/resources/planners/:planner',function(request,response){
+    app.get('/resources/planners/:planner',auth,function(request,response){
         var id=validate.toString(request.params.planner)
           , planners=app.get('resources').planners
           , planner=get_element(id,planners)
@@ -137,7 +139,7 @@ module.exports=function(app){
         response.status(404).json(_error.notfound);
     });
 
-    app.put('/resources/planners/:planner',function(request,response){
+    app.put('/resources/planners/:planner',auth,function(request,response){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
           , planners=resources.planners
@@ -179,7 +181,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/planners/:planner',function(request,response){
+    app.delete('/resources/planners/:planner',auth,function(request,response){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
           , planners=resources.planners
@@ -195,7 +197,8 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/planners/:planner/_tid',function(request,response){
+    app.post('/resources/planners/:planner/_tid',auth,
+        function(request,response){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
           , planners=resources.planners
@@ -276,7 +279,8 @@ module.exports=function(app){
         }
     };
 
-    app.post('/resources/planners/:planner/_check',function(request,response){
+    app.post('/resources/planners/:planner/_check',auth,
+        function(request,response){
         return generic_action(request,response,null,[],
             function(resources,planners,planner,args){
                 response.status(200).json({
@@ -288,7 +292,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_status',function(request,response){
+    app.post('/resources/planners/:planner/_status',auth,
+        function(request,response){
         return generic_action(request,response,null,[status],
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.status=args.planner.status;
@@ -304,7 +309,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_api',function(request,response){
+    app.post('/resources/planners/:planner/_api',auth,
+        function(request,response){
         return generic_action(request,response,null,[api],
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.tasks=args.planner.tasks;
@@ -331,7 +337,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_set',function(request,response){
+    app.post('/resources/planners/:planner/_set',auth,
+        function(request,response){
         return generic_action(request,response,schema.task,[set],
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.tid=args.planner.tid;
@@ -347,7 +354,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_get',function(request,response){
+    app.post('/resources/planners/:planner/_get',auth,
+        function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.task=args.planner.task;
@@ -367,7 +375,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_isset',function(request,response){
+    app.post('/resources/planners/:planner/_isset',auth,
+        function(request,response){
         return generic_action(request,response,null,[],
             function(resources,planners,planner,args){
                 response.status(200).json({
@@ -379,7 +388,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_unset',function(request,response){
+    app.post('/resources/planners/:planner/_unset',auth,
+        function(request,response){
         return generic_action(request,response,null,[unset],
             function(resources,planners,planner,args){
                 delete planners[planner[0]].planner.tid;
@@ -395,7 +405,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_run',function(request,response){
+    app.post('/resources/planners/:planner/_run',auth,
+        function(request,response){
         var targs=request.body.targs;
         if(targs._repository){
             var repository=get_element(
@@ -445,7 +456,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_stop',function(request,response){
+    app.post('/resources/planners/:planner/_stop',auth,
+        function(request,response){
         return generic_action(request,response,null,[stop],
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.status='stopped';
