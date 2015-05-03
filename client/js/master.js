@@ -36,6 +36,12 @@ var pleni=angular
               , controller:'WorkspaceController'
               , access:'user'
             })
+            .when('/pages/:page',{
+                templateUrl:function(params){
+                    return '/static/'+params.page;
+                }
+              , controller:'StaticController'
+            })
             .otherwise({
                 redirectTo: '/home'
             });
