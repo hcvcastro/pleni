@@ -8,26 +8,32 @@ var pleni=angular
             .when('/home',{
                 templateUrl:'/home'
               , controller:'HomeController'
+              , access:'everyone'
             })
             .when('/signin',{
                 templateUrl:'/signin'
               , controller:'SigninController'
+              , access:'guest'
             })
             .when('/signup',{
                 templateUrl:'/signup'
               , controller:'SignupController'
+              , access:'guest'
             })
             .when('/resources',{
                 templateUrl:'/resources/view'
               , controller:'ResourcesController'
+              , access:'user'
             })
             .when('/projects',{
                 templateUrl:'/projects/view'
               , controller:'ProjectsController'
+              , access:'user'
             })
             .when('/projects/:project',{
                 templateUrl:'/workspace/view'
               , controller:'WorkspaceController'
+              , access:'user'
             })
             .otherwise({
                 redirectTo: '/home'

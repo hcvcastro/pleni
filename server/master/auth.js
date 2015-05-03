@@ -37,8 +37,8 @@ module.exports=function(app){
         if(request.isAuthenticated()){
             response.send(request.user);
         }else{
-           response.send({
-                user:false
+            response.send({
+                role:'guest'
             });
         }
     });

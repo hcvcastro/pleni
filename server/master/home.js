@@ -2,9 +2,13 @@
 
 module.exports=function(app){
     app.get('/',function(request,response){
-        response.render('dev',{
-            role:request.user?'auth':'guest'
-        });
+        if(request.user){
+            response.cookie('auth',JSON.stringify({
+                user:request.user
+              , role:'user'
+            });
+        }
+        response.render('dev');
     });
 
     app.get('/home',function(request,response){
