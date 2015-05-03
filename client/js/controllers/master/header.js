@@ -1,19 +1,26 @@
 'use strict';
 
-pleni.controller('HeaderController',
-    ['$scope','$sessionStorage','$http','$window',
-    function($scope,$sessionStorage,$http,$window){
-        $scope.storage=$sessionStorage;
+pleni.controller('HeaderController',['$scope','Auth',function($scope,Auth){
+        $scope.status=function(index){
+            var auth=Auth.isUser();
+
+            switch(index){
+                case 1:
+                    return 'enabled';
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                    return auth==true? 'enabled':'';
+                case 6:
+                case 7:
+                    return auth==false? 'enabled':'';
+            }
+        }
 
         $scope.signout=function(){
-            $http.post('/signout')
-            .success(function(data){
-                utils.show('success','Redirecting to signin page');
-                $window.location.href='/#/signin';
-            })
-            .error(function(error){
-                utils.show('error','Invalid request');
-            });
+            console.log('logout');
+            Auth.signout();
         }
     }]
 );

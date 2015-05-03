@@ -7,6 +7,7 @@ header {
         ul {
             list-style: none;
             li {
+                display: none;
                 float: left;
                 height: 40px;
                 width: 120px;
@@ -21,6 +22,9 @@ header {
                     padding: 0.5rem 0 0.1rem 0;
                     transition: inherit;
                 }
+            }
+            li.enabled {
+                display: block;
             }
             li:hover, li.active {
                 margin-top: -0.4rem;
@@ -37,6 +41,8 @@ header {
             &.left>li:nth-child(5) {background-color: fade(@color2,30%);}
             &.right>li:nth-child(1) {background-color: fade(@color2,40%);}
             &.right>li:nth-child(2) {background-color: fade(@color2,70%);}
+            &.right>li:nth-child(3) {background-color: fade(@color2,40%);}
+            &.right>li:nth-child(4) {background-color: fade(@color2,70%);}
         }
     }
 }

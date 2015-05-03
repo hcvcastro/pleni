@@ -26,7 +26,9 @@ module.exports=function(app){
                     if(err){
                         return next(err);
                     }else{
-                        response.status(200).send(_success.ok);
+                        response.cookie('pleni.auth',JSON.stringify({
+                            role:'user'
+                        })).send(_success.ok);
                     }
                 });
             }
@@ -46,8 +48,8 @@ module.exports=function(app){
     app.post('/signout',function(request,response){
         if(request.isAuthenticated()){
             request.logout();
-            response.status(200).send(_success.ok);
         }
+        response.status(200).send(_success.ok);
     });
 
     app.get('/signup',function(request,response){

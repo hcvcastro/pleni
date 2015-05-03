@@ -2,7 +2,8 @@
 
 var pleni=angular
     .module('PleniApp',[
-        'ngRoute','ngResource','ngAnimate','ngStorage','btford.socket-io'])
+        'ngRoute','ngResource','ngAnimate'
+      , 'ngStorage','ngCookies','btford.socket-io'])
     .config(['$routeProvider',function($routeProvider){
         $routeProvider
             .when('/home',{
@@ -38,25 +39,23 @@ var pleni=angular
             .otherwise({
                 redirectTo: '/home'
             });
-    }]);
-
-/*var authed=function($q,$rootScope,$location,$http){
-    if($rootScope.user){
-        return true;
-    }else{
-        var deferred=$q.defer();
-
-        $http.post('/user')
-        .success(function(response){
-            $rootScope.user=response.user;
-            deferred.resolve(true);
-        })
-        .error(function(){
-            deferred.reject();
-            $location.path('/signin');
+    }])
+    .run(['$rootScope','$location','Auth',function($rootScope,$location,Auth){
+        $rootScope.$on('$routeChangeStart',function(event,next,current){
+            switch(next.access){
+                case 'everyone':
+                    break;
+                case 'guest':
+                    if(Auth.isUser()){
+                        $location.path('/');
+                    }
+                    break;
+                case 'user':
+                    if(!Auth.isUser()){
+                        $location.path('/signin');
+                    }
+                    break;
+            }
         });
-
-        return deferred.promise;
-    }
-};*/
+    }]);
 
