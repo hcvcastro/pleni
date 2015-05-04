@@ -31,6 +31,22 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
                 utils.show('error','Invalid request');
             });
         }
+      , signup:function(email,password,csrf,captcha){
+            $http.post('/signup',{
+                email:email
+              , password:password
+              , _csrf:csrf
+              , captcha:captcha
+            })
+            .success(function(data){
+                $location.path('/signin');
+                utils.show('success','We send a email confirmation, please'+
+                    ' confirm your information');
+            })
+            .error(function(error){
+                utils.show('error','Invalid request');
+            });
+        }
     };
 }]);
 

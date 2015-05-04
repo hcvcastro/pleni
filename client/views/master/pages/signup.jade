@@ -7,17 +7,20 @@
             h1 Sign up
             article.form.animate
                 .body
-                    form(ng-submit='send()')
+                    form(ng-submit='signup()')
                         p
                             label Email
-                            input(type='text',placeholder='Your email for sending confirmation',required)
+                            input(type='text',name='email',placeholder='Your email for sending confirmation',required,ng-model='email')
                         p
                             label Password
-                            input(type='password',placeholder='Your super safe password',required)
+                            input(type='password',name='password',placeholder='Your super safe password',required,ng-model='password')
                         p
                             label Password confirmation
-                            input(type='password',placeholder='Repeat your super safe password',required)
+                            input(type='password',name='confirm',placeholder='Repeat your super safe password',required,ng-model='confirm')
+                        .captcha
+                            no-captcha(g-recaptcha-response='recaptcha',theme='light',control='noCaptchaControl',site-key='#{captcha}')
                         p.offset
+                            input(type='hidden',name='_csrf',value='#{csrftoken}')
                             span.message
                                 | By signing up you agree to the 
                                 a(href='/#/pages/terms') Terms of Service

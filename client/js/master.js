@@ -3,7 +3,8 @@
 var pleni=angular
     .module('PleniApp',[
         'ngRoute','ngResource','ngAnimate'
-      , 'ngStorage','ngCookies','btford.socket-io'])
+      , 'ngStorage','ngCookies','btford.socket-io'
+      , 'noCAPTCHA'])
     .config(['$routeProvider',function($routeProvider){
         $routeProvider
             .when('/home',{

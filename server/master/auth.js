@@ -2,11 +2,14 @@
 
 var _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
+  , config=require('../../config/master')
   , csurf=require('csurf')
   , csrf=csurf({cookie:true})
+  , nocaptcha=require('no-captcha')
 
 module.exports=function(app){
-    var passport=app.get('passport');
+    var passport=app.get('passport')
+      , captcha=new nocaptcha(config.recaptcha.public,config.recaptcha.private);
 
     app.get('/signin',csrf,function(request,response){
         response.render('pages/signin',{
@@ -52,8 +55,24 @@ module.exports=function(app){
         response.status(200).send(_success.ok);
     });
 
-    app.get('/signup',function(request,response){
-        response.render('pages/signup');
+    app.get('/signup',csrf,function(request,response){
+        response.render('pages/signup',{
+            csrftoken:request.csrfToken()
+          , captcha:config.recaptcha.public
+        });
+    });
+
+    app.post('/signup',csrf,function(request,response){
+        captcha.verify({
+            response:request.body.captcha
+          , remoteip:request.connection.remoteAddress
+        },function(err,res){
+            if(!err){
+                response.status(200).send(_success.ok);
+            }else{
+                response.status(403).send(_error.validation);
+            }
+        });
     });
 };
 

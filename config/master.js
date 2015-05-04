@@ -17,7 +17,7 @@ module.exports={
         }
     }
   , master:{
-        host:process.env.OPENSHIFT_NODEJS_IP||'localhost'
+        host:process.env.OPENSHIFT_NODEJS_IP||'127.0.0.1'
       , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3004
       , admin:true
       , email:'admin@localhost'
@@ -25,6 +25,10 @@ module.exports={
     }
   , mongo:{
         url:'mongodb://localhost/pleni'
+    }
+  , recaptcha:{
+        public:'6LcKSQYTAAAAAOuUrljCf8ReCzohwRr9kdHrbouu'
+      , private:'6LcKSQYTAAAAAKmZZetWs5LQLIQey0mLNT5J09EQ'
     }
 };
 

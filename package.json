@@ -33,6 +33,7 @@
     "mongoose": "^4.0.2",
     "morgan": "^1.5.1",
     "nano": "^5.10.0",
+    "no-captcha": "^1.0.0",
     "node-uuid": "^1.4.2",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
