@@ -15,11 +15,11 @@ var utils={
         $('.messages').empty();
     }
   , send:function(message){
-        $('p.offset>.message').html(message);
-        $('p.offset>.hide').removeClass('hide');
+        $('p.load>.message').html(message);
+        $('p.load>.hide').removeClass('hide');
     }
   , receive:function(){
-        $('p.offset>span').addClass('hide');
+        $('p.load>span').addClass('hide');
     }
 
   , set_list:function($scope){

@@ -10,7 +10,11 @@ pleni.controller('SigninController',['$scope','Auth',function($scope,Auth){
     $scope.password='';
 
     $scope.signin=function(){
-        Auth.signin($scope.email,$scope.password,$('input[name=_csrf]').val());
+        utils.send('Trying login into account ...');
+        Auth.signin($scope.email,$scope.password,$('input[name=_csrf]').val(),
+            function(){
+                utils.receive();
+            });
     };
 }]);
 

@@ -10,13 +10,20 @@ pleni.controller('SignupController',['$scope','Auth',function($scope,Auth){
     $scope.password='';
     $scope.confirm='';
     $scope.recaptcha='';
+    $scope.control={};
 
     $scope.signup=function(){
         if($scope.password===$scope.confirm){
+            utils.send('Registering new account ...');
             Auth.signup($scope.email,$scope.password,
-                $('input[name=_csrf]').val(),$scope.recaptcha);
+                $('input[name=_csrf]').val(),
+                $scope.recaptcha,$scope.control.reset,
+                function(){
+                    utils.receive();
+                });
         }else{
             utils.show('warning','Passwords are slightly different');
+            utils.receive();
         }
     };
 }]);

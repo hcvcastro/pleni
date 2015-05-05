@@ -18,6 +18,9 @@
                             input(type='hidden',name='_csrf',value='#{csrftoken}')
                             span.message
                                 a(href='') Forgot your password?
+                        p.offset.load
+                            span.hide.loader.fa.fa-spinner.fa-spin
+                            span.hide.message
                         p.offset
                             button(type='submit') Login
 

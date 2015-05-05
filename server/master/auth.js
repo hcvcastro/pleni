@@ -6,6 +6,7 @@ var _success=require('../../core/json-response').success
   , csurf=require('csurf')
   , csrf=csurf({cookie:true})
   , nocaptcha=require('no-captcha')
+  , User=require('./models/user')
 
 module.exports=function(app){
     var passport=app.get('passport')
@@ -23,7 +24,8 @@ module.exports=function(app){
                 return next(err);
             }
             if(!user){
-                response.status(401).send(_error.auth);
+                //request.session
+                response.status(401).json(info);
             }else{
                 request.login(user,function(err){
                     if(err){
@@ -31,7 +33,7 @@ module.exports=function(app){
                     }else{
                         response.cookie('pleni.auth',JSON.stringify({
                             role:'user'
-                        })).send(_success.ok);
+                        })).json(_success.ok);
                     }
                 });
             }
@@ -40,9 +42,9 @@ module.exports=function(app){
 
     app.post('/profile',function(request,response){
         if(request.isAuthenticated()){
-            response.send(request.user);
+            response.json(request.user);
         }else{
-            response.send({
+            response.json({
                 role:'guest'
             });
         }
@@ -52,7 +54,7 @@ module.exports=function(app){
         if(request.isAuthenticated()){
             request.logout();
         }
-        response.status(200).send(_success.ok);
+        response.status(200).json(_success.ok);
     });
 
     app.get('/signup',csrf,function(request,response){
@@ -68,9 +70,27 @@ module.exports=function(app){
           , remoteip:request.connection.remoteAddress
         },function(err,res){
             if(!err){
-                response.status(200).send(_success.ok);
+                User.findOne({email:request.body.email},function(err,user){
+                    if(!user&&config.master.admin&&
+                        config.master.email!==request.body.email){
+                        User.create({
+                            email:request.body.email
+                          , password:request.body.password
+                        },function(err,user){
+                            if(!err){
+                                response.status(200).json(_success.ok);
+                            }else{
+                                response.status(403).json(_error.validation);
+                            }
+                        });
+                    }else{
+                        response.status(403).json({
+                            message:'The email is already registered'
+                        });
+                    }
+                });
             }else{
-                response.status(403).send(_error.validation);
+                response.status(403).json(_error.validation);
             }
         });
     });

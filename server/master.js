@@ -17,7 +17,7 @@ var http=require('http')
   , passport=require('passport')
   , localstrategy=require('passport-local').Strategy
   , mongoose=require('mongoose')
-  , model_user=require('./master/models/user')
+  , User=require('./master/models/user')
   , app=express()
   , server=http.Server(app)
   , ios=require('socket.io')(server)
@@ -55,7 +55,7 @@ passport.deserializeUser(function(id,done){
           , email:config.master.email
         });
     }else{
-        model_user.findById(id,function(err,user){
+        User.findById(id,function(err,user){
             done(err,user);
         });
     }
@@ -66,15 +66,21 @@ passport.use(new localstrategy({
   , passReqToCallback:true
 },function(request,email,password,done){
     if(config.master.admin){
-        if(email===config.master.email&&password===config.master.password){
-            return done(null,{
-                id:0
-              , email:config.master.email
-            });
+        if(email===config.master.email){
+            if(password===config.master.password){
+                return done(null,{
+                    id:0
+                  , email:config.master.email
+                });
+            }else{
+                return done(null,false,{
+                    message:'Invalid password'
+                });
+            }
         }
     }
 
-    model_user.findOne({
+    User.findOne({
         email:email
     },function(err,user){
         if(err){
@@ -159,6 +165,7 @@ app.use(passport.session());
     app.use(morgan('dev'));
 //}
 
+app.set('redis',redisclient);
 app.set('passport',passport);
 app.set('auth',function(request,response,next){
     if(request.isAuthenticated()){

@@ -7,7 +7,7 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
             var auth=$cookieStore.get('pleni.auth');
             return auth!==undefined;
         }
-      , signin:function(email,password,csrf){
+      , signin:function(email,password,csrf,done){
             $http.post('/signin',{
                 email:email
               , password:password
@@ -16,9 +16,15 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
             .success(function(data){
                 utils.show('success','Redirecting to projects list ...');
                 $location.path('/');
+                done();
             })
             .error(function(error){
-                utils.show('error','Incorrect credentials');
+                if(error.message){
+                    utils.show('error',error.message);
+                }else{
+                    utils.show('error','Incorrect credentials');
+                }
+                done();
             });
         }
       , signout:function(){
@@ -31,7 +37,7 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
                 utils.show('error','Invalid request');
             });
         }
-      , signup:function(email,password,csrf,captcha){
+      , signup:function(email,password,csrf,captcha,reset,done){
             $http.post('/signup',{
                 email:email
               , password:password
@@ -40,11 +46,16 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
             })
             .success(function(data){
                 $location.path('/signin');
-                utils.show('success','We send a email confirmation, please'+
-                    ' confirm your information');
+                done();
             })
             .error(function(error){
-                utils.show('error','Invalid request');
+                if(error.message){
+                    utils.show('error',error.message);
+                }else{
+                    utils.show('error','Invalid request');
+                }
+                reset();
+                done();
             });
         }
     };

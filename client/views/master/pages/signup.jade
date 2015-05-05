@@ -18,7 +18,7 @@
                             label Password confirmation
                             input(type='password',name='confirm',placeholder='Repeat your super safe password',required,ng-model='confirm')
                         .captcha
-                            no-captcha(g-recaptcha-response='recaptcha',theme='light',control='noCaptchaControl',site-key='#{captcha}')
+                            no-captcha(g-recaptcha-response='recaptcha',theme='light',control='control',site-key='#{captcha}')
                         p.offset
                             input(type='hidden',name='_csrf',value='#{csrftoken}')
                             span.message
@@ -28,6 +28,9 @@
                             span.message
                                 | and the 
                                 a(href='/#/pages/privacy') Privacy Policy.
+                        p.offset.load
+                            span.hide.loader.fa.fa-spinner.fa-spin
+                            span.hide.message
                         p.offset
                             button(type='submit') Register
 
