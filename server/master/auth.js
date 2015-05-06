@@ -87,6 +87,7 @@ module.exports=function(app){
                           , confirm:{
                                 key:generator()
                               , ts:Date.now()
+                            }
                         },function(err,user){
                             if(!err){
                                 response.status(200).json(_success.ok);

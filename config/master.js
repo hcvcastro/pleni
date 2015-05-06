@@ -18,7 +18,7 @@ module.exports={
     }
   , master:{
         host:process.env.OPENSHIFT_NODEJS_IP||'127.0.0.1'
-      , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3004
+      , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000
       , admin:true
       , email:'admin@localhost'
       , password:'asdf'

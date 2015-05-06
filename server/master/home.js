@@ -2,6 +2,7 @@
 
 var fs=require('fs')
   , join=require('path').join
+  , config=require('../../config/master')
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
 
@@ -12,7 +13,11 @@ module.exports=function(app){
                 role:'user'
             }));
         }
-        response.render('dev');
+        if(config.env=='production'){
+            response.render('prod');
+        }else{
+            response.render('dev');
+        }
     });
 
     app.get('/home',function(request,response){

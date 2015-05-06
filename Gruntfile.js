@@ -13,8 +13,16 @@ module.exports=function(grunt){
         pkg: grunt.file.readJSON('package.json')
 
       , watch:{
+/* -------- master watching ------------------------------------------------- */
+            master:{
+                files:[
+                    'server/master.js'
+                  , 'server/master/**/*.js'
+                ]
+              , tasks:['develop:master']
+            }
 /* -------- planners watching ----------------------------------------------- */
-            dumb:{
+          , dumb:{
                 files:['server/planners/dumb.js']
               , tasks:['develop:dumb']
             }
@@ -36,16 +44,6 @@ module.exports=function(grunt){
           , monitor:{
                 files:['server/monitor.js']
               , tasks:['develop:monitor']
-            }
-/* -------- master watching ------------------------------------------------- */
-          , master:{
-                files:[
-                    'server/master.js'
-                  , 'master/config/**/*.json'
-                  , 'master/controllers/**/*.js'
-                  , 'master/utils/**/*.js'
-                ]
-              , tasks:['develop:master']
             }
 /* -------- sites watching -------------------------------------------------- */
           , sites:{
@@ -80,7 +78,14 @@ module.exports=function(grunt){
         }
 
       , develop:{
-            dumb:{
+            master:{
+                file:'server/master.js'
+              , env:{
+                    PORT:grunt.option('port')||3000
+                  , ENV:'development'
+                }
+            }
+          , dumb:{
                 file:'server/planners/dumb.js'
               , env:{
                     PORT:grunt.option('port')||3001
@@ -122,13 +127,6 @@ module.exports=function(grunt){
                   , ENV:'development'
                 }
             }
-          , master:{
-                file:'server/master.js'
-              , env:{
-                    PORT:grunt.option('port')||3000
-                  , ENV:'development'
-                }
-            }
           , sites:{
                 file:'server/sites.js'
               , env:{
@@ -147,17 +145,13 @@ module.exports=function(grunt){
                     ENV:'test'
                 }
             }
-          , core:[
-                'tests/core/validators.js'
-              , 'tests/core/functions/**/*.js'
-              , 'tests/core/tasks/**/*.js'
-            ]
+          , core:['tests/core/**/*.js']
+          , master:['tests/master/**/*.js']
           , dumb:['tests/planners/dumb/server.js']
           , planners:['tests/planners/planner/*.js']
           , notifier:['tests/notifiers/**/*.js']
-          , master:['tests/master/**/*.js']
-          , sites:['tests/sites/*.js']
           , monitor:['tests/monitor/server.js']
+          , sites:['tests/sites/*.js']
         }
 
       , clean:{
@@ -167,10 +161,11 @@ module.exports=function(grunt){
           , monitor:'dist/monitor'
           , sites:'dist/sites'
         }
+
       , concurrent:{
             master:[
-                'jade:master'
-              , 'less:master'
+//                'jade:master'
+                'less:master'
               , 'uglify:master'
               , 'copy:master'
               , 'svgmin:master'
@@ -236,7 +231,19 @@ module.exports=function(grunt){
             }
         }
       , less:{
-            planner:{
+            master:{
+                options:{
+                    cleancss:true
+                  , paths:['bower_components']
+                }
+              , files:{
+                    'dist/master/client/style.css'
+                  : 'client/less/master.less'
+                  , 'dist/master/client/tasks.css'
+                  : 'client/less/tasks.less'
+                }
+            }
+          , planner:{
                 options:{
                     cleancss:true
                   , paths:['bower_components']
@@ -268,7 +275,56 @@ module.exports=function(grunt){
             }
         }
       , uglify:{
-            planner:{
+            master:{
+                files:[{
+                    'dist/master/client/js/angular-no-captcha.min.js':[
+                        'bower_components/angular-no-captcha/src/angular-no-captcha.js'
+                    ]
+                },{
+                    'dist/master/client/js/socket.io.min.js':[
+                        'bower_components/socket.io-client/socket.io.js'
+                    ]
+                },{
+                    'dist/master/client/js/socket.io.min.js':[
+                        'bower_components/socket.io-client/socket.io.js'
+                    ]
+                },{
+                    'dist/master/client/js/d3.min.js':[
+                        'bower_components/d3/d3.min.js'
+                      , 'bower_components/d3-tip/index.js'
+                    ]
+                },{
+                    'dist/master/client/js/master.min.js':[
+                        'client/js/utils.js'
+                      , 'client/js/editor.js'
+                      , 'client/js/master.js'
+                      , 'client/js/filters.js'
+                      , 'client/js/factories/resources/dbservers.js'
+                      , 'client/js/factories/resources/repositories.js'
+                      , 'client/js/factories/resources/planners.js'
+                      , 'client/js/factories/resources/notifiers.js'
+                      , 'client/js/factories/resources/projects.js'
+                      , 'client/js/factories/resources/workspace.js'
+                      , 'client/js/factories/resources.js'
+                      , 'client/js/visual/site.js'
+                      , 'client/js/factories/auth.js'
+                      , 'client/js/factories/editor.js'
+                      , 'client/js/factories/socket.js'
+                      , 'client/js/factories/visual.js'
+                      , 'client/js/controllers/master/static.js'
+                      , 'client/js/controllers/master/home.js'
+                      , 'client/js/controllers/master/signin.js'
+                      , 'client/js/controllers/master/signup.js'
+                      , 'client/js/controllers/master/forgot.js'
+                      , 'client/js/controllers/master/header.js'
+                      , 'client/js/controllers/master/notifier.js'
+                      , 'client/js/controllers/master/resources.js'
+                      , 'client/js/controllers/master/projects.js'
+                      , 'client/js/controllers/master/workspace.js'
+                    ]
+                }]
+            }
+          , planner:{
                 files:[{
                     'dist/planner/client/js/jquery.min.js':[
                         'bower_components/jquery/dist/jquery.min.js'
@@ -333,7 +389,79 @@ module.exports=function(grunt){
             }
         }
       , copy:{
-            planner:{
+            master:{
+                files:[{
+                    src:'client/favicon.ico'
+                  , dest:'dist/master/client/favicon.ico'
+                },{
+                    src:'client/svg/arrow_clean.svg'
+                  , dest:'dist/master/client/svg/arrow.svg'
+                },{
+                    src:'client/svg/text_clean.svg'
+                  , dest:'dist/master/client/svg/text.svg'
+                },{
+                    expand:true
+                  , flatten:true
+                  , cwd:'bower_components/font-awesome/'
+                  , src:'fonts/fontawesome-webfont.*'
+                  , dest:'dist/master/client/fonts/'
+                },{
+                    src:'bower_components/jquery/dist/jquery.min.js'
+                  , dest:'dist/master/client/js/jquery.min.js'
+                },{
+                    src:'bower_components/angular/angular.min.js'
+                  , dest:'dist/master/client/js/angular.min.js'
+                },{
+                    src:'bower_components/angular-route/angular-route.min.js'
+                  , dest:'dist/master/client/js/angular-route.min.js'
+                },{
+                    src:'bower_components/angular-resource/angular-resource.min.js'
+                  , dest:'dist/master/client/js/angular-resource.min.js'
+                },{
+                    src:'bower_components/angular-animate/angular-animate.min.js'
+                  , dest:'dist/master/client/js/angular-animate.min.js'
+                },{
+                    src:'bower_components/angular-socket-io/socket.min.js'
+                  , dest:'dist/master/client/js/angular-socket-io.min.js'
+                },{
+                    src:'bower_components/angular-cookies/angular-cookies.min.js'
+                  , dest:'dist/master/client/js/angular-cookies.min.js'
+                },{
+                    src:'bower_components/ngstorage/ngStorage.min.js'
+                  , dest:'dist/master/client/js/angular-storage.min.js'
+                },{
+                    src:'bower_components/json-editor/dist/jsoneditor.min.js'
+                  , dest:'dist/master/client/js/jsoneditor.min.js'
+                },{
+                    expand:true
+                  , cwd:'client/views/'
+                  , src:['master/**']
+                  , dest:'dist/master/client/views/'
+                },{
+                    expand:true
+                  , src:['core/**']
+                  , dest:'dist/master/'
+                },{
+                    src:'server/master.js'
+                  , dest:'dist/master/server/master.js'
+                },{
+                    expand:true
+                  , cwd:'server/'
+                  , src:['master/**']
+                  , dest:'dist/master/server/'
+                },{
+                    expand:true
+                  , src:'config/*.json'
+                  , dest:'dist/master/'
+                },{
+                    src:'config/master.js'
+                  , dest:'dist/master/config/master.js'
+                },{
+                    src:'package/master.json'
+                  , dest:'dist/master/package.json'
+                }]
+            }
+          , planner:{
                 files:[{
                     src:'client/favicon.ico'
                   , dest:'dist/planner/client/favicon.ico'
@@ -434,7 +562,31 @@ module.exports=function(grunt){
             }
         }
       , svgmin:{
-            sites:{
+            master:{
+                files:[{
+                    src:'client/svg/canvas.svg'
+                  , dest:'dist/master/client/svg/canvas.svg'
+                },{
+                    src:'client/svg/hiperborea.svg'
+                  , dest:'dist/master/client/svg/hiperborea.svg'
+                },{
+                    src:'client/svg/node1.svg'
+                  , dest:'dist/master/client/svg/node1.svg'
+                },{
+                    src:'client/svg/node2.svg'
+                  , dest:'dist/master/client/svg/node2.svg'
+                },{
+                    src:'client/svg/node3.svg'
+                  , dest:'dist/master/client/svg/node3.svg'
+                },{
+                    src:'client/svg/node4.svg'
+                  , dest:'dist/master/client/svg/node4.svg'
+                },{
+                    src:'client/svg/tile.svg'
+                  , dest:'dist/master/client/svg/tile.svg'
+                }]
+            }
+          , sites:{
                 files:[{
                     src:'client/svg/canvas.svg'
                   , dest:'dist/sites/client/svg/canvas.svg'
@@ -448,7 +600,14 @@ module.exports=function(grunt){
             }
         }
       , cssmin:{
-            sites:{
+            master:{
+                files:{
+                    'dist/master/client/style.css':[
+                        'dist/master/client/style.css'
+                    ]
+                }
+            }
+          , sites:{
                 files:{
                     'dist/sites/client/style.css':[
                         'dist/sites/client/style.css'
@@ -504,7 +663,8 @@ module.exports=function(grunt){
       , 'cssmin:sites'
     ]);
     grunt.registerTask('build',[
-        'build:planner'
+        'build:master'
+      , 'build:planner'
       , 'build:notifier'
       , 'build:monitor'
       , 'build:sites'

@@ -137,6 +137,7 @@ app.set('host',config.master.host);
 app.set('port',config.master.port);
 app.disable('x-powered-by');
 
+app.use(favicon(join(__dirname,'..','client','favicon.ico')));
 app.use(cookieparser(config.cookie.secret));
 app.use(bodyparser.json());
 app.use(cookiesession({
@@ -155,15 +156,13 @@ app.use(cookiesession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-/*if(config.env=='production'){
-    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+app.set('views',join(__dirname,'..','client','views','master'));
+app.set('view engine','jade');
+
+if(config.env=='production'){
     app.use(express.static(join(__dirname,'..','client')));
     app.use(morgan('combined'));
-}else{*/
-    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
-    app.set('views',join(__dirname,'..','client','views','master'));
-    app.set('view engine','jade');
-
+}else{
     app.use(lessmiddleware('/less',{
         dest:'/css'
       , pathRoot:join(__dirname,'..','client')
@@ -175,7 +174,7 @@ app.use(passport.session());
     app.locals.pretty=true;
 
     app.use(morgan('dev'));
-//}
+}
 
 app.set('redis',redisclient);
 app.set('passport',passport);

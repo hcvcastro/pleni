@@ -34,14 +34,13 @@ var http=require('http')
 app.set('host',config.sites.host);
 app.set('port',config.sites.port);
 app.disable('x-powered-by');
+app.use(favicon(join(__dirname,'..','client','favicon.ico')));
 app.use(bodyparser.json());
 
 if(config.env=='production'){
-    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
     app.use(express.static(join(__dirname,'..','client')));
     app.use(morgan('combined'));
 }else{
-    app.use(favicon(join(__dirname,'..','client','favicon.ico')));
     app.set('views',join(__dirname,'..','client','views','sites'));
     app.set('view engine','jade');
 
