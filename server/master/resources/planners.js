@@ -23,9 +23,9 @@ var extend=require('underscore').extend
     };
 
 module.exports=function(app){
-    var auth=app.get('auth');
+    var authed=app.get('auth');
 
-    app.get('/resources/planners',auth,function(request,response){
+    app.get('/resources/planners',authed,function(request,response){
         response.json(app.get('resources').planners.map(
             function(planner){
                 return {
@@ -38,7 +38,7 @@ module.exports=function(app){
             }));
     });
 
-    app.put('/resources/planners',auth,function(request,response){
+    app.put('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
             var resources=app.get('resources');
             resources.planners=request.body.map(function(planner){
@@ -58,7 +58,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/planners',auth,function(request,response){
+    app.post('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
             var resources=app.get('resources')
               , planners=resources.planners
@@ -86,7 +86,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/planners',auth,function(request,response){
+    app.delete('/resources/planners',authed,function(request,response){
         var resources=app.get('resources')
 
         resources.planners=[];
@@ -94,7 +94,7 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
-    app.post('/resources/planners/_check',auth,function(request,response){
+    app.post('/resources/planners/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
             test({
                 planner:{
@@ -120,7 +120,7 @@ module.exports=function(app){
         }
     });
 
-    app.get('/resources/planners/:planner',auth,function(request,response){
+    app.get('/resources/planners/:planner',authed,function(request,response){
         var id=validate.toString(request.params.planner)
           , planners=app.get('resources').planners
           , planner=get_element(id,planners)
@@ -139,7 +139,7 @@ module.exports=function(app){
         response.status(404).json(_error.notfound);
     });
 
-    app.put('/resources/planners/:planner',auth,function(request,response){
+    app.put('/resources/planners/:planner',authed,function(request,response){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
           , planners=resources.planners
@@ -181,7 +181,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/planners/:planner',auth,function(request,response){
+    app.delete('/resources/planners/:planner',authed,function(request,response){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
           , planners=resources.planners
@@ -197,7 +197,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/planners/:planner/_tid',auth,
+    app.post('/resources/planners/:planner/_tid',authed,
         function(request,response){
         var id=validate.toString(request.params.planner)
           , resources=app.get('resources')
@@ -279,7 +279,7 @@ module.exports=function(app){
         }
     };
 
-    app.post('/resources/planners/:planner/_check',auth,
+    app.post('/resources/planners/:planner/_check',authed,
         function(request,response){
         return generic_action(request,response,null,[],
             function(resources,planners,planner,args){
@@ -292,7 +292,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_status',auth,
+    app.post('/resources/planners/:planner/_status',authed,
         function(request,response){
         return generic_action(request,response,null,[status],
             function(resources,planners,planner,args){
@@ -309,7 +309,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_api',auth,
+    app.post('/resources/planners/:planner/_api',authed,
         function(request,response){
         return generic_action(request,response,null,[api],
             function(resources,planners,planner,args){
@@ -337,7 +337,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_set',auth,
+    app.post('/resources/planners/:planner/_set',authed,
         function(request,response){
         return generic_action(request,response,schema.task,[set],
             function(resources,planners,planner,args){
@@ -354,7 +354,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_get',auth,
+    app.post('/resources/planners/:planner/_get',authed,
         function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,planners,planner,args){
@@ -375,7 +375,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_isset',auth,
+    app.post('/resources/planners/:planner/_isset',authed,
         function(request,response){
         return generic_action(request,response,null,[],
             function(resources,planners,planner,args){
@@ -388,7 +388,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_unset',auth,
+    app.post('/resources/planners/:planner/_unset',authed,
         function(request,response){
         return generic_action(request,response,null,[unset],
             function(resources,planners,planner,args){
@@ -405,7 +405,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_run',auth,
+    app.post('/resources/planners/:planner/_run',authed,
         function(request,response){
         var targs=request.body.targs;
         if(targs._repository){
@@ -456,7 +456,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/planners/:planner/_stop',auth,
+    app.post('/resources/planners/:planner/_stop',authed,
         function(request,response){
         return generic_action(request,response,null,[stop],
             function(resources,planners,planner,args){
