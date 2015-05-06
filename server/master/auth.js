@@ -6,6 +6,7 @@ var _success=require('../../core/json-response').success
   , csurf=require('csurf')
   , csrf=csurf({cookie:true})
   , nocaptcha=require('no-captcha')
+  , generator=require('../../core/functions/utils/random').sync
   , User=require('./models/user')
 
 module.exports=function(app){
@@ -83,6 +84,9 @@ module.exports=function(app){
                             email:request.body.email
                           , password:request.body.password
                           , status:'confirm'
+                          , confirm:{
+                                key:generator()
+                              , ts:Date.now()
                         },function(err,user){
                             if(!err){
                                 response.status(200).json(_success.ok);
@@ -93,6 +97,37 @@ module.exports=function(app){
                     }else{
                         response.status(403).json({
                             message:'The email is already registered'
+                        });
+                    }
+                });
+            }else{
+                response.status(403).json(_error.validation);
+            }
+        });
+    });
+
+    app.post('/forgot',csrf,function(request,response){
+        captcha.verify({
+            response:request.body.captcha
+          , remoteip:request.connection.remoteAddress
+        },function(err,res){
+            if(!err){
+                User.findOne({email:request.body.email},function(err,user){
+                    if(user){
+                        user.confirm={
+                            key:generator()
+                          , ts:Date.now()
+                        };
+                        user.save(function(err){
+                            if(!err){
+                                response.status(200).json(_success.ok);
+                            }else{
+                                response.status(403).json(_error.validation);
+                            }
+                        });
+                    }else{
+                        response.status(403).json({
+                            message:'The email is not registered'
                         });
                     }
                 });

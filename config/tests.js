@@ -18,6 +18,14 @@ module.exports={
           , auth_pass:'~~{{~~æßðđł[¶]æßðŋħ]]]}}}}~~'
         }
     }
+  , mailgun:{
+        service:'Mailgun'
+      , auth:{
+            user:'postmaster@sandbox26789c87cb524590bf3f4fd3acfd7fff.mailgun.org'
+          , pass:'e822a5c96a0f59b0f5fe16a6d72f2fae'
+        }
+    }
+  , email:'cijkb.j@gmail.com'
   , url:'http://galao.local'
   , notifiers:[{
         script:'server/notifier.io'

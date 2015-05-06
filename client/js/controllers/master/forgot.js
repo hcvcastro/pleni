@@ -11,15 +11,13 @@ pleni.controller('ForgotController',['$scope','Auth',function($scope,Auth){
     $scope.control={};
 
     $scope.forgot=function(){
-        if($scope.password===$scope.confirm){
-            utils.send('Sending forgot request ...');
-            Auth.signup($scope.email,$scope.password,
-                $('input[name=_csrf]').val(),
-                $scope.recaptcha,$scope.control.reset,
-                function(){
-                    utils.receive();
-                });
-        }
+        utils.send('Sending forgot request ...');
+        Auth.forgot($scope.email,
+            $('input[name=_csrf]').val(),
+            $scope.recaptcha,$scope.control.reset,
+            function(){
+                utils.receive();
+            });
     };
 }]);
 

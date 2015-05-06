@@ -58,6 +58,26 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
                 done();
             });
         }
+      , forgot:function(email,csrf,captcha,reset,done){
+            $http.post('/forgot',{
+                email:email
+              , _csrf:csrf
+              , captcha:captcha
+            })
+            .success(function(data){
+                $location.path('/signin');
+                done();
+            })
+            .error(function(error){
+                if(error.message){
+                    utils.show('error',error.message);
+                }else{
+                    utils.show('error','Invalid request');
+                }
+                reset();
+                done();
+            });
+        }
     };
 }]);
 
