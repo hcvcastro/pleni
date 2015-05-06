@@ -1,0 +1,21 @@
+.grid.full.last
+    nav.menu
+        include ../blocks/footer/bottom
+    .main
+        .messages
+        section.forgot
+            h1 Forgot my password
+            article.form.animate
+                .body
+                    form(ng-submit='forgot()')
+                        p
+                            label Email
+                            input(type='text',name='email',placeholder='Your email for sending key reset',required,ng-model='email')
+                        .captcha
+                            no-captcha(g-recaptcha-response='recaptcha',theme='light',control='control',site-key='#{captcha}')
+                        p.offset.load
+                            span.hide.loader.fa.fa-spinner.fa-spin
+                            span.hide.message
+                        p.offset
+                            button(type='submit') Reset Password
+

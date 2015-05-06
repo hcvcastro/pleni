@@ -22,6 +22,7 @@
     "d3-tip": "~0.6.6",
     "pushy-dyn": "~0.9.3",
     "angular-ui-router": "~0.2.13",
-    "angular-no-captcha": "~0.4.2"
+    "angular-no-captcha": "~0.4.2",
+    "angular-cookies": "~1.3.15"
   }
 }

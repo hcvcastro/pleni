@@ -91,18 +91,30 @@ passport.use(new localstrategy({
                 message:'Unknown email: '+email
             });
         }
-        user.comparePassword(password,function(err,isMatch){
-            if(err){
-                return done(err);
-            }
-            if(isMatch){
-                return done(null,user);
-            }else{
+        switch(user.status){
+            case 'confirm':
                 return done(null,false,{
-                    message:'Invalid password'
+                    message:'Your account has not been confirmed yet. Please check'+
+                        ' your email or use the [Forgot your password]'
                 });
-            }
-        });
+            case 'active':
+                user.comparePassword(password,function(err,isMatch){
+                    if(err){
+                        return done(err);
+                    }
+                    if(isMatch){
+                        return done(null,user);
+                    }else{
+                        return done(null,false,{
+                            message:'Invalid password'
+                        });
+                    }
+                });
+            default:
+                done(null,false,{
+                    message:'Unknown email: '+email
+                });
+        }
     });
 }));
 

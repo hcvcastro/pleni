@@ -22,6 +22,11 @@ var pleni=angular
               , controller:'SignupController'
               , access:'guest'
             })
+            .when('/forgot',{
+                templateUrl:'/forgot'
+              , controller:'ForgotController'
+              , access:'guest'
+            })
             .when('/resources',{
                 templateUrl:'/resources/view'
               , controller:'ResourcesController'

@@ -18,13 +18,26 @@ module.exports=function(app){
         });
     });
 
+    app.get('/signup',csrf,function(request,response){
+        response.render('pages/signup',{
+            csrftoken:request.csrfToken()
+          , captcha:config.recaptcha.public
+        });
+    });
+
+    app.get('/forgot',csrf,function(request,response){
+        response.render('pages/forgot',{
+            csrftoken:request.csrfToken()
+          , captcha:config.recaptcha.public
+        });
+    });
+
     app.post('/signin',csrf,function(request,response,next){
         passport.authenticate('local',function(err,user,info){
             if(err){
                 return next(err);
             }
             if(!user){
-                //request.session
                 response.status(401).json(info);
             }else{
                 request.login(user,function(err){
@@ -57,13 +70,6 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
-    app.get('/signup',csrf,function(request,response){
-        response.render('pages/signup',{
-            csrftoken:request.csrfToken()
-          , captcha:config.recaptcha.public
-        });
-    });
-
     app.post('/signup',csrf,function(request,response){
         captcha.verify({
             response:request.body.captcha
@@ -76,6 +82,7 @@ module.exports=function(app){
                         User.create({
                             email:request.body.email
                           , password:request.body.password
+                          , status:'confirm'
                         },function(err,user){
                             if(!err){
                                 response.status(200).json(_success.ok);

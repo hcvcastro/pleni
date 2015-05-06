@@ -64,9 +64,8 @@ describe('signin controller functions',function(){
     it('POST /profile',function(done){
         request(app)
             .post('/profile')
-            .set('cookie',cookie)
+            .set('cookie',cookie[1])
             .end(function(err,res){
-                console.log(res);
                 res.body.should.have.property('id')
                     .and.eql(0);
                 res.body.should.have.property('email')
@@ -83,28 +82,6 @@ describe('signin controller functions',function(){
                 res.body.should.have.property('ok')
                     .and.be.eql(true);
                 done();
-            });
-    });
-
-    it('POST /signin 403 - three failed login',function(done){
-        request(app)
-            .get('/signin')
-            .end(function(err,res){
-                var $=cheerio.load(res.text)
-                  , csrf=$('input[name=_csrf]').val()
-
-                request(app)
-                    .post('/signin')
-                    .set('cookie',res.headers['set-cookie'])
-                    .send({
-                        _csrf:csrf
-                      , email:'nope@localhost'
-                      , password:'nopenope'
-                    })
-                    .expect(403)
-                    .end(function(err,res){
-                        done();
-                    });
             });
     });
 });
