@@ -14,18 +14,24 @@ var nodemailer=require('nodemailer')
  *          subject
  *          text
  *          html
+ *          attachments (*)
  */
 module.exports=function(args){
     var deferred=Q.defer()
       , transporter=nodemailer.createTransport(smtptransport(args.smtp))
+      , packet={
+            from:args.mail.from
+          , to:args.mail.to
+          , subject:args.mail.subject
+          , text:args.mail.text
+          , html:args.mail.html
+        }
 
-    transporter.sendMail({
-        from:args.mail.from
-      , to:args.mail.to
-      , subject:args.mail.subject
-      , text:args.mail.text
-      , html:args.mail.html
-    },function(error,info){
+    if(args.mail.attachments){
+        packet.attachments=args.mail.attachments;
+    }
+
+    transporter.sendMail(packet,function(error,info){
         if(!error){
             args.mail.result=info.response;
             deferred.resolve(args);

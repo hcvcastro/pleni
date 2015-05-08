@@ -3,6 +3,7 @@
 var _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
   , config=require('../../config/master')
+  , join=require('path').join
   , csurf=require('csurf')
   , csrf=csurf({cookie:true})
   , nocaptcha=require('no-captcha')
@@ -97,7 +98,10 @@ module.exports=function(app){
                             if(!err){
                                 response.status(200).json(_success.ok);
 
-                                response.render('pages/home',function(err,html){
+                                response.render('mail/confirm',{
+                                    site:'http://pleni.hiperborea.com.bo'
+                                  , confirm:'/confirm/0as0g9b9fasdf'
+                                },function(err,html){
                                     mailer({
                                         smtp:config.mailgun
                                       , mail:{
@@ -105,6 +109,10 @@ module.exports=function(app){
                                           , to:request.body.email
                                           , subject:'Welcome to Pleni Toolkit'
                                           , html:html
+                                          , attachments:[{
+                                                path:join(__dirname,'..','..','client','png','logo.png')
+                                              , cid:'logo@pleni'
+                                            }]
                                         }
                                     })
                                     .done();
