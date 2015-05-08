@@ -19,7 +19,6 @@ pleni.controller('HeaderController',['$scope','Auth',function($scope,Auth){
         }
 
         $scope.signout=function(){
-            console.log('logout');
             Auth.signout();
         }
     }]

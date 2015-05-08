@@ -20,9 +20,9 @@ var extend=require('underscore').extend
     };
 
 module.exports=function(app){
-    var auth=app.get('auth');
+    var authed=app.get('auth');
 
-    app.get('/resources/notifiers',auth,function(request,response){
+    app.get('/resources/notifiers',authed,function(request,response){
         response.json(app.get('resources').notifiers.map(
             function(notifier){
                 return {
@@ -35,7 +35,7 @@ module.exports=function(app){
             }));
     });
 
-    app.put('/resources/notifiers',auth,function(request,response){
+    app.put('/resources/notifiers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifiers).length==0){
             var resources=app.get('resources');
             resources.notifiers=request.body.map(function(notifier){
@@ -55,7 +55,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/notifiers',auth,function(request,response){
+    app.post('/resources/notifiers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier).length==0){
             var resources=app.get('resources')
               , notifiers=resources.notifiers
@@ -83,7 +83,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/notifiers',auth,function(request,response){
+    app.delete('/resources/notifiers',authed,function(request,response){
         var resources=app.get('resources')
 
         resources.notifiers=[];
@@ -91,7 +91,7 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
-    app.post('/resources/notifiers/_check',auth,function(request,response){
+    app.post('/resources/notifiers/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier).length==0){
             test({
                 notifier:{
@@ -117,7 +117,7 @@ module.exports=function(app){
         }
     });
 
-    app.get('/resources/notifiers/:notifier',auth,function(request,response){
+    app.get('/resources/notifiers/:notifier',authed,function(request,response){
         var id=validate.toString(request.params.notifier)
           , notifiers=app.get('resources').notifiers
           , notifier=get_element(id,notifiers)
@@ -136,7 +136,7 @@ module.exports=function(app){
         response.status(404).json(_error.notfound);
     });
 
-    app.put('/resources/notifiers/:notifier',auth,function(request,response){
+    app.put('/resources/notifiers/:notifier',authed,function(request,response){
         var id=validate.toString(request.params.notifier)
           , resources=app.get('resources')
           , notifiers=resources.notifiers
@@ -178,7 +178,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/notifiers/:notifier',auth,function(request,response){
+    app.delete('/resources/notifiers/:notifier',authed,function(request,response){
         var id=validate.toString(request.params.notifier)
           , resources=app.get('resources')
           , notifiers=resources.notifiers
@@ -244,7 +244,7 @@ module.exports=function(app){
         }
     };
 
-    app.post('/resources/notifiers/:notifier/_check',auth,
+    app.post('/resources/notifiers/:notifier/_check',authed,
         function(request,response){
         return generic_action(request,response,null,[],
             function(resources,notifiers,notifier,args){
@@ -257,7 +257,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_get',auth,
+    app.post('/resources/notifiers/:notifier/_get',authed,
         function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,notifiers,notifier,args){
@@ -285,7 +285,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_add',auth,
+    app.post('/resources/notifiers/:notifier/_add',authed,
         function(request,response){
         var id=request.body.planner
           , resources=app.get('resources')
@@ -310,7 +310,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_remove',auth,function(
+    app.post('/resources/notifiers/:notifier/_remove',authed,function(
             request,response){
         var id=request.body.planner
           , resources=app.get('resources')
@@ -335,7 +335,7 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_clean',auth,
+    app.post('/resources/notifiers/:notifier/_clean',authed,
         function(request,response){
         return generic_action(request,response,null,[clean],
             function(resources,planners,planner,args){

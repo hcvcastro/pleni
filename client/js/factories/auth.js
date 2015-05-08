@@ -1,7 +1,7 @@
 'use strict';
 
-pleni.factory('Auth',['$http','$cookieStore','$location',
-    function($http,$cookieStore,$location){
+pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
+    function($rootScope,$http,$cookieStore,$location){
     return {
         isUser:function(){
             var auth=$cookieStore.get('pleni.auth');
@@ -14,8 +14,8 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
               , _csrf:csrf
             })
             .success(function(data){
-                utils.show('success','Redirecting to projects list ...');
-                $location.path('/');
+                $rootScope.flash=['success','Redirecting to projects list ...'];
+                $location.path('/projects');
                 done();
             })
             .error(function(error){
@@ -31,6 +31,7 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
             $http.post('/signout')
             .success(function(data){
                 $cookieStore.remove('pleni.auth');
+                $rootScope.flash=['success','Your account was closed ...'];
                 $location.path('/signin');
             })
             .error(function(error){
@@ -45,6 +46,8 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
               , captcha:captcha
             })
             .success(function(data){
+                $rootScope.flash=['success','Your registration is complete, '
+                    +'please check your email to confim your request'];
                 $location.path('/signin');
                 done();
             })
@@ -65,6 +68,8 @@ pleni.factory('Auth',['$http','$cookieStore','$location',
               , captcha:captcha
             })
             .success(function(data){
+                $rootScope.flash=['success','Please check your email to reset '
+                    +'your password'];
                 $location.path('/signin');
                 done();
             })

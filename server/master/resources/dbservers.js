@@ -19,9 +19,9 @@ var validate=require('../../../core/validators')
     };
 
 module.exports=function(app){
-    var auth=app.get('auth');
+    var authed=app.get('auth');
 
-    app.get('/resources/dbservers',auth,function(request,response){
+    app.get('/resources/dbservers',authed,function(request,response){
         response.json(app.get('resources').dbservers.map(
             function(dbserver){
                 return {
@@ -36,7 +36,7 @@ module.exports=function(app){
             }));
     });
 
-    app.put('/resources/dbservers',auth,function(request,response){
+    app.put('/resources/dbservers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbservers).length==0){
             var resources=app.get('resources');
             resources.dbservers=request.body.map(function(dbserver){
@@ -59,7 +59,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/dbservers',auth,function(request,response){
+    app.post('/resources/dbservers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
             var resources=app.get('resources')
               , dbservers=resources.dbservers
@@ -97,7 +97,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/dbservers',auth,function(request,response){
+    app.delete('/resources/dbservers',authed,function(request,response){
         var resources=app.get('resources')
 
         resources.dbservers=[];
@@ -105,7 +105,7 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
-    app.post('/resources/dbservers/_check',auth,function(request,response){
+    app.post('/resources/dbservers/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
             test({
                 db:{
@@ -132,7 +132,7 @@ module.exports=function(app){
         }
     });
 
-    app.get('/resources/dbservers/:dbserver',auth,function(request,response){
+    app.get('/resources/dbservers/:dbserver',authed,function(request,response){
         var id=validate.toString(request.params.dbserver)
           , dbservers=app.get('resources').dbservers
           , dbserver=get_element(id,dbservers)
@@ -152,7 +152,7 @@ module.exports=function(app){
         response.status(404).json(_error.notfound);
     });
 
-    app.put('/resources/dbservers/:dbserver',auth,function(request,response){
+    app.put('/resources/dbservers/:dbserver',authed,function(request,response){
         var id=validate.toString(request.params.dbserver)
           , resources=app.get('resources')
           , dbservers=resources.dbservers
@@ -199,7 +199,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/dbservers/:dbserver',auth,function(request,response){
+    app.delete('/resources/dbservers/:dbserver',authed,function(request,response){
         var id=validate.toString(request.params.dbserver)
           , resources=app.get('resources')
           , dbservers=resources.dbservers
@@ -215,7 +215,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/dbservers/:dbserver/_check',auth,
+    app.post('/resources/dbservers/:dbserver/_check',authed,
         function(request,response){
         var id=validate.toString(request.params.dbserver)
           , resources=app.get('resources')
@@ -248,7 +248,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/dbservers/:dbserver/_databases',auth,
+    app.post('/resources/dbservers/:dbserver/_databases',authed,
         function(request,response){
         var id=validate.toString(request.params.dbserver)
           , resources=app.get('resources')

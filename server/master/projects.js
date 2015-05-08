@@ -14,13 +14,13 @@ var validate=require('../../core/validators')
     };
 
 module.exports=function(app){
-    var auth=app.get('auth');
+    var authed=app.get('auth');
 
-    app.get('/projects/view',auth,function(request,response){
+    app.get('/projects/view',authed,function(request,response){
         response.render('pages/projects');
     });
 
-    app.get('/projects',auth,function(request,response){
+    app.get('/projects',authed,function(request,response){
         response.json(app.get('projects').map(
             function(project){
                 return {
@@ -30,7 +30,7 @@ module.exports=function(app){
             }));
     });
 
-    app.put('/projects',auth,function(request,response){
+    app.put('/projects',authed,function(request,response){
         if(schema.js.validate(request.body,schema.projects).length==0){
             app.set('projects',request.body.map(function(project){
                 return {
@@ -48,7 +48,7 @@ module.exports=function(app){
         }
     });
 
-    app.post('/projects',auth,function(request,response){
+    app.post('/projects',authed,function(request,response){
         if(schema.js.validate(request.body,schema.project).length==0){
             var project=get_element(request.body.id,app.get('projects'))
 
@@ -71,12 +71,12 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/projects',auth,function(request,response){
+    app.delete('/projects',authed,function(request,response){
         app.set('projects',[]);
         response.status(200).json(_success.ok);
     });
 
-    app.get('/projects/:project',auth,function(request,response){
+    app.get('/projects/:project',authed,function(request,response){
         var id=validate.toString(request.params.project)
           , projects=app.get('projects')
           , project=get_element(id,projects)
@@ -92,7 +92,7 @@ module.exports=function(app){
         response.status(404).json(_error.notfound);
     });
 
-    app.put('/projects/:project',auth,function(request,response){
+    app.put('/projects/:project',authed,function(request,response){
         var id=validate.toString(request.params.project)
           , projects=app.get('projects')
           , project=get_element(id,projects)
@@ -120,7 +120,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/projects/:project',auth,function(request,response){
+    app.delete('/projects/:project',authed,function(request,response){
         var id=validate.toString(request.params.project)
           , projects=app.get('projects')
           , project=get_element(id,projects)
