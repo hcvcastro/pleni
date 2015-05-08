@@ -7,6 +7,7 @@ var _success=require('../../core/json-response').success
   , csrf=csurf({cookie:true})
   , nocaptcha=require('no-captcha')
   , generator=require('../../core/functions/utils/random').sync
+  , mailer=require('../../core/functions/mails/send')
   , User=require('./models/user')
 
 module.exports=function(app){
@@ -71,6 +72,10 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
+    app.get('/mail',function(request,response){
+        response.render('mail/confirm');
+    });
+
     app.post('/signup',csrf,function(request,response){
         captcha.verify({
             response:request.body.captcha
@@ -91,6 +96,19 @@ module.exports=function(app){
                         },function(err,user){
                             if(!err){
                                 response.status(200).json(_success.ok);
+
+                                response.render('pages/home',function(err,html){
+                                    mailer({
+                                        smtp:config.mailgun
+                                      , mail:{
+                                            from:config.email
+                                          , to:request.body.email
+                                          , subject:'Welcome to Pleni Toolkit'
+                                          , html:html
+                                        }
+                                    })
+                                    .done();
+                                });
                             }else{
                                 response.status(403).json(_error.validation);
                             }
