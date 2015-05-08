@@ -39,7 +39,7 @@ var http=require('http')
         });
     }
   , notify=function(task,planner,success,fail){
-        console.log('ASSIGN '+task+' -> '+planner);
+        console.log('ASSIGN ',task,' -> ',planner);
         if(config.env=='test'){
             success();
         }else{
@@ -47,9 +47,16 @@ var http=require('http')
                 url:task
               , json:{planner:planner}
             },function(error,response){
-                if(!error&&response.statusCode==200){
-                    success();
+                if(!error){
+                    if(response.statusCode==200){
+                        console.log('SUCCESS');
+                        success();
+                    }else{
+                        console.log('FAIL',response.statusCode);
+                        fail();
+                    }
                 }else{
+                    console.log(error);
                     fail();
                 }
             });
