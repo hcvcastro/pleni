@@ -86,21 +86,21 @@ module.exports=function(app){
                 User.findOne({email:request.body.email},function(err,user){
                     if(!user&&config.master.admin&&
                         config.master.email!==request.body.email){
+                        var key=generator()
                         User.create({
                             email:request.body.email
                           , password:request.body.password
-                          , status:'confirm'
-                          , confirm:{
-                                key:generator()
-                              , ts:Date.now()
+                          , status:{
+                                type:'confirm'
+                              , key:key
                             }
                         },function(err,user){
                             if(!err){
                                 response.status(200).json(_success.ok);
 
                                 response.render('mail/confirm',{
-                                    site:'http://pleni.hiperborea.com.bo'
-                                  , confirm:'/confirm/0as0g9b9fasdf'
+                                    site:config.url
+                                  , confirm:'/#/confirm/'+key
                                 },function(err,html){
                                     mailer({
                                         smtp:config.mailgun
@@ -131,6 +131,11 @@ module.exports=function(app){
                 response.status(403).json(_error.validation);
             }
         });
+    });
+
+    app.get('/confirm/:key',function(request,response){
+        console.log('confirm');
+        response.send(_success.ok);
     });
 
     app.post('/forgot',csrf,function(request,response){

@@ -23,6 +23,7 @@ module.exports={
           , pass:'e822a5c96a0f59b0f5fe16a6d72f2fae'
         }
     }
+  , url:'http://pleni.hiperborea.com.bo'
   , email:'Pleni Team <info@hiperborea.com.bo>'
   , master:{
         host:process.env.OPENSHIFT_NODEJS_IP||'127.0.0.1'

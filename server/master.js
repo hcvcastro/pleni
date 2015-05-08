@@ -91,11 +91,11 @@ passport.use(new localstrategy({
                 message:'Unknown email: '+email
             });
         }
-        switch(user.status){
+        switch(user.status.type){
             case 'confirm':
                 return done(null,false,{
-                    message:'Your account has not been confirmed yet. Please check'+
-                        ' your email or use the [Forgot your password]'
+                    message:'Your account has not been confirmed yet. Please '
+                        +'check your email or click in forgot your password'
                 });
             case 'active':
                 user.comparePassword(password,function(err,isMatch){

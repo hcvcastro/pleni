@@ -17,9 +17,20 @@ var user=new Schema({
       , required:true
     }
   , status:{
-        type:String
-      , required:true
-      , default:'inactive'
+        type:{
+            type:String
+          , required:true
+          , default:'inactive'
+          , enum:['confirm','reset','active','inactive']
+        }
+      , key:{
+            type:String
+          , required:false
+        }
+      , ts:{
+            type:Date
+          , default:Date.now
+        }
     }
 });
 
