@@ -3,7 +3,6 @@
 var http=require('http')
   , join=require('path').join
   , _error=require('../core/json-response').error
-  , config=require('../config/master')
   , express=require('express')
   , morgan=require('morgan')
   , lessmiddleware=require('less-middleware')
@@ -23,6 +22,11 @@ var http=require('http')
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , loadconfig=require('../core/loadconfig')
+  , config=require('../config/master');
+
+if(process.env.ENV=='test'){
+    config=require('../config/tests');
+}
 
 var redisclient=redis.createClient(
     config.redis.port,config.redis.host,config.redis.options)
@@ -186,16 +190,16 @@ app.set('auth',function(request,response,next){
     response.status(401).json(_error.auth);
 });
 
-require('./master/home')(app);
-require('./master/auth')(app);
-require('./master/resources')(app);
-require('./master/resources/dbservers')(app);
-require('./master/resources/repositories')(app);
-require('./master/resources/planners')(app);
-require('./master/resources/notifiers')(app);
-require('./master/notifier')(app,ios,ioc);
-require('./master/projects')(app);
-require('./master/workspace')(app);
+require('./master/home')(app,config);
+require('./master/auth')(app,config);
+require('./master/resources')(app,config);
+require('./master/resources/dbservers')(app,config);
+require('./master/resources/repositories')(app,config);
+require('./master/resources/planners')(app,config);
+require('./master/resources/notifiers')(app,config);
+require('./master/notifier')(app,config,ios,ioc);
+require('./master/projects')(app,config);
+require('./master/workspace')(app,config);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

@@ -9,6 +9,11 @@ module.exports={
       , pass:'~~@[@ł€¶→}][þß~łĸ«»””n[þø||@#~½@~~~'
       , prefix:'test_'
     }
+  , cookie:{
+        secret:'master'
+      , maxAge:3*60*60*1000
+      , name:'pleni.master.sid'
+    }
   , redis:{
         host:'localhost'
       , port:6379
@@ -25,8 +30,27 @@ module.exports={
           , pass:'e822a5c96a0f59b0f5fe16a6d72f2fae'
         }
     }
+  , url:'http://localhost'
   , email:'cijkb.j@gmail.com'
-  , url:'http://galao.local'
+  , master:{
+        host:process.env.OPENSHIFT_NODEJS_IP||'127.0.0.1'
+      , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000
+      , admin:true
+      , email:'admin@localhost'
+      , password:'asdf'
+    }
+  , user:{
+        email:'cijkb.j@gmail.com'
+      , password:'asdf'
+    }
+  , mongo:{
+        url:'mongodb://localhost/test'
+    }
+  , recaptcha:{
+        public:'6LcKSQYTAAAAAOuUrljCf8ReCzohwRr9kdHrbouu'
+      , private:'6LcKSQYTAAAAAKmZZetWs5LQLIQey0mLNT5J09EQ'
+    }
+
   , notifiers:[{
         script:'server/notifier.io'
       , host:'http://localhost'

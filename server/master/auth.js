@@ -2,7 +2,6 @@
 
 var _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
-  , config=require('../../config/master')
   , join=require('path').join
   , csurf=require('csurf')
   , csrf=csurf({cookie:true})
@@ -11,7 +10,7 @@ var _success=require('../../core/json-response').success
   , mailer=require('../../core/functions/mails/send')
   , User=require('./models/user')
 
-module.exports=function(app){
+module.exports=function(app,config){
     var passport=app.get('passport')
       , captcha=new nocaptcha(config.recaptcha.public,config.recaptcha.private);
 
@@ -73,16 +72,8 @@ module.exports=function(app){
         response.status(200).json(_success.ok);
     });
 
-    app.get('/mail',function(request,response){
-        response.render('mail/confirm');
-    });
-
     app.post('/signup',csrf,function(request,response){
-        captcha.verify({
-            response:request.body.captcha
-          , remoteip:request.connection.remoteAddress
-        },function(err,res){
-            if(!err){
+        var register=function(){
                 User.findOne({email:request.body.email},function(err,user){
                     if(!user&&config.master.admin&&
                         config.master.email!==request.body.email){
@@ -98,25 +89,9 @@ module.exports=function(app){
                             if(!err){
                                 response.status(200).json(_success.ok);
 
-                                response.render('mail/confirm',{
-                                    site:config.url
-                                  , confirm:'/#/confirm/'+key
-                                },function(err,html){
-                                    mailer({
-                                        smtp:config.mailgun
-                                      , mail:{
-                                            from:config.email
-                                          , to:request.body.email
-                                          , subject:'Welcome to Pleni Toolkit'
-                                          , html:html
-                                          , attachments:[{
-                                                path:join(__dirname,'..','..','client','png','logo.png')
-                                              , cid:'logo@pleni'
-                                            }]
-                                        }
-                                    })
-                                    .done();
-                                });
+                                if(config.env==='production'){
+                                    mail();
+                                }
                             }else{
                                 response.status(403).json(_error.validation);
                             }
@@ -127,47 +102,71 @@ module.exports=function(app){
                         });
                     }
                 });
-            }else{
-                response.status(403).json(_error.validation);
             }
-        });
+          , mail=function(){
+                response.render('mail/confirm',{
+                    site:config.url
+                  , confirm:'/#/confirm/'+key
+                },function(err,html){
+                    mailer({
+                        smtp:config.mailgun
+                      , mail:{
+                            from:config.email
+                          , to:request.body.email
+                          , subject:'Welcome to Pleni Toolkit'
+                          , html:html
+                          , attachments:[{
+                                path:join(__dirname,'..','..','client','png'
+                                    ,'logo.png')
+                              , cid:'logo@pleni'
+                            }]
+                        }
+                    })
+                    .done();
+                });
+          };
+
+        if(config.env==='test'){
+            register();
+        }else{
+            captcha.verify({
+                response:request.body.captcha
+              , remoteip:request.connection.remoteAddress
+            },function(err,res){
+                if(!err){
+                    register();
+                }else{
+                    response.status(403).json(_error.validation);
+                }
+            });
+        }
     });
 
     app.get('/confirm/:key',function(request,response,next){
-        if(request.params.key){
-            if(request.params.key.length===36){
-                User.findOneAndUpdate({
-                    'status.type':'confirm'
-                  , 'status.key':request.params.key
-                },{
-                    $set:{
-                        'status.type':'active'
-                      , 'status.key':''
-                      , 'status.ts':Date.now()
-                    }
-                },function(err,user){
-                    if(!err){
-                        if(user){
-                            console.log(user);
-                            request.login(user,function(err){
-                                if(err){
-                                    return next(err);
-                                }else{
-                                    response.cookie('pleni.auth',JSON.stringify({
-                                        role:'user'
-                                    })).redirect('/');
-                                }
-                            });
+        if(request.params.key&&request.params.key.length===36){
+            User.findOneAndUpdate({
+                'status.type':'confirm'
+              , 'status.key':request.params.key
+            },{
+                $set:{
+                    'status.type':'active'
+                  , 'status.ts':Date.now()
+                }
+            },function(err,user){
+                if(!err&&user){
+                    request.login(user,function(err){
+                        if(err){
+                            return next(err);
                         }else{
-                            response.status(404).render('404');
+                            response.cookie('pleni.auth',JSON.stringify({
+                                role:'user'
+                            })).redirect('/');
                         }
-                    }else{
-                        response.status(404).render('404');
-                    }
-                });
-            }else {
-                response.status(404).render('404');
-            }
+                    });
+                }else{
+                    response.status(404).render('404');
+                }
+            });
         }else{
             response.status(404).render('404');
         }
