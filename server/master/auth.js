@@ -133,9 +133,44 @@ module.exports=function(app){
         });
     });
 
-    app.get('/confirm/:key',function(request,response){
-        console.log('confirm');
-        response.send(_success.ok);
+    app.get('/confirm/:key',function(request,response,next){
+        if(request.params.key){
+            if(request.params.key.length===36){
+                User.findOneAndUpdate({
+                    'status.type':'confirm'
+                  , 'status.key':request.params.key
+                },{
+                    $set:{
+                        'status.type':'active'
+                      , 'status.key':''
+                      , 'status.ts':Date.now()
+                    }
+                },function(err,user){
+                    if(!err){
+                        if(user){
+                            console.log(user);
+                            request.login(user,function(err){
+                                if(err){
+                                    return next(err);
+                                }else{
+                                    response.cookie('pleni.auth',JSON.stringify({
+                                        role:'user'
+                                    })).redirect('/');
+                                }
+                            });
+                        }else{
+                            response.status(404).render('404');
+                        }
+                    }else{
+                        response.status(404).render('404');
+                    }
+                });
+            }else {
+                response.status(404).render('404');
+            }
+        }else{
+            response.status(404).render('404');
+        }
     });
 
     app.post('/forgot',csrf,function(request,response){

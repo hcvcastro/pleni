@@ -47,7 +47,7 @@ pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
             })
             .success(function(data){
                 $rootScope.flash=['success','Your registration is complete, '
-                    +'please check your email to confim your request'];
+                    +'please check your email to confim your register'];
                 $location.path('/signin');
                 done();
             })
