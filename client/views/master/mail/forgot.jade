@@ -1,0 +1,20 @@
+center
+    table(style='max-width:480px;border-collapse:collapse;')
+        thead
+            tr(style='background-color:#b5c9ab;')
+                td(align='center',colspan='3',style='padding:0;')
+                    img(src='cid:logo@pleni')
+        tbody
+            tr
+                td(colspan='3',style='padding:10px;')
+                    p Dear #{email},
+                    p Probably you has requested a password reset for your Pleni account.
+                    p Please click the following link to reset your password.
+                    p #{site}#{reset}
+                    p If you did not request your password to be reset (or you remembered your password), disregard this messsage; no changes have been made to your account.
+                    p This link expires in 24 hours, but don't worry, you can always request a new one!
+                    p The Pleni Team
+        tfoot
+            tr(style='background-color:#647f67;')
+                td(colspan='3',style='height:20px;padding:0;')
+

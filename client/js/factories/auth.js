@@ -14,8 +14,7 @@ pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
               , _csrf:csrf
             })
             .success(function(data){
-                $rootScope.flash=['success','Redirecting to projects list ...'];
-                $location.path('/projects');
+                $location.path('/');
                 done();
             })
             .error(function(error){

@@ -101,6 +101,8 @@ passport.use(new localstrategy({
                     message:'Your account has not been confirmed yet. Please '
                         +'check your email or click in forgot your password'
                 });
+                break;
+            case 'forgot':
             case 'active':
                 user.comparePassword(password,function(err,isMatch){
                     if(err){
@@ -114,9 +116,10 @@ passport.use(new localstrategy({
                         });
                     }
                 });
+                break;
             default:
-                done(null,false,{
-                    message:'Unknown email: '+email
+                return done(null,false,{
+                    message:'Your account is inactive'
                 });
         }
     });

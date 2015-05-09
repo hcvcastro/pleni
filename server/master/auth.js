@@ -89,8 +89,8 @@ module.exports=function(app,config){
                             if(!err){
                                 response.status(200).json(_success.ok);
 
-                                if(config.env==='production'){
-                                    mail();
+                                if(config.env!=='test'){
+                                    mail(key);
                                 }
                             }else{
                                 response.status(403).json(_error.validation);
@@ -103,10 +103,10 @@ module.exports=function(app,config){
                     }
                 });
             }
-          , mail=function(){
+          , mail=function(key){
                 response.render('mail/confirm',{
                     site:config.url
-                  , confirm:'/#/confirm/'+key
+                  , confirm:'/confirm/'+key
                 },function(err,html){
                     mailer({
                         smtp:config.mailgun
@@ -173,34 +173,69 @@ module.exports=function(app,config){
     });
 
     app.post('/forgot',csrf,function(request,response){
-        captcha.verify({
-            response:request.body.captcha
-          , remoteip:request.connection.remoteAddress
-        },function(err,res){
-            if(!err){
-                User.findOne({email:request.body.email},function(err,user){
-                    if(user){
-                        user.confirm={
-                            key:generator()
-                          , ts:Date.now()
-                        };
-                        user.save(function(err){
-                            if(!err){
-                                response.status(200).json(_success.ok);
-                            }else{
-                                response.status(403).json(_error.validation);
-                            }
-                        });
+        var register=function(){
+                var key=generator();
+
+                User.findOneAndUpdate({
+                    email:request.body.email
+                },{
+                    $set:{
+                        'status.type':'forgot'
+                      , 'status.key':key
+                      , 'status.ts':Date.now()
+                    }
+                },function(err,user){
+                    if(!err){
+                        response.status(200).json(_success.ok);
+
+                        if(config.env!=='test'){
+                            mail(key);
+                        }
                     }else{
                         response.status(403).json({
                             message:'The email is not registered'
                         });
                     }
                 });
-            }else{
-                response.status(403).json(_error.validation);
             }
-        });
+          , mail=function(key){
+                response.render('mail/forgot',{
+                    email:request.body.email
+                  , site:config.url
+                  , reset:'/reset/'+key
+                },function(err,html){
+                    mailer({
+                        smtp:config.mailgun
+                      , mail:{
+                            from:config.email
+                          , to:request.body.email
+                          , subject:'Pleni password reset'
+                          , html:html
+                          , attachments:[{
+                                path:join(__dirname,'..','..','client','png'
+                                    ,'logo.png')
+                              , cid:'logo@pleni'
+                            }]
+                        }
+                    })
+                    .done();
+                });
+            };
+
+        if(config.env=='test'){
+            register();
+        }else{
+            captcha.verify({
+                response:request.body.captcha
+              , remoteip:request.connection.remoteAddress
+            },function(err,res){
+                if(!err){
+                    register();
+                }else{
+                    response.status(403).json(_error.validation);
+                }
+            });
+        }
     });
 };
 

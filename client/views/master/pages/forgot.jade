@@ -14,6 +14,7 @@
                         .captcha
                             no-captcha(g-recaptcha-response='recaptcha',theme='light',control='control',site-key='#{captcha}')
                         p.offset.load
+                            input(type='hidden',name='_csrf',value='#{csrftoken}')
                             span.hide.loader.fa.fa-spinner.fa-spin
                             span.hide.message
                         p.offset

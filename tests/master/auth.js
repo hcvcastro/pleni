@@ -179,6 +179,14 @@ describe('signin controller functions',function(){
         });
     });
 
+    describe('testing for forgot',function(){
+        it('GET /forgot',function(done){
+            request(app)
+                .get('/forgot')
+                .expect(200,done);
+        });
+    });
+
     after(function(done){
         User.remove({email:config.user.email},function(err){
             if(err){
