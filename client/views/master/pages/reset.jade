@@ -1,0 +1,28 @@
+.grid.full.last
+    nav.menu
+        include ../blocks/footer/bottom
+    .main
+        .messages
+        section.reset
+            h1 Reset password
+            article.form.animate
+                .body
+                    form(ng-submit='reset()')
+                        p
+                            label Email confirmation
+                            input(type='text',name='email',placeholder='The email associated with the account',required,ng-model='email')
+                        p
+                            label New Password
+                            input(type='password',name='password',placeholder='Your super safe new password',required,ng-model='password')
+                        p
+                            label Password confirmation
+                            input(type='password',name='confirm',placeholder='Repeat your super safe new password',required,ng-model='confirm')
+                        .captcha
+                            no-captcha(g-recaptcha-response='recaptcha',theme='light',control='control',site-key='#{captcha}')
+                        p.offset.load
+                            input(type='hidden',name='_csrf',value='#{csrftoken}')
+                            span.hide.loader.fa.fa-spinner.fa-spin
+                            span.hide.message
+                        p.offset
+                            button(type='submit') Reset Password
+

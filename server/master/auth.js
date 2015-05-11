@@ -34,6 +34,13 @@ module.exports=function(app,config){
         });
     });
 
+    app.get('/reset',csrf,function(request,response){
+        response.render('pages/reset',{
+            csrftoken:request.csrfToken()
+          , captcha:config.recaptcha.public
+        });
+    });
+
     app.post('/signin',csrf,function(request,response,next){
         passport.authenticate('local',function(err,user,info){
             if(err){
@@ -202,7 +209,7 @@ module.exports=function(app,config){
                 response.render('mail/forgot',{
                     email:request.body.email
                   , site:config.url
-                  , reset:'/reset/'+key
+                  , reset:'/#/reset/'+key
                 },function(err,html){
                     mailer({
                         smtp:config.mailgun
@@ -238,26 +245,59 @@ module.exports=function(app,config){
         }
     });
 
-    app.get('/reset/:key',csrf,function(request,response,next){
-        if(request.params.key&&request.params.key.length===36){
-            User.findOne({
-                'status.type':'forgot'
-              , 'status.key':request.params.key
-            },function(err,user){
-                if(!err&&user){
-                    if((Date.parse(user.status.ts)+(24*60*60))<Date.now()){
-                        response.render('pages/reset',{
-                            csrftoken:request.csrfToken()
-                        });
-                    }else{
-                        response.status(404).render('404');
-                    }
+    app.post('/reset/:key',csrf,function(request,response,next){
+        var validate=function(){
+                if(request.params.key&&request.params.key.length===36){
+                    User.findOne({
+                        'email':request.body.email
+                      , 'status.type':'forgot'
+                      , 'status.key':request.params.key
+                    },function(err,user){
+                        if(!err&&user){
+                            register(user);
+                        }else{
+                            response.status(403).json(_error.validation);
+                        }
+                    });
                 }else{
-                    response.status(404).render('404');
+                    response.status(403).json(_error.validation);
+                }
+            }
+          , register=function(user){
+                if((Date.now()-Date.parse(user.status.ts))<86400){
+                    user.password=request.body.password;
+                    user.status.type='active';
+                    user.status.ts=Date.now();
+
+                    user.save(function(err){
+                        if(!err){
+                            response.status(200).json(_success.ok);
+                        }else{
+                            console.log(err);
+                            response.status(403).json(_error.validation);
+                        }
+                    });
+                }else{
+                    response.status(404).json({
+                        message:'The reset key has expired, please '
+                            +'use the forgot my password again'
+                    });
+                }
+            };
+
+        if(config.env=='test'){
+            validate();
+        }else{
+            captcha.verify({
+                response:request.body.captcha
+              , remoteip:request.connection.remoteAddress
+            },function(err,res){
+                if(!err){
+                    validate();
+                }else{
+                    response.status(403).json(_error.validation);
                 }
             });
-        }else{
-            response.status(404).render('404');
         }
     });
 };

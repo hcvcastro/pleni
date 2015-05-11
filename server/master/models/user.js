@@ -21,7 +21,7 @@ var user=new Schema({
             type:String
           , required:true
           , default:'inactive'
-          , enum:['confirm','reset','active','inactive']
+          , enum:['confirm','forgot','active','inactive']
         }
       , key:{
             type:String

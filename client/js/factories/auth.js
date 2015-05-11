@@ -82,6 +82,29 @@ pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
                 done();
             });
         }
+      , reset:function(key,email,password,csrf,captcha,reset,done){
+            $http.post('/reset/'+key,{
+                email:email
+              , password:password
+              , _csrf:csrf
+              , captcha:captcha
+            })
+            .success(function(data){
+                $rootScope.flash=['success','Please signin with your new '
+                    +'password'];
+                $location.path('/signin');
+                done();
+            })
+            .error(function(error){
+                if(error.message){
+                    utils.show('error',error.message);
+                }else{
+                    utils.show('error','Invalid request');
+                }
+                reset();
+                done();
+            });
+        }
     };
 }]);
 

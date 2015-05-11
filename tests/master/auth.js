@@ -185,6 +185,73 @@ describe('signin controller functions',function(){
                 .get('/forgot')
                 .expect(200,done);
         });
+
+        it('POST /forgot',function(done){
+            request(app)
+                .get('/forgot')
+                .end(function(err,res){
+                    var $=cheerio.load(res.text)
+                      , csrf=$('input[name=_csrf]').val()
+
+                    request(app)
+                        .post('/forgot')
+                        .set('cookie',res.headers['set-cookie'])
+                        .send({
+                            _csrf:csrf
+                          , email:config.user.email
+                        })
+                        .expect(200)
+                        .end(function(err,res){
+                            User.findOne({
+                                email:config.user.email
+                            },function(err,user){
+                                user.status.type.should.be.eql('forgot');
+                                done();
+                            });
+                        });
+                });
+        });
+    });
+
+    describe('testing for reset',function(){
+        var key='';
+
+        before(function(done){
+            User.findOne({
+                'email':config.user.email
+              , 'status.type':'forgot'
+            },function(err,user){
+                key=user.status.key;
+                done();
+            });
+        });
+
+        it('POST /reset',function(done){
+            request(app)
+                .get('/reset')
+                .end(function(err,res){
+                    var $=cheerio.load(res.text)
+                      , csrf=$('input[name=_csrf]').val()
+
+                    request(app)
+                        .post('/reset/'+key)
+                        .set('cookie',res.headers['set-cookie'])
+                        .send({
+                            _csrf:csrf
+                          , email:config.user.email
+                          , password:config.user.password
+                        })
+                        .expect(200)
+                        .end(function(err,res){
+                            User.findOne({
+                                email:config.user.email
+                            },function(err,user){
+                                user.status.type.should.be.eql('active');
+                                done();
+                            });
+                        });
+                });
+        });
     });
 
     after(function(done){
