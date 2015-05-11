@@ -27,6 +27,11 @@ var pleni=angular
               , controller:'ForgotController'
               , access:'guest'
             })
+            .when('/reset/:key',{
+                templateUrl:'/reset'
+              , controller:'ResetController'
+              , access:'guest'
+            })
             .when('/resources',{
                 templateUrl:'/resources/view'
               , controller:'ResourcesController'

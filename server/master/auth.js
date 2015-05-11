@@ -237,5 +237,28 @@ module.exports=function(app,config){
             });
         }
     });
+
+    app.get('/reset/:key',csrf,function(request,response,next){
+        if(request.params.key&&request.params.key.length===36){
+            User.findOne({
+                'status.type':'forgot'
+              , 'status.key':request.params.key
+            },function(err,user){
+                if(!err&&user){
+                    if((Date.parse(user.status.ts)+(24*60*60))<Date.now()){
+                        response.render('pages/reset',{
+                            csrftoken:request.csrfToken()
+                        });
+                    }else{
+                        response.status(404).render('404');
+                    }
+                }else{
+                    response.status(404).render('404');
+                }
+            });
+        }else{
+            response.status(404).render('404');
+        }
+    });
 };
 
