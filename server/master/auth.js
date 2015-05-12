@@ -92,6 +92,13 @@ module.exports=function(app,config){
                                 type:'confirm'
                               , key:key
                             }
+                          , resources:{
+                                dbservers:[]
+                              , repositories:[]
+                              , planners:[]
+                              , notifiers:[]
+                            }
+                          , projects:[]
                         },function(err,user){
                             if(!err){
                                 response.status(200).json(_success.ok);

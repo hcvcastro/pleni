@@ -10,7 +10,7 @@ var request=require('supertest')
   , loadconfig=require('../../../core/loadconfig')
 
 describe('dbservers controller functions',function(){
-    describe('rest functions for collection',function(){
+/*    describe('rest functions for collection',function(){
         it('GET /resources/view',function(done){
             request(app)
                 .get('/resources/view')
@@ -428,6 +428,6 @@ describe('dbservers controller functions',function(){
                     });
             });
         });
-    });
+    });*/
 });
 

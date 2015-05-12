@@ -2,11 +2,10 @@
 
 var fs=require('fs')
   , join=require('path').join
-  , config=require('../../config/master')
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
 
-module.exports=function(app){
+module.exports=function(app,config){
     app.get('/',function(request,response){
         if(request.user){
             response.cookie('pleni.auth',JSON.stringify({

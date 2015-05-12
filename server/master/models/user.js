@@ -32,6 +32,43 @@ var user=new Schema({
           , default:Date.now
         }
     }
+  , resources:{
+        dbservers:[{
+            id:String
+          , db:{
+                host:String
+              , port:Number
+              , user:String
+              , pass:String
+              , prefix:String
+            }
+        }]
+      , repositories:[{
+            id:String
+          , _dbserver:String
+          , db:{
+                name:String
+            }
+        }]
+      , planners:[{
+            id:String
+          , planner:{
+                host:String
+              , port:Number
+            }
+        }]
+      , notifiers:[{
+            id:String
+          , notifier:{
+                host:String
+              , port:Number
+            }
+        }]
+    }
+  , projects:[{
+        id:String
+      , _repositories:[String]
+    }]
 });
 
 user.pre('save',function(next){

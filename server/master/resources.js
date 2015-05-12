@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports=function(app){
+module.exports=function(app,config){
     var authed=app.get('auth');
 
     app.get('/resources/view',authed,function(request,response){

@@ -34,13 +34,13 @@ redisclient.on('error',console.error.bind(console,'redis connection error:'));
 redisclient.on('ready',function(){
     console.log('connection to redis db: '+config.redis.host+':'
         +config.redis.port);
-})
+});
 var store=new redisstore({
     client:redisclient
   , host:config.redis.host
   , port:config.redis.port
   , prefix:config.redis.prefix
-})
+});
 
 mongoose.connect(config.mongo.url);
 var mongodb=mongoose.connection;
@@ -125,7 +125,7 @@ passport.use(new localstrategy({
     });
 }));
 
-var resources={}
+/*var resources={}
   , notifier=new Array()
   , projects=new Array()
 
@@ -139,7 +139,7 @@ projects=loadconfig(join(__dirname,'..','config','projects.json'));
 app.set('resources',resources);
 app.set('notifier',notifier);
 app.set('projects',projects);
-
+*/
 app.set('host',config.master.host);
 app.set('port',config.master.port);
 app.disable('x-powered-by');
@@ -189,7 +189,7 @@ app.set('auth',function(request,response,next){
     if(request.isAuthenticated()){
         return next();
     }
-    
+
     response.status(401).json(_error.auth);
 });
 
