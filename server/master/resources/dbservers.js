@@ -55,7 +55,7 @@ module.exports=function(app,config){
                 };
             });
 
-            app.set('resources',resources);
+            request.user.resources=resources;
             response.status(201).json(_success.ok);
         }else{
             response.status(400).json(_error.json);
@@ -82,7 +82,7 @@ module.exports=function(app,config){
 
                 dbservers.push(new_dbserver);
                 resources.dbservers=dbservers;
-                app.set('resources',resources);
+                request.user.resources=resources;
 
                 response.status(201).json({
                     id:new_dbserver.id
@@ -104,7 +104,7 @@ module.exports=function(app,config){
         var resources=request.user.resources
 
         resources.dbservers=[];
-        app.set('resources',resources);
+        request.user.resources=resources;
         response.status(200).json(_success.ok);
     });
 
@@ -197,7 +197,7 @@ module.exports=function(app,config){
             }
 
             resources.dbservers=dbservers;
-            app.set('resources',resources);
+            request.user.resources=resources;
         }else{
             response.status(403).json(_error.validation);
         }
@@ -212,7 +212,8 @@ module.exports=function(app,config){
         if(dbserver){
             dbservers.splice(dbserver[0],1);
             resources.dbservers=dbservers;
-            app.set('resources',resources);
+            request.user.resources=resources;
+
             response.status(200).json(_success.ok);
         }else{
             response.status(404).json(_error.notfound);

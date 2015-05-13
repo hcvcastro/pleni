@@ -2,228 +2,279 @@
 
 var request=require('supertest')
   , should=require('should')
+  , cheerio=require('cheerio')
   , join=require('path').join
   , app=require('../../../server/master')
+  , config=require('../../../config/tests')
+  , User=require('../../../server/master/models/user')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
-  , config=require('../../../config/tests')
-  , loadconfig=require('../../../core/loadconfig')
 
 describe('dbservers controller functions',function(){
-/*    describe('rest functions for collection',function(){
-        it('GET /resources/view',function(done){
-            request(app)
-                .get('/resources/view')
-                .expect(200,done);
-        });
+    var cookie='';
 
-        it('GET /resources/dbservers',function(done){
-            request(app)
-                .get('/resources/dbservers')
-                .expect('Content-Type',/json/)
-                .expect(200)
-                .end(function(err,res){
-                    res.statusCode.should.be.eql(200);
-                    res.should.be.json;
-                    res.body.should.have.an.Array;
-                    for(var i in res.body){
-                        res.body[i].should.have.property('id');
-                        res.body[i].should.have.property('db');
-                        res.body[i].db.should.have.property('host');
-                        res.body[i].db.should.have.property('port');
-                        res.body[i].db.should.have.property('user');
-                        res.body[i].db.should.have.property('prefix');
-                    }
-                    done();
-                });
+    before(function(done){
+        User.create({
+            email:config.user.email
+          , password:config.user.password
+          , status:{
+                type:'active'
+              , key:''
+            }
+          , resources:{
+                dbservers:[]
+              , repositories:[]
+              , planners:[]
+              , notifiers:[]
+            }
+          , projects:[]
+        },function(err,user){
+            if(!err){
+                done();
+            }
         });
+    });
 
-        [
-            {test:'',expected:_error.json,status:400}
-          , {test:{},expected:_error.json,status:400}
-          , {test:{'':''},expected:_error.json,status:400}
-          , {test:{'__':''},expected:_error.json,status:400}
-          , {test:{'host':{}},expected:_error.json,status:400}
-          , {test:{'host':{host:''}},expected:_error.json,status:400}
-          , {test:[
-              {
-                  id:'localhost'
-                , host:'http://localhost'
+    before(function(done){
+        request(app)
+            .get('/signin')
+            .end(function(err,res){
+                var $=cheerio.load(res.text)
+                  , csrf=$('input[name=_csrf]').val()
+
+                request(app)
+                    .post('/signin')
+                    .set('cookie',res.headers['set-cookie'])
+                    .send({
+                        _csrf:csrf
+                      , email:config.user.email
+                      , password:config.user.password
+                    })
+                    .end(function(err,res){
+                        cookie=res.headers['set-cookie'];
+                        done();
+                    });
+            });
+    });
+
+    it('GET /resources/view',function(done){
+        request(app)
+            .get('/resources/view')
+            .set('cookie',cookie[1])
+            .expect(200,done);
+    });
+
+    [
+        {test:'',expected:_error.json,status:400}
+      , {test:{},expected:_error.json,status:400}
+      , {test:{'':''},expected:_error.json,status:400}
+      , {test:{'__':''},expected:_error.json,status:400}
+      , {test:{'host':{}},expected:_error.json,status:400}
+      , {test:{'host':{host:''}},expected:_error.json,status:400}
+      , {test:[
+          {
+              id:'localhost'
+            , host:'http://localhost'
+            , port:8080
+            , user:'boo'
+            , pass:'boo.'
+            , prefix:'p_'
+          }
+        ],expected:_error.json,status:400}
+      , {test:[
+          {
+              id:'localhost'
+            , db:{
+                  host:'http://localhost'
                 , port:8080
                 , user:'boo'
                 , pass:'boo.'
                 , prefix:'p_'
               }
-            ],expected:_error.json,status:400}
-          , {test:[
-              {
-                  id:'localhost'
-                , db:{
-                      host:'http://localhost'
-                    , port:8080
-                    , user:'boo'
-                    , pass:'boo.'
-                    , prefix:'p_'
-                  }
-              }
-            ],expected:_success.ok,status:201}
-        ]
-        .forEach(function(element){
-            it('PUT /resources/dbservers',function(done){
-                request(app)
-                    .put('/resources/dbservers')
-                    .send(element.test)
-                    .expect('Content-Type',/json/)
-                    .expect(element.status)
-                    .end(function(err,res){
-                        res.statusCode.should.be.eql(element.status);
-                        res.should.be.json;
-                        res.body.should.have.property('ok');
-                        res.body.should.eql(element.expected);
-                        done();
-                    });
-            });
-        });
-
-        [
-            {test:'',expected:_error.validation,status:403}
-          , {test:{},expected:_error.validation,status:403}
-          , {test:{id:1},expected:_error.validation,status:403}
-          , {test:{db:''},expected:_error.validation,status:403}
-          , {test:{db:'1'},expected:_error.validation,status:403}
-          , {test:{db:'/'},expected:_error.validation,status:403}
-          , {test:{db:'...'},expected:_error.validation,status:403}
-          , {test:{
-                id:'localhost'
-              , db:{
-                    host:'http://localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:'p_'
-                }
-            },expected:_error.notoverride,status:403}
-        ]
-        .forEach(function(element){
-            it('POST /resources/dbservers',function(done){
-                request(app)
-                    .post('/resources/dbservers')
-                    .send(element.test)
-                    .expect('Content-Type',/json/)
-                    .expect(element.status)
-                    .end(function(err,res){
-                        res.statusCode.should.be.eql(element.status);
-                        res.should.be.json;
-                        res.body.should.have.property('ok');
-                        res.body.should.eql(element.expected);
-                        done();
-                    });
-            });
-        });
-
-        [
-            {test:{
-                id:'test'
-              , db:{
-                    host:'http://localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:'p_'
-                }
-            },expected:_success.ok,status:201}
-          , {test:{
-                id:'test2'
-              , db:{
-                    host:'localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:'p_'
-                }
-            },expected:_success.ok,status:201}
-        ]
-        .forEach(function(element){
-            it('POST /resources/dbservers',function(done){
-                request(app)
-                    .post('/resources/dbservers')
-                    .send(element.test)
-                    .expect('Content-Type',/json/)
-                    .expect(element.status)
-                    .end(function(err,res){
-                        res.statusCode.should.be.eql(element.status);
-                        res.should.be.json;
-                        res.body.should.have.property('id')
-                           .and.have.eql(element.test.id);
-                        done();
-                    });
-            });
-        });
-
-        it('DELETE /resources/dbservers',function(done){
+          }
+        ],expected:_success.ok,status:201}
+    ]
+    .forEach(function(element){
+        it('PUT /resources/dbservers',function(done){
             request(app)
-                .delete('/resources/dbservers')
+                .put('/resources/dbservers')
+                .set('cookie',cookie[1])
+                .send(element.test)
                 .expect('Content-Type',/json/)
-                .expect(200)
+                .expect(element.status)
                 .end(function(err,res){
-                    res.statusCode.should.be.eql(200);
+                    res.statusCode.should.be.eql(element.status);
+                    res.should.be.json;
                     res.body.should.have.property('ok');
-                    res.body.should.eql(_success.ok);
+                    res.body.should.eql(element.expected);
                     done();
                 });
         });
+    });
 
-        [
-            {test:'',expected:_error.validation,status:403}
-          , {test:{},expected:_error.validation,status:403}
-          , {test:{id:1},expected:_error.validation,status:403}
-          , {test:{db:''},expected:_error.validation,status:403}
-          , {test:{db:'1'},expected:_error.validation,status:403}
-          , {test:{db:'/'},expected:_error.validation,status:403}
-          , {test:{db:'...'},expected:_error.validation,status:403}
-          , {test:{
-                id:'test'
-              , db:{
-                    host:'http://localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:''
-                }
-            },expected:_error.network,status:404}
-          , {test:{
-                id:'test'
-              , db:{
-                    host:'http://localhost'
-                  , port:5984
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:''
-                }
-            },expected:_error.auth,status:401}
-          , {test :{
-                id:'test'
-              , db:config.db
-            },expected:_success.ok,status:200}
-        ]
-        .forEach(function(element){
-            it('POST /resources/dbservers/_check',function(done){
-                request(app)
-                    .post('/resources/dbservers/_check')
-                    .send(element.test)
-                    .expect('Content-Type',/json/)
-                    .expect(element.status)
-                    .end(function(err,res){
-                        res.statusCode.should.be.eql(element.status);
-                        res.body.should.have.property('ok');
-                        res.body.should.eql(element.expected);
-                        done();
-                    });
-            });
+    [
+        {test:'',expected:_error.validation,status:403}
+      , {test:{},expected:_error.validation,status:403}
+      , {test:{id:1},expected:_error.validation,status:403}
+      , {test:{db:''},expected:_error.validation,status:403}
+      , {test:{db:'1'},expected:_error.validation,status:403}
+      , {test:{db:'/'},expected:_error.validation,status:403}
+      , {test:{db:'...'},expected:_error.validation,status:403}
+      , {test:{
+            id:'localhost'
+          , db:{
+                host:'http://localhost'
+              , port:8080
+              , user:'boo'
+              , pass:'boo.'
+              , prefix:'p_'
+            }
+        },expected:_error.notoverride,status:403}
+    ]
+    .forEach(function(element){
+        it('POST /resources/dbservers',function(done){
+            request(app)
+                .post('/resources/dbservers')
+                .set('cookie',cookie[1])
+                .send(element.test)
+                .expect('Content-Type',/json/)
+                .expect(element.status)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(element.status);
+                    res.should.be.json;
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(element.expected);
+                    done();
+                });
         });
     });
 
-    describe('rest function for resources',function(){
+    [
+        {test:{
+            id:'test'
+          , db:{
+                host:'http://localhost'
+              , port:8080
+              , user:'boo'
+              , pass:'boo.'
+              , prefix:'p_'
+            }
+        },expected:_success.ok,status:201}
+      , {test:{
+            id:'test2'
+          , db:{
+                host:'localhost'
+              , port:8080
+              , user:'boo'
+              , pass:'boo.'
+              , prefix:'p_'
+            }
+        },expected:_success.ok,status:201}
+    ]
+    .forEach(function(element){
+        it('POST /resources/dbservers',function(done){
+            request(app)
+                .post('/resources/dbservers')
+                .set('cookie',cookie[1])
+                .send(element.test)
+                .expect('Content-Type',/json/)
+                .expect(element.status)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(element.status);
+                    res.should.be.json;
+                    res.body.should.have.property('id')
+                       .and.have.eql(element.test.id);
+                    done();
+                });
+        });
+    });
+
+    it('GET /resources/dbservers',function(done){
+        request(app)
+            .get('/resources/dbservers')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.an.Array;
+                for(var i in res.body){
+                    res.body[i].should.have.property('id');
+                    res.body[i].should.have.property('db');
+                    res.body[i].db.should.have.property('host');
+                    res.body[i].db.should.have.property('port');
+                    res.body[i].db.should.have.property('user');
+                    res.body[i].db.should.have.property('prefix');
+                }
+                done();
+            });
+    });
+
+    it('DELETE /resources/dbservers',function(done){
+        request(app)
+            .delete('/resources/dbservers')
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.body.should.have.property('ok');
+                res.body.should.eql(_success.ok);
+                done();
+            });
+    });
+
+    [
+        {test:'',expected:_error.validation,status:403}
+      , {test:{},expected:_error.validation,status:403}
+      , {test:{id:1},expected:_error.validation,status:403}
+      , {test:{db:''},expected:_error.validation,status:403}
+      , {test:{db:'1'},expected:_error.validation,status:403}
+      , {test:{db:'/'},expected:_error.validation,status:403}
+      , {test:{db:'...'},expected:_error.validation,status:403}
+      , {test:{
+            id:'test'
+          , db:{
+                host:'http://localhost'
+              , port:8080
+              , user:'boo'
+              , pass:'boo.'
+              , prefix:''
+            }
+        },expected:_error.network,status:404}
+      , {test:{
+            id:'test'
+          , db:{
+                host:'http://localhost'
+              , port:5984
+              , user:'boo'
+              , pass:'boo.'
+              , prefix:''
+            }
+        },expected:_error.auth,status:401}
+      , {test :{
+            id:'test'
+          , db:config.db
+        },expected:_success.ok,status:200}
+    ]
+    .forEach(function(element){
+        it('POST /resources/dbservers/_check',function(done){
+            request(app)
+                .post('/resources/dbservers/_check')
+                .set('cookie',cookie[1])
+                .send(element.test)
+                .expect('Content-Type',/json/)
+                .expect(element.status)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(element.status);
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(element.expected);
+                    done();
+                });
+        });
+    });
+
+/*    describe('rest function for resources',function(){
         before(function(done){
             request(app)
                 .put('/resources/dbservers')
@@ -429,5 +480,15 @@ describe('dbservers controller functions',function(){
             });
         });
     });*/
+
+    after(function(done){
+        User.remove({
+            email:config.user.email
+        },function(err){
+            if(!err){
+                done();
+            }
+        });
+    });
 });
 

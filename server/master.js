@@ -57,6 +57,12 @@ passport.deserializeUser(function(id,done){
         done(null,{
             id:0
           , email:config.master.email
+          , resources:{
+                dbservers:[]
+              , repositories:[]
+              , planners:[]
+              , notifiers:[]
+            }
         });
     }else{
         User.findById(id,function(err,user){
