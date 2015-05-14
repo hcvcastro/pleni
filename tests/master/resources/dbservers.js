@@ -365,7 +365,7 @@ describe('dbservers controller functions',function(){
               , pass:'boo.'
               , prefix:'p_'
             }
-        },id:'test',status:201}
+        },id:'test2',status:201}
       , {test:{
             id:'test2'
           , db:{
@@ -375,7 +375,7 @@ describe('dbservers controller functions',function(){
               , pass:'asdf'
               , prefix:'p_'
             }
-        },id:'test',status:200}
+        },id:'test2',status:200}
     ]
     .forEach(function(element){
         it('PUT /resources/dbservers/:dbserver',function(done){
@@ -428,7 +428,8 @@ describe('dbservers controller functions',function(){
     });
 
     [
-        {test:'test2',expected:_error.notfound,status:404}
+        {test:'test3',expected:_error.notfound,status:404}
+      , {test:'test2',expected:_error.auth,status:401}
       , {test:'test',expected:_success.ok,status:200}
     ]
     .forEach(function(element){
@@ -448,7 +449,8 @@ describe('dbservers controller functions',function(){
     });
 
     [
-        {test:'test2',expected:_error.notfound,status:404}
+        {test:'test3',expected:_error.notfound,status:404}
+      , {test:'test2',expected:_error.auth,status:401}
       , {test:'test',status:200}
     ]
     .forEach(function(element){

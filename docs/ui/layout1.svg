@@ -7383,11 +7383,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.65655355"
-     inkscape:cx="1024.6998"
-     inkscape:cy="658.44434"
+     inkscape:zoom="0.57063736"
+     inkscape:cx="375.48428"
+     inkscape:cy="475.21635"
      inkscape:document-units="px"
-     inkscape:current-layer="g8030"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:showpageshadow="false"
      showborder="true"
@@ -7640,7 +7640,7 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="menubar.guest"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true">
     <path
        style="fill:#658068;fill-opacity:0.98039216;fill-rule:evenodd;stroke:none"
@@ -7796,8 +7796,7 @@
      inkscape:groupmode="layer"
      id="layer1"
      inkscape:label="jumbotron"
-     style="display:none"
-     sodipodi:insensitive="true">
+     style="display:inline">
     <rect
        style="fill:#a4b4a6;fill-opacity:1;stroke:none;stroke-width:0.99778992;stroke-opacity:1"
        id="rect4640"
@@ -8773,7 +8772,7 @@
          sodipodi:role="line">Log in to Pleni</tspan></text>
   </g>
   <g
-     style="display:inline"
+     style="display:none"
      inkscape:label="auth.forgot"
      id="g11847"
      inkscape:groupmode="layer"
@@ -9524,7 +9523,7 @@
     </g>
   </g>
   <g
-     style="display:inline"
+     style="display:none"
      inkscape:label="menu"
      id="g5662"
      inkscape:groupmode="layer"
