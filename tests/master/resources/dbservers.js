@@ -214,12 +214,27 @@ describe('dbservers controller functions',function(){
     it('DELETE /resources/dbservers',function(done){
         request(app)
             .delete('/resources/dbservers')
+            .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
                 res.statusCode.should.be.eql(200);
                 res.body.should.have.property('ok');
                 res.body.should.eql(_success.ok);
+                done();
+            });
+    });
+
+    it('GET /resources/dbservers',function(done){
+        request(app)
+            .get('/resources/dbservers')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.an.Array.an.be.empty;
                 done();
             });
     });
@@ -274,212 +289,232 @@ describe('dbservers controller functions',function(){
         });
     });
 
-/*    describe('rest function for resources',function(){
-        before(function(done){
-            request(app)
-                .put('/resources/dbservers')
-                .send(loadconfig(
-                    join(__dirname,'..','..','..','config',
-                        'dbservers.json')))
-                .end(function(err,res){
-                    done();
-                });
-        });
-
-        it('GET /resources/dbservers/:dbserver',function(done){
-            request(app)
-                .get('/resources/dbservers/localhost')
-                .expect('Content-Type',/json/)
-                .expect(200)
-                .end(function(err,res){
-                    res.statusCode.should.be.eql(200);
-                    res.should.be.json;
-                    res.body.should.have.property('id');
-                    res.body.should.have.property('db');
-                    res.body.db.should.have.property('host');
-                    res.body.db.should.have.property('port');
-                    res.body.db.should.have.property('prefix');
-                    done();
-                });
-        });
-
-        it('GET /resources/dbservers/:dbserver',function(done){
-            request(app)
-                .get('/resources/dbservers/nonexistent')
-                .expect('Content-Type',/json/)
-                .expect(404)
-                .end(function(err,res){
-                    res.statusCode.should.be.eql(404);
-                    res.should.be.json;
-                    res.body.should.eql(_error.notfound);
-                    done();
-                });
-        });
-
-        [
-          , {test:{},id:{},expected:_error.validation,status:403}
-          , {test:{'':''},id:'asdf',expected:_error.validation,status:403}
-          , {test:{'__':''},id:250,expected:_error.validation,status:403}
-          , {test:{'host':{}},id:'asdf',expected:_error.validation,status:403}
-          , {test:{'host':{host:''}},id:'asdf',
-              expected:_error.validation,status:403}
-          , {test:{'host':
-              {host:'http://localhost'}},id:'asdf',
-              expected:_error.validation,status:403}
-          , {test:{
+    it('POST /resources/dbservers',function(done){
+        request(app)
+            .post('/resources/dbservers')
+            .set('cookie',cookie[1])
+            .send({
                 id:'test'
               , db:{
-                    host:'http://localhost'
-                  , port:8080
-                  , user:'boo'
-                  , pass:'boo.'
-                  , prefix:'p_'
+                    host:config.db.host
+                  , port:config.db.port
+                  , user:config.db.user
+                  , pass:config.db.pass
+                  , prefix:config.db.prefix
                 }
-            },id:'test',status:201}
-          , {test:{
-                id:'test'
-              , db:{
-                    host:'http://localhost'
-                  , port:5984
-                  , user:'admin'
-                  , pass:'asdf'
-                  , prefix:'p_'
-                }
-            },id:'test',status:200}
-        ]
-        .forEach(function(element){
-            it('PUT /resources/dbservers/:dbserver',function(done){
-                request(app)
-                    .put('/resources/dbservers/'+element.id)
-                    .send(element.test)
-                    .expect('Content-Type',/json/)
-                    .expect(element.status)
-                    .end(function(err,res){
-                        res.statusCode.should.be.eql(element.status);
-                        switch(res.statusCode){
-                            case 403:
-                                res.should.be.json;
-                                res.body.should.have.property('ok');
-                                res.body.should.eql(element.expected);
-                                break;
-                            case 200:
-                            case 201:
-                                res.should.be.json;
-                                res.body.should.have.property('id')
-                                   .and.have.eql(element.id);
-                                break;
-                        }
-                        done();
-                    });
+            })
+            .expect('Content-Type',/json/)
+            .expect(201)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(201);
+                res.should.be.json;
+                res.body.should.have.property('id')
+                   .and.have.eql('test');
+                done();
             });
-        });
+    });
 
-        it('DELETE /resources/dbservers/:dbserver',function(done){
-            request(app)
-                .delete('/resources/dbservers/test')
-                .expect('Content-Type',/json/)
-                .expect(200)
-                .end(function(err,res){
-                    res.statusCode.should.be.eql(200);
-                    res.body.should.have.property('ok');
-                    res.body.should.eql(_success.ok);
-                    done();
-                });
-        });
+    it('GET /resources/dbservers/:dbserver',function(done){
+        request(app)
+            .get('/resources/dbservers/test')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.property('id');
+                res.body.should.have.property('db');
+                res.body.db.should.have.property('host');
+                res.body.db.should.have.property('port');
+                res.body.db.should.have.property('prefix');
+                done();
+            });
+    });
 
-        it('DELETE /resources/dbservers/:dbserver',function(done){
-            request(app)
-                .delete('/resources/dbservers/test')
-                .expect('Content-Type',/json/)
-                .expect(404)
-                .end(function(err,res){
-                    res.statusCode.should.be.eql(404);
-                    res.body.should.eql(_error.notfound);
-                    done();
-                });
-        });
+    it('GET /resources/dbservers/:dbserver',function(done){
+        request(app)
+            .get('/resources/dbservers/nonexistent')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(404)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(404);
+                res.should.be.json;
+                res.body.should.eql(_error.notfound);
+                done();
+            });
+    });
 
-        it('GET /resources/dbservers',function(done){
+    [
+      , {test:{},id:{},expected:_error.validation,status:403}
+      , {test:{'':''},id:'asdf',expected:_error.validation,status:403}
+      , {test:{'__':''},id:250,expected:_error.validation,status:403}
+      , {test:{'host':{}},id:'asdf',expected:_error.validation,status:403}
+      , {test:{'host':{host:''}},id:'asdf',
+          expected:_error.validation,status:403}
+      , {test:{'host':
+          {host:'http://localhost'}},id:'asdf',
+          expected:_error.validation,status:403}
+      , {test:{
+            id:'test2'
+          , db:{
+                host:'http://localhost'
+              , port:8080
+              , user:'boo'
+              , pass:'boo.'
+              , prefix:'p_'
+            }
+        },id:'test',status:201}
+      , {test:{
+            id:'test2'
+          , db:{
+                host:'http://localhost'
+              , port:5984
+              , user:'admin'
+              , pass:'asdf'
+              , prefix:'p_'
+            }
+        },id:'test',status:200}
+    ]
+    .forEach(function(element){
+        it('PUT /resources/dbservers/:dbserver',function(done){
             request(app)
-                .get('/resources/dbservers')
+                .put('/resources/dbservers/'+element.id)
+                .set('cookie',cookie[1])
+                .send(element.test)
                 .expect('Content-Type',/json/)
-                .expect(200)
+                .expect(element.status)
                 .end(function(err,res){
-                    res.statusCode.should.be.eql(200);
-                    res.should.be.json;
-                    res.body.should.have.an.Array;
-                    for(var i in res.body){
-                        res.body[i].should.have.property('id');
-                        res.body[i].should.have.property('db');
-                        res.body[i].db.should.have.property('host');
-                        res.body[i].db.should.have.property('port');
-                        res.body[i].db.should.have.property('user');
-                        res.body[i].db.should.have.property('prefix');
+                    res.statusCode.should.be.eql(element.status);
+                    switch(res.statusCode){
+                        case 403:
+                            res.should.be.json;
+                            res.body.should.have.property('ok');
+                            res.body.should.eql(element.expected);
+                            break;
+                        case 200:
+                        case 201:
+                            res.should.be.json;
+                            res.body.should.have.property('id')
+                               .and.have.eql(element.id);
+                            break;
                     }
                     done();
                 });
         });
+    });
 
-        [
-            {test:'test',expected:_error.notfound,status:404}
-          , {test:'localhost',expected:_success.ok,status:200}
-        ]
-        .forEach(function(element){
-            it('POST /resources/dbservers/:dbserver/_check',function(done){
-                request(app)
-                    .post('/resources/dbservers/'+element.test+'/_check')
-                    .expect('Content-Type',/json/)
-                    .expect(element.status)
-                    .end(function(err,res){
-                        res.statusCode.should.be.eql(element.status);
-                        res.body.should.have.property('ok');
-                        res.body.should.eql(element.expected);
-                        done();
-                    });
+    it('GET /resources/dbservers',function(done){
+        request(app)
+            .get('/resources/dbservers')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.an.Array;
+                for(var i in res.body){
+                    res.body[i].should.have.property('id');
+                    res.body[i].should.have.property('db');
+                    res.body[i].db.should.have.property('host');
+                    res.body[i].db.should.have.property('port');
+                    res.body[i].db.should.have.property('user');
+                    res.body[i].db.should.have.property('prefix');
+                }
+                done();
             });
-        });
+    });
 
-        [
-            {test:'test',expected:_error.notfound,status:404}
-          , {test:'localhost',status:200}
-        ]
-        .forEach(function(element){
-            it('POST /resources/dbservers/:dbserver/_databases',function(done){
-                request(app)
-                    .post('/resources/dbservers/'+element.test+'/_databases')
-                    .expect('Content-Type',/json/)
-                    .expect(element.status)
-                    .end(function(err,res){
-                        res.statusCode.should.be.eql(element.status);
-                        switch(res.statusCode){
-                            case 401:
-                            case 404:
-                                res.body.should.have.property('ok');
-                                res.body.should.eql(element.expected);
-                                break;
-                            case 200:
-                                res.body.should.have.an.Array;
-                                for(var i in res.body){
-                                    res.body[i].should.be.property('name');
-                                    res.body[i].should.be.property('params');
-                                    res.body[i].params.should.be.
-                                        property('db_name');
-                                    res.body[i].params.should.be.
-                                        property('doc_count');
-                                    res.body[i].params.should.be.
-                                        property('disk_size');
-                                    res.body[i].params.should.be.
-                                        property('data_size');
-                                    res.body[i].params.should.be.
-                                        property('update_seq')
-                                }
-                                break;
-                        }
-                        done();
-                    });
-            });
+    [
+        {test:'test2',expected:_error.notfound,status:404}
+      , {test:'test',expected:_success.ok,status:200}
+    ]
+    .forEach(function(element){
+        it('POST /resources/dbservers/:dbserver/_check',function(done){
+            request(app)
+                .post('/resources/dbservers/'+element.test+'/_check')
+                .set('cookie',cookie[1])
+                .expect('Content-Type',/json/)
+                .expect(element.status)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(element.status);
+                    res.body.should.have.property('ok');
+                    res.body.should.eql(element.expected);
+                    done();
+                });
         });
-    });*/
+    });
+
+    [
+        {test:'test2',expected:_error.notfound,status:404}
+      , {test:'test',status:200}
+    ]
+    .forEach(function(element){
+        it('POST /resources/dbservers/:dbserver/_databases',function(done){
+            request(app)
+                .post('/resources/dbservers/'+element.test+'/_databases')
+                .set('cookie',cookie[1])
+                .expect('Content-Type',/json/)
+                .expect(element.status)
+                .end(function(err,res){
+                    res.statusCode.should.be.eql(element.status);
+                    switch(res.statusCode){
+                        case 401:
+                        case 404:
+                            res.body.should.have.property('ok');
+                            res.body.should.eql(element.expected);
+                            break;
+                        case 200:
+                            res.body.should.have.an.Array;
+                            for(var i in res.body){
+                                res.body[i].should.be.property('name');
+                                res.body[i].should.be.property('params');
+                                res.body[i].params.should.be.
+                                    property('db_name');
+                                res.body[i].params.should.be.
+                                    property('doc_count');
+                                res.body[i].params.should.be.
+                                    property('disk_size');
+                                res.body[i].params.should.be.
+                                    property('data_size');
+                                res.body[i].params.should.be.
+                                    property('update_seq')
+                            }
+                            break;
+                    }
+                    done();
+                });
+        });
+    });
+
+    it('DELETE /resources/dbservers/:dbserver',function(done){
+        request(app)
+            .delete('/resources/dbservers/test2')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.body.should.have.property('ok');
+                res.body.should.eql(_success.ok);
+                done();
+            });
+    });
+
+    it('DELETE /resources/dbservers/:dbserver',function(done){
+        request(app)
+            .delete('/resources/dbservers/test2')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(404)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(404);
+                res.body.should.eql(_error.notfound);
+                done();
+            });
+    });
 
     after(function(done){
         User.remove({
