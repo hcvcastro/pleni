@@ -22,9 +22,7 @@ module.exports=function(app,config){
     var authed=app.get('auth');
 
     app.get('/resources/dbservers',authed,function(request,response){
-        var resources=request.user.resources
-
-        response.json(resources.dbservers.map(
+        response.json(request.user.resources.dbservers.map(
             function(dbserver){
                 return {
                     id:dbserver.id
@@ -149,10 +147,9 @@ module.exports=function(app,config){
                   , prefix:dbserver[1].db.prefix
                 }
             });
-            return;
+        }else{
+            response.status(404).json(_error.notfound);
         }
-
-        response.status(404).json(_error.notfound);
     });
 
     app.put('/resources/dbservers/:dbserver',authed,function(request,response){

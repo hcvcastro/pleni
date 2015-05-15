@@ -30,31 +30,30 @@ describe('dbservers controller functions',function(){
           , projects:[]
         },function(err,user){
             if(!err){
+                request(app)
+                    .get('/signin')
+                    .end(function(err,res){
+                        var $=cheerio.load(res.text)
+                          , csrf=$('input[name=_csrf]').val()
+
+                        request(app)
+                            .post('/signin')
+                            .set('cookie',res.headers['set-cookie'])
+                            .send({
+                                _csrf:csrf
+                              , email:config.user.email
+                              , password:config.user.password
+                            })
+                            .end(function(err,res){
+                                cookie=res.headers['set-cookie'];
+                                done();
+                            });
+                    });
+            }else{
+                console.log(err);
                 done();
             }
         });
-    });
-
-    before(function(done){
-        request(app)
-            .get('/signin')
-            .end(function(err,res){
-                var $=cheerio.load(res.text)
-                  , csrf=$('input[name=_csrf]').val()
-
-                request(app)
-                    .post('/signin')
-                    .set('cookie',res.headers['set-cookie'])
-                    .send({
-                        _csrf:csrf
-                      , email:config.user.email
-                      , password:config.user.password
-                    })
-                    .end(function(err,res){
-                        cookie=res.headers['set-cookie'];
-                        done();
-                    });
-            });
     });
 
     it('GET /resources/view',function(done){
@@ -234,7 +233,7 @@ describe('dbservers controller functions',function(){
             .end(function(err,res){
                 res.statusCode.should.be.eql(200);
                 res.should.be.json;
-                res.body.should.have.an.Array.an.be.empty;
+                res.body.should.have.an.Array.and.be.empty;
                 done();
             });
     });

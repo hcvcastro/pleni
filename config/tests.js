@@ -43,6 +43,9 @@ module.exports={
         email:'cijkb.j@gmail.com'
       , password:'asdf'
     }
+  , couchdb:{
+        name:'db_test'
+    }
   , mongo:{
         url:'mongodb://localhost/test'
     }

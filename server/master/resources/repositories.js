@@ -20,7 +20,7 @@ module.exports=function(app){
     var authed=app.get('auth');
 
     app.get('/resources/repositories',authed,function(request,response){
-        response.json(app.get('resources').repositories.map(
+        response.json(request.user.resources.repositories.map(
             function(repository){
                 return {
                     id:repository.id
@@ -34,7 +34,8 @@ module.exports=function(app){
 
     app.put('/resources/repositories',authed,function(request,response){
         if(schema.js.validate(request.body,schema.repositories).length==0){
-            var resources=app.get('resources');
+            var resources=request.user.resources
+
             resources.repositories=request.body.map(function(repository){
                 return {
                     id:validate.toString(repository.id)
@@ -45,7 +46,7 @@ module.exports=function(app){
                 };
             });
 
-            app.set('resources',resources);
+            request.user.save();
             response.status(201).json(_success.ok);
         }else{
             response.status(400).json(_error.json);
@@ -54,7 +55,7 @@ module.exports=function(app){
 
     app.post('/resources/repositories',authed,function(request,response){
         if(schema.js.validate(request.body,schema.repository).length==0){
-            var resources=app.get('resources')
+            var resources=request.user.resources
               , repositories=resources.repositories
               , repository=get_element(request.body.id,repositories)
 
@@ -68,8 +69,7 @@ module.exports=function(app){
                 };
 
                 repositories.push(new_repository);
-                resources.repositories=repositories;
-                app.set('resources',resources);
+                request.user.save();
 
                 response.status(201).json(new_repository);
             }else{
@@ -81,17 +81,17 @@ module.exports=function(app){
     });
 
     app.delete('/resources/repositories',authed,function(request,response){
-        var resources=app.get('resources')
+        var resources=request.user.resources
 
         resources.repositories=[];
-        app.set('resources',resources);
+        request.user.save();
         response.status(200).json(_success.ok);
     });
 
     app.post('/resources/repositories/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.repository).length==0){
             var dbserver=get_element(
-                request.body._dbserver,app.get('resources').dbservers);
+                request.body._dbserver,request.user.resources.dbservers);
 
             if(dbserver){
                 test({
@@ -129,7 +129,7 @@ module.exports=function(app){
     app.get('/resources/repositories/:repository',authed,
         function(request,response){
         var id=validate.toString(request.params.repository)
-          , repositories=app.get('resources').repositories
+          , repositories=request.user.resources.repositories
           , repository=get_element(id,repositories)
 
         if(repository){
@@ -140,16 +140,15 @@ module.exports=function(app){
                     name:repository[1].db.name
                 }
             });
-            return;
+        }else{
+            response.status(404).json(_error.notfound);
         }
-
-        response.status(404).json(_error.notfound);
     });
 
     app.put('/resources/repositories/:repository',authed,
         function(request,response){
         var id=validate.toString(request.params.repository)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , repositories=resources.repositories
           , repository=get_element(id,repositories)
 
@@ -171,7 +170,7 @@ module.exports=function(app){
             }
 
             resources.repositories=repositories;
-            app.set('resources',resources);
+            request.user.save();
         }else{
             response.status(403).json(_error.validation);
         }
@@ -180,14 +179,15 @@ module.exports=function(app){
     app.delete('/resources/repositories/:repository',authed,
         function(request,response){
         var id=validate.toString(request.params.repository)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , repositories=resources.repositories
           , repository=get_element(id,repositories)
 
         if(repository){
             repositories.splice(repository[0],1);
             resources.repositories=repositories;
-            app.set('resources',resources);
+            request.user.save();
+
             response.status(200).json(_success.ok);
         }else{
             response.status(404).json(_error.notfound);
@@ -197,7 +197,7 @@ module.exports=function(app){
     app.post('/resources/repositories/:repository/_check',authed,
         function(request,response){
         var id=validate.toString(request.params.repository)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , repositories=resources.repositories
           , repository=get_element(id,repositories)
 
