@@ -26,7 +26,7 @@ module.exports=function(app){
     var authed=app.get('auth');
 
     app.get('/resources/planners',authed,function(request,response){
-        response.json(app.get('resources').planners.map(
+        response.json(request.user.resources.planners.map(
             function(planner){
                 return {
                     id:planner.id
@@ -40,7 +40,8 @@ module.exports=function(app){
 
     app.put('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
-            var resources=app.get('resources');
+            var resources=request.user.resources;
+
             resources.planners=request.body.map(function(planner){
                 return {
                     id:validate.toString(planner.id)
@@ -51,7 +52,7 @@ module.exports=function(app){
                 };
             });
 
-            app.set('resources',resources);
+            request.user.save();
             response.status(201).json(_success.ok);
         }else{
             response.status(400).json(_error.json);
@@ -60,7 +61,7 @@ module.exports=function(app){
 
     app.post('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
-            var resources=app.get('resources')
+            var resources=request.user.resources
               , planners=resources.planners
               , planner=get_element(request.body.id,planners)
 
@@ -74,8 +75,7 @@ module.exports=function(app){
                 };
 
                 planners.push(new_planner);
-                resources.planners=planners;
-                app.set('resources',resources);
+                request.user.save();
 
                 response.status(201).json(new_planner);
             }else{
@@ -87,10 +87,10 @@ module.exports=function(app){
     });
 
     app.delete('/resources/planners',authed,function(request,response){
-        var resources=app.get('resources')
+        var resources=request.user.resources
 
         resources.planners=[];
-        app.set('resources',resources);
+        request.user.save();
         response.status(200).json(_success.ok);
     });
 
@@ -122,7 +122,8 @@ module.exports=function(app){
 
     app.get('/resources/planners/:planner',authed,function(request,response){
         var id=validate.toString(request.params.planner)
-          , planners=app.get('resources').planners
+          , resources=request.user.resources
+          , planners=resources.planners
           , planner=get_element(id,planners)
 
         if(planner){
@@ -133,15 +134,14 @@ module.exports=function(app){
                   , port:planner[1].planner.port
                 }
             });
-            return;
+        }else{
+            response.status(404).json(_error.notfound);
         }
-
-        response.status(404).json(_error.notfound);
     });
 
     app.put('/resources/planners/:planner',authed,function(request,response){
         var id=validate.toString(request.params.planner)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , planners=resources.planners
           , planner=get_element(id,planners)
 
@@ -175,7 +175,7 @@ module.exports=function(app){
             }
 
             resources.planners=planners;
-            app.set('resources',resources);
+            request.user.save();
         }else{
             response.status(403).json(_error.validation);
         }
@@ -183,14 +183,15 @@ module.exports=function(app){
 
     app.delete('/resources/planners/:planner',authed,function(request,response){
         var id=validate.toString(request.params.planner)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , planners=resources.planners
           , planner=get_element(id,planners)
 
         if(planner){
             planners.splice(planner[0],1);
             resources.planners=planners;
-            app.set('resources',resources);
+            request.user.save();
+
             response.status(200).json(_success.ok);
         }else{
             response.status(404).json(_error.notfound);
@@ -200,7 +201,7 @@ module.exports=function(app){
     app.post('/resources/planners/:planner/_tid',authed,
         function(request,response){
         var id=validate.toString(request.params.planner)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , planners=resources.planners
           , planner=get_element(id,planners)
 
@@ -208,8 +209,8 @@ module.exports=function(app){
             if(planner){
                 planners[planner[0]].planner.tid=request.body.tid;
                 resources.planners=planners;
+                request.user.save();
 
-                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:planner[1].planner.host
@@ -226,7 +227,7 @@ module.exports=function(app){
 
     var generic_action=function(request,response,json,sequence,next){
         var id=validate.toString(request.params.planner)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , planners=resources.planners
           , planner=get_element(id,planners)
           , body=request.body
@@ -298,8 +299,8 @@ module.exports=function(app){
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.status=args.planner.status;
                 resources.planners=planners;
+                request.user.save();
 
-                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
@@ -313,10 +314,10 @@ module.exports=function(app){
         function(request,response){
         return generic_action(request,response,null,[api],
             function(resources,planners,planner,args){
-                planners[planner[0]].planner.tasks=args.planner.tasks;
-                resources.planners=planners;
+                //planners[planner[0]].planner.tasks=args.planner.tasks;
+                //resources.planners=planners;
+                //request.user.save();
 
-                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
@@ -343,8 +344,8 @@ module.exports=function(app){
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.tid=args.planner.tid;
                 resources.planners=planners;
+                request.user.save();
 
-                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
@@ -358,10 +359,10 @@ module.exports=function(app){
         function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,planners,planner,args){
-                planners[planner[0]].planner.task=args.planner.task;
-                resources.planners=planners;
+                //planners[planner[0]].planner.task=args.planner.task;
+                //resources.planners=planners;
+                //request.user.save();
 
-                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
@@ -392,10 +393,10 @@ module.exports=function(app){
         function(request,response){
         return generic_action(request,response,null,[unset],
             function(resources,planners,planner,args){
-                delete planners[planner[0]].planner.tid;
+                planners[planner[0]].planner.tid=undefined;
                 resources.planners=planners;
+                request.user.save();
 
-                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
@@ -410,7 +411,7 @@ module.exports=function(app){
         var targs=request.body.targs;
         if(targs._repository){
             var repository=get_element(
-                targs._repository,app.get('resources').repositories);
+                targs._repository,request.user.resources.repositories);
             if(repository){
                 delete targs._repository;
                 targs.db={};
@@ -424,7 +425,7 @@ module.exports=function(app){
         }
         if(targs._dbserver){
             var dbserver=get_element(
-                targs._dbserver,app.get('resources').dbservers);
+                targs._dbserver,request.user.resources.dbservers);
             if(dbserver){
                 delete targs._dbserver;
                 if(targs.db){
@@ -445,8 +446,8 @@ module.exports=function(app){
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.status='running';
                 resources.planners=planners;
+                request.user.save();
 
-                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
@@ -462,8 +463,8 @@ module.exports=function(app){
             function(resources,planners,planner,args){
                 planners[planner[0]].planner.status='stopped';
                 resources.planners=planners;
+                request.user.save();
 
-                app.set('resources',resources);
                 response.status(200).json({
                     planner:{
                         host:args.planner.host

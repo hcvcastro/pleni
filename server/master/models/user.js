@@ -55,6 +55,16 @@ var user=new Schema({
           , planner:{
                 host:String
               , port:Number
+              , tid:{
+                    type:String
+                  , required:false
+                }
+              , status:{
+                    type:String
+                  , required:false
+                  , default:'stopped'
+                  , enum:['running','stopped']
+                }
             }
         }]
       , notifiers:[{
