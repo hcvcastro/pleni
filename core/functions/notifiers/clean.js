@@ -8,6 +8,7 @@ var request=require('request')
  * args input
  *      notifier
  *          host
+ *          cookie
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -16,7 +17,12 @@ module.exports=function(args){
     if(args.debug){
         console.log('clean clients for notifier ... ');
     }
-    request.del({url:url},function(error,response){
+    request.del({
+        url:url
+      , headers:{
+            'cookie':args.notifier.cookie
+        }
+    },function(error,response){
         if(!error){
             if(response.statusCode==200){
                 deferred.resolve(args);

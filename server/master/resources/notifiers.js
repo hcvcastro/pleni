@@ -23,7 +23,7 @@ module.exports=function(app){
     var authed=app.get('auth');
 
     app.get('/resources/notifiers',authed,function(request,response){
-        response.json(app.get('resources').notifiers.map(
+        response.json(request.user.resources.notifiers.map(
             function(notifier){
                 return {
                     id:notifier.id
@@ -37,7 +37,8 @@ module.exports=function(app){
 
     app.put('/resources/notifiers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifiers).length==0){
-            var resources=app.get('resources');
+            var resources=request.user.resources;
+
             resources.notifiers=request.body.map(function(notifier){
                 return {
                     id:validate.toString(notifier.id)
@@ -48,7 +49,7 @@ module.exports=function(app){
                 };
             });
 
-            app.set('resources',resources);
+            request.user.save();
             response.status(201).json(_success.ok);
         }else{
             response.status(400).json(_error.json);
@@ -57,7 +58,7 @@ module.exports=function(app){
 
     app.post('/resources/notifiers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier).length==0){
-            var resources=app.get('resources')
+            var resources=request.user.resources
               , notifiers=resources.notifiers
               , notifier=get_element(request.body.id,notifiers)
 
@@ -71,8 +72,7 @@ module.exports=function(app){
                 };
 
                 notifiers.push(new_notifier);
-                resources.notifiers=notifiers;
-                app.set('resources',resources);
+                request.user.save();
 
                 response.status(201).json(new_notifier);
             }else{
@@ -84,10 +84,10 @@ module.exports=function(app){
     });
 
     app.delete('/resources/notifiers',authed,function(request,response){
-        var resources=app.get('resources')
+        var resources=request.user.resources
 
         resources.notifiers=[];
-        app.set('resources',resources);
+        request.user.save();
         response.status(200).json(_success.ok);
     });
 
@@ -119,7 +119,8 @@ module.exports=function(app){
 
     app.get('/resources/notifiers/:notifier',authed,function(request,response){
         var id=validate.toString(request.params.notifier)
-          , notifiers=app.get('resources').notifiers
+          , resources=request.user.resources
+          , notifiers=resources.notifiers
           , notifier=get_element(id,notifiers)
 
         if(notifier){
@@ -130,15 +131,14 @@ module.exports=function(app){
                   , port:notifier[1].notifier.port
                 }
             });
-            return;
+        }else{
+            response.status(404).json(_error.notfound);
         }
-
-        response.status(404).json(_error.notfound);
     });
 
     app.put('/resources/notifiers/:notifier',authed,function(request,response){
         var id=validate.toString(request.params.notifier)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , notifiers=resources.notifiers
           , notifier=get_element(id,notifiers)
 
@@ -172,7 +172,7 @@ module.exports=function(app){
             }
 
             resources.notifiers=notifiers;
-            app.set('resources',resources);
+            request.user.save();
         }else{
             response.status(403).json(_error.validation);
         }
@@ -180,14 +180,15 @@ module.exports=function(app){
 
     app.delete('/resources/notifiers/:notifier',authed,function(request,response){
         var id=validate.toString(request.params.notifier)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , notifiers=resources.notifiers
           , notifier=get_element(id,notifiers)
 
         if(notifier){
             notifiers.splice(notifier[0],1);
             resources.notifiers=notifiers;
-            app.set('resources',resources);
+            request.user.save();
+
             response.status(200).json(_success.ok);
         }else{
             response.status(404).json(_error.notfound);
@@ -196,7 +197,7 @@ module.exports=function(app){
 
     var generic_action=function(request,response,json,sequence,next){
         var id=validate.toString(request.params.notifier)
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , notifiers=resources.notifiers
           , notifier=get_element(id,notifiers)
           , body=request.body
@@ -214,6 +215,7 @@ module.exports=function(app){
                 notifier:{
                     host:notifier[1].notifier.host+':'+
                          notifier[1].notifier.port
+                  , cookie:request.headers.cookie
                 }
             };
             if(json){
@@ -261,10 +263,10 @@ module.exports=function(app){
         function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,notifiers,notifier,args){
-                notifiers[notifier[0]].notifier.planners=args.notifier.planners;
-                resources.notifiers=notifiers;
-
-                app.set('resources',resources);
+                //notifiers[notifier[0]].notifier.planners=
+                //args.notifier.planners;
+                //resources.notifiers=notifiers;
+                //request.user.save();
 
                 response.status(200).json({
                     notifier:{
@@ -288,7 +290,7 @@ module.exports=function(app){
     app.post('/resources/notifiers/:notifier/_add',authed,
         function(request,response){
         var id=request.body.planner
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , planners=resources.planners
           , planner=get_element(id,planners)
 
@@ -313,7 +315,7 @@ module.exports=function(app){
     app.post('/resources/notifiers/:notifier/_remove',authed,function(
             request,response){
         var id=request.body.planner
-          , resources=app.get('resources')
+          , resources=request.user.resources
           , planners=resources.planners
           , planner=get_element(id,planners)
 

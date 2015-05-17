@@ -9,6 +9,7 @@ var request=require('request')
  * args input
  *      notifier
  *          host
+ *          cookie
  *
  * args output
  *      notifier
@@ -21,7 +22,12 @@ module.exports=function(args){
     if(args.debug){
         console.log('get a clients for notifier ... '+args.notifier.host);
     }
-    request.get({url:url},function(error,response){
+    request.get({
+        url:url
+      , headers:{
+            'cookie':args.notifier.cookie
+        }
+    },function(error,response){
         if(!error){
             if(validator.isJSON(response.body)){
                 var parse=JSON.parse(response.body);

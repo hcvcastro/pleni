@@ -140,7 +140,7 @@ module.exports=function(grunt){
             options:{
                 reporter:'spec'
               , bail:true
-              , timeout:5000
+              , timeout:50000
               , env:{
                     ENV:'test'
                 }

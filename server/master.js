@@ -131,21 +131,14 @@ passport.use(new localstrategy({
     });
 }));
 
-/*var resources={}
-  , notifier=new Array()
+var notifier=new Array()
   , projects=new Array()
 
-// sync methods
-resources.dbservers=loadconfig(join(__dirname,'..','config','dbservers.json'));
-resources.repositories=loadconfig(join(__dirname,'..','config','repositories.json'));
-resources.planners=loadconfig(join(__dirname,'..','config','planners.json'));
-resources.notifiers=loadconfig(join(__dirname,'..','config','notifiers.json'));
 projects=loadconfig(join(__dirname,'..','config','projects.json'));
 
-app.set('resources',resources);
 app.set('notifier',notifier);
 app.set('projects',projects);
-*/
+
 app.set('host',config.master.host);
 app.set('port',config.master.port);
 app.disable('x-powered-by');

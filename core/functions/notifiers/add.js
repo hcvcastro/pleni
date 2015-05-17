@@ -8,6 +8,7 @@ var request=require('request')
  * args input
  *      notifier
  *          host
+ *          cookie
  *      planner
  *          host
  *          port
@@ -23,7 +24,13 @@ module.exports=function(args){
         console.log('add client for notifier ... '
             +args.planner.host+':'+args.planner.port);
     }
-    request.post({url:url,json:body},function(error,response){
+    request.post({
+        url:url
+      , headers:{
+            'cookie':args.notifier.cookie
+        }
+      , json:body
+    },function(error,response){
         if(!error){
             if(response.statusCode==200||response.statusCode==201){
                 deferred.resolve(args);

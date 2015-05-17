@@ -13,8 +13,8 @@ var validate=require('../../core/validators')
         }
         return;
     }
-  , get_planner=function(host,port,app){
-        var planners=app.get('resources').planners
+  , get_planner=function(user,host,port,app){
+        var planners=user.resources.planners
 
         for(var i in planners){
             if(planners[i].planner.host==host&&
@@ -47,13 +47,13 @@ module.exports=function(app,config,ios,ioc){
         });
     });
 
-    app.get('/notifier',function(request,response){
+    app.get('/notifier',authed,function(request,response){
         var notifier=app.get('notifier')
 
         response.json(notifier.map(
             function(notifier){
                 return {
-                    id:get_planner(
+                    id:get_planner(request.user,
                         notifier.planner.host,notifier.planner.port,app)
                   , planner:{
                         host:notifier.planner.host
@@ -63,7 +63,7 @@ module.exports=function(app,config,ios,ioc){
             }));
     });
 
-    app.put('/notifier',function(request,response){
+    app.put('/notifier',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planners).length==0){
             app.get('notifier').forEach(function(notifier){
                 notifier.socket.disconnect();
@@ -79,7 +79,8 @@ module.exports=function(app,config,ios,ioc){
                       , port:port
                     }
                   , socket:socket_connect(
-                        ios,ioc,host,port,get_planner(host,port,app))
+                        ios,ioc,host,port,get_planner(
+                            request.user,host,port,app))
                 }
             }));
 
@@ -87,7 +88,7 @@ module.exports=function(app,config,ios,ioc){
                 action:'put'
               , msg:app.get('notifier').map(function(element){
                     return {
-                        id:get_planner(
+                        id:get_planner(request.user,
                             element.planner.host,element.planner.port,app)
                       , planner:{
                             host:element.planner.host
@@ -102,14 +103,14 @@ module.exports=function(app,config,ios,ioc){
         }
     });
 
-    app.post('/notifier',function(request,response){
+    app.post('/notifier',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
             var planner=get_element(request.body,app.get('notifier'))
 
             if(!planner){
                 var host=validate.toValidHost(request.body.planner.host)
                   , port=validate.toInt(request.body.planner.port)
-                  , id=get_planner(host,port,app)
+                  , id=get_planner(request.user,host,port,app)
 
                 app.get('notifier').push({
                     planner:{
@@ -138,7 +139,7 @@ module.exports=function(app,config,ios,ioc){
         }
     });
 
-    app.delete('/notifier',function(request,response){
+    app.delete('/notifier',authed,function(request,response){
         app.get('notifier').forEach(function(notifier){
             notifier.socket.disconnect();
         });
@@ -151,13 +152,13 @@ module.exports=function(app,config,ios,ioc){
         response.status(200).json(_success.ok);
     });
 
-    app.post('/notifier/_add',function(request,response){
+    app.post('/notifier/_add',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
             var notifier=app.get('notifier')
               , planner=get_element(request.body,notifier)
               , host=validate.toValidHost(request.body.planner.host)
               , port=validate.toInt(request.body.planner.port)
-              , id=get_planner(host,port,app)
+              , id=get_planner(request.user,host,port,app)
 
             if(!planner){
                 app.get('notifier').push({
@@ -197,7 +198,7 @@ module.exports=function(app,config,ios,ioc){
         }
     });
 
-    app.post('/notifier/_remove',function(request,response){
+    app.post('/notifier/_remove',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
             var notifier=app.get('notifier')
               , planner=get_element(request.body,notifier)
@@ -212,7 +213,7 @@ module.exports=function(app,config,ios,ioc){
                 ios.emit('notifier',{
                     action:'remove'
                   , msg:{
-                        id:get_planner(host,port,app)
+                        id:get_planner(request.user,host,port,app)
                     }
                 });
                 app.set('notifier',notifier);
