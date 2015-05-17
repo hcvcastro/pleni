@@ -75,6 +75,12 @@ var user=new Schema({
             }
         }]
     }
+  , notifier:[{
+        planner:{
+            host:String
+          , port:Number
+        }
+    }]
   , projects:[{
         id:String
       , _repositories:[String]

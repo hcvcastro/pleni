@@ -48,9 +48,7 @@ module.exports=function(app,config,ios,ioc){
     });
 
     app.get('/notifier',authed,function(request,response){
-        var notifier=app.get('notifier')
-
-        response.json(notifier.map(
+        response.json(request.user.notifier.map(
             function(notifier){
                 return {
                     id:get_planner(request.user,

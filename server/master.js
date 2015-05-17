@@ -21,7 +21,7 @@ var http=require('http')
   , server=http.Server(app)
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
-  , loadconfig=require('../core/loadconfig')
+  , sessionsocketio=require('session.socket.io')
   , config=require('../config/master');
 
 if(process.env.ENV=='test'){
@@ -63,6 +63,7 @@ passport.deserializeUser(function(id,done){
               , planners:[]
               , notifiers:[]
             }
+          , notifier:[]
         });
     }else{
         User.findById(id,function(err,user){
@@ -130,14 +131,6 @@ passport.use(new localstrategy({
         }
     });
 }));
-
-var notifier=new Array()
-  , projects=new Array()
-
-projects=loadconfig(join(__dirname,'..','config','projects.json'));
-
-app.set('notifier',notifier);
-app.set('projects',projects);
 
 app.set('host',config.master.host);
 app.set('port',config.master.port);
@@ -213,12 +206,6 @@ app.use(function(request,response){
     response.status(404).render('404.jade',{
         title:'404',
         message:'I\'m so sorry, but file not found!!'
-    });
-});
-
-ios.sockets.on('connection',function(socket){
-    socket.emit('notifier',{
-        action:'connection'
     });
 });
 

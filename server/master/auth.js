@@ -98,6 +98,7 @@ module.exports=function(app,config){
                               , planners:[]
                               , notifiers:[]
                             }
+                          , notifier:[]
                           , projects:[]
                         },function(err,user){
                             if(!err){

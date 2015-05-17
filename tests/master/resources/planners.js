@@ -3,7 +3,6 @@
 var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
-  , join=require('path').join
   , app=require('../../../server/master')
   , config=require('../../../config/tests')
   , User=require('../../../server/master/models/user')
