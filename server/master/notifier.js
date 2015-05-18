@@ -67,7 +67,7 @@ module.exports=function(app,config,ios,ioc){
                 notifier.socket.disconnect();
             });
 
-            app.set('notifier',request.body.map(function(element){
+            request.user.notifier=request.body.map(function(element){
                 var host=validate.toValidHost(element.planner.host)
                   , port=validate.toInt(element.planner.port)
 
@@ -81,8 +81,9 @@ module.exports=function(app,config,ios,ioc){
                             request.user,host,port,app))
                 }
             }));
+            request.user.save();
 
-            ios.emit('notifier',{
+/*            ios.emit('notifier',{
                 action:'put'
               , msg:app.get('notifier').map(function(element){
                     return {
@@ -94,7 +95,7 @@ module.exports=function(app,config,ios,ioc){
                         }
                     }
                 })
-            });
+            });*/
             response.status(201).json(_success.ok);
         }else{
             response.status(400).json(_error.json);

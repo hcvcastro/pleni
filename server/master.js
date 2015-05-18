@@ -22,6 +22,7 @@ var http=require('http')
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , sessionsocketio=require('session.socket.io')
+  , sockets={}
   , config=require('../config/master');
 
 if(process.env.ENV=='test'){
@@ -132,12 +133,36 @@ passport.use(new localstrategy({
     });
 }));
 
+var parser=cookieparser(config.cookie.secret)
+  , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
+  , notifier=function(id,msg){
+        for(var i in sockets[id]){
+            sockets[id][i].emit('notifier',msg);
+        }
+    }
+
+sessionsockets.on('connection',function(err,socket,session){
+    var sid=socket.handshake.signedCookies[config.cookie.name];
+    if(!(sid in sockets)){
+        sockets[sid]={};
+    }
+
+    sockets[sid][socket.id]=socket;
+    socket.on('disconnect',function(){
+        delete sockets[sid][socket.id];
+
+        if(Object.keys(sockets[sid]).length==0){
+            delete sockets[sid];
+        }
+    });
+});
+
 app.set('host',config.master.host);
 app.set('port',config.master.port);
 app.disable('x-powered-by');
 
 app.use(favicon(join(__dirname,'..','client','favicon.ico')));
-app.use(cookieparser(config.cookie.secret));
+app.use(parser);
 app.use(bodyparser.json());
 app.use(cookiesession({
     cookie:{
