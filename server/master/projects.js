@@ -21,7 +21,7 @@ module.exports=function(app){
     });
 
     app.get('/projects',authed,function(request,response){
-        response.json(app.get('projects').map(
+        response.json(request.user.projects.map(
             function(project){
                 return {
                     id:project.id
@@ -32,7 +32,7 @@ module.exports=function(app){
 
     app.put('/projects',authed,function(request,response){
         if(schema.js.validate(request.body,schema.projects).length==0){
-            app.set('projects',request.body.map(function(project){
+            request.user.projects=request.body.map(function(project){
                 return {
                     id:validate.toString(project.id)
                   , _repositories:project._repositories.map(
@@ -40,8 +40,9 @@ module.exports=function(app){
                         return validate.toString(repository)
                     })
                 };
-            }));
+            });
 
+            request.user.save();
             response.status(201).json(_success.ok);
         }else{
             response.status(400).json(_error.json);
@@ -50,7 +51,7 @@ module.exports=function(app){
 
     app.post('/projects',authed,function(request,response){
         if(schema.js.validate(request.body,schema.project).length==0){
-            var project=get_element(request.body.id,app.get('projects'))
+            var project=get_element(request.body.id,request.user.projects)
 
             if(!project){
                 var new_project={
@@ -61,7 +62,9 @@ module.exports=function(app){
                     })
                 };
 
-                app.get('projects').push(new_project);
+                request.user.projects.push(new_project);
+                request.user.save();
+
                 response.status(201).json(new_project);
             }else{
                 response.status(403).json(_error.notoverride);
@@ -72,29 +75,28 @@ module.exports=function(app){
     });
 
     app.delete('/projects',authed,function(request,response){
-        app.set('projects',[]);
+        request.user.projects=[];
+        request.user.save();
         response.status(200).json(_success.ok);
     });
 
     app.get('/projects/:project',authed,function(request,response){
         var id=validate.toString(request.params.project)
-          , projects=app.get('projects')
-          , project=get_element(id,projects)
+          , project=get_element(id,request.user.projects)
 
         if(project){
             response.status(200).json({
                 id:project[1].id
               , _repositories:project[1]._repositories
             });
-            return;
+        }else{
+            response.status(404).json(_error.notfound);
         }
-
-        response.status(404).json(_error.notfound);
     });
 
     app.put('/projects/:project',authed,function(request,response){
         var id=validate.toString(request.params.project)
-          , projects=app.get('projects')
+          , projects=request.user.projects
           , project=get_element(id,projects)
 
         if(schema.js.validate(request.body,schema.project).length==0){
@@ -114,7 +116,8 @@ module.exports=function(app){
                 response.status(201).json(new_project);
             }
 
-            app.set('projects',projects);
+            request.user.projects=projects;
+            request.user.save();
         }else{
             response.status(403).json(_error.validation);
         }
@@ -122,12 +125,13 @@ module.exports=function(app){
 
     app.delete('/projects/:project',authed,function(request,response){
         var id=validate.toString(request.params.project)
-          , projects=app.get('projects')
+          , projects=request.user.projects
           , project=get_element(id,projects)
 
         if(project){
             projects.splice(project[0],1);
-            app.set('projects',projects);
+            request.user.save();
+
             response.status(200).json(_success.ok);
         }else{
             response.status(404).json(_error.notfound);

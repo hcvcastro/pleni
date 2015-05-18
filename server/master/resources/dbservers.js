@@ -18,7 +18,7 @@ var validate=require('../../../core/validators')
         return;
     };
 
-module.exports=function(app,config){
+module.exports=function(app){
     var authed=app.get('auth');
 
     app.get('/resources/dbservers',authed,function(request,response){
