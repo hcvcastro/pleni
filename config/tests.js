@@ -17,7 +17,7 @@ module.exports={
   , redis:{
         host:'localhost'
       , port:6379
-      , prefix:'sites:'
+      , prefix:'test:'
       , options:{
             no_ready_check:true
           , auth_pass:'~~{{~~æßðđł[¶]æßðŋħ]]]}}}}~~'

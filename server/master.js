@@ -20,9 +20,7 @@ var http=require('http')
   , app=express()
   , server=http.Server(app)
   , ios=require('socket.io')(server)
-  , ioc=require('socket.io-client')
   , sessionsocketio=require('session.socket.io')
-  , sockets={}
   , config=require('../config/master');
 
 if(process.env.ENV=='test'){
@@ -133,7 +131,8 @@ passport.use(new localstrategy({
     });
 }));
 
-var parser=cookieparser(config.cookie.secret)
+var sockets={}
+  , parser=cookieparser(config.cookie.secret)
   , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
   , notifier=function(id,msg){
         for(var i in sockets[id]){
@@ -217,7 +216,7 @@ require('./master/resources/dbservers')(app,config);
 require('./master/resources/repositories')(app,config);
 require('./master/resources/planners')(app,config);
 require('./master/resources/notifiers')(app,config);
-require('./master/notifier')(app,config,ios,ioc);
+require('./master/notifier')(app,config,notifier);
 require('./master/projects')(app,config);
 require('./master/workspace')(app,config);
 

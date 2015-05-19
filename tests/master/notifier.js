@@ -13,6 +13,8 @@ describe('notifiers controller functions',function(){
     var cookie='';
 
     before(function(done){
+        require('../../server/planner.io');
+
         User.create({
             email:config.user.email
           , password:config.user.password
@@ -68,7 +70,7 @@ describe('notifiers controller functions',function(){
                 done();
             });
     });
-/*
+
     [
         {test:'',expected:_error.json,status:400}
       , {test:{},expected:_error.json,status:400}
@@ -109,6 +111,7 @@ describe('notifiers controller functions',function(){
     it('GET /notifier',function(done){
         request(app)
             .get('/notifier')
+            .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -143,6 +146,7 @@ describe('notifiers controller functions',function(){
         it('POST /notifier',function(done){
             request(app)
                 .post('/notifier')
+                .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
                 .expect(element.status)
@@ -174,6 +178,7 @@ describe('notifiers controller functions',function(){
         it('POST /notifier',function(done){
             request(app)
                 .post('/notifier')
+                .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
                 .expect(element.status)
@@ -190,6 +195,7 @@ describe('notifiers controller functions',function(){
     it('DELETE /notifier',function(done){
         request(app)
             .delete('/notifier')
+            .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -200,17 +206,37 @@ describe('notifiers controller functions',function(){
             });
     });
 
-    before(function(done){
+    it('GET /notifier',function(done){
         request(app)
-            .put('/notifier')
-            .send([{
-                id:'localhost'
-              , planner:{
+            .get('/notifier')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.an.Array.and.be.empty;
+                done();
+            });
+    });
+
+    it('POST /notifier',function(done){
+        request(app)
+            .post('/notifier')
+            .set('cookie',cookie[1])
+            .send({
+                planner:{
                     host:'http://127.0.0.1'
                   , port:3001
                 }
-            }])
+            })
+            .expect('Content-Type',/json/)
+            .expect(201)
             .end(function(err,res){
+                res.statusCode.should.be.eql(201);
+                res.should.be.json;
+                res.body.should.have.property('ok');
+                res.body.should.eql(_success.ok);
                 done();
             });
     });
@@ -242,6 +268,7 @@ describe('notifiers controller functions',function(){
         it('POST /notifier/_add',function(done){
             request(app)
                 .post('/notifier/_add')
+                .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
                 .expect(element.status)
@@ -258,6 +285,7 @@ describe('notifiers controller functions',function(){
     it('POST /notifier/_remove',function(done){
         request(app)
             .post('/notifier/_remove')
+            .set('cookie',cookie[1])
             .send({
                 planner:{
                     host:'http://127.0.0.1'
@@ -277,6 +305,7 @@ describe('notifiers controller functions',function(){
     it('POST /notifier/_remove',function(done){
         request(app)
             .post('/notifier/_remove')
+            .set('cookie',cookie[1])
             .send({
                 planner:{
                     host:'http://127.0.0.1'
@@ -291,7 +320,7 @@ describe('notifiers controller functions',function(){
                 done();
             });
     });
-*/
+
     after(function(done){
         User.remove({
             email:config.user.email

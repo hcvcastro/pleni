@@ -1,6 +1,6 @@
 'use strict';
 
-pleni.controller('SocketController',
+pleni.controller('NotifierController',
     ['$scope','$sessionStorage','$http','Planners','Socket',
     function($scope,$sessionStorage,$http,Planners,Socket){
         $scope.storage=$sessionStorage;
