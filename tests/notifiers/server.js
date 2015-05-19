@@ -4,14 +4,12 @@ var request=require('supertest')
   , should=require('should')
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
-  , notifiers=[
-        '../../server/notifier.io'
-      , '../../server/master' 
-    ]
+  , config=require('../../config/tests')
+  , servers=config.notifiers
 
-notifiers.forEach(function(element){
-    describe('notifiers controller functions for '+element,function(){
-        var app=require(element)
+servers.forEach(function(server){
+    describe('notifiers controller functions for '+server.script,function(){
+        var app=require('../../'+server.script)
 
         describe('notifier server basic pages',function(){
             it('GET /id',function(done){

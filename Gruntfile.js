@@ -630,18 +630,19 @@ module.exports=function(grunt){
     });
 
     grunt.registerTask('test:core',['mochacli:core']);
-    grunt.registerTask('test:master',['mochacli:master']);
+    grunt.registerTask('test:master',['mochacli:core','mochacli:master']);
     grunt.registerTask('test:planner',['mochacli:dumb','mochacli:planners']);
-    grunt.registerTask('test:notifier',['mochacli:notifier']);
-    grunt.registerTask('test:monitor',['mochacli:monitor']);
-    grunt.registerTask('test:sites',['mochacli:sites']);
+    grunt.registerTask('test:notifier',['mochacli:core','mochacli:notifier']);
+    grunt.registerTask('test:monitor',['mochacli:core','mochacli:monitor']);
+    grunt.registerTask('test:sites',['mochacli:core','mochacli:sites']);
     grunt.registerTask('test',[
-        'test:core'
-      , 'test:master'
-      , 'test:planner'
-      , 'test:notifier'
-      , 'test:monitor'
-      , 'test:sites'
+        'mochacli:core'
+      , 'mochacli:master'
+      , 'mochacli:dumb'
+      , 'mochacli:planners'
+      , 'mochacli:notifier'
+      , 'mochacli:monitor'
+      , 'mochacli:sites'
     ]);
 
     grunt.registerTask('build:master',[
