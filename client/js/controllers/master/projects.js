@@ -38,7 +38,8 @@ pleni.controller('ProjectsController',
                 }
             }
           , refresh:function(){
-                Resources.projects.load();
+                utils.load_projects_start();
+                Resources.projects.load(utils.load_projects_end());
             }
           , implode:function(glue,pieces){
                 return pieces.map(function(element){

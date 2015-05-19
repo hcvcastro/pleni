@@ -27,13 +27,13 @@ article.view.animate(ng-show='planners.env.view==\'view\'')
                 p.offset
                     button(type='submit') Set TID
             p.offset
-            p.offset
+            p.offset.load
                 span.hide.loader.fa.fa-spinner
                 span.hide.message
         .run(ng-show='planner.set.status==\'set\'')
             form(ng-submit='planners.run()')
                 div#editor
-                p.offset
+                p.offset.load
                     span.hide.loader.fa.fa-spinner.fa-spin
                     span.hide.message
                 p.offset

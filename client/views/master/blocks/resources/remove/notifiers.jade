@@ -6,7 +6,7 @@ article.remove.animate(ng-show='notifiers.env.view==\'remove\'')
     .body
         form(ng-submit='notifiers.delete()')
             p.large Press the button if you want remove the registry for the notifier.
-            p.offset
+            p.offset.load
                 span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message
             p.offset

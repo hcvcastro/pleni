@@ -1,7 +1,5 @@
 nav.menu {
-/*    float: left;*/
     width: 240px;
-/*    height: 100%;*/
     background-color: @color4;
     border-right: 10px solid @color5;
     box-sizing: border-box;
@@ -18,6 +16,54 @@ nav.menu {
             z-index: 10;
             margin-bottom: 5px;
 
+            &.active {
+                width: 240px;
+
+                .title {
+                    color: @color5;
+                    background-color: @color2;
+                    background-repeat: no-repeat;
+                    background-position: center right;
+                    background-image: url('/svg/arrow.svg');
+
+                    .right {
+                        margin-right: 10px;
+                    }
+                }
+
+                &.header {
+                    .title {
+                        background-image: none;
+                    }
+                }
+
+                .options {
+                    float: left;
+                    width: 100%;
+
+                    ul {
+                        list-style: none;
+
+                        li {
+                            padding: 0.3rem 0 0.3rem 1.0rem;
+                            .font6;
+
+                            a {
+                                color: darken(@color2,10%);
+                            }
+                        }
+                    }
+                }
+            }
+
+            &:not(.active) {
+                width: 230px;
+
+                .options {
+                    display: none;
+                }
+            }
+
             .title {
                 float: left;
                 width: 100%;
@@ -27,77 +73,32 @@ nav.menu {
 
                 &>a, &>span {
                     float: left;
-                    padding: 0.36rem 0 0 0.6rem;
+                    height: 100%;
+                    width: 150px;
+                    box-sizing: border-box;
+                    padding: 0.43rem;
                     .font1;
                 }
 
                 .right {
                     color: @color1;
-                    margin: 7px 7px 0 0;
+                    height: 100%;
                     z-index: 10;
-                    span {
+
+                    span, a {
                         float: left;
-                        .font3;
-                        width: 25px;
-                        text-align: right;
+                        height: 100%;
+                        box-sizing: border-box;
                     }
-                    a {
-                        margin: 4px 0 0 4px;
-                    }
-                }
-            }
-        }
-
-        li.active {
-            width: 240px;
-
-            &:not(.header) {
-                .title {
-                    background-image: url('/svg/arrow.svg');
-                }
-            }
-
-            .title {
-                background-color: @color2;
-                background-repeat: no-repeat;
-                background-position: top right;
-                color: @color5;
-
-                .right {
                     span {
-                        padding-right: 15px;
-                        color: @color5;
+                        .font3;
+                        text-align: right;
+                        padding: 0.43rem 0.43rem 0.43rem 0;
                     }
                     a {
-                        margin: 4px 10px 0 4px;
+                        padding: 10px;
                     }
                 }
-            }
-
-            .options {
-                float: left;
-                width: 100%;
-
-                ul {
-                    list-style: none;
-
-                    li {
-                        padding: 0.3rem 0 0.3rem 1.0rem;
-                        .font6;
-
-                        a {
-                            color: darken(@color2,10%);
-                        }
-                    }
-                }
-            }
-        }
-
-        li:not(.active) {
-            width: 230px;
-
-            .options {
-                display: none;
             }
         }
     }

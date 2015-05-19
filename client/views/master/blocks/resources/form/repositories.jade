@@ -16,7 +16,7 @@ article.form.animate(ng-show='repositories.env.view==\'form\'')
             p
                 label DB Name
                 input(type='text',placeholder='The name of the CouchDB database',required,ng-model='repository.db.name')
-            p.offset
+            p.offset.load
                 span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message
             p.offset

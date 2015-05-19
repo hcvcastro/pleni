@@ -24,7 +24,7 @@ article.form.animate(ng-show='dbservers.env.view==\'form\'')
             p
                 label Prefix
                 input(type='text',placeholder='The prefix used in the couchdb server',ng-model='dbserver.db.prefix')
-            p.offset
+            p.offset.load
                 span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message
             p.offset

@@ -15,7 +15,7 @@ article.form.animate(ng-show='planners.env.view==\'form\'')
             p
                 label Port
                 input(type='number',placeholder='The port for the planner',min=1,max=65535,required,ng-model='planner.planner.port')
-            p.offset
+            p.offset.load
                 span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message
             p.offset
