@@ -217,7 +217,7 @@ require('./master/resources/dbservers')(app,config);
 require('./master/resources/repositories')(app,config);
 require('./master/resources/planners')(app,config);
 require('./master/resources/notifiers')(app,config);
-//require('./master/notifier')(app,config,ios,ioc);
+require('./master/notifier')(app,config,ios,ioc);
 require('./master/projects')(app,config);
 require('./master/workspace')(app,config);
 

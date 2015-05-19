@@ -68,7 +68,7 @@ describe('notifiers controller functions',function(){
                 done();
             });
     });
-
+/*
     [
         {test:'',expected:_error.json,status:400}
       , {test:{},expected:_error.json,status:400}
@@ -105,7 +105,7 @@ describe('notifiers controller functions',function(){
                 });
         });
     });
-/*
+
     it('GET /notifier',function(done){
         request(app)
             .get('/notifier')

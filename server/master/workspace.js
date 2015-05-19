@@ -28,9 +28,9 @@ module.exports=function(app){
     var generic_document=function(request,response,func,done){
         var id_p=validate.toString(request.params.project)
           , id_r=validate.toString(request.params.repository)
-          , resources=app.get('resources');
+          , resources=request.user.resources
 
-        var project=get_element(id_p,app.get('projects'))
+        var project=get_element(id_p,request.user.projects)
         if(!project){
             response.status(404).json(_error.notfound);
             return;

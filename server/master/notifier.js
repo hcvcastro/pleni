@@ -80,7 +80,7 @@ module.exports=function(app,config,ios,ioc){
                         ios,ioc,host,port,get_planner(
                             request.user,host,port,app))
                 }
-            }));
+            });
             request.user.save();
 
 /*            ios.emit('notifier',{

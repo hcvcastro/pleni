@@ -278,7 +278,8 @@ module.exports=function(grunt){
             master:{
                 files:[{
                     'dist/master/client/js/angular-no-captcha.min.js':[
-                        'bower_components/angular-no-captcha/src/angular-no-captcha.js'
+                        'bower_components/angular-no-captcha/src/'
+                            +'angular-no-captcha.js'
                     ]
                 },{
                     'dist/master/client/js/socket.io.min.js':[
@@ -415,16 +416,19 @@ module.exports=function(grunt){
                     src:'bower_components/angular-route/angular-route.min.js'
                   , dest:'dist/master/client/js/angular-route.min.js'
                 },{
-                    src:'bower_components/angular-resource/angular-resource.min.js'
+                    src:'bower_components/angular-resource/'
+                        +'angular-resource.min.js'
                   , dest:'dist/master/client/js/angular-resource.min.js'
                 },{
-                    src:'bower_components/angular-animate/angular-animate.min.js'
+                    src:'bower_components/angular-animate/'
+                        +'angular-animate.min.js'
                   , dest:'dist/master/client/js/angular-animate.min.js'
                 },{
                     src:'bower_components/angular-socket-io/socket.min.js'
                   , dest:'dist/master/client/js/angular-socket-io.min.js'
                 },{
-                    src:'bower_components/angular-cookies/angular-cookies.min.js'
+                    src:'bower_components/angular-cookies/'
+                        +'angular-cookies.min.js'
                   , dest:'dist/master/client/js/angular-cookies.min.js'
                 },{
                     src:'bower_components/ngstorage/ngStorage.min.js'
