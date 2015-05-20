@@ -7,9 +7,9 @@ var validate=require('../../core/validators')
   , ioc=require('socket.io-client')
   , sockets={}
   , get_element=function(needle,haystack){
-        for(var i in haystack){
-            if(haystack[i].host==needle.planner.host
-                &&haystack[i].port==needle.planner.port){
+        for(var i=0;i<haystack.length;i++){
+            if(haystack[i].planner.host==needle.planner.host
+                &&haystack[i].planner.port==needle.planner.port){
                 return [i,haystack[i]];
             }
         }
@@ -18,8 +18,8 @@ var validate=require('../../core/validators')
   , get_planner=function(user,host,port){
         var planners=user.resources.planners
 
-        for(var i in planners){
-            if(planners[i].host==host&&planners[i].port==port){
+        for(var i=0;i<planners.length;i++){
+            if(planners[i].planner.host==host&&planners[i].planner.port==port){
                 return planners[i].id;
             }
         }
@@ -52,10 +52,10 @@ module.exports=function(app,config,notifier){
         response.json(request.user.notifier.map(
             function(notifier){
                 return {
-                    id:get_planner(request.user,notifier.host,notifier.port)
+                    id:notifier.id
                   , planner:{
-                        host:notifier.host
-                      , port:notifier.port
+                        host:notifier.planner.host
+                      , port:notifier.planner.port
                     }
                 };
             }));
@@ -79,24 +79,34 @@ module.exports=function(app,config,notifier){
                   , port=validate.toInt(element.planner.port)
                   , plannerid=get_planner(user,host,port)
 
-                sockets[id].push(socket_connect(
-                    plannerid,host,port,notifier,sid));
+                if(plannerid){
+                    sockets[id].push(socket_connect(
+                        plannerid,host,port,notifier,sid));
 
-                return {
-                    host:host
-                  , port:port
-                };
-            });
+                    return {
+                        id:plannerid
+                      , planner:{
+                            host:host
+                          , port:port
+                        }
+                    };
+                }else{
+                    return;
+                }
+            }).filter(function(element){
+                return element!=undefined;
+            })
             request.user.save();
 
             notifier(sid,{
                 action:'put'
               , msg:request.user.notifier.map(function(element){
                     return {
-                        id:get_planner(user,element.host,element.port)
+                        id:get_planner(user,
+                            element.planner.host,element.planner.port)
                       , planner:{
-                            host:element.host
-                          , port:element.port
+                            host:element.planner.host
+                          , port:element.planner.port
                         }
                     }
                 })
@@ -119,29 +129,36 @@ module.exports=function(app,config,notifier){
                   , sid=request.sessionID
                   , plannerid=get_planner(user,host,port)
 
-                if(!sockets[id]){
-                    sockets[id]=[];
-                }
-                sockets[id].push(socket_connect(
-                    plannerid,host,port,notifier,sid));
+                if(plannerid){
+                    if(!sockets[id]){
+                        sockets[id]=[];
+                    }
+                    sockets[id].push(socket_connect(
+                        plannerid,host,port,notifier,sid));
 
-                request.user.notifier.push({
-                    host:host
-                  , port:port
-                });
-                request.user.save();
-
-                notifier(sid,{
-                    action:'post'
-                  , msg:{
+                    request.user.notifier.push({
                         id:plannerid
                       , planner:{
                             host:host
                           , port:port
                         }
-                    }
-                });
-                response.status(201).json(_success.ok);
+                    });
+                    request.user.save();
+
+                    notifier(sid,{
+                        action:'post'
+                      , msg:{
+                            id:plannerid
+                          , planner:{
+                                host:host
+                              , port:port
+                            }
+                        }
+                    });
+                    response.status(201).json(_success.ok);
+                }else{
+                    response.status(404).json(_error.notfound);
+                }
             }else{
                 response.status(403).json(_error.notoverride);
             }
@@ -188,8 +205,11 @@ module.exports=function(app,config,notifier){
                     plannerid,host,port,notifier,sid));
 
                 request.user.notifier.push({
-                    host:host
-                  , port:port
+                    id:plannerid
+                  , planner:{
+                        host:host
+                      , port:port
+                    }
                 });
                 request.user.save();
 
@@ -230,8 +250,8 @@ module.exports=function(app,config,notifier){
               , plannerid=get_planner(request.user,host,port)
 
             if(planner){
-                var host=planner[1].host
-                  , port=planner[1].port
+                var host=planner[1].planner.host
+                  , port=planner[1].planner.port
 
                 sockets[id][planner[0]].disconnect();
                 sockets[id].splice(planner[0],1);
@@ -242,7 +262,7 @@ module.exports=function(app,config,notifier){
                 notifier(sid,{
                     action:'remove'
                   , msg:{
-                        id:get_planner(request.user,host,port,app)
+                        id:plannerid
                     }
                 });
                 response.status(200).json(_success.ok);

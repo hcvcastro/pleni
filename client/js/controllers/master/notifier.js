@@ -35,7 +35,7 @@ pleni.controller('NotifierController',
                     }
                   , msg:''
                 };
-
+console.log(element.id);
                 Planners.check({server:element.id},function(){
                     pkg.check='online';
                     Planners.status({server:element.id},function(i){

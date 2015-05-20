@@ -25,7 +25,25 @@ describe('notifiers controller functions',function(){
           , resources:{
                 dbservers:[]
               , repositories:[]
-              , planners:[]
+              , planners:[{
+                    id:'localhost'
+                  , planner:{
+                        host:'http://127.0.0.1'
+                      , port:3001
+                    }
+                },{
+                    id:'test1'
+                  , planner:{
+                        host:'http://127.0.0.1'
+                      , port:8081
+                    }
+                },{
+                    id:'test2'
+                  , planner:{
+                        host:'http://127.0.0.1'
+                      , port:8082
+                    }
+                }]
               , notifiers:[]
             }
           , projects:[]
@@ -119,6 +137,7 @@ describe('notifiers controller functions',function(){
                 res.should.be.json;
                 res.body.should.have.an.Array;
                 for(var i in res.body){
+                    res.body[i].should.have.property('id')
                     res.body[i].should.have.property('planner');
                     res.body[i].planner.should.have.property('host');
                     res.body[i].planner.should.have.property('port');
@@ -173,6 +192,12 @@ describe('notifiers controller functions',function(){
               , port:8082
             }
         },expected:_success.ok,status:201}
+      , {test:{
+            planner:{
+                host:'http://127.0.0.1'
+              , port:8083
+            }
+        },expected:_error.notfound,status:404}
     ]
     .forEach(function(element){
         it('POST /notifier',function(done){
