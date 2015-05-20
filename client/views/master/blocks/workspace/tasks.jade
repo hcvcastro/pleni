@@ -26,7 +26,7 @@ article.form(ng-show='workspace.env.panel==\'tasks\'')
                     li.link(ng-click='tasks.stop($index,planner)')
                         a.fa.fa-stop(title='Stop task in planner')
             div#editor
-            p.offset
+            p.offset.load
                 span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message
             p.offset

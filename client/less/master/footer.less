@@ -3,10 +3,9 @@ footer {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 50px;
-    background-color: fade(@color2,50%);
+    background-color: @color4;
 
-/*    .button0 {
+    .button0 {
         float: left;
         height: 100%;
         color: @color5;
@@ -16,27 +15,26 @@ footer {
         .button0;
         font-size: 16px;
         width: 25px;
-        padding: 5px 5px 0 5px;
+        padding: 5px 5px;
+        box-sizing: border-box;
     }
 
-    .control {
-        margin-left: 240px;
-        width: 710px;
-    }
     .tabs {
         height: 25px;
         width: 100%;
         display: flex;
+        justify-content: center;
 
         .tab {
             width: 142px;
+            border-radius: 0 0 10px 10px;
+            transition: 1s all ease 0s;
+
             :nth-child(1) {
                 .button1;
-                background-color: fade(@color2,30%);
             }
             :nth-child(2) {
                 .button1;
-                background-color: fade(@color2,20%);
             }
             :nth-child(3) {
                 .button0;
@@ -44,17 +42,12 @@ footer {
                 width: 92px;
                 padding: 2px 0 0 5px;
                 cursor: pointer;
-
-                &.active {
-                    background-color: fade(@color2, 80%);
-                }
             }
         }
-        .tab:nth-child(1) {background-color: fade(@color2,56%);}
-        .tab:nth-child(2) {background-color: fade(@color2,52%);}
-        .tab:nth-child(3) {background-color: fade(@color2,48%);}
-        .tab:nth-child(4) {background-color: fade(@color2,44%);}
-        .tab:nth-child(5) {background-color: fade(@color2,40%);}
+
+        .tab.active {background-color: fade(@color2,100%);}
+        .tab:not(.active) {background-color: fade(@color2,35%);}
+        .tab:hover {background-color: fade(@color2,70%);}
     }
     .bar {
         height: 25px;
@@ -80,7 +73,8 @@ footer {
         :nth-child(6) {
             .button0;
             .font4;
-            width: 376px;
+            flex: 1 1 auto;
+            padding:3px 0 0 5px;
             overflow: hidden;
         }
         :nth-child(7) {
@@ -88,13 +82,13 @@ footer {
             color: @error_frg;
         }
 
-        :nth-child(1) {background-color: fade(@color2,95%);}
-        :nth-child(2) {background-color: fade(@color2,85%);}
-        :nth-child(3) {background-color: fade(@color2,75%);}
-        :nth-child(4) {background-color: fade(@color2,65%);}
-        :nth-child(5) {background-color: fade(@color2,95%);}
-        :nth-child(6) {background-color: fade(@color2,85%);}
+        :nth-child(1) {background-color: fade(@color2,100%);}
+        :nth-child(2) {background-color: fade(@color2,70%);}
+        :nth-child(3) {background-color: fade(@color2,80%);}
+        :nth-child(4) {background-color: fade(@color2,90%);}
+        :nth-child(5) {background-color: fade(@color2,100%);}
+        :nth-child(6) {background-color: fade(@color2,70%);}
         :nth-child(7) {background-color: @color3;}
-    }*/
+    }
 }
 
