@@ -311,7 +311,7 @@ pleni.controller('WorkspaceController',
           , run:function(index,planner){
                 if(!planner.set.count||!planner.set.interval){
                     utils.show('error',
-                    'The count and interval parameters cannot are required');
+                    'The count and interval parameters are required');
                     return;
                 }
                 if(!Editor.is_valid()){

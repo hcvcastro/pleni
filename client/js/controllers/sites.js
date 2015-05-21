@@ -207,7 +207,7 @@ pleni.controller('SitesController',
                           , type:pkg.task.msg.node.type
                         },pkg.task.msg.node.rel);
                         $scope.status.message='GET '+pkg.task.msg.node.page+' '
-                            +pkg.task.msg.node.status+'. links founded: '
+                            +pkg.task.msg.node.status+'. links found: '
                             +pkg.task.msg.node.rel.length;
                         $scope.status.completed++;
                         $scope.status.total=visual.nodes.length;

@@ -199,7 +199,8 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/dbservers/:dbserver',authed,function(request,response){
+    app.delete('/resources/dbservers/:dbserver',authed,
+        function(request,response){
         var id=validate.toString(request.params.dbserver)
           , resources=request.user.resources
           , dbservers=resources.dbservers

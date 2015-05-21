@@ -1,0 +1,27 @@
+.grid.full.last
+    nav.menu
+        include ../blocks/footer/bottom
+    .main
+        .messages
+        section.settings
+            h1 Change password
+            article.form.animate
+                .body
+                    form(ng-submit='change()')
+                        p
+                            label Current Password
+                            input(type='password',name='password1',placeholder='Your current password',required,ng-model='password1')
+                        p
+                            label New Password
+                            input(type='password',name='password2',placeholder='Your super safe new password',required,ng-model='password2')
+                        p
+                            label Password confirmation
+                            input(type='password',name='confirm',placeholder='Repeat your super safe new password',required,ng-model='confirm')
+                        p.offset.load
+                            input(type='hidden',name='_csrf',value='#{csrftoken}')
+                            span.hide.loader.fa.fa-spinner.fa-spin
+                            span.hide.message
+                        p.offset
+                            button(type='submit') Change Password
+        include ../blocks/footer
+

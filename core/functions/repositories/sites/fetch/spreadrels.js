@@ -66,7 +66,7 @@ module.exports=function(args){
             }
  
             if(args.debug){
-                console.log('spread the founded links: '+spread.join(' '));
+                console.log('spread links found: '+spread.join(' '));
             }
  
             args.task.spread=spread;

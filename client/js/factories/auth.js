@@ -105,6 +105,25 @@ pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
                 done();
             });
         }
+      , change:function(pass1,pass2,csrf,done){
+            $http.post('/change',{
+                pass1:pass1
+              , pass2:pass2
+              , _csrf:csrf
+            })
+            .success(function(data){
+                utils.show('success','Password changed successfully');
+                done();
+            })
+            .error(function(error){
+                if(error.message){
+                    utils.show('error',error.message);
+                }else{
+                    utils.show('error','Invalid request');
+                }
+                done();
+            });
+        }
     };
 }]);
 

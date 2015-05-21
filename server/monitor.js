@@ -115,7 +115,7 @@ app.put('/tasks',function(request,response){
                 if(planner){
                     assign(planner,function(){
                         response.status(200).json({
-                            msg:'Available planner founded'
+                            msg:'Available planner found'
                           , queue:0
                         });
                     });

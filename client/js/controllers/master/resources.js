@@ -92,7 +92,7 @@ pleni.controller('ResourcesController',
                         utils.show('info','DB Server is online');
                     },function(error){
                         utils.receive();
-                        utils.show('error','DB Server cannot be founded');
+                        utils.show('error','DB Server cannot be found');
                     });
                 }else{
                     var dbserver=$scope.storage.dbservers[index];
@@ -261,7 +261,7 @@ pleni.controller('ResourcesController',
                         utils.show('info','Repository is online');
                     },function(error){
                         utils.receive();
-                        utils.show('error','Repository cannot be founded');
+                        utils.show('error','Repository cannot be found');
                     });
                 }else{
                     var repository=$scope.storage.repositories[index];
@@ -273,7 +273,7 @@ pleni.controller('ResourcesController',
                         utils.show('info','Repository is online');
                     },function(error){
                         repository.check='offline';
-                        utils.show('error','Repository cannot be founded');
+                        utils.show('error','Repository cannot be found');
                     });
                 }
             }
@@ -384,7 +384,7 @@ pleni.controller('ResourcesController',
                         utils.show('info','Planner is online');
                     },function(error){
                         utils.receive();
-                        utils.show('error','Planner cannot be founded');
+                        utils.show('error','Planner cannot be found');
                     });
                 }else{
                     var planner=$scope.storage.planners[index];
@@ -416,7 +416,7 @@ pleni.controller('ResourcesController',
                         });
                     },function(error){
                         planner.check='offline';
-                        utils.show('error','Planner cannot be founded');
+                        utils.show('error','Planner cannot be found');
                     });
                 }
             }
@@ -715,7 +715,7 @@ pleni.controller('ResourcesController',
                         utils.show('info','Notifier is online');
                     },function(error){
                         utils.receive();
-                        utils.show('error','Notifier cannot be founded');
+                        utils.show('error','Notifier cannot be found');
                     });
                 }else{
                     var notifier=$scope.storage.notifiers[index];
@@ -727,7 +727,7 @@ pleni.controller('ResourcesController',
                         notifier.type=data.notifier.type;
                     },function(error){
                         notifier.check='offline';
-                        utils.show('error','Notifier cannot be founded');
+                        utils.show('error','Notifier cannot be found');
                     });
                 }
             }

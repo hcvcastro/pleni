@@ -84,7 +84,7 @@ describe('monitor controller functions',function(){
             .end(function(err,res){
                 res.statusCode.should.be.eql(200);
                 res.body.should.have.property('msg')
-                    .and.be.eql('Available planner founded');
+                    .and.be.eql('Available planner found');
                 res.body.should.have.property('queue')
                     .and.be.eql(0);
 
@@ -147,7 +147,7 @@ describe('monitor controller functions',function(){
             .end(function(err,res){
                 res.statusCode.should.be.eql(200);
                 res.body.should.have.property('msg')
-                    .and.be.eql('Available planner founded');
+                    .and.be.eql('Available planner found');
                 res.body.should.have.property('queue')
                     .and.be.eql(0);
 

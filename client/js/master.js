@@ -47,6 +47,11 @@ var pleni=angular
               , controller:'WorkspaceController'
               , access:'user'
             })
+            .when('/settings',{
+                templateUrl:'/settings/view'
+              , controller:'SettingsController'
+              , access:'user'
+            })
             .when('/pages/:page',{
                 templateUrl:function(params){
                     return '/static/'+params.page;

@@ -110,11 +110,11 @@ passport.use(new localstrategy({
                 break;
             case 'forgot':
             case 'active':
-                user.comparePassword(password,function(err,isMatch){
+                user.comparePassword(password,function(err,match){
                     if(err){
                         return done(err);
                     }
-                    if(isMatch){
+                    if(match){
                         return done(null,user);
                     }else{
                         return done(null,false,{
@@ -219,6 +219,7 @@ require('./master/resources/notifiers')(app,config);
 require('./master/notifier')(app,config,notifier);
 require('./master/projects')(app,config);
 require('./master/workspace')(app,config);
+require('./master/settings')(app,config);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){
