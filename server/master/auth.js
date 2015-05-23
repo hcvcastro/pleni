@@ -82,8 +82,9 @@ module.exports=function(app,config){
     app.post('/signup',csrf,function(request,response){
         var register=function(){
                 User.findOne({email:request.body.email},function(err,user){
-                    if(!user&&config.master.admin&&
-                        config.master.email!==request.body.email){
+                    if(!user&&
+                        !(config.master.admin&&
+                            config.master.email==request.body.email)){
                         var key=generator()
                         User.create({
                             email:request.body.email

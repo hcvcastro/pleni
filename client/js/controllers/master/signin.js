@@ -4,6 +4,7 @@ pleni.controller('SigninController',['$rootScope','$scope','Auth',
     function($rootScope,$scope,Auth){
     utils.set_tab(1,1);
     utils.set_active('signin',1);
+    utils.set_header(true);
 
     $('input[name=email]').focus();
 

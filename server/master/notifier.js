@@ -247,11 +247,11 @@ module.exports=function(app,config,notifier){
             var planner=get_element(request.body,request.user.notifier)
               , id=request.user.id
               , sid=request.sessionID
-              , plannerid=get_planner(request.user,host,port)
 
             if(planner){
                 var host=planner[1].planner.host
                   , port=planner[1].planner.port
+                  , plannerid=get_planner(request.user,host,port)
 
                 sockets[id][planner[0]].disconnect();
                 sockets[id].splice(planner[0],1);

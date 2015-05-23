@@ -82,6 +82,7 @@ pleni.controller('NotifierController',
         }
 
         Socket.on('notifier',function(pkg){
+            console.log(pkg);
             switch(pkg.action){
                 case 'put':
                 case 'delete':
@@ -110,7 +111,7 @@ pleni.controller('NotifierController',
                             case 'create':
                                 $scope.storage.threads[i].set={
                                     status:'set'
-                                  , name:pkg.planner.task.name
+                                  , name:pkg.planner.task.id
                                   , count:pkg.planner.task.count
                                   , interval:pkg.planner.task.interval
                                 };

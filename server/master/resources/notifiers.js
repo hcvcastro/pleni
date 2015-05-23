@@ -312,8 +312,8 @@ module.exports=function(app){
         });
     });
 
-    app.post('/resources/notifiers/:notifier/_remove',authed,function(
-            request,response){
+    app.post('/resources/notifiers/:notifier/_remove',authed,
+        function(request,response){
         var id=request.body.planner
           , resources=request.user.resources
           , planners=resources.planners
