@@ -5,7 +5,11 @@ pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
     return {
         isUser:function(){
             var auth=$cookieStore.get('pleni.auth');
-            return (auth&&auth.role=='user');
+            if(auth&&auth.role=='user'){
+                return true;
+            }else{
+                return false;
+            }
         }
       , signin:function(email,password,csrf,done){
             $http.post('/signin',{
