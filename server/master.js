@@ -62,6 +62,7 @@ passport.deserializeUser(function(id,done){
               , planners:[]
               , notifiers:[]
             }
+          , projects:[]
           , notifier:[]
         });
     }else{
@@ -179,13 +180,18 @@ app.use(cookiesession({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.set('views',join(__dirname,'..','client','views','master'));
-app.set('view engine','jade');
-
 if(config.env=='production'){
+    app.set('views',join(__dirname,'..','views'));
+    app.set('view engine','jade');
+
     app.use(express.static(join(__dirname,'..','client')));
+    app.locals.pretty=false;
+
     app.use(morgan('combined'));
 }else{
+    app.set('views',join(__dirname,'..','client','views','master'));
+    app.set('view engine','jade');
+
     app.use(lessmiddleware('/less',{
         dest:'/css'
       , pathRoot:join(__dirname,'..','client')
@@ -228,10 +234,11 @@ app.use(function(error,request,response,next){
     response.status(403).send('forbidden');
 });
 app.use(function(request,response){
-    response.status(404).render('404.jade',{
-        title:'404',
-        message:'I\'m so sorry, but file not found!!'
-    });
+    if(config.env=='production'){
+        response.status(404).sendFile(join(__dirname,'..','client','404.html'));
+    }else{
+        response.status(404).render('404');
+    }
 });
 
 server.listen(app.get('port'),app.get('host'),function(){

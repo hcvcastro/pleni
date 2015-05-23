@@ -1,6 +1,7 @@
 'use strict';
 
 var validate=require('../../core/validators')
+  , join=require('path').join
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
   , schema=require('../../core/schema')
@@ -13,11 +14,17 @@ var validate=require('../../core/validators')
         return;
     };
 
-module.exports=function(app){
+module.exports=function(app,config){
     var authed=app.get('auth');
 
     app.get('/projects/view',authed,function(request,response){
-        response.render('pages/projects');
+        if(config.env=='production'){
+            response.status(200)
+                .sendFile(join(__dirname,'..','..','client',
+                    'projects.html'));
+        }else{
+            response.render('pages/projects');
+        }
     });
 
     app.get('/projects',authed,function(request,response){

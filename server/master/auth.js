@@ -96,7 +96,13 @@ module.exports=function(app,config){
                                 dbservers:[]
                               , repositories:[]
                               , planners:[]
-                              , notifiers:[]
+                              , notifiers:[{
+                                    id:'master'
+                                  , notifier:{
+                                        host:config.url
+                                      , port:80
+                                    }
+                                }]
                             }
                           , notifier:[]
                           , projects:[]
@@ -179,11 +185,21 @@ module.exports=function(app,config){
                         }
                     });
                 }else{
-                    response.status(404).render('404');
+                    if(config.env=='production'){
+                        response.status(404).sendFile(join(__dirname,'..',
+                            'client','404.html'));
+                    }else{
+                        response.status(404).render('404');
+                    }
                 }
             });
         }else{
-            response.status(404).render('404');
+            if(config.env=='production'){
+                response.status(404).sendFile(join(__dirname,'..',
+                    'client','404.html'));
+            }else{
+                response.status(404).render('404');
+            }
         }
     });
 

@@ -164,8 +164,8 @@ module.exports=function(grunt){
 
       , concurrent:{
             master:[
-//                'jade:master'
-                'less:master'
+                'jade:master'
+              , 'less:master'
               , 'uglify:master'
               , 'copy:master'
               , 'svgmin:master'
@@ -194,7 +194,40 @@ module.exports=function(grunt){
             ]
         }
       , jade:{
-            planner:{
+            master:{
+                options:{
+                    pretty:false
+                }
+              , files:{
+                    'dist/master/client/index.html'
+                  : 'client/views/master/prod.jade'
+                  , 'dist/master/client/404.html'
+                  : 'client/views/master/404.jade'
+                  , 'dist/master/client/home.html'
+                  : 'client/views/master/pages/home.jade'
+                  , 'dist/master/client/static/api.html'
+                  : 'client/views/master/static/api.jade'
+                  , 'dist/master/client/static/contact.html'
+                  : 'client/views/master/static/contact.jade'
+                  , 'dist/master/client/static/privacy.html'
+                  : 'client/views/master/static/privacy.jade'
+                  , 'dist/master/client/static/security.html'
+                  : 'client/views/master/static/security.jade'
+                  , 'dist/master/client/static/started.html'
+                  : 'client/views/master/static/started.jade'
+                  , 'dist/master/client/static/support.html'
+                  : 'client/views/master/static/support.jade'
+                  , 'dist/master/client/static/terms.html'
+                  : 'client/views/master/static/terms.jade'
+                  , 'dist/master/client/resources.html'
+                  : 'client/views/master/pages/resources.jade'
+                  , 'dist/master/client/projects.html'
+                  : 'client/views/master/pages/projects.jade'
+                  , 'dist/master/client/workspace.html'
+                  : 'client/views/master/pages/workspace.jade'
+                }
+            }
+          , planner:{
                 options:{
                     pretty:false
                 }
@@ -317,11 +350,13 @@ module.exports=function(grunt){
                       , 'client/js/controllers/master/signin.js'
                       , 'client/js/controllers/master/signup.js'
                       , 'client/js/controllers/master/forgot.js'
+                      , 'client/js/controllers/master/reset.js'
                       , 'client/js/controllers/master/header.js'
                       , 'client/js/controllers/master/notifier.js'
                       , 'client/js/controllers/master/resources.js'
                       , 'client/js/controllers/master/projects.js'
                       , 'client/js/controllers/master/workspace.js'
+                      , 'client/js/controllers/master/settings.js'
                     ]
                 }]
             }
@@ -438,9 +473,9 @@ module.exports=function(grunt){
                   , dest:'dist/master/client/js/jsoneditor.min.js'
                 },{
                     expand:true
-                  , cwd:'client/views/'
-                  , src:['master/**']
-                  , dest:'dist/master/client/views/'
+                  , cwd:'client/views/master'
+                  , src:['**']
+                  , dest:'dist/master/views/'
                 },{
                     expand:true
                   , src:['core/**']
@@ -453,10 +488,6 @@ module.exports=function(grunt){
                   , cwd:'server/'
                   , src:['master/**']
                   , dest:'dist/master/server/'
-                },{
-                    expand:true
-                  , src:'config/*.json'
-                  , dest:'dist/master/'
                 },{
                     src:'config/master.js'
                   , dest:'dist/master/config/master.js'
