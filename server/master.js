@@ -212,7 +212,9 @@ app.set('auth',function(request,response,next){
         return next();
     }
 
-    response.status(401).json(_error.auth);
+    response.status(401)
+        .cookie('pleni.auth',JSON.stringify({role:'guest'}))
+        .json(_error.auth);
 });
 
 require('./master/home')(app,config);

@@ -1,8 +1,8 @@
 'use strict';
 
 pleni.controller('NotifierController',
-    ['$scope','$sessionStorage','$http','Planners','Socket',
-    function($scope,$sessionStorage,$http,Planners,Socket){
+    ['$scope','$sessionStorage','$http','Planners','Socket','Visual',
+    function($scope,$sessionStorage,$http,Planners,Socket,Visual){
         $scope.storage=$sessionStorage;
         $scope.storage.threads=[];
 
@@ -81,6 +81,74 @@ pleni.controller('NotifierController',
             });
         }
 
+        var process_planner=function(thread,pkg){
+            var i=thread[0]
+
+            switch(pkg.planner.action){
+                case 'connection':
+                    break;
+                case 'create':
+                    $scope.storage.threads[i].set={
+                        status:'set'
+                      , name:pkg.planner.task.id
+                      , count:pkg.planner.task.count
+                      , interval:pkg.planner.task.interval
+                    };
+                    break;
+                case 'remove':
+                    $scope.storage.threads[i].set={
+                        status:'unset'
+                      , name:''
+                      , count:undefined
+                      , interval:undefined
+                    };
+                    break;
+                case 'run':
+                    $scope.storage.threads[i].status='running';
+                    $scope.storage.planners[get_element(
+                        thread[1].id,$scope.storage.planners)[0]
+                    ].status='running';
+                    break;
+                case 'stop':
+                    $scope.storage.threads[i].status='stopped';
+                    $scope.storage.planners[get_element(
+                        thread[1].id,$scope.storage.planners)[0]
+                    ].status='stopped';
+                    break;
+                case 'task':
+                    if($scope.storage.threads[i].set.count>0){
+                        $scope.storage.threads[i].set.count--;
+                    }
+
+                    switch(pkg.planner.task.id){
+                        case 'site/fetch':
+                            $scope.storage.threads[i].msg
+                                ='GET '
+                                +pkg.planner.task.msg.node.page+' '
+                                +pkg.planner.task.msg.node.status
+                                +'. links found: '
+                                +pkg.planner.task.msg.node.rel.length;
+
+                            if($scope.storage.workspace.visual==
+                                pkg.params.repository){
+                                Visual.add({
+                                    page:pkg.planner.task.msg.node.page
+                                  , status:pkg.planner.task.msg.node.status
+                                  , mime:pkg.planner.task.msg.node.mime
+                                  , get:pkg.planner.task.msg.node.get
+                                  , type:pkg.planner.task.msg.node.type
+                                },pkg.planner.task.msg.node.rel);
+                            }
+
+                            break;
+                        default:
+                            $scope.storage.threads[i].msg
+                                =pkg.planner.task.msg;
+                    }
+                    break;
+            }
+        };
+
         Socket.on('notifier',function(pkg){
             console.log(pkg);
             switch(pkg.action){
@@ -97,65 +165,17 @@ pleni.controller('NotifierController',
                     }
                     break;
                 case 'create':
-                    $scope.storage.threads.push(create_thread(pkg.msg));
+                    var thread=get_element(pkg.msg.id,$scope.storage.threads);
+                    if(!thread){
+                        $scope.storage.threads.push(create_thread(pkg.msg));
+                    }
                     break;
                 case 'connection':
                     break;
                 case 'planner':
                     var thread=get_element(pkg.id,$scope.storage.threads)
                     if(thread){
-                        var i=thread[0];
-                        switch(pkg.planner.action){
-                            case 'connection':
-                                break;
-                            case 'create':
-                                $scope.storage.threads[i].set={
-                                    status:'set'
-                                  , name:pkg.planner.task.id
-                                  , count:pkg.planner.task.count
-                                  , interval:pkg.planner.task.interval
-                                };
-                                break;
-                            case 'remove':
-                                $scope.storage.threads[i].set={
-                                    status:'unset'
-                                  , name:''
-                                  , count:undefined
-                                  , interval:undefined
-                                };
-                                break;
-                            case 'run':
-                                $scope.storage.threads[i].status='running';
-                                $scope.storage.planners[get_element(
-                                    thread[1].id,$scope.storage.planners)[0]
-                                ].status='running';
-                                break;
-                            case 'stop':
-                                $scope.storage.threads[i].status='stopped';
-                                $scope.storage.planners[get_element(
-                                    thread[1].id,$scope.storage.planners)[0]
-                                ].status='stopped';
-                                break;
-                            case 'task':
-                                if($scope.storage.threads[i].set.count>0){
-                                    $scope.storage.threads[i].set.count--;
-                                }
-
-                                switch(pkg.planner.task.id){
-                                    case 'site/fetch':
-                                        $scope.storage.threads[i].msg
-                                            ='GET '
-                                            +pkg.planner.task.msg.node.page+' '
-                                            +pkg.planner.task.msg.node.status
-                                            +'. links found: '
-                                            +pkg.planner.task.msg.node.rel.length;
-                                        break;
-                                    default:
-                                        $scope.storage.threads[i].msg
-                                            =pkg.planner.task.msg;
-                                }
-                                break;
-                        }
+                        process_planner(thread,pkg);
                     }
                     break;
             }

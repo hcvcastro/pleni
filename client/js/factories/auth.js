@@ -5,7 +5,7 @@ pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
     return {
         isUser:function(){
             var auth=$cookieStore.get('pleni.auth');
-            return auth!==undefined;
+            return (auth&&auth.role=='user');
         }
       , signin:function(email,password,csrf,done){
             $http.post('/signin',{

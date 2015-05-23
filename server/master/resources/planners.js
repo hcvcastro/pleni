@@ -411,7 +411,7 @@ module.exports=function(app){
     app.post('/resources/planners/:planner/_run',authed,
         function(request,response){
         var targs=request.body.targs
-          , buffer=[]
+          , buffer={}
 
         if(targs._repository){
             var repository=get_element(
@@ -424,7 +424,7 @@ module.exports=function(app){
                 targs._dbserver=repository[1]._dbserver;
                 request.body.targs=targs;
 
-                buffer.push(repository[1].id);
+                buffer.repository=repository[1].id;
             }else{
                 response.status(403).json(_error.badrequest);
                 return;
@@ -445,8 +445,6 @@ module.exports=function(app){
                     targs.db.prefix=dbserver[1].db.prefix;
                 }
                 request.body.targs=targs;
-
-                buffer.push(dbserver[1].id);
             }else{
                 response.status(403).json(_error.badrequest);
                 return;
