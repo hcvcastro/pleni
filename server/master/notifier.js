@@ -25,20 +25,45 @@ var validate=require('../../core/validators')
         }
         return;
     }
-  , socket_connect=function(id,host,port,notifier,sid){
-        var socket=ioc.connect(host+':'+port,{reconnect:true,'forceNew':true})
-        socket.on('notifier',function(msg){
-            notifier(sid,{
-                action:'planner'
-              , id:id
-              , planner:msg
-            });
-        });
-        return socket;
-    }
 
 module.exports=function(app,config,notifier){
-    var authed=app.get('auth');
+    var authed=app.get('auth')
+      , get_session=function(id,done,fail){
+            var sid=config.redis.prefix+id
+
+            app.get('redis').get(sid,function(err,reply){
+                if(reply){
+                    done(JSON.parse(reply));
+                }else if(fail){
+                    fail(err);
+                }
+            });
+        }
+      , socket_connect=function(id,host,port,notifier,sid){
+            var socket=ioc.connect(host+':'+port,{
+                reconnect:true
+              , 'forceNew':true
+            })
+
+            socket.on('notifier',function(msg){
+                get_session(sid,function(session){
+                    var params=[]
+
+                    if(session.planners&&(id in session.planners)){
+                        params=session.planners[id];
+                    }
+
+                    notifier(sid,{
+                        action:'planner'
+                      , id:id
+                      , params:params
+                      , planner:msg
+                    });
+                });
+            });
+            return socket;
+        }
+
 
     app.get('/id',function(request,response){
         response.json({
@@ -253,8 +278,10 @@ module.exports=function(app,config,notifier){
                   , port=planner[1].planner.port
                   , plannerid=get_planner(request.user,host,port)
 
-                sockets[id][planner[0]].disconnect();
-                sockets[id].splice(planner[0],1);
+                if(sockets[id]){
+                    sockets[id][planner[0]].disconnect();
+                    sockets[id].splice(planner[0],1);
+                }
 
                 request.user.notifier.splice(planner[0],1);
                 request.user.save();

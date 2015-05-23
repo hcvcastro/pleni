@@ -616,6 +616,20 @@ pleni.controller('ResourcesController',
                     });
                 }
             }
+          , clean:function(index){
+                var planner=$scope.storage.planners[index];
+
+                utils.send('Send a clean TID request ...');
+                Resources.planners.clean({
+                    server:planner.id
+                },function(data){
+                    utils.receive();
+                    utils.show('success','Cleaned the TID planner');
+                },function(error){
+                    utils.receive();
+                    utils.show('error',error);
+                });
+          }
           , edit:function(index){
                 $scope.planners.env.view='form';
                 $scope.planners.env.type='element';

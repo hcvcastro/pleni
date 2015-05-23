@@ -14,6 +14,7 @@ pleni.factory('Planners',['$resource',function($resource){
       , get:{method:'POST',params:{action:'_get'}}
       , isset:{method:'POST',params:{action:'_isset'}}
       , unset:{method:'POST',params:{action:'_unset'}}
+      , clean:{method:'POST',params:{action:'_clean'}}
       , run:{method:'POST',params:{action:'_run'}}
       , stop:{method:'POST',params:{action:'_stop'}}
     });

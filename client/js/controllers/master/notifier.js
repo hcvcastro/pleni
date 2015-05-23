@@ -140,8 +140,20 @@ pleni.controller('NotifierController',
                                 if($scope.storage.threads[i].set.count>0){
                                     $scope.storage.threads[i].set.count--;
                                 }
-                                $scope.storage.threads[i].msg
-                                    =pkg.planner.task.msg;
+
+                                switch(pkg.planner.task.id){
+                                    case 'site/fetch':
+                                        $scope.storage.threads[i].msg
+                                            ='GET '
+                                            +pkg.planner.task.msg.node.page+' '
+                                            +pkg.planner.task.msg.node.status
+                                            +'. links found: '
+                                            +pkg.planner.task.msg.node.rel.length;
+                                        break;
+                                    default:
+                                        $scope.storage.threads[i].msg
+                                            =pkg.planner.task.msg;
+                                }
                                 break;
                         }
                     }

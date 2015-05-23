@@ -18,6 +18,7 @@ article.list
                 th.status &nbsp;
                 th.status &nbsp;
                 th.status &nbsp;
+                th.status &nbsp;
                 th.options &nbsp;
         tbody
             tr(ng-repeat='planner in storage.planners')
@@ -35,6 +36,8 @@ article.list
                 td.status
                     a(title='Add/Remove planner to master notifier',ng-click='planners.follow($index)',ng-show='planner.type==\'io\'||planner.type==\'ion\'')
                         span.fa(ng-class='{\'fa-bell-o\':planner.follow==true,\'fa-bell-slash-o\':planner.follow==false}')
+                td.status
+                    a.fa.fa-recycle(title='Clean TID',ng-click='planners.clean($index)')
                 td.options
                     a.fa.fa-refresh(title='Check connection',ng-click='planners.check($index)',ng-class='{\'fa-spin\':planner.check==\'checking\'}')
                     a.fa.fa-edit(title='Edit properties',ng-click='planners.edit($index)')

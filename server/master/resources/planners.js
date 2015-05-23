@@ -270,6 +270,8 @@ module.exports=function(app){
                     response.status(401).json(_error.auth);
                 }else if(error.error=='not override'){
                     response.status(403).json(_error.notoverride);
+                }else if(error.error=='not found'){
+                    response.status(404).json(_error.notfound);
                 }else{
                     response.status(403).json(_error.badrequest);
                 }
@@ -408,24 +410,31 @@ module.exports=function(app){
 
     app.post('/resources/planners/:planner/_run',authed,
         function(request,response){
-        var targs=request.body.targs;
+        var targs=request.body.targs
+          , buffer=[]
+
         if(targs._repository){
             var repository=get_element(
                 targs._repository,request.user.resources.repositories);
+
             if(repository){
                 delete targs._repository;
                 targs.db={};
                 targs.db.name=repository[1].db.name;
                 targs._dbserver=repository[1]._dbserver;
                 request.body.targs=targs;
+
+                buffer.push(repository[1].id);
             }else{
                 response.status(403).json(_error.badrequest);
                 return;
             }
         }
+
         if(targs._dbserver){
             var dbserver=get_element(
                 targs._dbserver,request.user.resources.dbservers);
+
             if(dbserver){
                 delete targs._dbserver;
                 if(targs.db){
@@ -436,6 +445,8 @@ module.exports=function(app){
                     targs.db.prefix=dbserver[1].db.prefix;
                 }
                 request.body.targs=targs;
+
+                buffer.push(dbserver[1].id);
             }else{
                 response.status(403).json(_error.badrequest);
                 return;
@@ -447,6 +458,12 @@ module.exports=function(app){
                 planners[planner[0]].planner.status='running';
                 resources.planners=planners;
                 request.user.save();
+
+                if(!request.session.planners){
+                    request.session.planners={};
+                }
+                request.session.planners[planner[1].id]=buffer;
+                request.session.save();
 
                 response.status(200).json({
                     planner:{
@@ -465,6 +482,12 @@ module.exports=function(app){
                 resources.planners=planners;
                 request.user.save();
 
+                if(request.session.planners&&
+                    (planner[1].id in request.session.planners)){
+                    delete request.session.planners[planner[1].id];
+                    request.session.save();
+                }
+
                 response.status(200).json({
                     planner:{
                         host:args.planner.host
@@ -472,6 +495,29 @@ module.exports=function(app){
                     }
                 });
         });
+    });
+
+    app.post('/resources/planners/:planner/_clean',authed,
+        function(request,response){
+        var id=validate.toString(request.params.planner)
+          , resources=request.user.resources
+          , planners=resources.planners
+          , planner=get_element(id,planners)
+
+        if(planner){
+            planners[planner[0]].planner.tid=undefined;
+            resources.planners=planners;
+            request.user.save();
+
+            response.status(200).json({
+                planner:{
+                    host:planner[1].host
+                  , result:true
+                }
+            });
+        }else{
+            response.status(404).json(_error.notfound);
+        }
     });
 };
 
