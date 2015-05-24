@@ -1,28 +1,27 @@
 'use strict';
 
 var http=require('http')
+  , join=require('path').join
+  , validate=require('../core/validators')
+  , _success=require('../core/json-response').success
+  , _error=require('../core/json-response').error
   , express=require('express')
+  , morgan=require('morgan')
+  , lessmiddleware=require('less-middleware')
   , favicon=require('serve-favicon')
   , bodyparser=require('body-parser')
-  , lessmiddleware=require('less-middleware')
-  , join=require('path').join
-  , url=require('url')
-  , app=express()
-  , server=http.createServer(app)
-  , config=require('../config/sites')
-  , morgan=require('morgan')
   , cookieparser=require('cookie-parser')
   , cookiesession=require('express-session')
   , redis=require('redis')
   , redisstore=require('connect-redis')(cookiesession)
+  , app=express()
+  , server=http.createServer(app)
+  , config=require('../config/sites')
   , redisclient=redis.createClient(
         config.redis.port,config.redis.host,config.redis.options)
   , ios=require('socket.io')(server)
   , ioc=require('socket.io-client')
   , sessionsocketio=require('session.socket.io')
-  , validate=require('../core/validators')
-  , _success=require('../core/json-response').success
-  , _error=require('../core/json-response').error
   , monitor=require('./sites/monitor')
   , create=require('./sites/planners').create
   , fetch=require('./sites/planners').fetch

@@ -1,17 +1,26 @@
 'use strict';
 
 var http=require('http')
-  , express=require('express')
-  , bodyparser=require('body-parser')
-  , app=express()
-  , server=http.createServer(app)
-  , morgan=require('morgan')
   , request=require('request')
+  , join=require('path').join
   , validate=require('../core/validators')
   , _success=require('../core/json-response').success
   , _error=require('../core/json-response').error
-  , config=require('../config/monitor')
+  , express=require('express')
+  , morgan=require('morgan')
+  , lessmiddleware=require('less-middleware')
+  , favicon=require('serve-favicon')
+  , bodyparser=require('body-parser')
+  , cookieparser=require('cookie-parser')
+  , cookiesession=require('express-session')
   , redis=require('redis')
+  , redisstore=require('connect-redis')(cookiesession)
+  , passport=require('password')
+  , localstrategy=require('password-local').Strategy
+  , mongoose=require('mongoose')
+  , app=express()
+  , server=http.createServer(app)
+  , config=require('../config/monitor')
   , redisclient=redis.createClient(
         config.redis.port,config.redis.host,config.redis.options)
   , assign=function(planner,done){
