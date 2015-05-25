@@ -68,12 +68,12 @@ var pleni=angular
                 case 'everyone':
                     break;
                 case 'guest':
-                    if(Auth.isUser()){
+                    if(Auth.isUser('mastr')){
                         $location.path('/');
                     }
                     break;
                 case 'user':
-                    if(!Auth.isUser()){
+                    if(!Auth.isUser('mastr')){
                         $location.path('/signin');
                     }
                     break;

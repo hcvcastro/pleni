@@ -752,7 +752,7 @@ module.exports=function(grunt){
     ]);
     grunt.registerTask('serve:monitor',[
         'develop:monitor'
-      , 'watch:monitor'
+      , 'watch'
     ]);
     grunt.registerTask('serve:master',[
         'develop:master'

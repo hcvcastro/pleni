@@ -1,0 +1,23 @@
+.grid.full.last
+    nav.menu
+        include ../blocks/footer/bottom
+    .main
+        .messages
+        section.signin
+            h1 Pleni Monitor
+            article.form.animate
+                .body
+                    form(ng-submit='signin()')
+                        p
+                            label Email
+                            input(type='email',name='email',placeholder='Your email registered',required,ng-model='email')
+                        p
+                            label Password
+                            input(type='password',name='password',placeholder='Your super safe password',required,ng-model='password')
+                        p.offset.load
+                            input(type='hidden',name='_csrf',value='#{csrftoken}')
+                            span.hide.loader.fa.fa-spinner.fa-spin
+                            span.hide.message
+                        p.offset
+                            button(type='submit') Login
+

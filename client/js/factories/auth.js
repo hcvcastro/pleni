@@ -3,8 +3,8 @@
 pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
     function($rootScope,$http,$cookieStore,$location){
     return {
-        isUser:function(){
-            var auth=$cookieStore.get('pleni.mastr.auth');
+        isUser:function(app){
+            var auth=$cookieStore.get(['pleni',app,'auth'].join('.'));
             if(auth&&auth.role=='user'){
                 return true;
             }else{
@@ -30,10 +30,10 @@ pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
                 done();
             });
         }
-      , signout:function(){
+      , signout:function(app){
             $http.post('/signout')
             .success(function(data){
-                $cookieStore.remove('pleni.mastr.auth');
+                $cookieStore.remove(['pleni',app,'auth'].join('.'));
                 $rootScope.flash=['success','Your account was closed ...'];
                 $location.path('/signin');
             })
