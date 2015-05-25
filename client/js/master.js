@@ -59,7 +59,7 @@ var pleni=angular
               , controller:'StaticController'
             })
             .otherwise({
-                redirectTo: '/home'
+                redirectTo:'/home'
             });
     }])
     .run(['$rootScope','$location','Auth',function($rootScope,$location,Auth){

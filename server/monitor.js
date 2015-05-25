@@ -136,6 +136,8 @@ app.set('auth',function(request,response,next){
         .json(_error.auth);
 });
 
+require('./monitor/home')(app,config);
+
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){
         return next(error);
