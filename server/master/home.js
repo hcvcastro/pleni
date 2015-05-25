@@ -8,7 +8,7 @@ var fs=require('fs')
 module.exports=function(app,config){
     app.get('/',function(request,response){
         if(request.user){
-            response.cookie('pleni.auth',JSON.stringify({
+            response.cookie('pleni.mastr.auth',JSON.stringify({
                 role:'user'
             }));
         }

@@ -31,8 +31,8 @@ var redisclient=redis.createClient(
     config.redis.port,config.redis.host,config.redis.options)
 redisclient.on('error',console.error.bind(console,'redis connection error:'));
 redisclient.on('ready',function(){
-    console.log('connection to redis db: '+config.redis.host+':'
-        +config.redis.port);
+    console.log('connection to redis db:',
+        config.redis.host,':',config.redis.port);
 });
 var store=new redisstore({
     client:redisclient
@@ -45,7 +45,7 @@ mongoose.connect(config.mongo.url);
 var mongodb=mongoose.connection;
 mongodb.on('error',console.error.bind(console,'mongo connection error:'));
 mongodb.once('open',function(){
-    console.log('connection to mongo db: '+config.mongo.url);
+    console.log('connection to mongo db:',config.mongo.url);
 });
 
 passport.serializeUser(function(user,done){
@@ -213,7 +213,7 @@ app.set('auth',function(request,response,next){
     }
 
     response.status(401)
-        .cookie('pleni.auth',JSON.stringify({role:'guest'}))
+        .cookie('pleni.mastr.auth',JSON.stringify({role:'guest'}))
         .json(_error.auth);
 });
 

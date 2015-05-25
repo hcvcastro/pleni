@@ -3,7 +3,7 @@
 module.exports={
     env:process.env.ENV||'production'
   , cookie:{
-        secret:'pleni'
+        secret:'sites'
       , maxAge:3*60*60*1000
       , name:'pleni.site.sid'
     }

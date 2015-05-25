@@ -53,7 +53,7 @@ module.exports=function(app,config){
                     if(err){
                         return next(err);
                     }else{
-                        response.cookie('pleni.auth',JSON.stringify({
+                        response.cookie('pleni.mastr.auth',JSON.stringify({
                             role:'user'
                         })).json(_success.ok);
                     }
@@ -180,7 +180,7 @@ module.exports=function(app,config){
                         if(err){
                             return next(err);
                         }else{
-                            response.cookie('pleni.auth',JSON.stringify({
+                            response.cookie('pleni.mastr.auth',JSON.stringify({
                                 role:'user'
                             })).redirect('/');
                         }
