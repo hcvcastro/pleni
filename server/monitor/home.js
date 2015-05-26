@@ -24,6 +24,12 @@ module.exports=function(app,config){
         }
     });
 
+    app.get('/id',function(request,response){
+        response.status(200).json({
+            monitor:'ready for action'
+        });
+    });
+
     app.get('/home',csrf,function(request,response){
         if(request.user){
             response.cookie('pleni.monitr.auth',JSON.stringify({

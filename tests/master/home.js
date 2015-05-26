@@ -34,7 +34,15 @@ describe('home controller functions',function(){
             });
     });
 
-    ['api']
+    [
+        'api'
+      , 'contact'
+      , 'privacy'
+      , 'security'
+      , 'started'
+      , 'support'
+      , 'terms'
+    ]
     .forEach(function(element){
         it('GET /static/'+element,function(done){
             request(app)

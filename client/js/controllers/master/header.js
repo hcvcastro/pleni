@@ -19,7 +19,7 @@ pleni.controller('HeaderController',['$scope','Auth',function($scope,Auth){
         }
 
         $scope.signout=function(){
-            Auth.signout('mastr');
+            Auth.signout('mastr',function(){});
         }
     }]
 );

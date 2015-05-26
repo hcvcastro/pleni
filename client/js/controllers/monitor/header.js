@@ -13,7 +13,9 @@ pleni.controller('HeaderController',['$scope','Auth',function($scope,Auth){
         }
 
         $scope.signout=function(){
-            Auth.signout('monitr');
+            Auth.signout('monitr',function(){
+                location.reload();
+            });
         }
     }]
 );

@@ -25,7 +25,7 @@ pleni.controller('HomeController',['$rootScope','$scope','Auth',
         utils.send('Trying login into account ...');
         Auth.signin($scope.email,$scope.password,$('input[name=_csrf]').val(),
             function(){
-                utils.receive();
+                location.reload();
             });
     };
 }]);

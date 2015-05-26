@@ -33,8 +33,8 @@ module.exports={
   , url:'http://localhost'
   , email:'cijkb.j@gmail.com'
   , master:{
-        host:process.env.OPENSHIFT_NODEJS_IP||'127.0.0.1'
-      , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3000
+        host:'127.0.0.1'
+      , port:3000
       , admin:true
       , email:'admin@localhost'
       , password:'asdf'
@@ -45,6 +45,12 @@ module.exports={
     }
   , couchdb:{
         name:'db_test'
+    }
+  , monitor:{
+        host:'127.0.0.1'
+      , port:3003
+      , email:'admin@localhost'
+      , password:'asdf'
     }
   , mongo:{
         url:'mongodb://localhost/test'

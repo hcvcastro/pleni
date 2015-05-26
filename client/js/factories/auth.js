@@ -30,12 +30,13 @@ pleni.factory('Auth',['$rootScope','$http','$cookieStore','$location',
                 done();
             });
         }
-      , signout:function(app){
+      , signout:function(app,done){
             $http.post('/signout')
             .success(function(data){
                 $cookieStore.remove(['pleni',app,'auth'].join('.'));
                 $rootScope.flash=['success','Your account was closed ...'];
                 $location.path('/signin');
+                done();
             })
             .error(function(error){
                 utils.show('error','Invalid request');
