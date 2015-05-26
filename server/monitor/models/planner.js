@@ -4,7 +4,8 @@ var mongoose=require('mongoose')
   , Schema=mongoose.Schema
 
 var planner=new Schema({
-    host:{
+    id:String
+  , host:{
         type:String
       , required:true
       , lowercase:true

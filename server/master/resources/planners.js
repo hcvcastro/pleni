@@ -23,7 +23,7 @@ var extend=require('underscore').extend
     };
 
 module.exports=function(app){
-    var authed=app.get('auth');
+    var authed=app.get('auth')
 
     app.get('/resources/planners',authed,function(request,response){
         response.json(request.user.resources.planners.map(
