@@ -3,10 +3,10 @@
 var validate=require('../../../core/validators')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
+  , schema=require('../../../core/schema')
   , test=require('../../../core/functions/databases/test')
   , auth=require('../../../core/functions/databases/auth')
   , infodb=require('../../../core/functions/databases/infodb')
-  , schema=require('../../../core/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){

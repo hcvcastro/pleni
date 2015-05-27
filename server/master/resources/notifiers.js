@@ -4,12 +4,12 @@ var extend=require('underscore').extend
   , validate=require('../../../core/validators')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
+  , schema=require('../../../core/schema')
   , test=require('../../../core/functions/notifiers/test')
   , get=require('../../../core/functions/notifiers/get')
   , add=require('../../../core/functions/notifiers/add')
   , remove=require('../../../core/functions/notifiers/remove')
   , clean=require('../../../core/functions/notifiers/clean')
-  , schema=require('../../../core/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){

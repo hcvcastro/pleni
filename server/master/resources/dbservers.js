@@ -3,12 +3,12 @@
 var validate=require('../../../core/validators')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
+  , pretty=require('prettysize')
+  , schema=require('../../../core/schema')
   , test=require('../../../core/functions/databases/test')
   , auth=require('../../../core/functions/databases/auth')
   , list=require('../../../core/functions/databases/list')
   , infodbs=require('../../../core/functions/databases/infodbs')
-  , pretty=require('prettysize')
-  , schema=require('../../../core/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){

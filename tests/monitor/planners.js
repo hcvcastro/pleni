@@ -13,6 +13,8 @@ describe('planners controller functions',function(){
     var cookie='';
 
     before(function(done){
+        require('../../server/planner.io');
+
         request(app)
             .get('/home')
             .end(function(err,res){
@@ -181,10 +183,10 @@ describe('planners controller functions',function(){
                 done();
             });
     });
-/*
-    it('GET /resources/planners',function(done){
+
+    it('GET /planners',function(done){
         request(app)
-            .get('/resources/planners')
+            .get('/planners')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -220,9 +222,9 @@ describe('planners controller functions',function(){
         },expected:_success.ok,status:200}
     ]
     .forEach(function(element){
-        it('POST /resources/planners/_check',function(done){
+        it('POST /planners/_check',function(done){
             request(app)
-                .post('/resources/planners/_check')
+                .post('/planners/_check')
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -236,9 +238,9 @@ describe('planners controller functions',function(){
         });
     });
 
-    it('POST /resources/planners',function(done){
+    it('POST /planners',function(done){
         request(app)
-            .post('/resources/planners')
+            .post('/planners')
             .set('cookie',cookie[1])
             .send({
                 id:'test'
@@ -258,9 +260,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('GET /resources/planners/:planner',function(done){
+    it('GET /planners/:planner',function(done){
         request(app)
-            .get('/resources/planners/test')
+            .get('/planners/test')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -275,9 +277,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('GET /resources/planners/:planner',function(done){
+    it('GET /planners/:planner',function(done){
         request(app)
-            .get('/resources/planners/nonexistent')
+            .get('/planners/nonexistent')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(404)
@@ -315,9 +317,9 @@ describe('planners controller functions',function(){
         },id:'test2',status:200}
     ]
     .forEach(function(element){
-        it('PUT /resources/planners/:planner',function(done){
+        it('PUT /planners/:planner',function(done){
             request(app)
-                .put('/resources/planners/'+element.id)
+                .put('/planners/'+element.id)
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -342,9 +344,9 @@ describe('planners controller functions',function(){
         });
     });
 
-    it('DELETE /resources/planners/:planner',function(done){
+    it('DELETE /planners/:planner',function(done){
         request(app)
-            .delete('/resources/planners/test2')
+            .delete('/planners/test2')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -356,9 +358,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('DELETE /resources/planners/:planner',function(done){
+    it('DELETE /planners/:planner',function(done){
         request(app)
-            .delete('/resources/planners/test2')
+            .delete('/planners/test2')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(404)
@@ -369,9 +371,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('GET /resources/planners',function(done){
+    it('GET /planners',function(done){
         request(app)
-            .get('/resources/planners')
+            .get('/planners')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -388,7 +390,7 @@ describe('planners controller functions',function(){
                 done();
             });
     });
-
+/*
     [
         {test:'test2',expected:_error.notfound,status:404}
       , {test:'test',expected:_success.ok,status:200}

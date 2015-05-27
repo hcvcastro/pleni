@@ -4,6 +4,7 @@ var extend=require('underscore').extend
   , validate=require('../../../core/validators')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
+  , schema=require('../../../core/schema')
   , test=require('../../../core/functions/planners/test')
   , status=require('../../../core/functions/planners/status')
   , api=require('../../../core/functions/planners/api')
@@ -12,7 +13,6 @@ var extend=require('underscore').extend
   , unset=require('../../../core/functions/planners/unset')
   , run=require('../../../core/functions/planners/run')
   , stop=require('../../../core/functions/planners/stop')
-  , schema=require('../../../core/schema')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
