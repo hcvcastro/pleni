@@ -10,7 +10,18 @@ module.exports=function(app){
     var authed=app.get('auth');
 
     app.get('/planners',authed,function(request,response){
-        //response.json(request.user
+        Planner.find({},function(err,planners){
+            return response.status(200).json(planners.map(function(planner){
+                console.log(planner);
+                return {
+                    id:planner.id
+                  , planner:{
+                        host:''
+                      , port:0
+                    }
+                };
+            }));
+        });
     });
 
     app.put('/planners',authed,function(request,response){

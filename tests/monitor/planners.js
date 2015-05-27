@@ -146,13 +146,33 @@ describe('planners controller functions',function(){
         });
     });
 
-    after(function(done){
+    it('GET /planners',function(done){
+        request(app)
+            .get('/planners')
+            .set('cookie',cookie[1])
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.should.be.json;
+                res.body.should.have.an.Array;
+                for(var i in res.body){
+                    res.body[i].should.have.property('id');
+                    res.body[i].should.have.property('planner');
+                    res.body[i].planner.should.have.property('host');
+                    res.body[i].planner.should.have.property('port');
+                }
+                done();
+            });
+    });
+
+/*    after(function(done){
         Planner.remove({},function(err){
             if(!err){
                 done();
             }
         });
-    });
+    });*/
 });
 
 //  , redis=require('redis')
