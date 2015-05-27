@@ -84,22 +84,18 @@ describe('repositories controller functions',function(){
       , {test:{'__':''},expected:_error.json,status:400}
       , {test:{'host':{}},expected:_error.json,status:400}
       , {test:{'host':{host:''}},expected:_error.json,status:400}
-      , {test:[
-          {
-              id:'localhost'
-            , dbserver:'localhost'
-            , name:'pleni_site_test'
-          }
-        ],expected:_error.json,status:400}
-      , {test:[
-          {
-              id:'localhost'
-            , _dbserver:'localhost'
-            , db:{
-                  name:'pleni_site_test'
-              }
-          }
-        ],expected:_success.ok,status:201}
+      , {test:[{
+            id:'localhost'
+          , dbserver:'localhost'
+          , name:'pleni_site_test'
+        }],expected:_error.json,status:400}
+      , {test:[{
+            id:'localhost'
+          , _dbserver:'localhost'
+          , db:{
+                name:'pleni_site_test'
+            }
+        }],expected:_success.ok,status:201}
     ]
     .forEach(function(element){
         it('PUT /resources/repositories',function(done){

@@ -12,12 +12,11 @@ module.exports=function(app){
     app.get('/planners',authed,function(request,response){
         Planner.find({},function(err,planners){
             return response.status(200).json(planners.map(function(planner){
-                console.log(planner);
                 return {
                     id:planner.id
                   , planner:{
-                        host:''
-                      , port:0
+                        host:planner.host
+                      , port:planner.port
                     }
                 };
             }));
@@ -31,10 +30,8 @@ module.exports=function(app){
                     request.body.map(function(planner){
                         return {
                             id:validate.toString(planner.id)
-                          , planner:{
-                                host:validate.toValidHost(planner.planner.host)
-                              , port:validate.toInt(planner.planner.port)
-                            }
+                          , host:validate.toValidHost(planner.planner.host)
+                          , port:validate.toInt(planner.planner.port)
                         };
                     }),function(){
                         response.status(201).json(_success.ok);
@@ -49,16 +46,22 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.planner).length==0){
             Planner.findOne({id:request.body.id},function(err,planner){
                 if(!planner){
-                    var new_planner={
+                    Planner.create({
                         id:validate.toString(request.body.id)
-                      , planner:{
-                            host:validate.toValidHost(request.body.planner.host)
-                          , port:validate.toInt(request.body.planner.port)
+                      , host:validate.toValidHost(request.body.planner.host)
+                      , port:validate.toInt(request.body.planner.port)
+                    },function(err,planner){
+                        if(!err){
+                            response.status(201).json({
+                                id:planner.id
+                              , planner:{
+                                    host:planner.host
+                                  , port:planner.port
+                                }
+                            });
+                        }else{
+                            response.status(403).json(_error.validation);
                         }
-                    };
-
-                    Planner.create(new_planner,function(){
-                        response.status(201).json(new_planner);
                     });
                 }else{
                     response.status(403).json(_error.notoverride);
@@ -67,6 +70,12 @@ module.exports=function(app){
         }else{
             response.status(403).json(_error.validation);
         }
+    });
+
+    app.delete('/planners',authed,function(request,response){
+        Planner.remove({},function(){
+            response.status(200).json(_success.ok);
+        });
     });
 }
 

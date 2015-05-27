@@ -69,28 +69,24 @@ describe('dbservers controller functions',function(){
       , {test:{'__':''},expected:_error.json,status:400}
       , {test:{'host':{}},expected:_error.json,status:400}
       , {test:{'host':{host:''}},expected:_error.json,status:400}
-      , {test:[
-          {
-              id:'localhost'
-            , host:'http://localhost'
-            , port:8080
-            , user:'boo'
-            , pass:'boo.'
-            , prefix:'p_'
-          }
-        ],expected:_error.json,status:400}
-      , {test:[
-          {
-              id:'localhost'
-            , db:{
-                  host:'http://localhost'
-                , port:8080
-                , user:'boo'
-                , pass:'boo.'
-                , prefix:'p_'
-              }
-          }
-        ],expected:_success.ok,status:201}
+      , {test:[{
+            id:'localhost'
+          , host:'http://localhost'
+          , port:8080
+          , user:'boo'
+          , pass:'boo.'
+          , prefix:'p_'
+        }],expected:_error.json,status:400}
+      , {test:[{
+            id:'localhost'
+          , db:{
+                host:'http://localhost'
+              , port:8080
+              , user:'boo'
+              , pass:'boo.'
+              , prefix:'p_'
+            }
+        }],expected:_success.ok,status:201}
     ]
     .forEach(function(element){
         it('PUT /resources/dbservers',function(done){

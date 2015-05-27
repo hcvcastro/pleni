@@ -69,18 +69,14 @@ describe('projects controller functions',function(){
       , {test:{'__':''},expected:_error.json,status:400}
       , {test:{'host':{}},expected:_error.json,status:400}
       , {test:{'host':{host:''}},expected:_error.json,status:400}
-      , {test:[
-          {
-              id:'localhost'
-            , _repositories:'localhost'
-          }
-        ],expected:_error.json,status:400}
-      , {test:[
-          {
-              id:'localhost'
-            , _repositories:['localhost','test']
-          }
-        ],expected:_success.ok,status:201}
+      , {test:[{
+            id:'localhost'
+          , _repositories:'localhost'
+        }],expected:_error.json,status:400}
+      , {test:[{
+            id:'localhost'
+          , _repositories:['localhost','test']
+        }],expected:_success.ok,status:201}
     ]
     .forEach(function(element){
         it('PUT /projects',function(done){

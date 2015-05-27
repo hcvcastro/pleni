@@ -83,23 +83,19 @@ describe('notifiers controller functions',function(){
       , {test:{'__':''},expected:_error.json,status:400}
       , {test:{'host':{}},expected:_error.json,status:400}
       , {test:{'host':{host:''}},expected:_error.json,status:400}
-      , {test:[
-          {
-              id:'localhost'
-            , notifier:{
-                  host:'localhost'
-              }
-          }
-        ],expected:_error.json,status:400}
-      , {test:[
-          {
-              id:'localhost'
-            , notifier:{
-                  host:'http://127.0.0.1'
-                , port:8080
-              }
-          }
-        ],expected:_success.ok,status:201}
+      , {test:[{
+            id:'localhost'
+          , notifier:{
+                host:'localhost'
+            }
+        }],expected:_error.json,status:400}
+      , {test:[{
+            id:'localhost'
+          , notifier:{
+                host:'http://127.0.0.1'
+              , port:8080
+            }
+        }],expected:_success.ok,status:201}
     ]
     .forEach(function(element){
         it('PUT /resources/notifiers',function(done){
