@@ -6,9 +6,6 @@ module.exports=function(grunt){
     require('load-grunt-tasks')(grunt);
     require('time-grunt')(grunt);
 
-    var reloadPort=35729
-      , filescontrol
-
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json')
 
@@ -54,21 +51,53 @@ module.exports=function(grunt){
               , tasks:['develop:sites']
             }
 /* -------- frontend watching ----------------------------------------------- */
-          , js:{
+          , masterjs:{
                 files:['client/js/**/*.js']
-              , options:{livereload:reloadPort}
+              , options:{
+                    livereload:35729
+                }
             }
-          , less:{
+          , monitorjs:{
+                files:['client/js/**/*.js']
+              , options:{
+                    livereload:35730
+                }
+            }
+          , masterless:{
                 files:['client/less/**/*.less']
-              , options:{livereload:reloadPort}
+              , options:{
+                    livereload:35729
+                }
             }
-          , svg:{
+          , monitorless:{
+                files:['client/less/**/*.less']
+              , options:{
+                    livereload:35730
+                }
+            }
+          , mastersvg:{
                 files:['client/svg/**/*.svg']
-              , options:{livereload:reloadPort}
+              , options:{
+                    livereload:35729
+                }
             }
-          , views:{
-                files:['client/views/**/*.jade']
-              , options:{livereload:reloadPort}
+          , monitorsvg:{
+                files:['client/svg/**/*.svg']
+              , options:{
+                    livereload:35730
+                }
+            }
+          , masterviews:{
+              files:['client/views/master/**/*.jade']
+              , options:{
+                    livereload:35729
+                }
+            }
+          , monitorviews:{
+              files:['client/views/monitor/**/*.jade']
+              , options:{
+                    livereload:35730
+                }
             }
 /* -------- documentation watching ------------------------------------------ */
           , tex:{
@@ -706,30 +735,6 @@ module.exports=function(grunt){
       , 'build:sites'
     ]);
 
-    grunt.config.requires('watch.master.files');
-    filescontrol=grunt.config('watch.master.files');
-    filescontrol=grunt.file.expand(filescontrol);
-
-    grunt.registerTask('delayed-livereload',
-        'Live reload after the node server has restarted.',function(){
-        var done=this.async()
-          , url='http://localhost:'+reloadPort+'/changed?files='
-               +filescontrol.join(',')
-
-        setTimeout(function(){
-            request.get(url,function(err,res){
-                var reloaded=!err&&res.statusCode===200
-
-                if(reloaded){
-                    grunt.log.ok('Delayed live reload successful.')
-                }else{
-                    grunt.log.error('Unable to make a delayed live reload.')
-                }
-                done(reloaded)
-            })
-        },500)
-    });
-
     grunt.registerTask('serve:dumb',[
         'develop:dumb'
       , 'watch:dumb'
@@ -752,15 +757,23 @@ module.exports=function(grunt){
     ]);
     grunt.registerTask('serve:monitor',[
         'develop:monitor'
-      , 'watch'
+      , 'watch:monitor'
+      , 'watch:monitorjs'
+      , 'watch:monitorless'
+      , 'watch:monitorsvg'
+      , 'watch:monitorviews'
     ]);
     grunt.registerTask('serve:master',[
         'develop:master'
-      , 'watch'
+      , 'watch:master'
+      , 'watch:masterjs'
+      , 'watch:masterless'
+      , 'watch:mastersvg'
+      , 'watch:masterviews'
     ]);
     grunt.registerTask('serve:sites',[
         'develop:sites'
-      , 'watch'
+      , 'watch:sites'
     ]);
 };
 

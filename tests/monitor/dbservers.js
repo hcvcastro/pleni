@@ -5,7 +5,7 @@ var request=require('supertest')
   , cheerio=require('cheerio')
   , app=require('../../server/monitor')
   , config=require('../../config/tests')
-  , DBServer=require('../../server/monitor/models/dbserver')
+  , DBServer=require('../../server/monitor/models/dbserver').RDBServer
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
 

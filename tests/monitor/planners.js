@@ -5,7 +5,7 @@ var request=require('supertest')
   , cheerio=require('cheerio')
   , app=require('../../server/monitor')
   , config=require('../../config/tests')
-  , Planner=require('../../server/monitor/models/planner')
+  , Planner=require('../../server/monitor/models/planner').RPlanner
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
 
