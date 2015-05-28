@@ -1,0 +1,14 @@
+article.remove.animate(ng-show='planners.env.view==\'remove\'')
+    .title
+        h2 Remove Planner
+        .close
+            a.fa.fa-close(ng-click='planners.list()')
+    .body
+        form(ng-submit='planners.delete()')
+            p.large Press the button if you want remove the registry for the planner.
+            p.offset.load
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='submit') Remove
+

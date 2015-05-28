@@ -1,0 +1,29 @@
+article.list
+    div.tasks
+        ul
+            li(ng-click='dbservers.add()')
+                span.fa.fa-plus
+                span Add DB Server
+            li(ng-click='dbservers.refresh(1)')
+                span.fa.fa-refresh
+                span Refresh
+        .clearfix
+    table
+        thead
+            tr
+                th Name
+                th Host
+                th.status &nbsp;
+                th.options &nbsp;
+        tbody
+            tr(ng-repeat='dbserver in storage.dbservers')
+                td
+                    a(ng-click='dbservers.view($index)') {{dbserver.id|truncate:16}}
+                td {{dbserver.db.host}}:{{dbserver.db.port}}
+                td.status
+                    span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
+                td.options
+                    a.fa.fa-refresh(title='Check connection',ng-click='dbservers.check($index)',ng-class='{\'fa-spin\':dbserver.check==\'checking\'}')
+                    a.fa.fa-edit(title='Edit properties',ng-click='dbservers.edit($index)')
+                    a.fa.fa-trash(title='Remove element',ng-click='dbservers.remove($index)')
+

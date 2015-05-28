@@ -1,0 +1,43 @@
+article.view.animate(ng-show='planners.env.view==\'view\'')
+    .title
+        h2 {{planner.id}} ({{planner.planner.host}}:{{planner.planner.port}})
+        .close
+            a.fa.fa-close(ng-click='planners.list()')
+    .body
+        .set(ng-show='planner.set.status!=\'set\'')
+            form(ng-submit='planners.set()')
+                p
+                    label Task
+                    select(required,ng-model='planner.set.name',ng-options='task.name as task.name for task in planner.api')
+                        option(value='',selected='selected',disabled='disabled') Select a Task
+                    a.extra.api.fa.fa-refresh(title='Refresh available tasks',ng-click='planners.api()')
+                p
+                    label Count
+                    input(type='number',placeholder='Number for task repetitions',min=-1,max=1000000,required,ng-model='planner.set.count')
+                p
+                    label Interval
+                    input(type='number',placeholder='Miliseconds between each repetition',min=0,max=1000000,step=500,required,ng-model='planner.set.interval')
+                p.offset
+                    button(type='submit') Set task
+            p.offset
+            form(ng-submit='planners.tid()')
+                p
+                    label TID
+                    input(type='number',placeholder='Number for task repetitions',min=1,max=1000000,required,ng-model='planner.set.tid')
+                p.offset
+                    button(type='submit') Set TID
+            p.offset
+            p.offset.load
+                span.hide.loader.fa.fa-spinner
+                span.hide.message
+        .run(ng-show='planner.set.status==\'set\'')
+            form(ng-submit='planners.run()')
+                div#editor
+                p.offset.load
+                    span.hide.loader.fa.fa-spinner.fa-spin
+                    span.hide.message
+                p.offset
+                    button(type='submit') Run
+                    button(type='button',ng-click='planners.stop()') Stop
+                    button(type='button',ng-click='planners.unset()') Unset
+

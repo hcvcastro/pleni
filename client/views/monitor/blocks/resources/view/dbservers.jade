@@ -1,0 +1,34 @@
+article.view.animate(ng-show='dbservers.env.view==\'view\'')
+    .title
+        h2 {{dbserver.id}} ({{dbserver.db.prefix}})
+        .close
+            a.fa.fa-close(ng-click='dbservers.list()')
+    .body
+        div.tasks
+            ul
+                li(ng-click='dbservers.scan()')
+                    span.fa.fa-database
+                    span Scan Repositories
+            .clearfix
+        p.offset.load
+            span.hide.loader.fa.fa-spinner.fa-spin
+            span.hide.message
+        table(ng-show='dbserver.repositories')
+            thead
+                tr
+                    th Name
+                    th Documents
+                    th Disk Size
+                    th Data Size
+                    th Sequence
+                    th.status &nbsp;
+            tbody
+                tr(ng-repeat='repositories in dbserver.repositories')
+                    td {{repositories.name|truncate:18}}
+                    td.aright {{repositories.params.doc_count}}
+                    td.aright {{repositories.params.disk_size}}
+                    td.aright {{repositories.params.data_size}}
+                    td.aright {{repositories.params.update_seq}}
+                    td.status
+                        a.fa.fa-plus-circle(title='Add database to repositories list',ng-click='dbservers.repositories.add($index)')
+
