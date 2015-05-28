@@ -23,10 +23,18 @@ var utils={
     }
 
   , set_list:function($scope){
-        $scope.dbservers.env.view='list';
-        $scope.repositories.env.view='list';
-        $scope.planners.env.view='list';
-        $scope.notifiers.env.view='list';
+        if($scope.dbservers){
+            $scope.dbservers.env.view='list';
+        }
+        if($scope.repositories){
+            $scope.repositories.env.view='list';
+        }
+        if($scope.planners){
+            $scope.planners.env.view='list';
+        }
+        if($scope.notifiers){
+            $scope.notifiers.env.view='list';
+        }
     }
   , set_active:function(element,index){
         $('section.'+element).addClass('active')

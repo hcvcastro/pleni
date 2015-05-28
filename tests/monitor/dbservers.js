@@ -3,63 +3,38 @@
 var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
-  , app=require('../../../server/master')
-  , config=require('../../../config/tests')
-  , User=require('../../../server/master/models/user')
-  , _success=require('../../../core/json-response').success
-  , _error=require('../../../core/json-response').error
+  , app=require('../../server/monitor')
+  , config=require('../../config/tests')
+  , DBServer=require('../../server/monitor/models/dbserver')
+  , _success=require('../../core/json-response').success
+  , _error=require('../../core/json-response').error
 
 describe('dbservers controller functions',function(){
     var cookie='';
 
     before(function(done){
-        User.create({
-            email:config.user.email
-          , password:config.user.password
-          , status:{
-                type:'active'
-              , key:''
-            }
-          , resources:{
-                dbservers:[]
-              , repositories:[]
-              , planners:[]
-              , notifiers:[]
-            }
-          , projects:[]
-        },function(err,user){
-            if(!err){
-                request(app)
-                    .get('/signin')
-                    .end(function(err,res){
-                        var $=cheerio.load(res.text)
-                          , csrf=$('input[name=_csrf]').val()
+        require('../../server/planner.io');
 
-                        request(app)
-                            .post('/signin')
-                            .set('cookie',res.headers['set-cookie'])
-                            .send({
-                                _csrf:csrf
-                              , email:config.user.email
-                              , password:config.user.password
-                            })
-                            .end(function(err,res){
-                                cookie=res.headers['set-cookie'];
-                                done();
-                            });
-                    });
-            }else{
-                console.log(err);
-                done();
-            }
-        });
-    });
-
-    it('GET /resources/view',function(done){
         request(app)
-            .get('/resources/view')
-            .set('cookie',cookie[1])
-            .expect(200,done);
+            .get('/home')
+            .end(function(err,res){
+                var $=cheerio.load(res.text)
+                  , csrf=$('input[name=_csrf]').val()
+
+                request(app)
+                    .post('/signin')
+                    .set('cookie',res.headers['set-cookie'])
+                    .send({
+                        _csrf:csrf
+                      , email:config.monitor.email
+                      , password:config.monitor.password
+                    })
+                    .expect(200)
+                    .end(function(err,res){
+                        cookie=res.headers['set-cookie'];
+                        done();
+                    });
+            });
     });
 
     [
@@ -418,7 +393,7 @@ describe('dbservers controller functions',function(){
                 done();
             });
     });
-
+/*
     [
         {test:'test3',expected:_error.notfound,status:404}
       , {test:'test2',expected:_error.auth,status:401}
@@ -508,12 +483,10 @@ describe('dbservers controller functions',function(){
                 res.body.should.eql(_error.notfound);
                 done();
             });
-    });
+    });*/
 
     after(function(done){
-        User.remove({
-            email:config.user.email
-        },function(err){
+        DBServer.remove({},function(err){
             if(!err){
                 done();
             }

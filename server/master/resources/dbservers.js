@@ -29,7 +29,6 @@ module.exports=function(app){
                   , db:{
                         host:dbserver.db.host
                       , port:dbserver.db.port
-                      , user:dbserver.db.user
                       , prefix:dbserver.db.prefix
                     }
                 };

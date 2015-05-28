@@ -17,29 +17,31 @@ var validate=require('../../core/validators')
 module.exports=function(app){
     var authed=app.get('auth');
 
-    app.get('/planners',authed,function(request,response){
+    app.get('/resources/planners',authed,function(request,response){
         Planner.find({},function(err,planners){
             return response.status(200).json(planners.map(function(planner){
                 return {
                     id:planner.id
                   , planner:{
-                        host:planner.host
-                      , port:planner.port
+                        host:planner.planner.host
+                      , port:planner.planner.port
                     }
                 };
             }));
         });
     });
 
-    app.put('/planners',authed,function(request,response){
+    app.put('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
             Planner.remove({},function(){
                 Planner.collection.insert(
                     request.body.map(function(planner){
                         return {
                             id:validate.toString(planner.id)
-                          , host:validate.toValidHost(planner.planner.host)
-                          , port:validate.toInt(planner.planner.port)
+                          , planner:{
+                                host:validate.toValidHost(planner.planner.host)
+                              , port:validate.toInt(planner.planner.port)
+                            }
                         };
                     }),function(){
                         response.status(201).json(_success.ok);
@@ -50,21 +52,23 @@ module.exports=function(app){
         }
     });
 
-    app.post('/planners',authed,function(request,response){
+    app.post('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
             Planner.findOne({id:request.body.id},function(err,planner){
                 if(!planner){
                     Planner.create({
                         id:validate.toString(request.body.id)
-                      , host:validate.toValidHost(request.body.planner.host)
-                      , port:validate.toInt(request.body.planner.port)
+                      , planner:{
+                            host:validate.toValidHost(request.body.planner.host)
+                          , port:validate.toInt(request.body.planner.port)
+                        }
                     },function(err,planner){
                         if(!err){
                             response.status(201).json({
                                 id:planner.id
                               , planner:{
-                                    host:planner.host
-                                  , port:planner.port
+                                    host:planner.planner.host
+                                  , port:planner.planner.port
                                 }
                             });
                         }else{
@@ -80,13 +84,13 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/planners',authed,function(request,response){
+    app.delete('/resources/planners',authed,function(request,response){
         Planner.remove({},function(){
             response.status(200).json(_success.ok);
         });
     });
 
-    app.post('/planners/_check',authed,function(request,response){
+    app.post('/resources/planners/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
             test({
                 planner:{
@@ -112,7 +116,7 @@ module.exports=function(app){
         }
     });
 
-    app.get('/planners/:planner',authed,function(request,response){
+    app.get('/resources/planners/:planner',authed,function(request,response){
         Planner.findOne({
             id:validate.toString(request.params.planner)
         },function(err,planner){
@@ -120,8 +124,8 @@ module.exports=function(app){
                 response.status(200).json({
                     id:planner.id
                   , planner:{
-                        host:planner.host
-                      , port:planner.port
+                        host:planner.planner.host
+                      , port:planner.planner.port
                     }
                 });
             }else{
@@ -130,7 +134,7 @@ module.exports=function(app){
         });
     });
 
-    app.put('/planners/:planner',authed,function(request,response){
+    app.put('/resources/planners/:planner',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
             var id=validate.toString(request.params.planner)
               , host=validate.toValidHost(request.body.planner.host)
@@ -138,8 +142,11 @@ module.exports=function(app){
 
             Planner.findOne({id:id},function(err,planner){
                 if(planner){
-                    planner.host=host;
-                    planner.port=port;
+                    planner.planner={
+                        host:host
+                      , port:port
+                    };
+
                     planner.save(function(err,planner){
                         if(!err){
                             response.status(200).json({
@@ -156,8 +163,10 @@ module.exports=function(app){
                 }else{
                     Planner.create({
                         id:id
-                      , host:host
-                      , port:port
+                      , planner:{
+                            host:host
+                          , port:port
+                        }
                     },function(err,planner){
                         if(!err){
                             response.status(201).json({
@@ -178,7 +187,7 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/planners/:planner',authed,function(request,response){
+    app.delete('/resources/planners/:planner',authed,function(request,response){
         Planner.findOne({
             id:validate.toString(request.params.planner)
         },function(err,planner){

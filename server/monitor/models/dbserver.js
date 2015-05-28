@@ -3,21 +3,20 @@
 var mongoose=require('mongoose')
   , Schema=mongoose.Schema
 
-var planner=new Schema({
+var dbserver=new Schema({
     id:String
-  , planner:{
+  , db:{
         host:{
             type:String
           , required:true
           , lowercase:true
         }
       , port:Number
-      , tid:{
-            type:String
-          , required:false
-        }
+      , user:String
+      , pass:String
+      , prefix:String
     }
 });
 
-module.exports=mongoose.model('Planner',planner);
+module.exports=mongoose.model('DBServer',dbserver);
 

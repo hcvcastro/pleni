@@ -65,9 +65,9 @@ describe('planners controller functions',function(){
         }],expected:_success.ok,status:201}
     ]
     .forEach(function(element){
-        it('PUT /planners',function(done){
+        it('PUT /resources/planners',function(done){
             request(app)
-                .put('/planners')
+                .put('/resources/planners')
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -99,9 +99,9 @@ describe('planners controller functions',function(){
         },expected:_error.notoverride,status:403}
     ]
     .forEach(function(element){
-        it('POST /planners',function(done){
+        it('POST /resources/planners',function(done){
             request(app)
-                .post('/planners')
+                .post('/resources/planners')
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -133,9 +133,9 @@ describe('planners controller functions',function(){
         },expected:_success.ok,status:201}
     ]
     .forEach(function(element){
-        it('POST /planners',function(done){
+        it('POST /resources/planners',function(done){
             request(app)
-                .post('/planners')
+                .post('/resources/planners')
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -150,9 +150,9 @@ describe('planners controller functions',function(){
         });
     });
 
-    it('GET /planners',function(done){
+    it('GET /resources/planners',function(done){
         request(app)
-            .get('/planners')
+            .get('/resources/planners')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -170,9 +170,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('DELETE /planners',function(done){
+    it('DELETE /resources/planners',function(done){
         request(app)
-            .delete('/planners')
+            .delete('/resources/planners')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -184,9 +184,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('GET /planners',function(done){
+    it('GET /resources/planners',function(done){
         request(app)
-            .get('/planners')
+            .get('/resources/planners')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -222,9 +222,9 @@ describe('planners controller functions',function(){
         },expected:_success.ok,status:200}
     ]
     .forEach(function(element){
-        it('POST /planners/_check',function(done){
+        it('POST /resources/planners/_check',function(done){
             request(app)
-                .post('/planners/_check')
+                .post('/resources/planners/_check')
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -238,9 +238,9 @@ describe('planners controller functions',function(){
         });
     });
 
-    it('POST /planners',function(done){
+    it('POST /resources/planners',function(done){
         request(app)
-            .post('/planners')
+            .post('/resources/planners')
             .set('cookie',cookie[1])
             .send({
                 id:'test'
@@ -260,9 +260,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('GET /planners/:planner',function(done){
+    it('GET /resources/planners/:planner',function(done){
         request(app)
-            .get('/planners/test')
+            .get('/resources/planners/test')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -277,9 +277,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('GET /planners/:planner',function(done){
+    it('GET /resources/planners/:planner',function(done){
         request(app)
-            .get('/planners/nonexistent')
+            .get('/resources/planners/nonexistent')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(404)
@@ -317,9 +317,9 @@ describe('planners controller functions',function(){
         },id:'test2',status:200}
     ]
     .forEach(function(element){
-        it('PUT /planners/:planner',function(done){
+        it('PUT /resources/planners/:planner',function(done){
             request(app)
-                .put('/planners/'+element.id)
+                .put('/resources/planners/'+element.id)
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -344,9 +344,9 @@ describe('planners controller functions',function(){
         });
     });
 
-    it('DELETE /planners/:planner',function(done){
+    it('DELETE /resources/planners/:planner',function(done){
         request(app)
-            .delete('/planners/test2')
+            .delete('/resources/planners/test2')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -358,9 +358,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('DELETE /planners/:planner',function(done){
+    it('DELETE /resources/planners/:planner',function(done){
         request(app)
-            .delete('/planners/test2')
+            .delete('/resources/planners/test2')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(404)
@@ -371,9 +371,9 @@ describe('planners controller functions',function(){
             });
     });
 
-    it('GET /planners',function(done){
+    it('GET /resources/planners',function(done){
         request(app)
-            .get('/planners')
+            .get('/resources/planners')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
