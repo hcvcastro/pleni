@@ -218,89 +218,37 @@ module.exports=function(app){
             }
         });
     });
-/*
+
     app.post('/resources/dbservers/:dbserver/_check',authed,
         function(request,response){
-        var id=validate.toString(request.params.dbserver)
-          , resources=request.user.resources
-          , dbservers=resources.dbservers
-          , dbserver=get_element(id,dbservers)
-
-        if(dbserver){
-            test({
-                db:{
-                    host:dbserver[1].db.host+':'+
-                         dbserver[1].db.port
-                  , user:dbserver[1].db.user
-                  , pass:dbserver[1].db.pass
-                }
-            })
-            .then(auth)
-            .then(function(args){
-                response.status(200).json(_success.ok);
-            })
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
-                }
-            })
-            .done();
-        }else{
-            response.status(404).json(_error.notfound)
-        }
+        DBServer.findOne({
+            id:validate.toString(request.params.dbserver)
+        },function(err,dbserver){
+            if(dbserver){
+                test({
+                    db:{
+                        host:dbserver.db.host+':'+
+                             dbserver.db.port
+                      , user:dbserver.db.user
+                      , pass:dbserver.db.pass
+                    }
+                })
+                .then(auth)
+                .then(function(args){
+                    response.status(200).json(_success.ok);
+                })
+                .fail(function(error){
+                    if(error.code=='ECONNREFUSED'){
+                        response.status(404).json(_error.network);
+                    }else if(error.error=='unauthorized'){
+                        response.status(401).json(_error.auth);
+                    }
+                })
+                .done();
+            }else{
+                response.status(404).json(_error.notfound)
+            }
+        });
     });
-
-    app.post('/resources/dbservers/:dbserver/_databases',authed,
-        function(request,response){
-        var id=validate.toString(request.params.dbserver)
-          , resources=request.user.resources
-          , dbservers=resources.dbservers
-          , dbserver=get_element(id,dbservers)
-
-        if(dbserver){
-            var prefix=dbserver[1].db.prefix;
-
-            test({
-                db:{
-                    host:dbserver[1].db.host+':'+
-                         dbserver[1].db.port
-                  , user:dbserver[1].db.user
-                  , pass:dbserver[1].db.pass
-                  , prefix:prefix
-                }
-            })
-            .then(auth)
-            .then(list)
-            .then(infodbs)
-            .then(function(args){
-                response.status(200).json(args.db.explist.map(
-                    function(element){
-                        return {
-                            name:element.db_name.substring(prefix.length)
-                          , params:{
-                                db_name:element.db_name
-                              , doc_count:element.doc_count
-                              , disk_size:pretty(element.disk_size)
-                              , data_size:pretty(element.data_size)
-                              , update_seq:element.update_seq
-                            }
-                        };
-                    }));
-            })
-            .fail(function(error){
-                if(error.code=='ECONNREFUSED'){
-                    response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
-                    response.status(401).json(_error.auth);
-                }
-            })
-            .done();
-        }else{
-            response.status(404).json(_error.notfound)
-        }
-    });
-*/
 };
 

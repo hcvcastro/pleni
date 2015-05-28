@@ -211,14 +211,14 @@ pleni.controller('HomeController',
             }
           , show:function(){
                 utils.set_list($scope);
-                utils.set_active('planners',3);
+                utils.set_active('planners',2);
                 if(!$scope.storage.planners){
                     $scope.planners.refresh();
                 }
             }
           , refresh:function(hide){
-                utils.load_resources_start(3,hide)
-                Resources.planners.load(utils.load_resources_end(3,hide));
+                utils.load_resources_start(2,hide)
+                Resources.planners.load(utils.load_resources_end(2,hide));
             }
           , save:function(){
                 utils.clean();
