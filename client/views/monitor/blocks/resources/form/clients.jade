@@ -1,0 +1,20 @@
+article.form.animate(ng-show='clients.env.view==\'form\'')
+    .title
+        h2(ng-show='clients.env.type==\'collection\'') Add a Client
+        h2(ng-show='clients.env.type==\'element\'') Edit: {{client.id}}
+        .close
+            a.fa.fa-close(ng-click='clients.list()')
+    .body
+        form(ng-submit='clients.save()')
+            p
+                label Name
+                input(type='text',placeholder='The name for the connection',required,ng-model='client.id')
+            p
+                label Prefix
+                input(type='text',placeholder='The prefix used in the couchdb server',ng-model='dbserver.db.prefix')
+            p.offset.load
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='submit') Save
+

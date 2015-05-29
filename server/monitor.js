@@ -137,6 +137,7 @@ app.set('auth',function(request,response,next){
 });
 
 require('./monitor/home')(app,config);
+require('./monitor/clients')(app,config);
 require('./monitor/planners')(app,config);
 require('./monitor/dbservers')(app,config);
 

@@ -25,6 +25,28 @@ pleni.controller('HomeController',
     }else{
         $scope.storage=$sessionStorage;
 
+        $scope.client={
+            id:''
+          , key:''
+        };
+        $scope.clients={
+            env:{
+                view:'list'
+              , type:'collection'
+            }
+          , show:function(){
+                utils.set_list($scope);
+                utils.set_active('clients',1);
+                if(!$scope.storage.clients){
+                    $scope.clients.refresh();
+                }
+            }
+          , refresh:function(hide){
+                utils.load_resources_start(1,hide)
+                Resources.clients.load(utils.load_resources_end(1,hide));
+            }
+        };
+
         $scope.dbserver={
             id:''
           , db:{
@@ -42,14 +64,14 @@ pleni.controller('HomeController',
             }
           , show:function(){
                 utils.set_list($scope);
-                utils.set_active('dbservers',1);
+                utils.set_active('dbservers',2);
                 if(!$scope.storage.dbservers){
                     $scope.dbservers.refresh();
                 }
             }
           , refresh:function(hide){
-                utils.load_resources_start(1,hide)
-                Resources.dbservers.load(utils.load_resources_end(1,hide));
+                utils.load_resources_start(2,hide)
+                Resources.dbservers.load(utils.load_resources_end(2,hide));
             }
           , save:function(){
                 utils.clean();
@@ -211,14 +233,14 @@ pleni.controller('HomeController',
             }
           , show:function(){
                 utils.set_list($scope);
-                utils.set_active('planners',2);
+                utils.set_active('planners',3);
                 if(!$scope.storage.planners){
                     $scope.planners.refresh();
                 }
             }
           , refresh:function(hide){
-                utils.load_resources_start(2,hide)
-                Resources.planners.load(utils.load_resources_end(2,hide));
+                utils.load_resources_start(3,hide)
+                Resources.planners.load(utils.load_resources_end(3,hide));
             }
           , save:function(){
                 utils.clean();
@@ -538,10 +560,11 @@ pleni.controller('HomeController',
             }
         };
 
+        $scope.clients.refresh();
         $scope.dbservers.refresh();
         $scope.planners.refresh();
 
-        $scope.dbservers.show();
+        $scope.clients.show();
     }
 }]);
 

@@ -1,0 +1,28 @@
+article.list
+    div.tasks
+        ul
+            li(ng-click='clients.add()')
+                span.fa.fa-plus
+                span Add Client
+            li(ng-click='clients.refresh(1)')
+                span.fa.fa-refresh
+                span Refresh
+        .clearfix
+    table
+        thead
+            tr
+                th Name
+                th Key
+                th.status &nbsp;
+                th.options &nbsp;
+        tbody
+            tr(ng-repeat='client in storage.clients')
+                td {{client.id|truncate:16}}
+                td {{client.key}}
+                td.status
+                    span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
+                td.options
+                    a.fa.fa-refresh(title='Check connection',ng-click='clients.check($index)',ng-class='{\'fa-spin\':dbserver.check==\'checking\'}')
+                    a.fa.fa-edit(title='Edit properties',ng-click='clients.edit($index)')
+                    a.fa.fa-trash(title='Remove element',ng-click='clients.remove($index)')
+
