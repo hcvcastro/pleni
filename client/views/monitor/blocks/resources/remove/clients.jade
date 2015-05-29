@@ -1,10 +1,10 @@
-article.remove.animate(ng-show='dbservers.env.view==\'remove\'')
+article.remove.animate(ng-show='clients.env.view==\'remove\'')
     .title
-        h2 Remove Database Server
+        h2 Remove Client
         .close
-            a.fa.fa-close(ng-click='dbservers.list()')
+            a.fa.fa-close(ng-click='clients.list()')
     .body
-        form(ng-submit='dbservers.delete()')
+        form(ng-submit='clients.delete()')
             p.large Press the button if you want remove the registry for the database server.
             p.offset.load
                 span.hide.loader.fa.fa-spinner.fa-spin

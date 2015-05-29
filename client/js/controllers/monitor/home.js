@@ -45,6 +45,55 @@ pleni.controller('HomeController',
                 utils.load_resources_start(1,hide)
                 Resources.clients.load(utils.load_resources_end(1,hide));
             }
+          , save:function(){
+                utils.clean();
+                if($scope.clients.env.type=='collection'){
+                    utils.send('Saving client settings ...');
+                    Resources.clients.create($scope.client,function(data){
+                        $scope.clients.refresh();
+                        $scope.clients.list();
+                        utils.receive();
+                        utils.show('success','Client added to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
+            }
+          , list:function(){
+                $scope.clients.env.view='list';
+            }
+          , add:function(){
+                $scope.clients.env.view='form';
+                $scope.clients.env.type='collection';
+            }
+          , view:function(index){
+                $scope.clients.env.view='view';
+                $scope.clients.env.type='element';
+                $scope.client=$scope.storage.clients[index];
+            }
+          , remove:function(index){
+                $scope.clients.env.view='remove';
+                $scope.clients.env.type='element';
+                $scope.client=$scope.storage.clients[index];
+            }
+          , delete:function(){
+                utils.clean();
+                if($scope.clients.env.type='element'){
+                    utils.send('Sending delete request ...');
+                    Resources.clients.delete({
+                        client:$scope.client.id
+                    },function(data){
+                        $scope.clients.refresh();
+                        $scope.clients.list();
+                        utils.receive();
+                        utils.show('success', 'Client removed to the list');
+                    },function(error){
+                        utils.receive();
+                        utils.show('error',error.data.message);
+                    });
+                }
+            }
         };
 
         $scope.dbserver={
