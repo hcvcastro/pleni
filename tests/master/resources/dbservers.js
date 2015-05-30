@@ -79,6 +79,7 @@ describe('dbservers controller functions',function(){
         }],expected:_error.json,status:400}
       , {test:[{
             id:'localhost'
+          , type:'real'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -116,6 +117,7 @@ describe('dbservers controller functions',function(){
       , {test:{db:'...'},expected:_error.validation,status:403}
       , {test:{
             id:'localhost'
+          , type:'real'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -146,6 +148,7 @@ describe('dbservers controller functions',function(){
     [
         {test:{
             id:'test'
+          , type:'real'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -156,6 +159,7 @@ describe('dbservers controller functions',function(){
         },expected:_success.ok,status:201}
       , {test:{
             id:'test2'
+          , type:'real'
           , db:{
                 host:'localhost'
               , port:8080
@@ -195,6 +199,7 @@ describe('dbservers controller functions',function(){
                 res.body.should.have.an.Array;
                 for(var i in res.body){
                     res.body[i].should.have.property('id');
+                    res.body[i].should.have.property('type');
                     res.body[i].should.have.property('db');
                     res.body[i].db.should.have.property('host');
                     res.body[i].db.should.have.property('port');
@@ -225,13 +230,14 @@ describe('dbservers controller functions',function(){
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
+                console.log(res.body);
                 res.statusCode.should.be.eql(200);
                 res.should.be.json;
                 res.body.should.have.an.Array.and.be.empty;
                 done();
             });
     });
-
+/*
     [
         {test:'',expected:_error.validation,status:403}
       , {test:{},expected:_error.validation,status:403}
@@ -242,6 +248,7 @@ describe('dbservers controller functions',function(){
       , {test:{db:'...'},expected:_error.validation,status:403}
       , {test:{
             id:'test'
+          , type:'real'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -252,6 +259,7 @@ describe('dbservers controller functions',function(){
         },expected:_error.network,status:404}
       , {test:{
             id:'test'
+          , type:'real'
           , db:{
                 host:'http://localhost'
               , port:5984
@@ -262,6 +270,7 @@ describe('dbservers controller functions',function(){
         },expected:_error.auth,status:401}
       , {test :{
             id:'test'
+          , type:'real'
           , db:config.db
         },expected:_success.ok,status:200}
     ]
@@ -281,13 +290,14 @@ describe('dbservers controller functions',function(){
                 });
         });
     });
-
+/*
     it('POST /resources/dbservers',function(done){
         request(app)
             .post('/resources/dbservers')
             .set('cookie',cookie[1])
             .send({
                 id:'test'
+              , type:'real'
               , db:{
                     host:config.db.host
                   , port:config.db.port
@@ -351,6 +361,7 @@ describe('dbservers controller functions',function(){
           expected:_error.validation,status:403}
       , {test:{
             id:'test2'
+          , type:'real'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -361,6 +372,7 @@ describe('dbservers controller functions',function(){
         },id:'test2',status:201}
       , {test:{
             id:'test2'
+          , type:'real'
           , db:{
                 host:'http://localhost'
               , port:5984
@@ -508,7 +520,7 @@ describe('dbservers controller functions',function(){
                 res.body.should.eql(_error.notfound);
                 done();
             });
-    });
+    });*/
 
     after(function(done){
         User.remove({

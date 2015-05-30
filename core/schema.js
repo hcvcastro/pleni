@@ -82,6 +82,9 @@ var dbserver={
             'type':'string'
           , 'format':'id'
         }
+      , 'type':{
+            'type':'string'
+        }
       , 'db':{
             'type':'object'
           , 'properties':{
@@ -108,7 +111,7 @@ var dbserver={
           , 'required':['host','port','user','pass','prefix']
         }
     }
-  , 'required':['id','db']
+  , 'required':['id','type','db']
 };
 exports.dbserver=dbserver;
 

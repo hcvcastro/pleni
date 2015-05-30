@@ -22,26 +22,41 @@ module.exports=function(app){
     var authed=app.get('auth');
 
     app.get('/resources/dbservers',authed,function(request,response){
-        response.json(request.user.resources.dbservers.map(
-            function(dbserver){
-                return {
-                    id:dbserver.id
-                  , db:{
-                        host:dbserver.db.host
-                      , port:dbserver.db.port
-                      , prefix:dbserver.db.prefix
-                    }
-                };
-            }));
+        response.json(request.user.resources.dbservers
+        .filter(function(dbserver){
+            return dbserver.attrs.readable;
+        })
+        .map(function(dbserver){
+            return {
+                id:dbserver.id
+              , type:(dbserver.attrs.virtual?'virtual':'real')
+              , db:{
+                    host:dbserver.db.host
+                  , port:dbserver.db.port
+                  , prefix:dbserver.db.prefix
+                }
+            };
+        }));
     });
 
     app.put('/resources/dbservers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbservers).length==0){
             var resources=request.user.resources
 
-            resources.dbservers=request.body.map(function(dbserver){
+            resources.dbservers=resources.dbservers.filter(function(dbserver){
+                return !dbserver.attrs.writable||
+                       !dbserver.attrs.readable;
+            });
+
+            resources.dbservers=resources.dbservers.concat(request.body.map(
+            function(dbserver){
                 return {
                     id:validate.toString(dbserver.id)
+                  , attrs:{
+                        virtual:(dbserver.type=='virtual')
+                      , readable:true
+                      , writable:true
+                    }
                   , db:{
                         host:validate.toValidHost(dbserver.db.host)
                       , port:validate.toInt(dbserver.db.port)
@@ -50,7 +65,7 @@ module.exports=function(app){
                       , prefix:validate.toString(dbserver.db.prefix)
                     }
                 };
-            });
+            }));
 
             request.user.save();
             response.status(201).json(_success.ok);
@@ -68,6 +83,11 @@ module.exports=function(app){
             if(!dbserver){
                 var new_dbserver={
                     id:validate.toString(request.body.id)
+                  , attrs:{
+                        virtual:(request.body.type=='virtual')
+                      , readable:true
+                      , writable:true
+                    }
                   , db:{
                         host:validate.toValidHost(request.body.db.host)
                       , port:validate.toInt(request.body.db.port)
@@ -78,10 +98,11 @@ module.exports=function(app){
                 };
 
                 dbservers.push(new_dbserver);
-                request.user.save();
 
+                request.user.save();
                 response.status(201).json({
                     id:new_dbserver.id
+                  , type:(new_dbserver.attrs.virtual?'virtual':'real')
                   , db:{
                         host:new_dbserver.db.host
                       , port:new_dbserver.db.port
@@ -99,7 +120,11 @@ module.exports=function(app){
     app.delete('/resources/dbservers',authed,function(request,response){
         var resources=request.user.resources
 
-        resources.dbservers=[];
+        resources.dbservers=resources.dbservers.filter(function(dbserver){
+            return !(Boolean(dbserver.attrs.readable))||
+                   !(Boolean(dbserver.attrs.writable));
+        });
+
         request.user.save();
         response.status(200).json(_success.ok);
     });
@@ -140,6 +165,7 @@ module.exports=function(app){
         if(dbserver){
             response.status(200).json({
                 id:dbserver[1].id
+              , type:(dbserver[1].attrs.virtual?'virtual':'real')
               , db:{
                     host:dbserver[1].db.host
                   , port:dbserver[1].db.port
@@ -160,6 +186,11 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
             var new_dbserver={
                 id:id
+              , attrs:{
+                    virtual:(request.body.type=='virtual')
+                  , readable:true
+                  , writable:true
+                }
               , db:{
                     host:validate.toValidHost(request.body.db.host)
                   , port:validate.toInt(request.body.db.port)
@@ -170,19 +201,25 @@ module.exports=function(app){
             };
 
             if(dbserver){
-                dbservers[dbserver[0]]=new_dbserver;
-                response.status(200).json({
-                    id:new_dbserver.id
-                  , db:{
-                        host:new_dbserver.db.host
-                      , port:new_dbserver.db.port
-                      , prefix:new_dbserver.db.prefix
-                    }
-                });
+                if(dbserver.attrs.readable&&dbserver.attrs.writable){
+                    dbservers[dbserver[0]]=new_dbserver;
+                    response.status(200).json({
+                        id:new_dbserver.id
+                      , type:(new_dbserver.attrs.virtual?'virtual':'real')
+                      , db:{
+                            host:new_dbserver.db.host
+                          , port:new_dbserver.db.port
+                          , prefix:new_dbserver.db.prefix
+                        }
+                    });
+                }else{
+                    response.status(403).json(_error.notoverride);
+                }
             }else{
                 dbservers.push(new_dbserver);
                 response.status(201).json({
                     id:new_dbserver.id
+                  , type:(new_dbserver.attrs.virtual?'virtual':'real')
                   , db:{
                         host:new_dbserver.db.host
                       , port:new_dbserver.db.port
@@ -206,11 +243,15 @@ module.exports=function(app){
           , dbserver=get_element(id,dbservers)
 
         if(dbserver){
-            dbservers.splice(dbserver[0],1);
-            resources.dbservers=dbservers;
-            request.user.save();
+            if(dbserver.attrs.readable&&dbserver.attrs.writable){
+                dbservers.splice(dbserver[0],1);
+                resources.dbservers=dbservers;
+                request.user.save();
 
-            response.status(200).json(_success.ok);
+                response.status(200).json(_success.ok);
+            }else{
+                response.status(403).json(_error.notoverride);
+            }
         }else{
             response.status(404).json(_error.notfound);
         }

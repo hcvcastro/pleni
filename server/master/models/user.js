@@ -35,11 +35,10 @@ var user=new Schema({
   , resources:{
         dbservers:[{
             id:String
-          , type:{
-                type:String
-              , required:true
-              , default:'real'
-              , enum:['virtual','real']
+          , attrs:{
+                virtual:Boolean
+              , readable:Boolean
+              , writable:Boolean
             }
           , db:{
                 host:String
@@ -58,6 +57,11 @@ var user=new Schema({
         }]
       , planners:[{
             id:String
+          , attrs:{
+                virtual:Boolean
+              , readable:Boolean
+              , writable:Boolean
+            }
           , planner:{
                 host:String
               , port:Number
@@ -75,6 +79,11 @@ var user=new Schema({
         }]
       , notifiers:[{
             id:String
+          , attrs:{
+                virtual:Boolean
+              , readable:Boolean
+              , writable:Boolean
+            }
           , notifier:{
                 host:String
               , port:Number

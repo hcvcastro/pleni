@@ -86,6 +86,8 @@ module.exports=function(app,config){
                         !(config.master.admin&&
                             config.master.email==request.body.email)){
                         var key=generator()
+                          , skel=require('./models/skel')(config)
+
                         User.create({
                             email:request.body.email
                           , password:request.body.password
@@ -93,20 +95,9 @@ module.exports=function(app,config){
                                 type:'confirm'
                               , key:key
                             }
-                          , resources:{
-                                dbservers:[]
-                              , repositories:[]
-                              , planners:[]
-                              , notifiers:[{
-                                    id:'master'
-                                  , notifier:{
-                                        host:config.url
-                                      , port:80
-                                    }
-                                }]
-                            }
-                          , notifier:[]
-                          , projects:[]
+                          , resources:skel.resources
+                          , notifier:skel.notifier
+                          , projects:skel.projects
                         },function(err,user){
                             if(!err){
                                 response.status(200).json(_success.ok);
