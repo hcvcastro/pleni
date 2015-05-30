@@ -62,6 +62,7 @@
     "grunt-contrib-uglify": "^0.8.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-develop": "~0.2.2",
+    "grunt-express": "^1.4.1",
     "grunt-latex": "^0.2.2",
     "grunt-mocha-cli": "^1.9.0",
     "grunt-svgmin": "^2.0.0",

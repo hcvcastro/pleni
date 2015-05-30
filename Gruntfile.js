@@ -737,43 +737,35 @@ module.exports=function(grunt){
 
     grunt.registerTask('serve:dumb',[
         'develop:dumb'
-      , 'watch:dumb'
+      , 'watch'
     ]);
     grunt.registerTask('serve:planner',[
         'develop:planner'
-      , 'watch:planner'
+      , 'watch'
     ]);
     grunt.registerTask('serve:planner:io',[
         'develop:planner_io'
-      , 'watch:planner'
+      , 'watch'
     ]);
     grunt.registerTask('serve:planner:ion',[
         'develop:planner_ion'
-      , 'watch:planner'
+      , 'watch'
     ]);
     grunt.registerTask('serve:notifier',[
         'develop:notifier'
-      , 'watch:notifier'
+      , 'watch'
     ]);
     grunt.registerTask('serve:monitor',[
         'develop:monitor'
-      , 'watch:monitor'
-      , 'watch:monitorjs'
-      , 'watch:monitorless'
-      , 'watch:monitorsvg'
-      , 'watch:monitorviews'
+      , 'watch'
     ]);
     grunt.registerTask('serve:master',[
         'develop:master'
-      , 'watch:master'
-      , 'watch:masterjs'
-      , 'watch:masterless'
-      , 'watch:mastersvg'
-      , 'watch:masterviews'
+      , 'watch'
     ]);
     grunt.registerTask('serve:sites',[
         'develop:sites'
-      , 'watch:sites'
+      , 'watch'
     ]);
 };
 

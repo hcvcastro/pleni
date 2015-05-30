@@ -55,6 +55,26 @@ js.addFormat('emptyslug',function(value){
 });
 exports.js=js;
 
+var client={
+    'type':'object'
+  , 'properties':{
+        'id':{
+            'type':'string'
+          , 'format':'id'
+        }
+    }
+  , 'required':['id']
+};
+exports.client=client;
+
+var clients={
+    'type':'array'
+  , 'items':client
+  , 'minItems':1
+  , 'uniqueItems':true
+};
+exports.clients=clients;
+
 var dbserver={
     'type':'object'
   , 'properties':{

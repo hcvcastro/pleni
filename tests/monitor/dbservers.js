@@ -13,8 +13,6 @@ describe('dbservers controller functions',function(){
     var cookie='';
 
     before(function(done){
-        require('../../server/planner.io');
-
         request(app)
             .get('/home')
             .end(function(err,res){

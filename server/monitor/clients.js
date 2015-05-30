@@ -5,6 +5,7 @@ var validate=require('../../core/validators')
   , _error=require('../../core/json-response').error
   , schema=require('../../core/schema')
   , Client=require('./models/client')
+  , generator=require('../../core/functions/utils/random').sync
 
 module.exports=function(app){
     var authed=app.get('auth');
@@ -27,7 +28,7 @@ module.exports=function(app){
                     request.body.map(function(client){
                         return {
                             id:validate.toString(client.id)
-                          , key:validate.toString(client.key)
+                          , key:generator()
                         };
                     }),function(){
                         response.status(201).json(_success.ok);
@@ -44,7 +45,7 @@ module.exports=function(app){
                 if(!client){
                     Client.create({
                         id:validate.toString(request.body.id)
-                      , key:validate.toString(request.body.key)
+                      , key:generator()
                     },function(err,client){
                         if(!err){
                             response.status(201).json({
@@ -88,7 +89,7 @@ module.exports=function(app){
     app.put('/resources/clients/:client',authed,function(request,response){
         if(schema.js.validate(request.body,schema.client).length==0){
             var id=validate.toString(request.params.client)
-              , key=validate.toString(request.body.key)
+              , key=generator()
 
             Client.findOne({id:id},function(err,client){
                 if(client){
@@ -125,13 +126,13 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/clients/:key',authed,
+    app.delete('/resources/clients/:client',authed,
         function(request,response){
         Client.findOne({
-            id:validate.toString(request.params.key)
-        },function(err,key){
-            if(key){
-                key.remove(function(){
+            id:validate.toString(request.params.client)
+        },function(err,client){
+            if(client){
+                client.remove(function(){
                     response.status(200).json(_success.ok);
                 });
             }else{
