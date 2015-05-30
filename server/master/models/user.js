@@ -35,6 +35,12 @@ var user=new Schema({
   , resources:{
         dbservers:[{
             id:String
+          , type:{
+                type:String
+              , required:true
+              , default:'real'
+              , enum:['virtual','real']
+            }
           , db:{
                 host:String
               , port:Number

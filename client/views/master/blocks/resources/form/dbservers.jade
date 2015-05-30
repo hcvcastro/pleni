@@ -1,4 +1,4 @@
-article.form.animate(ng-show='dbservers.env.view==\'form\'')
+article.form.animate(ng-show='dbservers.env.view==\'formr\'')
     .title
         h2(ng-show='dbservers.env.type==\'collection\'') Add a Database Server
         h2(ng-show='dbservers.env.type==\'element\'') Edit: {{dbserver.id}}
@@ -24,6 +24,30 @@ article.form.animate(ng-show='dbservers.env.view==\'form\'')
             p
                 label Prefix
                 input(type='text',placeholder='The prefix used in the couchdb server',ng-model='dbserver.db.prefix')
+            p.offset.load
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='submit') Save
+                button(type='button',ng-click='dbservers.check()') Test
+
+article.form.animate(ng-show='dbservers.env.view==\'formv\'')
+    .title
+        h2(ng-show='dbservers.env.type==\'collection\'') Add a Database Rack
+        h2(ng-show='dbservers.env.type==\'element\'') Edit {{dbserver.id}}
+        .close
+            a.fa.fa-close(ng-click='dbservers.list()')
+    .body
+        form(ng-submit='dbservers.save()')
+            p
+                label Name
+                input(type='text',placeholder='The name for the connection',required,ng-model='dbserver.id')
+            p
+                label Host
+                input(type='text',placeholder='The host or a IP of your couchdb server',required,ng-model='dbserver.db.host')
+            p
+                label Port
+                input(type='number',placeholder='The port for the connection',min=1,max=65535,required,ng-model='dbserver.db.port')
             p.offset.load
                 span.hide.loader.fa.fa-spinner.fa-spin
                 span.hide.message

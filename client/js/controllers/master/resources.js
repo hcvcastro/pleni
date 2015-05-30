@@ -77,7 +77,7 @@ pleni.controller('ResourcesController',
                 if(index){
                     $scope.dbservers.list();
                 }
-                if($scope.dbservers.env.view=='form'){
+                if($scope.dbservers.env.view=='formr'){
                     if(!$scope.dbserver.id){
                         $scope.dbserver.id='test';
                     }
@@ -94,6 +94,8 @@ pleni.controller('ResourcesController',
                         utils.receive();
                         utils.show('error','DB Server cannot be found');
                     });
+                }else if($scope.dbservers.env.view=='formv'){
+
                 }else{
                     var dbserver=$scope.storage.dbservers[index];
                     dbserver.check='checking';
@@ -109,8 +111,12 @@ pleni.controller('ResourcesController',
           , list:function(){
                 $scope.dbservers.env.view='list';
             }
-          , add:function(){
-                $scope.dbservers.env.view='form';
+          , addr:function(){
+                $scope.dbservers.env.view='formr';
+                $scope.dbservers.env.type='collection';
+            }
+          , addv:function(){
+                $scope.dbservers.env.view='formv';
                 $scope.dbservers.env.type='collection';
             }
           , view:function(index){
@@ -161,7 +167,7 @@ pleni.controller('ResourcesController',
                 }
             }
           , edit:function(index){
-                $scope.dbservers.env.view='form';
+                $scope.dbservers.env.view='form';   // TODO
                 $scope.dbservers.env.type='element';
                 $scope.dbserver=$scope.storage.dbservers[index];
             }
