@@ -28,6 +28,7 @@ pleni.factory('Resources',['$sessionStorage',
                         for(var i=0;i<data.length;i++){
                             $sessionStorage.dbservers.push({
                                 id:data[i].id
+                              , type:data[i].type
                               , db:{
                                     host:data[i].db.host
                                   , port:data[i].db.port

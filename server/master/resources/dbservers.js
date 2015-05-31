@@ -5,10 +5,14 @@ var validate=require('../../../core/validators')
   , _error=require('../../../core/json-response').error
   , pretty=require('prettysize')
   , schema=require('../../../core/schema')
-  , test=require('../../../core/functions/databases/test')
-  , auth=require('../../../core/functions/databases/auth')
-  , list=require('../../../core/functions/databases/list')
-  , infodbs=require('../../../core/functions/databases/infodbs')
+  , rtest=require('../../../core/functions/databases/test')
+  , rauth=require('../../../core/functions/databases/auth')
+  , rlist=require('../../../core/functions/databases/list')
+  , rinfodbs=require('../../../core/functions/databases/infodbs')
+  , vtest=require('../../../core/functions/monitor/db/test')
+  , vauth=require('../../../core/functions/monitor/db/auth')
+  , vlist=require('../../../core/functions/monitor/db/list')
+  , vinfodbs=require('../../../core/functions/monitor/db/infodbs')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
@@ -24,12 +28,13 @@ module.exports=function(app){
     app.get('/resources/dbservers',authed,function(request,response){
         response.json(request.user.resources.dbservers
         .filter(function(dbserver){
-            return dbserver.attrs.readable;
+            return Boolean(dbserver.attrs.readable)
         })
         .map(function(dbserver){
             return {
                 id:dbserver.id
               , type:(dbserver.attrs.virtual?'virtual':'real')
+              , readonly:!Boolean(dbserver.attrs.writeable)
               , db:{
                     host:dbserver.db.host
                   , port:dbserver.db.port
@@ -44,8 +49,8 @@ module.exports=function(app){
             var resources=request.user.resources
 
             resources.dbservers=resources.dbservers.filter(function(dbserver){
-                return !dbserver.attrs.writable||
-                       !dbserver.attrs.readable;
+                return !(Boolean(dbserver.attrs.readable))||
+                       !(Boolean(dbserver.attrs.writable));
             });
 
             resources.dbservers=resources.dbservers.concat(request.body.map(
@@ -103,6 +108,7 @@ module.exports=function(app){
                 response.status(201).json({
                     id:new_dbserver.id
                   , type:(new_dbserver.attrs.virtual?'virtual':'real')
+                  , readonly:!Boolean(new_dbserver.attrs.writeable)
                   , db:{
                         host:new_dbserver.db.host
                       , port:new_dbserver.db.port
@@ -131,6 +137,20 @@ module.exports=function(app){
 
     app.post('/resources/dbservers/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
+            var test=undefined
+              , auth=undefined
+
+            switch(request.body.type){
+                case 'real':
+                    test=rtest;
+                    auth=rauth;
+                    break;
+                case 'virtual':
+                    test=vtest;
+                    auth=vauth;
+                    break;
+            }
+
             test({
                 db:{
                     host:validate.toValidHost(request.body.db.host)+':'+
@@ -166,6 +186,7 @@ module.exports=function(app){
             response.status(200).json({
                 id:dbserver[1].id
               , type:(dbserver[1].attrs.virtual?'virtual':'real')
+              , readonly:!Boolean(dbserver[1].attrs.writeable)
               , db:{
                     host:dbserver[1].db.host
                   , port:dbserver[1].db.port
@@ -201,11 +222,12 @@ module.exports=function(app){
             };
 
             if(dbserver){
-                if(dbserver.attrs.readable&&dbserver.attrs.writable){
+                if(dbserver[1].attrs.readable&&dbserver[1].attrs.writable){
                     dbservers[dbserver[0]]=new_dbserver;
                     response.status(200).json({
                         id:new_dbserver.id
                       , type:(new_dbserver.attrs.virtual?'virtual':'real')
+                      , readonly:!Boolean(new_dbserver.attrs.writeable)
                       , db:{
                             host:new_dbserver.db.host
                           , port:new_dbserver.db.port
@@ -220,6 +242,7 @@ module.exports=function(app){
                 response.status(201).json({
                     id:new_dbserver.id
                   , type:(new_dbserver.attrs.virtual?'virtual':'real')
+                  , readonly:!Boolean(new_dbserver.attrs.writeable)
                   , db:{
                         host:new_dbserver.db.host
                       , port:new_dbserver.db.port
@@ -243,7 +266,7 @@ module.exports=function(app){
           , dbserver=get_element(id,dbservers)
 
         if(dbserver){
-            if(dbserver.attrs.readable&&dbserver.attrs.writable){
+            if(dbserver[1].attrs.readable&&dbserver[1].attrs.writable){
                 dbservers.splice(dbserver[0],1);
                 resources.dbservers=dbservers;
                 request.user.save();
@@ -265,6 +288,17 @@ module.exports=function(app){
           , dbserver=get_element(id,dbservers)
 
         if(dbserver){
+            var test=undefined
+              , auth=undefined
+
+            if(dbserver[1].attrs.virtual){
+                test=vtest;
+                auth=vauth;
+            }else{
+                test=rtest;
+                auth=rauth;
+            }
+
             test({
                 db:{
                     host:dbserver[1].db.host+':'+
@@ -298,7 +332,23 @@ module.exports=function(app){
           , dbserver=get_element(id,dbservers)
 
         if(dbserver){
-            var prefix=dbserver[1].db.prefix;
+            var prefix=dbserver[1].db.prefix
+              , test=undefined
+              , auth=undefined
+              , list=undefined
+              , infodbs=undefined
+
+            if(dbserver[1].attrs.virtual){
+                test=vtest;
+                auth=vauth;
+                list=vlist;
+                infodbs=vinfodbs;
+            }else{
+                test=rtest;
+                auth=rauth;
+                list=rlist;
+                infodbs=rinfodbs;
+            }
 
             test({
                 db:{

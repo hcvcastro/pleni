@@ -19,6 +19,7 @@ pleni.controller('ResourcesController',
 
         $scope.dbserver={
             id:''
+          , type:''
           , db:{
                 host:''
               , port:0
@@ -40,7 +41,7 @@ pleni.controller('ResourcesController',
                 }
             }
           , refresh:function(hide){
-                utils.load_resources_start(1,hide)
+                utils.load_resources_start(1,hide);
                 Resources.dbservers.load(utils.load_resources_end(1,hide));
             }
           , save:function(){
@@ -78,6 +79,7 @@ pleni.controller('ResourcesController',
                     $scope.dbservers.list();
                 }
                 if($scope.dbservers.env.view=='formr'){
+                    $scope.dbserver.type='real';
                     if(!$scope.dbserver.id){
                         $scope.dbserver.id='test';
                     }
@@ -111,12 +113,9 @@ pleni.controller('ResourcesController',
           , list:function(){
                 $scope.dbservers.env.view='list';
             }
-          , addr:function(){
-                $scope.dbservers.env.view='formr';
-                $scope.dbservers.env.type='collection';
-            }
-          , addv:function(){
-                $scope.dbservers.env.view='formv';
+          , add:function(flag){
+                $scope.dbserver.type=(flag==0?'real':'virtual');
+                $scope.dbservers.env.view='form';
                 $scope.dbservers.env.type='collection';
             }
           , view:function(index){

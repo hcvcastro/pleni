@@ -1,12 +1,12 @@
 article.list
     div.tasks
         ul
-            li(ng-click='dbservers.addr()')
+            li(ng-click='dbservers.add(0)')
                 span.fa.fa-plus
                 span Add DB Server
-            li(ng-click='dbservers.addv()')
+            li(ng-click='dbservers.add(1)')
                 span.fa.fa-plus
-                span Add DB Rack
+                span Add DB Virtual
             li(ng-click='dbservers.refresh(1)')
                 span.fa.fa-refresh
                 span Refresh
@@ -17,12 +17,15 @@ article.list
                 th Name
                 th Host
                 th.status &nbsp;
+                th.status &nbsp;
                 th.options &nbsp;
         tbody
             tr(ng-repeat='dbserver in storage.dbservers')
                 td
                     a(ng-click='dbservers.view($index)') {{dbserver.id|truncate:16}}
                 td {{dbserver.db.host}}:{{dbserver.db.port}}
+                td.status
+                    span.fa(title='DB connection type: {{dbserver.type}}',ng-class='{\'fa-database\':dbserver.type==\'real\',\'fa-magin\':dbserver.type==\'virtual\'}')
                 td.status
                     span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
                 td.options

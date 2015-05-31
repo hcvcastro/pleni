@@ -237,7 +237,7 @@ describe('dbservers controller functions',function(){
                 done();
             });
     });
-/*
+
     [
         {test:'',expected:_error.validation,status:403}
       , {test:{},expected:_error.validation,status:403}
@@ -290,7 +290,7 @@ describe('dbservers controller functions',function(){
                 });
         });
     });
-/*
+
     it('POST /resources/dbservers',function(done){
         request(app)
             .post('/resources/dbservers')
@@ -520,7 +520,7 @@ describe('dbservers controller functions',function(){
                 res.body.should.eql(_error.notfound);
                 done();
             });
-    });*/
+    });
 
     after(function(done){
         User.remove({
