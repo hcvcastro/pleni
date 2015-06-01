@@ -25,7 +25,7 @@ module.exports=function(args){
 
     if(!args.auth || !args.auth.cookie){
         if(args.debug){
-            console.log('authentification in db server ... '+args.db.user);
+            console.log('authentification in monitor db server ... '+args.db.user);
         }
         request.post({url:url,json:body},function(error,response){
             if(!error){

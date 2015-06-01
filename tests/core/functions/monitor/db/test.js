@@ -6,9 +6,9 @@ var should=require('should')
   , config=require('../../../../../config/tests')
   , server=config.monitor
 
-describe('testing couchdb server',function(){
+describe('testing monitor server',function(){
     before(function(done){
-        require('../../../../../'+server.script);
+        require('../../../../../server/monitor');
         done();
     });
 

@@ -55,6 +55,20 @@ js.addFormat('emptyslug',function(value){
 });
 exports.js=js;
 
+var auth={
+    'type':'object'
+  , 'properties':{
+        'user':{
+            'type':'string'
+        }
+      , 'password':{
+            'type':'string'
+        }
+    }
+  , 'required':['user','password']
+};
+exports.auth=auth;
+
 var client={
     'type':'object'
   , 'properties':{

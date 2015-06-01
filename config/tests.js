@@ -47,12 +47,12 @@ module.exports={
         name:'db_test'
     }
   , monitor:{
-        script:'server/monitor'
-      , host:'127.0.0.1'
+        host:'127.0.0.1'
       , port:3003
       , email:'admin@localhost'
       , password:'asdf'
       , url:'http://localhost'
+      , apikey:''
     }
   , mongo:{
         url:'mongodb://localhost/test'
