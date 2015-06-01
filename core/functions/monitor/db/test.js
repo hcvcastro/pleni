@@ -16,7 +16,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host
+      , url=args.db.host+'/id'
 
     if(!args.db.check){
         if(args.debug){
@@ -26,8 +26,10 @@ module.exports=function(args){
             if(!error){
                 if(validator.isJSON(response.body)){
                     var parse=JSON.parse(response.body);
- 
-                    if(response.statusCode==200&&parse.couchdb){
+
+                    if(response.statusCode==200
+                        &&parse.resources
+                        &&parse.resources.dbservers){
                             args.db.check=true;
                             deferred.resolve(args);
                     }else{

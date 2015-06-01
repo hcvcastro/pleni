@@ -27,6 +27,10 @@ module.exports=function(app,config){
     app.get('/id',function(request,response){
         response.status(200).json({
             monitor:'ready for action'
+          , resources:{
+                dbservers:true
+              , planners:true
+            }
         });
     });
 
