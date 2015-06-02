@@ -30,6 +30,7 @@ module.exports=function(args){
         request.post({url:url,json:body},function(error,response){
             if(!error){
                 if(response.statusCode==200){
+                    console.log('cookie',response.headers['set-cookie']);
                     var regex=/^(.*); Version=1;.*$/i
                       , exec=regex.exec(response.headers['set-cookie'])
                     

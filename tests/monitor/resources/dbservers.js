@@ -3,18 +3,18 @@
 var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
-  , app1=require('../../../server/master')
-  , app2=require('../../../server/monitor')
+  , app=require('../../../server/master')
   , config=require('../../../config/tests')
+  , monitor=config.monitor.url+':'+config.monitor.port
   , User=require('../../../server/master/models/user')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
 
 describe('dbservers controller functions',function(){
-    var cookie1=''
-      , cookie2=''
-      , user='test@localhost'
-      , apikey=''
+    var cookie1=undefined
+      , cookie2=undefined
+      , dbuser=undefined
+      , apikey=undefined
 
     before(function(done){
         User.create({
@@ -33,13 +33,14 @@ describe('dbservers controller functions',function(){
           , projects:[]
         },function(err,user){
             if(!err){
-                request(app1)
+                dbuser=user.id;
+                request(app)
                     .get('/signin')
                     .end(function(err,res){
                         var $=cheerio.load(res.text)
                           , csrf=$('input[name=_csrf]').val()
 
-                        request(app1)
+                        request(app)
                             .post('/signin')
                             .set('cookie',res.headers['set-cookie'])
                             .send({
@@ -59,14 +60,14 @@ describe('dbservers controller functions',function(){
         });
     });
 
-/*    before(function(done){
-        request(app2)
+    before(function(done){
+        request(monitor)
             .get('/home')
             .end(function(err,res){
                 var $=cheerio.load(res.text)
                   , csrf=$('input[name=_csrf]').val()
 
-                request(app2)
+                request(monitor)
                     .post('/signin')
                     .set('cookie',res.headers['set-cookie'])
                     .send({
@@ -78,23 +79,22 @@ describe('dbservers controller functions',function(){
                     .end(function(err,res){
                         cookie2=res.headers['set-cookie'];
 
-                        request(app2)
+                        request(monitor)
                             .post('/resources/clients')
                             .set('cookie',cookie2[1])
                             .send({
                                 id:'test'
                             })
                             .end(function(err,res){
-                                apikey=res.key;
+                                apikey=res.body.key;
                                 done();
                             });
                     });
             });
-    });*/
+    });
 
     it('GET /resources/view',function(done){
-        console.log('cookie ->',cookie1[0]);
-        request(app1)
+        request(app)
             .get('/resources/view')
             .set('cookie',cookie1[1])
             .expect(200,done);
@@ -117,7 +117,7 @@ describe('dbservers controller functions',function(){
         }],expected:_error.json,status:400}
       , {test:[{
             id:'localhost'
-          , type:'real'
+          , type:'virtual'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -129,7 +129,7 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('PUT /resources/dbservers',function(done){
-            request(app1)
+            request(app)
                 .put('/resources/dbservers')
                 .set('cookie',cookie1[1])
                 .send(element.test)
@@ -155,7 +155,7 @@ describe('dbservers controller functions',function(){
       , {test:{db:'...'},expected:_error.validation,status:403}
       , {test:{
             id:'localhost'
-          , type:'real'
+          , type:'virtual'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -167,7 +167,7 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers',function(done){
-            request(app1)
+            request(app)
                 .post('/resources/dbservers')
                 .set('cookie',cookie1[1])
                 .send(element.test)
@@ -186,7 +186,7 @@ describe('dbservers controller functions',function(){
     [
         {test:{
             id:'test'
-          , type:'real'
+          , type:'virtual'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -197,7 +197,7 @@ describe('dbservers controller functions',function(){
         },expected:_success.ok,status:201}
       , {test:{
             id:'test2'
-          , type:'real'
+          , type:'virtual'
           , db:{
                 host:'localhost'
               , port:8080
@@ -209,7 +209,7 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers',function(done){
-            request(app1)
+            request(app)
                 .post('/resources/dbservers')
                 .set('cookie',cookie1[1])
                 .send(element.test)
@@ -226,7 +226,7 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers',function(done){
-        request(app1)
+        request(app)
             .get('/resources/dbservers')
             .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
@@ -248,7 +248,7 @@ describe('dbservers controller functions',function(){
     });
 
     it('DELETE /resources/dbservers',function(done){
-        request(app1)
+        request(app)
             .delete('/resources/dbservers')
             .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
@@ -262,13 +262,12 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers',function(done){
-        request(app1)
+        request(app)
             .get('/resources/dbservers')
             .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
-                console.log(res.body);
                 res.statusCode.should.be.eql(200);
                 res.should.be.json;
                 res.body.should.have.an.Array.and.be.empty;
@@ -286,7 +285,7 @@ describe('dbservers controller functions',function(){
       , {test:{db:'...'},expected:_error.validation,status:403}
       , {test:{
             id:'test'
-          , type:'real'
+          , type:'virtual'
           , db:{
                 host:'http://localhost'
               , port:8080
@@ -297,24 +296,19 @@ describe('dbservers controller functions',function(){
         },expected:_error.network,status:404}
       , {test:{
             id:'test'
-          , type:'real'
+          , type:'virtual'
           , db:{
-                host:'http://localhost'
-              , port:5984
+                host:config.monitor.url
+              , port:config.monitor.port
               , user:'boo'
               , pass:'boo.'
               , prefix:''
             }
         },expected:_error.auth,status:401}
-      , {test :{
-            id:'test'
-          , type:'real'
-          , db:config.db
-        },expected:_success.ok,status:200}
     ]
     .forEach(function(element){
         it('POST /resources/dbservers/_check',function(done){
-            request(app1)
+            request(app)
                 .post('/resources/dbservers/_check')
                 .set('cookie',cookie1[1])
                 .send(element.test)
@@ -329,8 +323,34 @@ describe('dbservers controller functions',function(){
         });
     });
 
+    /*it('POST /resources/dbservers/_check',function(done){
+        request(app)
+            .post('/resources/dbservers/_check')
+            .set('cookie',cookie1[1])
+            .send({
+                id:'test'
+              , type:'virtual'
+              , db:{
+                    host:config.monitor.url
+                  , port:config.monitor.port
+                  , user:dbuser
+                  , pass:apikey
+                  , prefix:''
+                }
+            })
+            .expect('Content-Type',/json/)
+            .expect(200)
+            .end(function(err,res){
+                res.statusCode.should.be.eql(200);
+                res.body.should.have.property('ok');
+                res.body.should.eql(_success.ok);
+                done();
+            });
+    });
+
+/*
     it('POST /resources/dbservers',function(done){
-        request(app1)
+        request(app)
             .post('/resources/dbservers')
             .set('cookie',cookie1[1])
             .send({
@@ -356,7 +376,7 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers/:dbserver',function(done){
-        request(app1)
+        request(app)
             .get('/resources/dbservers/test')
             .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
@@ -374,7 +394,7 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers/:dbserver',function(done){
-        request(app1)
+        request(app)
             .get('/resources/dbservers/nonexistent')
             .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
@@ -422,7 +442,7 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('PUT /resources/dbservers/:dbserver',function(done){
-            request(app1)
+            request(app)
                 .put('/resources/dbservers/'+element.id)
                 .set('cookie',cookie1[1])
                 .send(element.test)
@@ -449,7 +469,7 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers',function(done){
-        request(app1)
+        request(app)
             .get('/resources/dbservers')
             .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
@@ -476,7 +496,7 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers/:dbserver/_check',function(done){
-            request(app1)
+            request(app)
                 .post('/resources/dbservers/'+element.test+'/_check')
                 .set('cookie',cookie1[1])
                 .expect('Content-Type',/json/)
@@ -497,7 +517,7 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers/:dbserver/_databases',function(done){
-            request(app1)
+            request(app)
                 .post('/resources/dbservers/'+element.test+'/_databases')
                 .set('cookie',cookie1[1])
                 .expect('Content-Type',/json/)
@@ -534,7 +554,7 @@ describe('dbservers controller functions',function(){
     });
 
     it('DELETE /resources/dbservers/:dbserver',function(done){
-        request(app1)
+        request(app)
             .delete('/resources/dbservers/test2')
             .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
@@ -548,7 +568,7 @@ describe('dbservers controller functions',function(){
     });
 
     it('DELETE /resources/dbservers/:dbserver',function(done){
-        request(app1)
+        request(app)
             .delete('/resources/dbservers/test2')
             .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
@@ -556,6 +576,15 @@ describe('dbservers controller functions',function(){
             .end(function(err,res){
                 res.statusCode.should.be.eql(404);
                 res.body.should.eql(_error.notfound);
+                done();
+            });
+    });*/
+
+    after(function(done){
+        request(monitor)
+            .delete('/resources/clients/test')
+            .set('cookie',cookie2[1])
+            .end(function(err,res){
                 done();
             });
     });

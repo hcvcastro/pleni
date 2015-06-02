@@ -46,6 +46,13 @@ js.addFormat('slug',function(value){
     }
     return 'there is not a valid slug';
 });
+js.addFormat('uuid',function(value){
+    if(notEmpty(value)
+        && /^[a-z0-9]*$/i.test(value)){
+        return null;
+    }
+    return 'there is not a valid slug';
+});
 js.addFormat('emptyslug',function(value){
     if(value==''
         || /^[a-z][a-z0-9_\-]*$/i.test(value)){
@@ -112,7 +119,7 @@ var dbserver={
                 }
               , 'user':{
                     'type':'string'
-                  , 'format':'slug'
+                  , 'format':'uuid'
                 }
               , 'pass':{
                     'type':'string'

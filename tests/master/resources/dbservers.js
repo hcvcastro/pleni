@@ -231,7 +231,6 @@ describe('dbservers controller functions',function(){
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
-                console.log(res.body);
                 res.statusCode.should.be.eql(200);
                 res.should.be.json;
                 res.body.should.have.an.Array.and.be.empty;

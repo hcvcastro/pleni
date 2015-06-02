@@ -133,14 +133,20 @@ module.exports=function(app){
 
     app.post('/resources/dbservers/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
-            test({
-                db:{
-                    host:validate.toValidHost(request.body.db.host)+':'+
-                         validate.toInt(request.body.db.port)
-                  , user:validate.toString(request.body.db.user)
-                  , pass:validate.toString(request.body.db.pass)
+            var packet={
+                    db:{
+                        host:validate.toValidHost(request.body.db.host)+':'+
+                             validate.toInt(request.body.db.port)
+                      , user:validate.toString(request.body.db.user)
+                      , pass:validate.toString(request.body.db.pass)
+                    }
                 }
-            })
+
+            if(request.body.type=='virtual'){
+                packet.db.host+='/dbserver'
+            }
+
+            test(packet)
             .then(auth)
             .then(function(args){
                 response.status(200).json(_success.ok);
@@ -148,7 +154,7 @@ module.exports=function(app){
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){
                     response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
+                }else{
                     response.status(401).json(_error.auth);
                 }
             })

@@ -250,5 +250,16 @@ module.exports=function(app){
             }
         });
     });
+
+    app.get('/dbserver',function(request,response){
+        response.status(200).json({
+            "couchdb":"Welcome"
+        });
+    });
+
+    app.post('/dbserver/_session',function(request,response){
+        console.log(request.body);
+        response.status(401).json(_error.json);
+    });
 };
 

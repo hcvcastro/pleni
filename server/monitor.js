@@ -140,7 +140,6 @@ require('./monitor/home')(app,config);
 require('./monitor/clients')(app,config);
 require('./monitor/planners')(app,config);
 require('./monitor/dbservers')(app,config);
-require('./monitor/auth')(app,config);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){
