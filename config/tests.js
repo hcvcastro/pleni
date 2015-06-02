@@ -38,6 +38,7 @@ module.exports={
       , admin:true
       , email:'admin@localhost'
       , password:'asdf'
+      , mongo:'mongodb://localhost/testmaster'
     }
   , user:{
         email:'cijkb.j@gmail.com'
@@ -53,9 +54,7 @@ module.exports={
       , password:'asdf'
       , url:'http://localhost'
       , apikey:''
-    }
-  , mongo:{
-        url:'mongodb://localhost/test'
+      , mongo:'mongodb://localhost/testmonitor'
     }
   , recaptcha:{
         public:'6LcKSQYTAAAAAOuUrljCf8ReCzohwRr9kdHrbouu'

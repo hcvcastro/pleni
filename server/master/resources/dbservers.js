@@ -5,14 +5,10 @@ var validate=require('../../../core/validators')
   , _error=require('../../../core/json-response').error
   , pretty=require('prettysize')
   , schema=require('../../../core/schema')
-  , rtest=require('../../../core/functions/databases/test')
-  , rauth=require('../../../core/functions/databases/auth')
-  , rlist=require('../../../core/functions/databases/list')
-  , rinfodbs=require('../../../core/functions/databases/infodbs')
-  , vtest=require('../../../core/functions/monitor/db/test')
-  , vauth=require('../../../core/functions/monitor/db/auth')
-  , vlist=require('../../../core/functions/monitor/db/list')
-  , vinfodbs=require('../../../core/functions/monitor/db/infodbs')
+  , test=require('../../../core/functions/databases/test')
+  , auth=require('../../../core/functions/databases/auth')
+  , list=require('../../../core/functions/databases/list')
+  , infodbs=require('../../../core/functions/databases/infodbs')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
@@ -137,20 +133,6 @@ module.exports=function(app){
 
     app.post('/resources/dbservers/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
-            var test=undefined
-              , auth=undefined
-
-            switch(request.body.type){
-                case 'real':
-                    test=rtest;
-                    auth=rauth;
-                    break;
-                case 'virtual':
-                    test=vtest;
-                    auth=vauth;
-                    break;
-            }
-
             test({
                 db:{
                     host:validate.toValidHost(request.body.db.host)+':'+
@@ -288,17 +270,6 @@ module.exports=function(app){
           , dbserver=get_element(id,dbservers)
 
         if(dbserver){
-            var test=undefined
-              , auth=undefined
-
-            if(dbserver[1].attrs.virtual){
-                test=vtest;
-                auth=vauth;
-            }else{
-                test=rtest;
-                auth=rauth;
-            }
-
             test({
                 db:{
                     host:dbserver[1].db.host+':'+
@@ -333,22 +304,6 @@ module.exports=function(app){
 
         if(dbserver){
             var prefix=dbserver[1].db.prefix
-              , test=undefined
-              , auth=undefined
-              , list=undefined
-              , infodbs=undefined
-
-            if(dbserver[1].attrs.virtual){
-                test=vtest;
-                auth=vauth;
-                list=vlist;
-                infodbs=vinfodbs;
-            }else{
-                test=rtest;
-                auth=rauth;
-                list=rlist;
-                infodbs=rinfodbs;
-            }
 
             test({
                 db:{

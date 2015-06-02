@@ -31,9 +31,7 @@ module.exports={
       , admin:true
       , email:'admin@localhost'
       , password:'asdf'
-    }
-  , mongo:{
-        url:'mongodb://localhost/pleni'
+      , mongo:'mongodb://localhost/pleni'
     }
   , recaptcha:{
         public:'6LcKSQYTAAAAAOuUrljCf8ReCzohwRr9kdHrbouu'

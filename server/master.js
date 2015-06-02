@@ -41,11 +41,11 @@ var store=new redisstore({
   , prefix:config.redis.prefix
 });
 
-mongoose.connect(config.mongo.url);
+mongoose.connect(config.master.mongo);
 var mongodb=mongoose.connection;
 mongodb.on('error',console.error.bind(console,'mongo connection error:'));
 mongodb.once('open',function(){
-    console.log('connection to mongo db:',config.mongo.url);
+    console.log('connection to mongo db:',config.master.mongo);
 });
 
 passport.serializeUser(function(user,done){

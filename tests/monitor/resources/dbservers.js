@@ -3,14 +3,18 @@
 var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
-  , app=require('../../../server/master')
+  , app1=require('../../../server/master')
+  , app2=require('../../../server/monitor')
   , config=require('../../../config/tests')
   , User=require('../../../server/master/models/user')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
 
 describe('dbservers controller functions',function(){
-    var cookie='';
+    var cookie1=''
+      , cookie2=''
+      , user='test@localhost'
+      , apikey=''
 
     before(function(done){
         User.create({
@@ -29,13 +33,13 @@ describe('dbservers controller functions',function(){
           , projects:[]
         },function(err,user){
             if(!err){
-                request(app)
+                request(app1)
                     .get('/signin')
                     .end(function(err,res){
                         var $=cheerio.load(res.text)
                           , csrf=$('input[name=_csrf]').val()
 
-                        request(app)
+                        request(app1)
                             .post('/signin')
                             .set('cookie',res.headers['set-cookie'])
                             .send({
@@ -44,8 +48,7 @@ describe('dbservers controller functions',function(){
                               , password:config.user.password
                             })
                             .end(function(err,res){
-                                cookie=res.headers['set-cookie'];
-                                console.log('cookie',cookie);
+                                cookie1=res.headers['set-cookie'];
                                 done();
                             });
                     });
@@ -56,10 +59,44 @@ describe('dbservers controller functions',function(){
         });
     });
 
+/*    before(function(done){
+        request(app2)
+            .get('/home')
+            .end(function(err,res){
+                var $=cheerio.load(res.text)
+                  , csrf=$('input[name=_csrf]').val()
+
+                request(app2)
+                    .post('/signin')
+                    .set('cookie',res.headers['set-cookie'])
+                    .send({
+                        _csrf:csrf
+                      , email:config.monitor.email
+                      , password:config.monitor.password
+                    })
+                    .expect(200)
+                    .end(function(err,res){
+                        cookie2=res.headers['set-cookie'];
+
+                        request(app2)
+                            .post('/resources/clients')
+                            .set('cookie',cookie2[1])
+                            .send({
+                                id:'test'
+                            })
+                            .end(function(err,res){
+                                apikey=res.key;
+                                done();
+                            });
+                    });
+            });
+    });*/
+
     it('GET /resources/view',function(done){
-        request(app)
+        console.log('cookie ->',cookie1[0]);
+        request(app1)
             .get('/resources/view')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect(200,done);
     });
 
@@ -92,9 +129,9 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('PUT /resources/dbservers',function(done){
-            request(app)
+            request(app1)
                 .put('/resources/dbservers')
-                .set('cookie',cookie[1])
+                .set('cookie',cookie1[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
                 .expect(element.status)
@@ -130,9 +167,9 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers',function(done){
-            request(app)
+            request(app1)
                 .post('/resources/dbservers')
-                .set('cookie',cookie[1])
+                .set('cookie',cookie1[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
                 .expect(element.status)
@@ -172,9 +209,9 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers',function(done){
-            request(app)
+            request(app1)
                 .post('/resources/dbservers')
-                .set('cookie',cookie[1])
+                .set('cookie',cookie1[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
                 .expect(element.status)
@@ -189,9 +226,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers',function(done){
-        request(app)
+        request(app1)
             .get('/resources/dbservers')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -211,9 +248,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('DELETE /resources/dbservers',function(done){
-        request(app)
+        request(app1)
             .delete('/resources/dbservers')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -225,9 +262,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers',function(done){
-        request(app)
+        request(app1)
             .get('/resources/dbservers')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -277,9 +314,9 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers/_check',function(done){
-            request(app)
+            request(app1)
                 .post('/resources/dbservers/_check')
-                .set('cookie',cookie[1])
+                .set('cookie',cookie1[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
                 .expect(element.status)
@@ -293,9 +330,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('POST /resources/dbservers',function(done){
-        request(app)
+        request(app1)
             .post('/resources/dbservers')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .send({
                 id:'test'
               , type:'real'
@@ -319,9 +356,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers/:dbserver',function(done){
-        request(app)
+        request(app1)
             .get('/resources/dbservers/test')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -337,9 +374,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers/:dbserver',function(done){
-        request(app)
+        request(app1)
             .get('/resources/dbservers/nonexistent')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(404)
             .end(function(err,res){
@@ -385,9 +422,9 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('PUT /resources/dbservers/:dbserver',function(done){
-            request(app)
+            request(app1)
                 .put('/resources/dbservers/'+element.id)
-                .set('cookie',cookie[1])
+                .set('cookie',cookie1[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
                 .expect(element.status)
@@ -412,9 +449,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('GET /resources/dbservers',function(done){
-        request(app)
+        request(app1)
             .get('/resources/dbservers')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -439,9 +476,9 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers/:dbserver/_check',function(done){
-            request(app)
+            request(app1)
                 .post('/resources/dbservers/'+element.test+'/_check')
-                .set('cookie',cookie[1])
+                .set('cookie',cookie1[1])
                 .expect('Content-Type',/json/)
                 .expect(element.status)
                 .end(function(err,res){
@@ -460,9 +497,9 @@ describe('dbservers controller functions',function(){
     ]
     .forEach(function(element){
         it('POST /resources/dbservers/:dbserver/_databases',function(done){
-            request(app)
+            request(app1)
                 .post('/resources/dbservers/'+element.test+'/_databases')
-                .set('cookie',cookie[1])
+                .set('cookie',cookie1[1])
                 .expect('Content-Type',/json/)
                 .expect(element.status)
                 .end(function(err,res){
@@ -497,9 +534,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('DELETE /resources/dbservers/:dbserver',function(done){
-        request(app)
+        request(app1)
             .delete('/resources/dbservers/test2')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(200)
             .end(function(err,res){
@@ -511,9 +548,9 @@ describe('dbservers controller functions',function(){
     });
 
     it('DELETE /resources/dbservers/:dbserver',function(done){
-        request(app)
+        request(app1)
             .delete('/resources/dbservers/test2')
-            .set('cookie',cookie[1])
+            .set('cookie',cookie1[1])
             .expect('Content-Type',/json/)
             .expect(404)
             .end(function(err,res){
