@@ -137,9 +137,10 @@ app.set('auth',function(request,response,next){
 });
 
 require('./monitor/home')(app,config);
-require('./monitor/clients')(app,config);
-require('./monitor/planners')(app,config);
-require('./monitor/dbservers')(app,config);
+require('./monitor/resources/clients')(app,config);
+require('./monitor/resources/planners')(app,config);
+require('./monitor/resources/dbservers')(app,config);
+require('./monitor/dbserver')(app,config);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

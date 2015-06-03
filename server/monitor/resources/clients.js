@@ -1,11 +1,11 @@
 'use strict';
 
-var validate=require('../../core/validators')
-  , _success=require('../../core/json-response').success
-  , _error=require('../../core/json-response').error
-  , schema=require('../../core/schema')
-  , Client=require('./models/client')
-  , generator=require('../../core/functions/utils/random').sync
+var validate=require('../../../core/validators')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
+  , schema=require('../../../core/schema')
+  , Client=require('../models/client')
+  , generator=require('../../../core/functions/utils/random').sync
 
 module.exports=function(app){
     var authed=app.get('auth');

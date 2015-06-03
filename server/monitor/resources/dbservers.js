@@ -1,14 +1,14 @@
 'use strict';
 
-var validate=require('../../core/validators')
-  , _success=require('../../core/json-response').success
-  , _error=require('../../core/json-response').error
-  , schema=require('../../core/schema')
-  , DBServer=require('./models/dbserver').RDBServer
-  , test=require('../../core/functions/databases/test')
-  , auth=require('../../core/functions/databases/auth')
-  , list=require('../../core/functions/databases/list')
-  , infodbs=require('../../core/functions/databases/infodbs')
+var validate=require('../../../core/validators')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
+  , schema=require('../../../core/schema')
+  , DBServer=require('../models/dbserver').RDBServer
+  , test=require('../../../core/functions/databases/test')
+  , auth=require('../../../core/functions/databases/auth')
+  , list=require('../../../core/functions/databases/list')
+  , infodbs=require('../../../core/functions/databases/infodbs')
 
 module.exports=function(app){
     var authed=app.get('auth');
@@ -249,17 +249,6 @@ module.exports=function(app){
                 response.status(404).json(_error.notfound)
             }
         });
-    });
-
-    app.get('/dbserver',function(request,response){
-        response.status(200).json({
-            "couchdb":"Welcome"
-        });
-    });
-
-    app.post('/dbserver/_session',function(request,response){
-        console.log(request.body);
-        response.status(401).json(_error.json);
     });
 };
 

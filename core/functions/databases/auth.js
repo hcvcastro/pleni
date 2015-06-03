@@ -29,10 +29,13 @@ module.exports=function(args){
         }
         request.post({url:url,json:body},function(error,response){
             if(!error){
+                console.log(response.headers['set-cookie']);
                 if(response.statusCode==200){
-                    console.log('cookie',response.headers['set-cookie']);
-                    var regex=/^(.*); Version=1;.*$/i
-                      , exec=regex.exec(response.headers['set-cookie'])
+                    var auth=response.headers['set-cookie'].find(function(e){
+                            return e.startsWith('AuthSession=');
+                        });
+                    var regex=/^(.*); .*$/i
+                      , exec=regex.exec(auth)
                     
                     if(!args.auth){
                         args.auth={}
