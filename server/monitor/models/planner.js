@@ -19,6 +19,5 @@ var planner=new Schema({
     }
 });
 
-exports.VPlanner=mongoose.model('VPlanner',planner);
-exports.RPlanner=mongoose.model('RPlanner',planner);
+module.exports=mongoose.model('Planner',planner);
 

@@ -316,7 +316,7 @@ describe('dbservers controller functions',function(){
         });
     });
 
-    /*it('POST /resources/dbservers/_check',function(done){
+    it('POST /resources/dbservers/_check',function(done){
         request(app)
             .post('/resources/dbservers/_check')
             .set('cookie',cookie1[1])

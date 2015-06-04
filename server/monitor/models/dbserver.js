@@ -18,6 +18,5 @@ var dbserver=new Schema({
     }
 });
 
-exports.VDBServer=mongoose.model('VDBServer',dbserver);
-exports.RDBServer=mongoose.model('RDBServer',dbserver);
+module.exports=mongoose.model('DBServer',dbserver);
 

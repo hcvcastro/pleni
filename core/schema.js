@@ -76,6 +76,20 @@ var auth={
 };
 exports.auth=auth;
 
+var auth2={
+    'type':'object'
+  , 'properties':{
+        'name':{
+            'type':'string'
+        }
+      , 'password':{
+            'type':'string'
+        }
+    }
+  , 'required':['name','password']
+};
+exports.auth2=auth2;
+
 var client={
     'type':'object'
   , 'properties':{
