@@ -29,7 +29,6 @@ module.exports=function(args){
         }
         request.post({url:url,json:body},function(error,response){
             if(!error){
-                console.log(response.statusCode,response.body);
                 if(response.statusCode==200){
                     var auth=response.headers['set-cookie'].find(function(e){
                             return e.startsWith('AuthSession=');

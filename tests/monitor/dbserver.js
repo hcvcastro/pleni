@@ -341,20 +341,19 @@ describe('dbservers controller functions',function(){
             });
     });
 
-/*
     it('POST /resources/dbservers',function(done){
         request(app)
             .post('/resources/dbservers')
             .set('cookie',cookie1[1])
             .send({
                 id:'test'
-              , type:'real'
+              , type:'virtual'
               , db:{
-                    host:config.db.host
-                  , port:config.db.port
-                  , user:config.db.user
-                  , pass:config.db.pass
-                  , prefix:config.db.prefix
+                    host:config.monitor.url
+                  , port:config.monitor.port
+                  , user:dbuser
+                  , pass:apikey
+                  , prefix:''
                 }
             })
             .expect('Content-Type',/json/)
@@ -412,10 +411,10 @@ describe('dbservers controller functions',function(){
           expected:_error.validation,status:403}
       , {test:{
             id:'test2'
-          , type:'real'
+          , type:'virtual'
           , db:{
-                host:'http://localhost'
-              , port:8080
+                host:config.monitor.url
+              , port:config.monitor.port
               , user:'boo'
               , pass:'boo.'
               , prefix:'p_'
@@ -423,10 +422,10 @@ describe('dbservers controller functions',function(){
         },id:'test2',status:201}
       , {test:{
             id:'test2'
-          , type:'real'
+          , type:'virtual'
           , db:{
-                host:'http://localhost'
-              , port:5984
+                host:config.monitor.url
+              , port:config.monitor.port
               , user:'admin'
               , pass:'asdf'
               , prefix:'p_'
@@ -502,7 +501,7 @@ describe('dbservers controller functions',function(){
                 });
         });
     });
-
+/*
     [
         {test:'test3',expected:_error.notfound,status:404}
       , {test:'test2',expected:_error.auth,status:401}
@@ -544,7 +543,7 @@ describe('dbservers controller functions',function(){
                     done();
                 });
         });
-    });
+    });*/
 
     it('DELETE /resources/dbservers/:dbserver',function(done){
         request(app)
@@ -571,7 +570,7 @@ describe('dbservers controller functions',function(){
                 res.body.should.eql(_error.notfound);
                 done();
             });
-    });*/
+    });
 
     after(function(done){
         request(monitor)

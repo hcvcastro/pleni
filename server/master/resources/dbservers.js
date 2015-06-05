@@ -143,7 +143,7 @@ module.exports=function(app){
                 }
 
             if(request.body.type=='virtual'){
-                packet.db.host+='/dbserver'
+                packet.db.host+='/dbserver';
             }
 
             test(packet)
@@ -276,14 +276,20 @@ module.exports=function(app){
           , dbserver=get_element(id,dbservers)
 
         if(dbserver){
-            test({
-                db:{
-                    host:dbserver[1].db.host+':'+
-                         dbserver[1].db.port
-                  , user:dbserver[1].db.user
-                  , pass:dbserver[1].db.pass
+            var packet={
+                    db:{
+                        host:dbserver[1].db.host+':'+
+                             dbserver[1].db.port
+                      , user:dbserver[1].db.user
+                      , pass:dbserver[1].db.pass
+                    }
                 }
-            })
+
+            if(dbserver[1].attrs.virtual){
+                packet.db.host+='/dbserver';
+            }
+
+            test(packet)
             .then(auth)
             .then(function(args){
                 response.status(200).json(_success.ok);
@@ -291,7 +297,7 @@ module.exports=function(app){
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){
                     response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
+                }else{
                     response.status(401).json(_error.auth);
                 }
             })
