@@ -501,7 +501,7 @@ describe('dbservers controller functions',function(){
                 });
         });
     });
-/*
+
     [
         {test:'test3',expected:_error.notfound,status:404}
       , {test:'test2',expected:_error.auth,status:401}
@@ -543,7 +543,7 @@ describe('dbservers controller functions',function(){
                     done();
                 });
         });
-    });*/
+    });
 
     it('DELETE /resources/dbservers/:dbserver',function(done){
         request(app)

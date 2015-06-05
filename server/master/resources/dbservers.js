@@ -315,17 +315,22 @@ module.exports=function(app){
           , dbserver=get_element(id,dbservers)
 
         if(dbserver){
-            var prefix=dbserver[1].db.prefix
-
-            test({
-                db:{
-                    host:dbserver[1].db.host+':'+
-                         dbserver[1].db.port
-                  , user:dbserver[1].db.user
-                  , pass:dbserver[1].db.pass
-                  , prefix:prefix
+            var packet={
+                    db:{
+                        host:dbserver[1].db.host+':'+
+                             dbserver[1].db.port
+                      , user:dbserver[1].db.user
+                      , pass:dbserver[1].db.pass
+                      , prefix:dbserver[1].db.prefix
+                    }
                 }
-            })
+              , prefix=packet.db.prefix
+
+            if(dbserver[1].attrs.virtual){
+                packet.db.host+='/dbserver';
+            }
+
+            test(packet)
             .then(auth)
             .then(list)
             .then(infodbs)
@@ -347,7 +352,7 @@ module.exports=function(app){
             .fail(function(error){
                 if(error.code=='ECONNREFUSED'){
                     response.status(404).json(_error.network);
-                }else if(error.error=='unauthorized'){
+                }else{
                     response.status(401).json(_error.auth);
                 }
             })

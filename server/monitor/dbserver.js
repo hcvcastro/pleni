@@ -4,6 +4,8 @@ var _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
   , schema=require('../../core/schema')
   , Client=require('./models/client')
+  , DBServer=require('./models/dbserver')
+  , User=require('./models/user')
 
 module.exports=function(app){
     app.get('/dbserver',function(request,response){
@@ -30,6 +32,11 @@ module.exports=function(app){
         }else{
             response.status(400).json(_error.json);
         }
+    });
+
+    app.get('/dbserver/_all_dbs',function(request,response){
+        console.log(request);
+        response.status(200).json([]);
     });
 };
 
