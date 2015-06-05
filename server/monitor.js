@@ -136,6 +136,7 @@ app.set('auth',function(request,response,next){
         .json(_error.auth);
 });
 
+require('./monitor/init')(app,config);
 require('./monitor/home')(app,config);
 require('./monitor/resources/clients')(app,config);
 require('./monitor/resources/planners')(app,config);
