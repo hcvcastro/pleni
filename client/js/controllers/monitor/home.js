@@ -98,6 +98,7 @@ pleni.controller('HomeController',
 
         $scope.dbserver={
             id:''
+          , type:'real'
           , db:{
                 host:''
               , port:0
@@ -140,6 +141,7 @@ pleni.controller('HomeController',
                     Resources.dbservers.update({
                         dbserver:$scope.dbserver.id
                       , id:$scope.dbserver.id
+                      , type:'real'
                       , db:$scope.dbserver.db
                     },function(data){
                         $scope.dbservers.refresh();
@@ -166,7 +168,11 @@ pleni.controller('HomeController',
 
                     utils.clean();
                     utils.send('Checking connection ...');
-                    Resources.dbservers.check($scope.dbserver,function(data){
+                    Resources.dbservers.check({
+                        id:$scope.dbserver.id
+                      , type:'real'
+                      , db:$scope.dbserver.db
+                    },function(data){
                         utils.receive();
                         utils.show('info','DB Server is online');
                     },function(error){

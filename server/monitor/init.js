@@ -4,21 +4,28 @@ var Client=require('./models/client')
   , DBServer=require('./models/dbserver')
   , Planner=require('./models/planner')
   , User=require('./models/user')
+  , Q=require('q')
+  , test=require('../../core/functions/databases/test')
+  , auth=require('../../core/functions/databases/auth')
+  , list=require('../../core/functions/databases/list')
+  , infodbs=require('../../core/functions/databases/infodbs')
 
 module.exports=function(app,config){
     var redis=app.get('redis')
-      , load=function(Model,container,each){
-            Model.find({},function(err,list){
+      , load=function(model,container,each,done){
+            model.find({},function(err,collection){
                 var params={}
                 
-                list.forEach(function(element){
+                collection.forEach(function(element){
                     each(params,element);
                 });
 
-                if(params.legth>0){
+                if(collection.length>0){
                     redis.hmset(container,params,function(err,reply){
                         if(err){
                             console.log(err);
+                        }else if(done){
+                            done(collection);
                         }
                     });
                 }
@@ -30,6 +37,26 @@ module.exports=function(app,config){
     });
     load(DBServer,'monitor:dbserver',function(params,element){
         params[element.id]=element.db;
+    },function(collection){
+        Q.all(collection.map(function(dbserver){
+            console.log('dbserver',dbserver);
+            return test({
+                id:dbserver.id
+              , db:{
+                    host:dbserver.db.host+':'+dbserver.db.port
+                  , user:dbserver.db.user
+                  , pass:dbserver.db.pass
+                  , prefix:dbserver.db.prefix
+                }})
+                .then(auth)
+                .then(list)
+                .then(infodbs)
+        }))
+        .spread(function(){
+            arguments.forEach(function(dbserver){
+                console.log('-> arg',dbserver);
+            });
+        });
     });
     load(Planner,'monitor:planner',function(params,element){
         params[element.id]=element.planner;

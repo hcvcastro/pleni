@@ -109,6 +109,7 @@ module.exports=function(grunt){
       , develop:{
             master:{
                 file:'server/master.js'
+              , nodeArgs:['--harmony']
               , env:{
                     PORT:grunt.option('port')||3000
                   , ENV:'development'
@@ -116,6 +117,7 @@ module.exports=function(grunt){
             }
           , dumb:{
                 file:'server/planners/dumb.js'
+              , nodeArgs:['--harmony']
               , env:{
                     PORT:grunt.option('port')||3001
                   , ENV:'development'
@@ -123,6 +125,7 @@ module.exports=function(grunt){
             }
           , planner:{
                 file:'server/planner.js'
+              , nodeArgs:['--harmony']
               , env:{
                     PORT:grunt.option('port')||3001
                   , ENV:'development'
@@ -130,6 +133,7 @@ module.exports=function(grunt){
             }
           , planner_io:{
                 file:'server/planner.io.js'
+              , nodeArgs:['--harmony']
               , env:{
                     PORT:grunt.option('port')||3001
                   , ENV:'development'
@@ -137,6 +141,7 @@ module.exports=function(grunt){
             }
           , planner_ion:{
                 file:'server/planner.ion.js'
+              , nodeArgs:['--harmony']
               , env:{
                     PORT:grunt.option('port')||3001
                   , ENV:'development'
@@ -144,6 +149,7 @@ module.exports=function(grunt){
             }
           , notifier:{
                 file:'server/notifier.io.js'
+              , nodeArgs:['--harmony']
               , env:{
                     PORT:grunt.option('port')||3002
                   , ENV:'development'
@@ -151,6 +157,7 @@ module.exports=function(grunt){
             }
           , monitor:{
                 file:'server/monitor.js'
+              , nodeArgs:['--harmony']
               , env:{
                     PORT:grunt.option('port')||3003
                   , ENV:'development'
@@ -158,6 +165,7 @@ module.exports=function(grunt){
             }
           , sites:{
                 file:'server/sites.js'
+              , nodeArgs:['--harmony']
               , env:{
                     PORT:grunt.option('port')||3004
                   , ENV:'development'
@@ -168,6 +176,7 @@ module.exports=function(grunt){
       , mochacli:{
             options:{
                 reporter:'spec'
+              , harmony:true
               , bail:true
               , timeout:50000
               , env:{
