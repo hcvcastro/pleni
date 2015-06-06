@@ -3,11 +3,11 @@
 var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
-  , app=require('../../server/monitor')
-  , config=require('../../config/tests')
-  , Client=require('../../server/monitor/models/client')
-  , _success=require('../../core/json-response').success
-  , _error=require('../../core/json-response').error
+  , app=require('../../../server/monitor')
+  , config=require('../../../config/tests')
+  , Client=require('../../../server/monitor/models/client')
+  , _success=require('../../../core/json-response').success
+  , _error=require('../../../core/json-response').error
 
 describe('clients controller functions',function(){
     var cookie='';

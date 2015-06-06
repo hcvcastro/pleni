@@ -32,14 +32,13 @@ module.exports=function(app,config){
             });
         }
 
-    load(Client,'monitor:client',function(params,element){
+    load(Client,'monitor:clients',function(params,element){
         params[element.key]=element.id;
     });
-    load(DBServer,'monitor:dbserver',function(params,element){
+    load(DBServer,'monitor:dbservers',function(params,element){
         params[element.id]=element.db;
     },function(collection){
         Q.all(collection.map(function(dbserver){
-            console.log('dbserver',dbserver);
             return test({
                 id:dbserver.id
               , db:{
@@ -53,12 +52,30 @@ module.exports=function(app,config){
                 .then(infodbs)
         }))
         .spread(function(){
-            arguments.forEach(function(dbserver){
-                console.log('-> arg',dbserver);
+            var params1={}
+              , params2={}
+
+            for(var arg in arguments){
+                var id=arguments[arg].id
+                arguments[arg].db.explist.forEach(function(repository){
+                    params1[repository.db_name]=id;
+                    params2[repository.db_name]=JSON.stringify(repository);
+                });
+            }
+
+            redis.hmset('monitor:repositorydb',params1,function(err,reply){
+                if(err){
+                    console.log(err);
+                }
+            });
+            redis.hmset('monitor:repositories',params2,function(err,reply){
+                if(err){
+                    console.log(err);
+                }
             });
         });
     });
-    load(Planner,'monitor:planner',function(params,element){
+    load(Planner,'monitor:planners',function(params,element){
         params[element.id]=element.planner;
     });
 };
