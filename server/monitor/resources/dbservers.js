@@ -9,30 +9,38 @@ var validate=require('../../../core/validators')
   , auth=require('../../../core/functions/databases/auth')
   , list=require('../../../core/functions/databases/list')
   , infodbs=require('../../../core/functions/databases/infodbs')
+  , sort=require('../../../core/utils').sort
 
 module.exports=function(app){
-    var authed=app.get('auth');
+    var authed=app.get('auth')
+      , redis=app.get('redis')
 
     app.get('/resources/dbservers',authed,function(request,response){
-        DBServer.find({},function(err,dbservers){
-            return response.status(200).json(dbservers.map(function(dbserver){
-                return {
-                    id:dbserver.id
+        redis.hgetall('monitor:dbservers',function(err,reply){
+            var list=[]
+
+            for(var r in reply){
+                var db=JSON.parse(reply[r]);
+
+                list.push({
+                    id:r
                   , db:{
-                        host:dbserver.db.host
-                      , port:dbserver.db.port
-                      , prefix:dbserver.db.prefix
+                        host:db.host
+                      , port:db.port
+                      , prefix:db.prefix
                     }
-                };
-            }));
+                })
+            }
+
+            list.sort(sort);
+            return response.status(200).json(list);
         });
     });
 
     app.put('/resources/dbservers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbservers).length==0){
             DBServer.remove({},function(){
-                DBServer.collection.insert(
-                    request.body.map(function(dbserver){
+                var obj1=request.body.map(function(dbserver){
                         return {
                             id:validate.toString(dbserver.id)
                           , db:{
@@ -43,9 +51,26 @@ module.exports=function(app){
                               , prefix:validate.toString(dbserver.db.prefix)
                             }
                         };
-                    }),function(){
-                        response.status(201).json(_success.ok);
+                    })
+                  , obj2={}
+
+                obj1.forEach(function(el){
+                    obj2[el.id]=JSON.stringify(el.db);
+                });
+
+                DBServer.collection.insert(obj1,function(){
+                    redis.del('monitor:dbservers',function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
+                        redis.hmset('monitor:dbserver',obj2,function(err,reply){
+                            if(err){
+                                console.log(err);
+                            }
+                            response.status(201).json(_success.ok);
+                        })
                     });
+                });
             });
         }else{
             response.status(400).json(_error.json);
@@ -56,28 +81,34 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
             DBServer.findOne({id:request.body.id},function(err,dbserver){
                 if(!dbserver){
-                    DBServer.create({
-                        id:validate.toString(request.body.id)
-                      , db:{
+                    var id=validate.toString(request.body.id)
+                      , db={
                             host:validate.toValidHost(request.body.db.host)
                           , port:validate.toInt(request.body.db.port)
                           , user:validate.toString(request.body.db.user)
                           , pass:validate.toString(request.body.db.pass)
                           , prefix:validate.toString(request.body.db.prefix)
                         }
-                    },function(err,dbserver){
-                        if(!err){
-                            response.status(201).json({
-                                id:dbserver.id
-                              , db:{
-                                    host:dbserver.db.host
-                                  , port:dbserver.db.port
-                                  , prefix:dbserver.db.prefix
-                                }
-                            });
-                        }else{
-                            response.status(403).json(_error.validation);
+
+                    redis.hset('monitor:dbservers',id,JSON.stringify(db),
+                        function(err,reply){
+                        if(err){
+                            console.log(err);
                         }
+
+                        DBServer.create({
+                            id:id
+                          , db:db
+                        });
+
+                        response.status(201).json({
+                            id:id
+                          , db:{
+                                host:db.host
+                              , port:db.port
+                              , prefix:db.prefix
+                            }
+                        });
                     });
                 }else{
                     response.status(403).json(_error.notoverride);
@@ -89,8 +120,13 @@ module.exports=function(app){
     });
 
     app.delete('/resources/dbservers',authed,function(request,response){
-        DBServer.remove({},function(){
-            response.status(200).json(_success.ok);
+        redis.del('monitor:dbservers',function(err,reply){
+            if(err){
+                console.log(err);
+            }
+            DBServer.remove({},function(){
+                response.status(200).json(_success.ok);
+            });
         });
     });
 
@@ -122,16 +158,18 @@ module.exports=function(app){
     });
 
     app.get('/resources/dbservers/:dbserver',authed,function(request,response){
-        DBServer.findOne({
-            id:validate.toString(request.params.dbserver)
-        },function(err,dbserver){
-            if(dbserver){
+        var id=validate.toString(request.params.dbserver)
+
+        redis.hget('monitor:dbservers',id,function(err,reply){
+            var db=JSON.parse(reply)
+
+            if(db){
                 response.status(200).json({
-                    id:dbserver.id
+                    id:id
                   , db:{
-                        host:dbserver.db.host
-                      , port:dbserver.db.port
-                      , prefix:dbserver.db.prefix
+                        host:db.host
+                      , port:db.port
+                      , prefix:db.prefix
                     }
                 });
             }else{
@@ -143,21 +181,19 @@ module.exports=function(app){
     app.put('/resources/dbservers/:dbserver',authed,function(request,response){
         if(schema.js.validate(request.body,schema.dbserver).length==0){
             var id=validate.toString(request.params.dbserver)
-              , host=validate.toValidHost(request.body.db.host)
-              , port=validate.toInt(request.body.db.port)
-              , user=validate.toString(request.body.db.user)
-              , pass=validate.toString(request.body.db.pass)
-              , prefix=validate.toString(request.body.db.prefix)
+              , db={
+                    host:validate.toValidHost(request.body.db.host)
+                  , port:validate.toInt(request.body.db.port)
+                  , user:validate.toString(request.body.db.user)
+                  , pass:validate.toString(request.body.db.pass)
+                  , prefix:validate.toString(request.body.db.prefix)
+                }
 
             DBServer.findOne({id:id},function(err,dbserver){
+                redis.hset('monitor:clients',id,JSON.stringify(db));
+
                 if(dbserver){
-                    dbserver.db={
-                        host:host
-                      , port:port
-                      , user:user
-                      , pass:pass
-                      , prefix:prefix
-                    };
+                    dbserver.db=db;
 
                     dbserver.save(function(err,dbserver){
                         if(!err){
@@ -176,13 +212,7 @@ module.exports=function(app){
                 }else{
                     DBServer.create({
                         id:id
-                      , db:{
-                            host:host
-                          , port:port
-                          , user:user
-                          , pass:pass
-                          , prefix:prefix
-                        }
+                      , db:db
                     },function(err,dbserver){
                         if(!err){
                             response.status(201).json({
@@ -210,8 +240,12 @@ module.exports=function(app){
             id:validate.toString(request.params.dbserver)
         },function(err,dbserver){
             if(dbserver){
-                dbserver.remove(function(){
+                redis.hdel('monitor:dbservers',dbserver.id,function(err,reply){
+                    if(err){
+                        console.log(err);
+                    }
                     response.status(200).json(_success.ok);
+                    dbserver.remove();
                 });
             }else{
                 response.status(404).json(_error.notfound);
@@ -221,16 +255,18 @@ module.exports=function(app){
 
     app.post('/resources/dbservers/:dbserver/_check',authed,
         function(request,response){
-        DBServer.findOne({
-            id:validate.toString(request.params.dbserver)
-        },function(err,dbserver){
-            if(dbserver){
+        var id=validate.toString(request.params.dbserver)
+
+        redis.hget('monitor:dbservers',id,function(err,reply){
+            var db=JSON.parse(reply)
+
+            if(db){
                 test({
                     db:{
-                        host:dbserver.db.host+':'+
-                             dbserver.db.port
-                      , user:dbserver.db.user
-                      , pass:dbserver.db.pass
+                        host:db.host+':'+
+                             db.port
+                      , user:db.user
+                      , pass:db.pass
                     }
                 })
                 .then(auth)

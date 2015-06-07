@@ -3,6 +3,7 @@
 var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
+  , redis=require('redis')
   , app=require('../../../server/monitor')
   , config=require('../../../config/tests')
   , Client=require('../../../server/monitor/models/client')
@@ -10,7 +11,20 @@ var request=require('supertest')
   , _error=require('../../../core/json-response').error
 
 describe('clients controller functions',function(){
-    var cookie='';
+    var cookie=''
+      , redisclient=redis.createClient(
+        config.redis.port,config.redis.host,config.redis.options)
+    redisclient.on('error',console.error.bind(console,'redis connection error:'));
+    redisclient.on('ready',function(){
+        console.log('connection to redis db:',
+            config.redis.host,':',config.redis.port);
+    });
+
+    before(function(done){
+        redisclient.flushall(function(err,reply){
+            done();
+        });
+    });
 
     before(function(done){
         request(app)

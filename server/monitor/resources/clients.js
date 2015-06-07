@@ -44,11 +44,16 @@ module.exports=function(app){
                 });
 
                 Client.collection.insert(obj1,function(){
-                    redis.hmset('monitor:clients',obj2,function(err,reply){
+                    redis.del('monitor:clients',function(err,reply){
                         if(err){
                             console.log(err);
                         }
-                        response.status(201).json(_success.ok);
+                        redis.hmset('monitor:clients',obj2,function(err,reply){
+                            if(err){
+                                console.log(err);
+                            }
+                            response.status(201).json(_success.ok);
+                        });
                     });
                 });
             });

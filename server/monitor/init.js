@@ -36,7 +36,7 @@ module.exports=function(app,config){
         params[element.key]=element.id;
     });
     load(DBServer,'monitor:dbservers',function(params,element){
-        params[element.id]=element.db;
+        params[element.id]=JSON.stringify(element.db);
     },function(collection){
         Q.all(collection.map(function(dbserver){
             return test({
@@ -76,7 +76,7 @@ module.exports=function(app,config){
         });
     });
     load(Planner,'monitor:planners',function(params,element){
-        params[element.id]=element.planner;
+        params[element.id]=JSON.stringify(element.planner);
     });
 };
 
