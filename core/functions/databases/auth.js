@@ -32,10 +32,10 @@ module.exports=function(args){
                 if(response.statusCode==200){
                     var auth=response.headers['set-cookie'].find(function(e){
                             return e.startsWith('AuthSession=');
-                        });
-                    var regex=/^(.*); .*$/i
+                        })
+                      , regex=/^(.*); .*$/i
                       , exec=regex.exec(auth)
-                    
+
                     if(!args.auth){
                         args.auth={}
                     }

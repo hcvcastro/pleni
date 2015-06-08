@@ -1,13 +1,17 @@
 'use strict';
 
-var _success=require('../../core/json-response').success
+var validate=require('../../core/validators')
+  , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
   , schema=require('../../core/schema')
   , Client=require('./models/client')
   , DBServer=require('./models/dbserver')
   , User=require('./models/user')
+  , generator=require('../../core/functions/utils/random').sync
 
-module.exports=function(app){
+module.exports=function(app,config){
+    var redis=app.get('redis')
+
     app.get('/dbserver',function(request,response){
         response.status(200).json({
             "couchdb":"Welcome"
@@ -16,12 +20,32 @@ module.exports=function(app){
 
     app.post('/dbserver/_session',function(request,response){
         if(schema.js.validate(request.body,schema.auth2).length==0){
-            Client.findOne({key:request.body.password},function(err,client){
-                if(client){
-                    response.cookie('AuthSession','asdf',{
-                        path:'/'
-                      , httpOnly:true
-                    }).status(200).json(_success.ok);
+            var user=validate.toString(request.body.user)
+              , apikey=validate.toString(request.body.password)
+
+            redis.hget('monitor:clients',apikey,function(err,reply){
+                if(err){
+                    console.log(err);
+                }
+
+                if(reply){
+                    var cookie=generator()
+
+                    User.findOne({id:user,client:reply},function(err,user){
+                        var repositories=JSON.stringify([])
+
+                        if(user){
+                            repositories=JSON.stringify(user.repositories)
+                        }
+
+                        redis.setex('user:'+cookie,60,repositories,
+                        function(err,reply){
+                            response.cookie('AuthSession',cookie,{
+                                path:'/'
+                              , httponly:true
+                            }).status(200).json(_success.ok);
+                        });
+                    });
                 }else{
                     response.cookie('AuthSession','',{
                         path:'/'
@@ -35,8 +59,23 @@ module.exports=function(app){
     });
 
     app.get('/dbserver/_all_dbs',function(request,response){
-        console.log(request);
-        response.status(200).json([]);
+        var regex=/^AuthSession=(.+) *$/
+          , exec=regex.exec(request.headers.cookie)
+
+        if(exec){
+            redis.get('user:'+exec[1],function(err,reply){
+                if(err){
+                    console.log(err);
+                }
+                if(reply){
+                    response.status(200).json(JSON.parse(reply));
+                }else{
+                    response.status(401).json(_error.auth);
+                }
+            });
+        }else{
+            response.status(401).json(_error.auth);
+        }
     });
 };
 
