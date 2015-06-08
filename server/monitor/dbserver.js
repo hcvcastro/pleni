@@ -77,5 +77,9 @@ module.exports=function(app,config){
             response.status(401).json(_error.auth);
         }
     });
+
+    app.put('/dbserver/:repository',function(request,response){
+
+    });
 };
 

@@ -415,7 +415,7 @@ module.exports=function(app){
 
         if(targs._repository){
             var repository=get_element(
-                targs._repository,request.user.resources.repositories);
+                targs._repository,request.user.resources.repositories)
 
             if(repository){
                 delete targs._repository;
@@ -433,16 +433,23 @@ module.exports=function(app){
 
         if(targs._dbserver){
             var dbserver=get_element(
-                targs._dbserver,request.user.resources.dbservers);
+                targs._dbserver,request.user.resources.dbservers)
 
             if(dbserver){
+                var host=dbserver[1].db.host+':'+dbserver[1].db.port
+                if(dbserver[1].attrs.virtual){
+                    host+='/dbserver';
+                }
+
                 delete targs._dbserver;
                 if(targs.db){
-                    targs.db.host=dbserver[1].db.host+':'+
-                                  dbserver[1].db.port;
+                    targs.db.host=host;
                     targs.db.user=dbserver[1].db.user;
                     targs.db.pass=dbserver[1].db.pass;
-                    targs.db.prefix=dbserver[1].db.prefix;
+
+                    if(!targs.db.name.startsWith(dbserver[1].db.prefix)){
+                        targs.db.name=dbserver[1].db.prefix+targs.db.name;
+                    }
                 }
                 request.body.targs=targs;
             }else{

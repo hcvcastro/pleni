@@ -25,7 +25,7 @@ article.list
                     a(ng-click='dbservers.view($index)') {{dbserver.id|truncate:16}}
                 td {{dbserver.db.host}}:{{dbserver.db.port}}
                 td.status
-                    span.fa(title='DB connection type: {{dbserver.type}}',ng-class='{\'fa-database\':dbserver.type==\'real\',\'fa-magin\':dbserver.type==\'virtual\'}')
+                    span.fa(title='DB connection type: {{dbserver.type}}',ng-class='{\'fa-database\':dbserver.type==\'real\',\'fa-magic\':dbserver.type==\'virtual\'}')
                 td.status
                     span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
                 td.options
