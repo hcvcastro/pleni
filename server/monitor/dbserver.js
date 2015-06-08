@@ -58,7 +58,7 @@ module.exports=function(app,config){
         }
     });
 
-    app.get('/dbserver/_all_dbs',function(request,response){
+    var auth=function(request,response,next){
         var regex=/^AuthSession=(.+) *$/
           , exec=regex.exec(request.headers.cookie)
 
@@ -68,7 +68,8 @@ module.exports=function(app,config){
                     console.log(err);
                 }
                 if(reply){
-                    response.status(200).json(JSON.parse(reply));
+                    request.reply=reply;
+                    return next();
                 }else{
                     response.status(401).json(_error.auth);
                 }
@@ -76,10 +77,15 @@ module.exports=function(app,config){
         }else{
             response.status(401).json(_error.auth);
         }
+    };
+
+    app.get('/dbserver/_all_dbs',auth,function(request,response){
+        response.status(200).json(JSON.parse(request.reply));
     });
 
-    app.put('/dbserver/:repository',function(request,response){
-
+    app.put('/dbserver/:repository',auth,function(request,response){
+        
+        response.status(401).json(_error.auth);
     });
 };
 

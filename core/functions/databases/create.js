@@ -19,7 +19,7 @@ module.exports=function(args){
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
-
+console.log('create',url,headers);
     request.put({url:url,headers:headers},function(error,response){
         if(!error){
             if(response.statusCode==201){
