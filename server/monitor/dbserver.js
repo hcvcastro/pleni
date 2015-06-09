@@ -38,7 +38,7 @@ module.exports=function(app,config){
                             repositories=JSON.stringify(user.repositories)
                         }
 
-                        redis.setex('user:'+cookie,60,repositories,
+                        redis.setex('user:'+cookie,60*5,repositories,
                         function(err,reply){
                             response.cookie('AuthSession',cookie,{
                                 path:'/'
@@ -68,7 +68,7 @@ module.exports=function(app,config){
                     console.log(err);
                 }
                 if(reply){
-                    request.reply=reply;
+                    request.reply=JSON.parse(reply);
                     return next();
                 }else{
                     response.status(401).json(_error.auth);
@@ -80,12 +80,21 @@ module.exports=function(app,config){
     };
 
     app.get('/dbserver/_all_dbs',auth,function(request,response){
-        response.status(200).json(JSON.parse(request.reply));
+        response.status(200).json(request.reply);
     });
 
     app.put('/dbserver/:repository',auth,function(request,response){
-        
-        response.status(401).json(_error.auth);
+        redis.hkeys('monitor:dbservers',function(err,dbservers){
+            if(err){
+                console.log(err);
+            }
+            if(dbserver){
+                var key=dbservers[Math.floor(Math.random()*dbservers.length)]
+                
+            }else{
+                response.status(401).json(_error.auth);
+            }
+        });
     });
 };
 

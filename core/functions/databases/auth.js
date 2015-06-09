@@ -14,6 +14,7 @@ var request=require('request')
  * args output
  *      auth
  *          cookie
+ *          ts
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -40,6 +41,7 @@ module.exports=function(args){
                         args.auth={}
                     }
                     args.auth.cookie=exec[1];
+                    args.auth.ts=Date.now()
                     deferred.resolve(args);
                 }else{
                     deferred.reject(response.body);

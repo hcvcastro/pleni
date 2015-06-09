@@ -49,11 +49,12 @@ module.exports=function(app,config){
                 }})
                 .then(auth)
                 .then(list)
-                .then(infodbs)
+                .then(infodbs);
         }))
         .spread(function(){
             var params1={}
               , params2={}
+              , params3={}
 
             for(var arg in arguments){
                 var id=arguments[arg].id
@@ -61,6 +62,7 @@ module.exports=function(app,config){
                     params1[repository.db_name]=id;
                     params2[repository.db_name]=JSON.stringify(repository);
                 });
+                params3[id]=JSON.stringify(arguments[arg].auth);
             }
 
             redis.hmset('monitor:repositorydb',params1,function(err,reply){
@@ -73,7 +75,13 @@ module.exports=function(app,config){
                     console.log(err);
                 }
             });
-        });
+            redis.hmset('monitor:cookies',params3,function(err,reply){
+                if(err){
+                    console.log(err);
+                }
+            });
+        })
+        .done();
     });
     load(Planner,'monitor:planners',function(params,element){
         params[element.id]=JSON.stringify(element.planner);
