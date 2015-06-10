@@ -141,11 +141,6 @@ module.exports=function(app,config){
     }*/
 
 /*
-redisclient.del('monitor:planners');
-redisclient.del('monitor:free');
-redisclient.del('monitor:queue');
-redisclient.del('monitor:tasks');
-
 app.put('/planners',function(request,response){
     if(validate.validHost(request.body.planner)){
         var planner=validate.toValidHost(request.body.planner)

@@ -3,6 +3,7 @@
 var http=require('http')
   , request=require('request')
   , join=require('path').join
+  , async=require('async')
   , validate=require('../core/validators')
   , _success=require('../core/json-response').success
   , _error=require('../core/json-response').error
@@ -135,6 +136,28 @@ app.set('auth',function(request,response,next){
         .cookie('pleni.monitr.auth',JSON.stringify({role:'guest'}))
         .json(_error.auth);
 });
+
+var destroy=function(){
+    server.close(function(){
+        async.each([
+            'monitor:clients'
+          , 'monitor:dbservers'
+          , 'monitor:repositorydb'
+          , 'monitor:repositories'
+          , 'monitor:cookies'
+          , 'monitor:planners'
+        ],function(element,done){
+            redisclient.del(element,function(){
+                done();
+            });
+        },function(){
+            console.log('Bye bye!!');
+            process.exit(0);
+        });
+    });
+};
+process.on('SIGINT',destroy);
+process.on('SIGTERM',destroy);
 
 require('./monitor/init')(app,config);
 require('./monitor/home')(app,config);

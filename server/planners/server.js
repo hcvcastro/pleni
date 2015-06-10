@@ -37,11 +37,13 @@ exports.set=function(host,port,signature){
     var destroy=function(){
         http.close(function(){
             fs.unlink(join(__dirname,'..','..','run',port),function(err){
-                if(err) throw err;
+                if(err){
+                    throw err;
+                }
+                console.log('Bye bye!!');
+                process.exit(0);
             });
         });
-        console.log('Bye bye!!');
-        process.exit(0);
     };
 
     process.on('SIGINT',destroy);
