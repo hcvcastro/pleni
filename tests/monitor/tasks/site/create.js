@@ -78,10 +78,10 @@ describe('testing task site/create',function(){
     after(function(done){
         remove({
             db:{
-                host:config.db.url+':'+config.db.port
+                host:config.monitor.url+':'+config.monitor.port+'/dbserver'
               , name:config.db.prefix+db_name
-              , user:config.db.user
-              , pass:config.db.pass
+              , user:dbuser
+              , pass:apikey
             }
         },repeat,stop,function(){
             done();
