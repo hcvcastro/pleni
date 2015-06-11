@@ -137,6 +137,8 @@ module.exports=function(app,config){
     });
 
     app.put('/dbserver/:repository',authed,function(request,response){
+        var repository=request.params.repository
+
         redis.hkeys('monitor:dbservers',function(err,dbservers){
             if(err){
                 console.log(err);
@@ -147,13 +149,12 @@ module.exports=function(app,config){
                     if(!cookie){
                         response.status(401).json(_error.auth);
                     }else{
-                        redis.hget('monitor:dbservers',key,function(err,reply){
+                        redis.hget('monitor:dbservers',key,function(err,_db){
                             if(err){
                                 console.log(err);
                             }
-                            var db=JSON.parse(reply)
-                              , name=db.prefix+request.reply.id+'_'
-                                    +request.params.repository
+                            var db=JSON.parse(_db)
+                              , name=db.prefix+request.reply.id+'_'+repository
 
                             _request.put({
                                 url:db.host+':'+db.port+'/'+name
@@ -212,6 +213,50 @@ module.exports=function(app,config){
     });
 
     app.put('/dbserver/:repository/:document',authed,function(request,response){
+        var repository=request.params.repository
+          , document=request.params.document
+
+        redis.hget('monitor:repositorydb',repository,function(err,dbserverid){
+            if(err){
+                console.log(err);
+            }
+            if(dbserverid){
+                redis.hget('monitor:dbservers',dbserverid,function(err,_db){
+                    if(err){
+                        console.log(err);
+                    }
+                    if(_db){
+                        var db=JSON.parse(_db)
+                          , name=db.prefix+request.reply.id+'_'+repository
+
+                        cookie(dbserverid,function(cookie){
+                            _request.put({
+                                url:db.host+':'+db.port+'/'+name+'/'+document
+                              , headers:{
+                                    'Cookie':cookie
+                                  , 'X-CouchDB-WWW-Authenticate':'Cookie'
+                                }
+                            },function(error,reply){
+                                response.status(reply.statusCode)
+                                    .json(reply.body);
+                            });
+                        });
+                    }else{
+                        response.status(404).json(_error.notfound);
+                    }
+                });
+            }else{
+                response.status(404).json(_error.notfound);
+            }
+        });
+    });
+
+    app.put('/dbserver/:repository/_design/:document',authed,
+    function(request,response){
+        response.status(400).json(_error.json);
+    });
+
+    app.delete('/dbserver/:repository',authed,function(request,response){
         response.status(400).json(_error.json);
     });
 };
