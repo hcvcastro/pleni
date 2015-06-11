@@ -162,8 +162,45 @@ module.exports=function(app,config){
                                   , 'X-CouchDB-WWW-Authenticate':'Cookie'
                                 }
                             },function(error,reply){
-                                response.status(reply.statusCode)
-                                    .json(reply.body);
+                                if(reply.statusCode==201){
+                                    redis.hset('monitor:repositorydb',name,key,
+                                    function(err,reply){
+                                        if(err){
+                                            console.log(reply);
+                                        }
+                                    });
+                                    var info=JSON.stringify({
+                                        db_name:name
+                                      , doc_count:0
+                                      , doc_del_count:0
+                                      , update_seq:0
+                                      , purge_seq:0
+                                      , compact_running:false
+                                      , disk_size:79
+                                      , data_size:0
+                                      , instance_start_time:Date.now()*1000
+                                      , disk_format_version:6
+                                      , committed_update_seq:0
+                                    })
+
+                                    redis.hset('monitor:repositories',name,info,
+                                    function(err,reply){
+                                        if(err){
+                                            console.log(reply);
+                                        }
+                                    });
+                                }
+
+                                User.findOneAndUpdate({
+                                    id:request.reply.id
+                                },{
+                                    $set:{
+                                        repositories:request.reply.repositories
+                                    }
+                                },function(err,user){
+                                    response.status(reply.statusCode)
+                                        .json(reply.body);
+                                });
                             });
                         });
                     }
@@ -172,6 +209,10 @@ module.exports=function(app,config){
                 response.status(401).json(_error.auth);
             }
         });
+    });
+
+    app.put('/dbserver/:repository/:document',authed,function(request,response){
+        response.status(400).json(_error.json);
     });
 };
 

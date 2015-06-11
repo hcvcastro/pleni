@@ -15,7 +15,7 @@ module.exports=function(app,config){
       , load=function(model,container,each,done){
             model.find({},function(err,collection){
                 var params={}
-                
+
                 collection.forEach(function(element){
                     each(params,element);
                 });
