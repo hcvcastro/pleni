@@ -1,0 +1,23 @@
+article.list
+    div.tasks
+        ul
+            li(ng-click='apps.add()')
+                span.fa.fa-plus
+                span Add App
+            li(ng-click='apps.refresh(1)')
+                span.fa.fa-refresh
+                span Refresh
+        .clearfix
+    table
+        thead
+            tr
+                th Name
+                th Key
+                th.options &nbsp;
+        tbody
+            tr(ng-repeat='app in storage.apps')
+                td {{app.id|truncate:16}}
+                td {{app.key}}
+                td.options
+                    a.fa.fa-trash(title='Remove element',ng-click='apps.remove($index)')
+

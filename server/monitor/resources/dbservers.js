@@ -20,14 +20,14 @@ module.exports=function(app){
             var list=[]
 
             for(var r in reply){
-                var db=JSON.parse(reply[r]);
+                var dbserver=JSON.parse(reply[r]);
 
                 list.push({
                     id:r
                   , db:{
-                        host:db.host
-                      , port:db.port
-                      , prefix:db.prefix
+                        host:dbserver.db.host
+                      , port:dbserver.db.port
+                      , prefix:dbserver.db.prefix
                     }
                 })
             }
@@ -55,7 +55,7 @@ module.exports=function(app){
                   , obj2={}
 
                 obj1.forEach(function(el){
-                    obj2[el.id]=JSON.stringify(el.db);
+                    obj2[el.id]=JSON.stringify({db:el.db});
                 });
 
                 DBServer.collection.insert(obj1,function(){
@@ -63,7 +63,8 @@ module.exports=function(app){
                         if(err){
                             console.log(err);
                         }
-                        redis.hmset('monitor:dbserver',obj2,function(err,reply){
+                        redis.hmset('monitor:dbservers',obj2,
+                        function(err,reply){
                             if(err){
                                 console.log(err);
                             }
@@ -90,7 +91,7 @@ module.exports=function(app){
                           , prefix:validate.toString(request.body.db.prefix)
                         }
 
-                    redis.hset('monitor:dbservers',id,JSON.stringify(db),
+                    redis.hset('monitor:dbservers',id,JSON.stringify({db:db}),
                         function(err,reply){
                         if(err){
                             console.log(err);
@@ -161,15 +162,15 @@ module.exports=function(app){
         var id=validate.toString(request.params.dbserver)
 
         redis.hget('monitor:dbservers',id,function(err,reply){
-            var db=JSON.parse(reply)
+            var dbserver=JSON.parse(reply)
 
-            if(db){
+            if(dbserver){
                 response.status(200).json({
                     id:id
                   , db:{
-                        host:db.host
-                      , port:db.port
-                      , prefix:db.prefix
+                        host:dbserver.db.host
+                      , port:dbserver.db.port
+                      , prefix:dbserver.db.prefix
                     }
                 });
             }else{
@@ -190,7 +191,7 @@ module.exports=function(app){
                 }
 
             DBServer.findOne({id:id},function(err,dbserver){
-                redis.hset('monitor:clients',id,JSON.stringify(db));
+                redis.hset('monitor:dbservers',id,JSON.stringify({db:db}));
 
                 if(dbserver){
                     dbserver.db=db;
@@ -258,15 +259,15 @@ module.exports=function(app){
         var id=validate.toString(request.params.dbserver)
 
         redis.hget('monitor:dbservers',id,function(err,reply){
-            var db=JSON.parse(reply)
+            var dbserver=JSON.parse(reply)
 
-            if(db){
+            if(dbserver){
                 test({
                     db:{
-                        host:db.host+':'+
-                             db.port
-                      , user:db.user
-                      , pass:db.pass
+                        host:dbserver.db.host+':'+
+                             dbserver.db.port
+                      , user:dbserver.db.user
+                      , pass:dbserver.db.pass
                     }
                 })
                 .then(auth)

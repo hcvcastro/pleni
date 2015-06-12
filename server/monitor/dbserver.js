@@ -5,7 +5,7 @@ var _request=require('request')
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
   , schema=require('../../core/schema')
-  , Client=require('./models/client')
+  , App=require('./models/app')
   , DBServer=require('./models/dbserver')
   , User=require('./models/user')
   , generator=require('../../core/functions/utils/random').sync
@@ -27,14 +27,14 @@ module.exports=function(app,config){
             var userid=validate.toString(request.body.name)
               , apikey=validate.toString(request.body.password)
 
-            redis.hget('monitor:clients',apikey,function(err,reply){
+            redis.hget('monitor:apps',apikey,function(err,reply){
                 if(err){
                     console.log(err);
                 }
 
                 if(reply){
                     var cookie=generator()
-                    User.findOne({id:userid,client:reply},function(err,user){
+                    User.findOne({id:userid,app:reply},function(err,user){
                         var data=JSON.stringify({
                             id:userid
                           , repositories:[]

@@ -1,0 +1,14 @@
+article.remove.animate(ng-show='apps.env.view==\'remove\'')
+    .title
+        h2 Remove App
+        .close
+            a.fa.fa-close(ng-click='apps.list()')
+    .body
+        form(ng-submit='apps.delete()')
+            p.large Press the button if you want remove the registry for the app.
+            p.offset.load
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='submit') Remove
+

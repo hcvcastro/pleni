@@ -6,9 +6,10 @@ var mongoose=require('mongoose')
 
 var user=new Schema({
     id:String
-  , client:String
+  , app:String
   , repositories:[{
-        type:String
+        name:String
+      , dbserver:String
     }]
 });
 

@@ -3,10 +3,10 @@
         ul.items
             li
                 .title
-                    a(ng-click='clients.show()') Clients
+                    a(ng-click='apps.show()') Apps
                     .right
-                        span {{storage.clients.length}}
-                        a.fa.fa-refresh(ng-click='clients.refresh()')
+                        span {{storage.apps.length}}
+                        a.fa.fa-refresh(ng-click='apps.refresh()')
             li
                 .title
                     a(ng-click='dbservers.show()') Database Servers
@@ -22,11 +22,11 @@
         include ../blocks/footer/bottom
     .main
         .messages
-        section.clients
-            h1 Clients
-            include ../blocks/resources/list/clients
-            include ../blocks/resources/form/clients
-            include ../blocks/resources/remove/clients
+        section.apps
+            h1 Apps
+            include ../blocks/resources/list/apps
+            include ../blocks/resources/form/apps
+            include ../blocks/resources/remove/apps
         section.dbservers
             h1 DB Servers
             include ../blocks/resources/list/dbservers

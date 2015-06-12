@@ -25,35 +25,35 @@ pleni.controller('HomeController',
     }else{
         $scope.storage=$sessionStorage;
 
-        $scope.client={
+        $scope.app={
             id:''
           , key:''
         };
-        $scope.clients={
+        $scope.apps={
             env:{
                 view:'list'
               , type:'collection'
             }
           , show:function(){
                 utils.set_list($scope);
-                utils.set_active('clients',1);
-                if(!$scope.storage.clients){
-                    $scope.clients.refresh();
+                utils.set_active('apps',1);
+                if(!$scope.storage.apps){
+                    $scope.apps.refresh();
                 }
             }
           , refresh:function(hide){
                 utils.load_resources_start(1,hide)
-                Resources.clients.load(utils.load_resources_end(1,hide));
+                Resources.apps.load(utils.load_resources_end(1,hide));
             }
           , save:function(){
                 utils.clean();
-                if($scope.clients.env.type=='collection'){
-                    utils.send('Saving client settings ...');
-                    Resources.clients.create($scope.client,function(data){
-                        $scope.clients.refresh();
-                        $scope.clients.list();
+                if($scope.apps.env.type=='collection'){
+                    utils.send('Saving app settings ...');
+                    Resources.apps.create($scope.app,function(data){
+                        $scope.apps.refresh();
+                        $scope.apps.list();
                         utils.receive();
-                        utils.show('success','Client added to the list');
+                        utils.show('success','App added to the list');
                     },function(error){
                         utils.receive();
                         utils.show('error',error.data.message);
@@ -61,33 +61,33 @@ pleni.controller('HomeController',
                 }
             }
           , list:function(){
-                $scope.clients.env.view='list';
+                $scope.apps.env.view='list';
             }
           , add:function(){
-                $scope.clients.env.view='form';
-                $scope.clients.env.type='collection';
+                $scope.apps.env.view='form';
+                $scope.apps.env.type='collection';
             }
           , view:function(index){
-                $scope.clients.env.view='view';
-                $scope.clients.env.type='element';
-                $scope.client=$scope.storage.clients[index];
+                $scope.apps.env.view='view';
+                $scope.apps.env.type='element';
+                $scope.app=$scope.storage.apps[index];
             }
           , remove:function(index){
-                $scope.clients.env.view='remove';
-                $scope.clients.env.type='element';
-                $scope.client=$scope.storage.clients[index];
+                $scope.apps.env.view='remove';
+                $scope.apps.env.type='element';
+                $scope.app=$scope.storage.apps[index];
             }
           , delete:function(){
                 utils.clean();
-                if($scope.clients.env.type='element'){
+                if($scope.apps.env.type='element'){
                     utils.send('Sending delete request ...');
-                    Resources.clients.delete({
-                        client:$scope.client.id
+                    Resources.apps.delete({
+                        app:$scope.app.id
                     },function(data){
-                        $scope.clients.refresh();
-                        $scope.clients.list();
+                        $scope.apps.refresh();
+                        $scope.apps.list();
                         utils.receive();
-                        utils.show('success', 'Client removed to the list');
+                        utils.show('success', 'App removed to the list');
                     },function(error){
                         utils.receive();
                         utils.show('error',error.data.message);
@@ -615,11 +615,11 @@ pleni.controller('HomeController',
             }
         };
 
-        $scope.clients.refresh();
+        $scope.apps.refresh();
         $scope.dbservers.refresh();
         $scope.planners.refresh();
 
-        $scope.clients.show();
+        $scope.apps.show();
     }
 }]);
 

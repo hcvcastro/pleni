@@ -1,9 +1,9 @@
 'use strict';
 
 pleni.factory('Resources',['$sessionStorage',
-    'Clients','DBServers','Planners',
+    'Apps','DBServers','Planners',
     function($sessionStorage,
-        Clients,DBServers,Planners){
+        Apps,DBServers,Planners){
         var get_element=function(needle,haystack){
                 for(var i in haystack){
                     if(haystack[i].id==needle){
@@ -21,12 +21,12 @@ pleni.factory('Resources',['$sessionStorage',
             }
 
         return {
-            clients:{
+            apps:{
                 load:function(success,failure){
-                    Clients.query(function(data){
-                        $sessionStorage.clients=new Array();
+                    Apps.query(function(data){
+                        $sessionStorage.apps=new Array();
                         for(var i=0;i<data.length;i++){
-                            $sessionStorage.clients.push({
+                            $sessionStorage.apps.push({
                                 id:data[i].id
                               , key:data[i].key
                             });
@@ -36,20 +36,20 @@ pleni.factory('Resources',['$sessionStorage',
                         if(failure){failure(error);}
                     });
                 }
-              , create:function(client,success,failure){
-                    bind(Clients.save,client,success,failure);
+              , create:function(app,success,failure){
+                    bind(Apps.save,app,success,failure);
                 }
-              , update:function(client,success,failure){
-                    bind(Clients.update,client,success,failure);
+              , update:function(app,success,failure){
+                    bind(Apps.update,app,success,failure);
                 }
-              , check:function(client,success,failure){
-                    bind(Clients.check,client,success,failure);
+              , check:function(app,success,failure){
+                    bind(Apps.check,app,success,failure);
                 }
-              , scan:function(client,success,failure){
-                    bind(Clients.scan,client,success,failure);
+              , scan:function(app,success,failure){
+                    bind(Apps.scan,app,success,failure);
                 }
-              , delete:function(client,success,failure){
-                    bind(Clients.delete,client,success,failure);
+              , delete:function(app,success,failure){
+                    bind(Apps.delete,app,success,failure);
                 }
             }
           , dbservers:{

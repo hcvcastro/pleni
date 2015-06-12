@@ -4,7 +4,7 @@ var validate=require('../../../core/validators')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
   , schema=require('../../../core/schema')
-  , Client=require('../models/client')
+  , App=require('../models/app')
   , generator=require('../../../core/functions/utils/random').sync
   , sort=require('../../../core/utils').sort
 
@@ -12,8 +12,8 @@ module.exports=function(app){
     var authed=app.get('auth')
       , redis=app.get('redis')
 
-    app.get('/resources/clients',authed,function(request,response){
-        redis.hgetall('monitor:clients',function(err,reply){
+    app.get('/resources/apps',authed,function(request,response){
+        redis.hgetall('monitor:apps',function(err,reply){
             var list=[]
 
             for(var r in reply){
@@ -28,12 +28,12 @@ module.exports=function(app){
         });
     });
 
-    app.put('/resources/clients',authed,function(request,response){
-        if(schema.js.validate(request.body,schema.clients).length==0){
-            Client.remove({},function(){
-                var obj1=request.body.map(function(client){
+    app.put('/resources/apps',authed,function(request,response){
+        if(schema.js.validate(request.body,schema.apps).length==0){
+            App.remove({},function(){
+                var obj1=request.body.map(function(app){
                         return {
-                            id:validate.toString(client.id)
+                            id:validate.toString(app.id)
                           , key:generator()
                         };
                     })
@@ -43,12 +43,12 @@ module.exports=function(app){
                     obj2[el.key]=el.id;
                 });
 
-                Client.collection.insert(obj1,function(){
-                    redis.del('monitor:clients',function(err,reply){
+                App.collection.insert(obj1,function(){
+                    redis.del('monitor:apps',function(err,reply){
                         if(err){
                             console.log(err);
                         }
-                        redis.hmset('monitor:clients',obj2,function(err,reply){
+                        redis.hmset('monitor:apps',obj2,function(err,reply){
                             if(err){
                                 console.log(err);
                             }
@@ -62,19 +62,19 @@ module.exports=function(app){
         }
     });
 
-    app.post('/resources/clients',authed,function(request,response){
-        if(schema.js.validate(request.body,schema.client).length==0){
-            Client.findOne({id:request.body.id},function(err,client){
-                if(!client){
+    app.post('/resources/apps',authed,function(request,response){
+        if(schema.js.validate(request.body,schema.app).length==0){
+            App.findOne({id:request.body.id},function(err,app){
+                if(!app){
                     var id=validate.toString(request.body.id)
                       , key=generator()
 
-                    redis.hset('monitor:clients',key,id,function(err,reply){
+                    redis.hset('monitor:apps',key,id,function(err,reply){
                         if(err){
                             console.log(err);
                         }
 
-                        Client.create({
+                        App.create({
                             id:id
                           , key:key
                         });
@@ -93,25 +93,25 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/clients',authed,function(request,response){
-        redis.del('monitor:clients',function(err,reply){
+    app.delete('/resources/apps',authed,function(request,response){
+        redis.del('monitor:apps',function(err,reply){
             if(err){
                 console.log(err);
             }
-            Client.remove({},function(){
+            App.remove({},function(){
                 response.status(200).json(_success.ok);
             });
         });
     });
 
-    app.get('/resources/clients/:client',authed,function(request,response){
-        Client.findOne({
-            id:validate.toString(request.params.client)
-        },function(err,client){
-            if(client){
+    app.get('/resources/apps/:app',authed,function(request,response){
+        App.findOne({
+            id:validate.toString(request.params.app)
+        },function(err,app){
+            if(app){
                 response.status(200).json({
-                    id:client.id
-                  , key:client.key
+                    id:app.id
+                  , key:app.key
                 });
             }else{
                 response.status(404).json(_error.notfound);
@@ -119,36 +119,36 @@ module.exports=function(app){
         });
     });
 
-    app.put('/resources/clients/:client',authed,function(request,response){
-        if(schema.js.validate(request.body,schema.client).length==0){
-            var id=validate.toString(request.params.client)
+    app.put('/resources/apps/:app',authed,function(request,response){
+        if(schema.js.validate(request.body,schema.app).length==0){
+            var id=validate.toString(request.params.app)
               , key=generator()
 
-            Client.findOne({id:id},function(err,client){
-                redis.hset('monitor:clients',key,id);
+            App.findOne({id:id},function(err,app){
+                redis.hset('monitor:apps',key,id);
 
-                if(client){
-                    client.key=key
+                if(app){
+                    app.key=key
 
-                    client.save(function(err,client){
+                    app.save(function(err,app){
                         if(!err){
                             response.status(200).json({
-                                id:client.id
-                              , key:client.key
+                                id:app.id
+                              , key:app.key
                             });
                         }else{
                             response.status(403).json(_error.json);
                         }
                     });
                 }else{
-                    Client.create({
+                    App.create({
                         id:id
                       , key:key
-                    },function(err,client){
+                    },function(err,app){
                         if(!err){
                             response.status(201).json({
-                                id:client.id
-                              , key:client.key
+                                id:app.id
+                              , key:app.key
                             });
                         }else{
                             response.status(403).json(_error.json);
@@ -161,18 +161,18 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/clients/:client',authed,
+    app.delete('/resources/apps/:app',authed,
         function(request,response){
-        Client.findOne({
-            id:validate.toString(request.params.client)
-        },function(err,client){
-            if(client){
-                redis.hdel('monitor:clients',client.key,function(err,reply){
+        App.findOne({
+            id:validate.toString(request.params.app)
+        },function(err,app){
+            if(app){
+                redis.hdel('monitor:apps',app.key,function(err,reply){
                     if(err){
                         console.log(err);
                     }
                     response.status(200).json(_success.ok);
-                    client.remove();
+                    app.remove();
                 });
             }else{
                 response.status(404).json(_error.notfound);

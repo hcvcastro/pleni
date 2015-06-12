@@ -1,0 +1,17 @@
+article.form.animate(ng-show='apps.env.view==\'form\'')
+    .title
+        h2(ng-show='apps.env.type==\'collection\'') Add a App
+        h2(ng-show='apps.env.type==\'element\'') Edit: {{app.id}}
+        .close
+            a.fa.fa-close(ng-click='apps.list()')
+    .body
+        form(ng-submit='apps.save()')
+            p
+                label Name
+                input(type='text',placeholder='The name for the connection',required,ng-model='app.id')
+            p.offset.load
+                span.hide.loader.fa.fa-spinner.fa-spin
+                span.hide.message
+            p.offset
+                button(type='submit') Save
+

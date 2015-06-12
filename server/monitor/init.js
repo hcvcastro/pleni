@@ -1,6 +1,6 @@
 'use strict';
 
-var Client=require('./models/client')
+var App=require('./models/app')
   , DBServer=require('./models/dbserver')
   , Planner=require('./models/planner')
   , User=require('./models/user')
@@ -12,33 +12,33 @@ var Client=require('./models/client')
 
 module.exports=function(app,config){
     var redis=app.get('redis')
-      , load=function(model,container,each,done){
-            model.find({},function(err,collection){
-                var params={}
 
-                collection.forEach(function(element){
-                    each(params,element);
-                });
+    App.find({},function(err,apps){
+        var params={}
 
-                if(collection.length>0){
-                    redis.hmset(container,params,function(err,reply){
-                        if(err){
-                            console.log(err);
-                        }else if(done){
-                            done(collection);
-                        }
-                    });
+        apps.forEach(function(app){
+            params[app.key]=app.id;
+        });
+
+        if(apps.length>0){
+            redis.hmset('monitor:apps',params,function(err,reply){
+                if(err){
+                    console.log(err);
                 }
             });
         }
-
-    load(Client,'monitor:clients',function(params,element){
-        params[element.key]=element.id;
     });
-    load(DBServer,'monitor:dbservers',function(params,element){
-        params[element.id]=JSON.stringify(element.db);
-    },function(collection){
-        Q.all(collection.map(function(dbserver){
+
+    DBServer.find({},function(err,dbservers){
+        var params1={}
+
+        dbservers.forEach(function(dbserver){
+            params1[dbserver.id]=JSON.stringify({
+                db:dbserver.db
+            });
+        });
+
+        Q.all(dbservers.map(function(dbserver){
             return test({
                 id:dbserver.id
               , db:{
@@ -52,39 +52,29 @@ module.exports=function(app,config){
                 .then(infodbs);
         }))
         .spread(function(){
-            var params1={}
-              , params2={}
-              , params3={}
+            var params2={}
 
             for(var arg in arguments){
                 var id=arguments[arg].id
+
                 arguments[arg].db.explist.forEach(function(repository){
-                    params1[repository.db_name]=id;
-                    params2[repository.db_name]=JSON.stringify(repository);
+                    params2[repository.db_name]=JSON.stringify({
+                        dbserver:id
+                      , dbinfo:repository
+                    });
                 });
-                params3[id]=JSON.stringify(arguments[arg].auth);
+
+                if(arguments[arg].auth){
+                    var json=JSON.parse(params1[id])
+
+                    json.auth=arguments[arg].auth;
+                    params1[id]=JSON.stringify(json);
+                }
             }
 
-            redis.hmset('monitor:repositorydb',params1,function(err,reply){
-                if(err){
-                    console.log(err);
-                }
-            });
-            redis.hmset('monitor:repositories',params2,function(err,reply){
-                if(err){
-                    console.log(err);
-                }
-            });
-            redis.hmset('monitor:cookies',params3,function(err,reply){
-                if(err){
-                    console.log(err);
-                }
-            });
-        })
-        .done();
-    });
-    load(Planner,'monitor:planners',function(params,element){
-        params[element.id]=JSON.stringify(element.planner);
+            redis.hmset('monitor:dbservers',params1);
+            redis.hmset('monitor:repositories',params2);
+        });
     });
 };
 

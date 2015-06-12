@@ -6,11 +6,11 @@ var request=require('supertest')
   , redis=require('redis')
   , app=require('../../../server/monitor')
   , config=require('../../../config/tests')
-  , Client=require('../../../server/monitor/models/client')
+  , App=require('../../../server/monitor/models/app')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
 
-describe('clients controller functions',function(){
+describe('apps controller functions',function(){
     var cookie=''
       , redisclient=redis.createClient(
         config.redis.port,config.redis.host,config.redis.options)
@@ -64,9 +64,9 @@ describe('clients controller functions',function(){
         }],expected:_success.ok,status:201}
     ]
     .forEach(function(element){
-        it('PUT /resources/clients',function(done){
+        it('PUT /resources/apps',function(done){
             request(app)
-                .put('/resources/clients')
+                .put('/resources/apps')
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -94,9 +94,9 @@ describe('clients controller functions',function(){
         },expected:_error.notoverride,status:403}
     ]
     .forEach(function(element){
-        it('POST /resources/clients',function(done){
+        it('POST /resources/apps',function(done){
             request(app)
-                .post('/resources/clients')
+                .post('/resources/apps')
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -120,9 +120,9 @@ describe('clients controller functions',function(){
         },expected:_success.ok,status:201}
     ]
     .forEach(function(element){
-        it('POST /resources/clients',function(done){
+        it('POST /resources/apps',function(done){
             request(app)
-                .post('/resources/clients')
+                .post('/resources/apps')
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -137,9 +137,9 @@ describe('clients controller functions',function(){
         });
     });
 
-    it('GET /resources/clients',function(done){
+    it('GET /resources/apps',function(done){
         request(app)
-            .get('/resources/clients')
+            .get('/resources/apps')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -155,9 +155,9 @@ describe('clients controller functions',function(){
             });
     });
 
-    it('DELETE /resources/clients',function(done){
+    it('DELETE /resources/apps',function(done){
         request(app)
-            .delete('/resources/clients')
+            .delete('/resources/apps')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -169,9 +169,9 @@ describe('clients controller functions',function(){
             });
     });
 
-    it('GET /resources/clients',function(done){
+    it('GET /resources/apps',function(done){
         request(app)
-            .get('/resources/clients')
+            .get('/resources/apps')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -183,9 +183,9 @@ describe('clients controller functions',function(){
             });
     });
 
-    it('POST /resources/clients',function(done){
+    it('POST /resources/apps',function(done){
         request(app)
-            .post('/resources/clients')
+            .post('/resources/apps')
             .set('cookie',cookie[1])
             .send({
                 id:'test'
@@ -201,9 +201,9 @@ describe('clients controller functions',function(){
             });
     });
 
-    it('GET /resources/clients/:client',function(done){
+    it('GET /resources/apps/:app',function(done){
         request(app)
-            .get('/resources/clients/test')
+            .get('/resources/apps/test')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -216,9 +216,9 @@ describe('clients controller functions',function(){
             });
     });
 
-    it('GET /resources/clients/:client',function(done){
+    it('GET /resources/apps/:app',function(done){
         request(app)
-            .get('/resources/clients/nonexistent')
+            .get('/resources/apps/nonexistent')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(404)
@@ -248,9 +248,9 @@ describe('clients controller functions',function(){
         },id:'test2',status:200}
     ]
     .forEach(function(element){
-        it('PUT /resources/clients/:client',function(done){
+        it('PUT /resources/apps/:app',function(done){
             request(app)
-                .put('/resources/clients/'+element.id)
+                .put('/resources/apps/'+element.id)
                 .set('cookie',cookie[1])
                 .send(element.test)
                 .expect('Content-Type',/json/)
@@ -275,9 +275,9 @@ describe('clients controller functions',function(){
         });
     });
 
-    it('GET /resources/clients',function(done){
+    it('GET /resources/apps',function(done){
         request(app)
-            .get('/resources/clients')
+            .get('/resources/apps')
             .set('cookie',cookie[1])
             .expect('Content-Type',/json/)
             .expect(200)
@@ -294,7 +294,7 @@ describe('clients controller functions',function(){
     });
 
     after(function(done){
-        Client.remove({},function(err){
+        App.remove({},function(err){
             if(!err){
                 done();
             }

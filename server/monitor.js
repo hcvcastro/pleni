@@ -140,7 +140,7 @@ app.set('auth',function(request,response,next){
 var destroy=function(){
     server.close(function(){
         async.each([
-            'monitor:clients'
+            'monitor:apps'
           , 'monitor:dbservers'
           , 'monitor:repositorydb'
           , 'monitor:repositories'
@@ -161,7 +161,7 @@ process.on('SIGTERM',destroy);
 
 require('./monitor/init')(app,config);
 require('./monitor/home')(app,config);
-require('./monitor/resources/clients')(app,config);
+require('./monitor/resources/apps')(app,config);
 require('./monitor/resources/planners')(app,config);
 require('./monitor/resources/dbservers')(app,config);
 require('./monitor/dbserver')(app,config);
