@@ -90,7 +90,7 @@ var auth2={
 };
 exports.auth2=auth2;
 
-var client={
+var app={
     'type':'object'
   , 'properties':{
         'id':{
@@ -100,15 +100,15 @@ var client={
     }
   , 'required':['id']
 };
-exports.client=client;
+exports.app=app;
 
-var clients={
+var apps={
     'type':'array'
-  , 'items':client
+  , 'items':app
   , 'minItems':1
   , 'uniqueItems':true
 };
-exports.clients=clients;
+exports.apps=apps;
 
 var dbserver={
     'type':'object'

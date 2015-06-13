@@ -80,7 +80,7 @@ describe('dbservers controller functions',function(){
                         cookie2=res.headers['set-cookie'];
 
                         request(monitor)
-                            .post('/resources/clients')
+                            .post('/resources/apps')
                             .set('cookie',cookie2[1])
                             .send({
                                 id:'test'
@@ -574,7 +574,7 @@ describe('dbservers controller functions',function(){
 
     after(function(done){
         request(monitor)
-            .delete('/resources/clients/test')
+            .delete('/resources/apps/test')
             .set('cookie',cookie2[1])
             .end(function(err,res){
                 done();

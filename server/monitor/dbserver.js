@@ -27,16 +27,17 @@ module.exports=function(app,config){
             var userid=validate.toString(request.body.name)
               , apikey=validate.toString(request.body.password)
 
-            redis.hget('monitor:apps',apikey,function(err,reply){
+            redis.hget('monitor:apps',apikey,function(err,app){
                 if(err){
                     console.log(err);
                 }
 
-                if(reply){
+                if(app){
                     var cookie=generator()
-                    User.findOne({id:userid,app:reply},function(err,user){
+                    User.findOne({id:userid,app:app},function(err,user){
                         var data=JSON.stringify({
-                            id:userid
+                            id:
+                          , app:app
                           , repositories:[]
                         })
 

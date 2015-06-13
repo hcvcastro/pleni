@@ -72,8 +72,12 @@ module.exports=function(app,config){
                 }
             }
 
-            redis.hmset('monitor:dbservers',params1);
-            redis.hmset('monitor:repositories',params2);
+            if(Object.keys(params1).length){
+                redis.hmset('monitor:dbservers',params1);
+                if(Object.keys(params2).length){
+                    redis.hmset('monitor:repositories',params2);
+                }
+            }
         });
     });
 };
