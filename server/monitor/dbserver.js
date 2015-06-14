@@ -15,6 +15,71 @@ var _request=require('request')
 
 module.exports=function(app,config){
     var redis=app.get('redis')
+      , authed=function(request,response,next){
+            var regex=/^AuthSession=(.+) *$/
+              , exec=regex.exec(request.headers.cookie)
+
+            if(exec){
+                redis.get('user:'+exec[1],function(err,reply){
+                    if(err){
+                        console.log(err);
+                    }
+                    if(reply){
+                        request.user=JSON.parse(reply);
+                        return next();
+                    }else{
+                        response.status(401).json(_error.auth);
+                    }
+                });
+            }else{
+                response.status(401).json(_error.auth);
+            }
+        }
+      , dbauth=function(dbserverid,done){
+            redis.hget('monitor:dbservers',dbserverid,function(err,_dbserver){
+                if(err){
+                    console.log(err);
+                }
+
+                if(_dbserver){
+                    var dbserver=JSON.parse(_dbserver)
+
+                    if(dbserver.auth&&dbserver.auth.ts&&
+                        ((+Date.now()- +dbserver.auth.ts)<500000)){
+                        done(dbserver);
+                    }else{
+                        test({
+                            id:dbserverid
+                          , db:{
+                                host:dbserver.db.host+':'+dbserver.db.port
+                              , user:dbserver.db.user
+                              , pass:dbserver.db.pass
+                              , prefix:dbserver.db.prefix
+                            }
+                        })
+                        .then(auth)
+                        .then(function(args){
+                            dbserver.auth=args.auth;
+
+                            redis.hset('monitor:dbservers',dbserverid,
+                                JSON.stringify(dbserver),function(err,reply){
+                                if(err){
+                                    console.log(err);
+                                }
+                                done(dbserver);
+                            });
+                        })
+                        .fail(function(error){
+                            console.log(error);
+                            done(null);
+                        })
+                        .done();
+                    }
+                }else{
+                    done(null);
+                }
+            });
+        }
 
     app.get('/dbserver',function(request,response){
         response.status(200).json({
@@ -27,28 +92,26 @@ module.exports=function(app,config){
             var userid=validate.toString(request.body.name)
               , apikey=validate.toString(request.body.password)
 
-            redis.hget('monitor:apps',apikey,function(err,app){
+            redis.hget('monitor:apps',apikey,function(err,appid){
                 if(err){
                     console.log(err);
                 }
 
-                if(app){
-                    var cookie=generator()
-                    User.findOne({id:userid,app:app},function(err,user){
-                        var data=JSON.stringify({
-                            id:
-                          , app:app
-                          , repositories:[]
-                        })
+                if(appid){
+                    User.findOne({id:userid,app:appid},function(err,user){
+                        var cookie=generator()
+                          , data={
+                                id:userid
+                              , app:appid
+                            }
 
                         if(user){
-                            data=JSON.stringify({
-                                id:userid
-                              , repositories:user.repositories
-                            });
+                            data.repositories=user.repositories;
+                        }else{
+                            data.repositories=[];
                         }
 
-                        redis.setex('user:'+cookie,60*5,data,
+                        redis.setex('user:'+cookie,60*5,JSON.stringify(data),
                         function(err,reply){
                             response.cookie('AuthSession',cookie,{
                                 path:'/'
@@ -68,153 +131,154 @@ module.exports=function(app,config){
         }
     });
 
-    var authed=function(request,response,next){
-        var regex=/^AuthSession=(.+) *$/
-          , exec=regex.exec(request.headers.cookie)
-
-        if(exec){
-            redis.get('user:'+exec[1],function(err,reply){
-                if(err){
-                    console.log(err);
-                }
-                if(reply){
-                    request.reply=JSON.parse(reply);
-                    return next();
-                }else{
-                    response.status(401).json(_error.auth);
-                }
-            });
-        }else{
-            response.status(401).json(_error.auth);
-        }
-    };
-
-    var cookie=function(key,done){
-        redis.hget('monitor:cookies',key,function(err,reply){
-            if(err){
-                console.log(err);
-            }
-            var json=JSON.parse(reply);
-            if((+Date.now()- +json.ts)>500000){
-                done(json.cookie);
-            }else{
-                redis.hget('monitor:dbservers',key,function(err,reply){
-                    if(err){
-                        console.log(err);
-                    }
-                    if(reply){
-                        var db=JSON.parse(reply);
-                        test({
-                            id:key
-                          , db:{
-                                host:db.host+':'+db.port
-                              , user:db.user
-                              , pass:db.pass
-                              , prefix:db.prefix
-                        }})
-                        .then(auth)
-                        .then(function(args){
-                            redis.hset('monitor:cookies',key,args.auth,
-                            function(err,reply){
-                                if(err){
-                                    console.log(err);
-                                }
-                                done(args.auth.cookie);
-                            });
-                        })
-                        .fail(function(error){
-                            console.log(error);
-                            done(null);
-                        })
-                        .done();
-                    }
-                });
-            }
-        });
-    };
-
     app.get('/dbserver/_all_dbs',authed,function(request,response){
-        response.status(200).json(request.reply.repositories);
+        var _repositories=request.user.repositories.map(function(repository){
+            return repository.name;
+        });
+        response.status(200).json(_repositories);
     });
 
     app.put('/dbserver/:repository',authed,function(request,response){
         var repository=request.params.repository
 
-        redis.hkeys('monitor:dbservers',function(err,dbservers){
-            if(err){
-                console.log(err);
-            }
-            if(dbservers){
-                var key=dbservers[Math.floor(Math.random()*dbservers.length)]
-                cookie(key,function(cookie){
-                    if(!cookie){
-                        response.status(401).json(_error.auth);
-                    }else{
-                        redis.hget('monitor:dbservers',key,function(err,_db){
-                            if(err){
-                                console.log(err);
-                            }
-                            var db=JSON.parse(_db)
-                              , name=db.prefix+request.reply.id+'_'+repository
+        if(!request.user.repositories.some(function(_repository){
+            return _repository.name==repository;
+        })){
+            redis.hkeys('monitor:dbservers',function(err,dbservers){
+                if(err){
+                    console.log(err);
+                }
+                if(dbservers){
+                    var dbserverid=dbservers[
+                            Math.floor(Math.random()*dbservers.length)]
+
+                    dbauth(dbserverid,function(dbserver){
+                        if(dbserver){
+                            var name=dbserver.db.prefix+request.user.id
+                                    +'_'+repository
 
                             _request.put({
-                                url:db.host+':'+db.port+'/'+name
+                                url:dbserver.db.host+':'+dbserver.db.port
+                                    +'/'+name
                               , headers:{
-                                    'Cookie':cookie
+                                    'Cookie':dbserver.auth.cookie
                                   , 'X-CouchDB-WWW-Authenticate':'Cookie'
                                 }
                             },function(error,reply){
                                 if(reply.statusCode==201){
-                                    redis.hset('monitor:repositorydb',name,key,
-                                    function(err,reply){
-                                        if(err){
-                                            console.log(reply);
-                                        }
-                                    });
-                                    var info=JSON.stringify({
-                                        db_name:name
-                                      , doc_count:0
-                                      , doc_del_count:0
-                                      , update_seq:0
-                                      , purge_seq:0
-                                      , compact_running:false
-                                      , disk_size:79
-                                      , data_size:0
-                                      , instance_start_time:Date.now()*1000
-                                      , disk_format_version:6
-                                      , committed_update_seq:0
-                                    })
+                                    var _repository=JSON.stringify({
+                                            dbserver:dbserverid
+                                          , dbinfo:{
+                                                db_name:name
+                                              , doc_count:0
+                                              , doc_del_count:0
+                                              , update_seq:0
+                                              , purge_seq:0
+                                              , compact_running:false
+                                              , disk_size:79
+                                              , data_size:0
+                                              , instance_start_time:
+                                                    Date.now()*1000
+                                              , disk_format_version:6
+                                              , committed_update_seq:0
+                                            }
+                                        })
+                                      , repositories=request.user.repositories
 
-                                    redis.hset('monitor:repositories',name,info,
-                                    function(err,reply){
-                                        if(err){
-                                            console.log(reply);
-                                        }
+                                    repositories.push({
+                                        name:repository
+                                      , dbserver:dbserverid
                                     });
-                                }
 
-                                User.findOneAndUpdate({
-                                    id:request.reply.id
-                                },{
-                                    $set:{
-                                        repositories:request.reply.repositories
-                                    }
-                                },function(err,user){
+                                    User.findOneAndUpdate({
+                                        id:request.user.id
+                                    },{
+                                        id:request.user.id
+                                      , app:request.user.app
+                                      , repositories:repositories
+                                    },{
+                                        upsert:true
+                                    },function(err,user){
+                                        redis.hset('monitor:repositories',
+                                            name,_repository);
+
+                                        response.status(reply.statusCode)
+                                            .json(reply.body);
+                                    });
+                                }else{
                                     response.status(reply.statusCode)
                                         .json(reply.body);
-                                });
+                                }
                             });
-                        });
-                    }
-                });
-            }else{
-                response.status(401).json(_error.auth);
-            }
-        });
+                        }else{
+                            response.status(401).json(_error.auth);
+                        }
+                    });
+                }else{
+                    response.status(401).json(_error.auth);
+                }
+            });
+        }else{
+            response.status(412).json({
+                error:'file_exists'
+              , reason:'The database could not be created, '
+                    +'the file already exists.'
+            });
+        }
+    });
+
+    app.delete('/dbserver/:repository',authed,function(request,response){
+        var repository=request.params.repository
+          , Repository=request.user.repositories.some(function(_repository){
+                return _repository.name==repository;
+            })
+            
+        if(Repository){
+            dbauth(Repository.dbserver,function(dbserver){
+                if(dbserver){
+                    var name=dbserver.db.prefix+request.user.id
+                            +'_'+repository
+
+                    _request.delete({
+                        url:dbserver.db.host+':'+dbserver.db.port
+                            +'/'+name
+                      , headers:{
+                            'Cookie':dbserver.auth.cookie
+                          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+                        }
+                    },function(error,reply){
+                        if(reply.statusCode==200){
+                            redis.hdel('monitor:repositories',name,
+                                function(err,reply){
+                                if(err){
+                                    console.log(reply);
+                                }
+
+                                // DELETE MONGO REPOSITORY
+                                // DELETE COOKIE REFERENCE
+                                response.status(reply.statusCode)
+                                    .json(reply.body);
+                            });
+                        }else{
+                            response.status(reply.statusCode)
+                                .json(reply.body);
+                        }
+                    });
+                }else{
+                    response.status(404).json({
+                        ok:false
+                    });
+                }
+            });
+        }else{
+            response.status(404).json({
+                ok:false
+            });
+        }
     });
 
     app.put('/dbserver/:repository/:document',authed,function(request,response){
-        var repository=request.params.repository
+/*        var repository=request.params.repository
           , document=request.params.document
 
         redis.hget('monitor:repositorydb',repository,function(err,dbserverid){
@@ -246,18 +310,14 @@ module.exports=function(app,config){
                         response.status(404).json(_error.notfound);
                     }
                 });
-            }else{
+            }else{*/
                 response.status(404).json(_error.notfound);
-            }
-        });
+/*            }
+        });*/
     });
 
     app.put('/dbserver/:repository/_design/:document',authed,
     function(request,response){
-        response.status(400).json(_error.json);
-    });
-
-    app.delete('/dbserver/:repository',authed,function(request,response){
         response.status(400).json(_error.json);
     });
 };

@@ -3,6 +3,7 @@
 var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
+  , redis=require('redis')
   , app=require('../../../../server/monitor')
   , base='../../../../core/tasks'
   , create=require(base+'/site/create')
@@ -16,6 +17,13 @@ describe('testing task site/create',function(){
     var cookie=undefined
       , dbuser='test'
       , apikey=undefined
+      , redisclient=redis.createClient(
+        config.redis.port,config.redis.host,config.redis.options)
+    redisclient.on('error',console.error.bind(console,'redis connection error:'));
+    redisclient.on('ready',function(){
+        console.log('connection to redis db:',
+            config.redis.host,':',config.redis.port);
+    });
 
     before(function(done){
         request(app)
@@ -37,7 +45,7 @@ describe('testing task site/create',function(){
                         cookie=res.headers['set-cookie'];
 
                         request(app)
-                            .post('/resources/clients')
+                            .post('/resources/apps')
                             .set('cookie',cookie[1])
                             .send({
                                 id:'test'
@@ -90,11 +98,17 @@ describe('testing task site/create',function(){
 
     after(function(done){
         request(app)
-            .delete('/resources/clients/test')
+            .delete('/resources/apps/test')
             .set('cookie',cookie[1])
             .end(function(err,res){
                 done();
             });
+    });
+
+    after(function(done){
+        redisclient.flushall(function(err,reply){
+            done();
+        });
     });
 });
 
