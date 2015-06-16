@@ -15,12 +15,19 @@ var _request=require('request')
 
 module.exports=function(app,config){
     var redis=app.get('redis')
-      , authed=function(request,response,next){
+      , cookie=function(header){
             var regex=/^AuthSession=(.+) *$/
-              , exec=regex.exec(request.headers.cookie)
+              , exec=regex.exec(header)
 
             if(exec){
-                redis.get('user:'+exec[1],function(err,reply){
+                return exec[1];
+            }
+        }
+      , authed=function(request,response,next){
+            var auth=cookie(request.headers.cookie)
+
+            if(auth){
+                redis.get('user:'+auth,function(err,reply){
                     if(err){
                         console.log(err);
                     }
@@ -228,18 +235,19 @@ module.exports=function(app,config){
     });
 
     app.delete('/dbserver/:repository',authed,function(request,response){
-        var repository=request.params.repository
-          , Repository=request.user.repositories.some(function(_repository){
+        var auth=cookie(request.headers.cookie)
+          , repository=request.params.repository
+          , index=request.user.repositories.findIndex(function(_repository){
                 return _repository.name==repository;
             })
-            
-        if(Repository){
-            dbauth(Repository.dbserver,function(dbserver){
+
+        if(index>=0){
+            dbauth(request.user.repositories[index].dbserver,function(dbserver){
                 if(dbserver){
                     var name=dbserver.db.prefix+request.user.id
                             +'_'+repository
 
-                    _request.delete({
+                    _request.del({
                         url:dbserver.db.host+':'+dbserver.db.port
                             +'/'+name
                       , headers:{
@@ -249,15 +257,30 @@ module.exports=function(app,config){
                     },function(error,reply){
                         if(reply.statusCode==200){
                             redis.hdel('monitor:repositories',name,
-                                function(err,reply){
+                                function(err){
                                 if(err){
-                                    console.log(reply);
+                                    console.log(err);
                                 }
 
-                                // DELETE MONGO REPOSITORY
-                                // DELETE COOKIE REFERENCE
-                                response.status(reply.statusCode)
-                                    .json(reply.body);
+                                request.user.repositories.splice(index,1);
+
+                                redis.setex('user:'+auth,60*5,
+                                    JSON.stringify(request.user),
+                                    function(err){
+                                    if(err){
+                                        console.log(err);
+                                    }
+                                    User.findOneAndUpdate({
+                                        id:request.user.id
+                                    },request.user,{upsert:true},
+                                        function(err,user){
+                                        if(err){
+                                            console.log(err);
+                                        }
+                                        response.status(reply.statusCode)
+                                            .json(reply.body);
+                                    });
+                                });
                             });
                         }else{
                             response.status(reply.statusCode)
