@@ -146,7 +146,8 @@ module.exports=function(app,config){
     });
 
     app.put('/dbserver/:repository',authed,function(request,response){
-        var repository=request.params.repository
+        var auth=cookie(request.headers.cookie)
+          , repository=request.params.repository
 
         if(!request.user.repositories.some(function(_repository){
             return _repository.name==repository;
@@ -190,27 +191,32 @@ module.exports=function(app,config){
                                               , committed_update_seq:0
                                             }
                                         })
-                                      , repositories=request.user.repositories
 
-                                    repositories.push({
+                                    request.user.repositories.push({
                                         name:repository
                                       , dbserver:dbserverid
                                     });
 
                                     User.findOneAndUpdate({
                                         id:request.user.id
-                                    },{
-                                        id:request.user.id
-                                      , app:request.user.app
-                                      , repositories:repositories
-                                    },{
-                                        upsert:true
-                                    },function(err,user){
+                                    },request.user,{upsert:true},
+                                        function(err,user){
                                         redis.hset('monitor:repositories',
-                                            name,_repository);
-
-                                        response.status(reply.statusCode)
-                                            .json(reply.body);
+                                            name,_repository,function(err){
+                                            if(err){
+                                                console.log(err);
+                                            }
+                                            redis.setex('user:'+auth,60*5,
+                                                JSON.stringify(request.user),
+                                                function(err){
+                                                    if(err){
+                                                        console.log(err);
+                                                    }
+                                                response
+                                                    .status(reply.statusCode)
+                                                    .json(reply.body);
+                                            });
+                                        });
                                     });
                                 }else{
                                     response.status(reply.statusCode)
@@ -301,47 +307,78 @@ module.exports=function(app,config){
     });
 
     app.put('/dbserver/:repository/:document',authed,function(request,response){
-/*        var repository=request.params.repository
+        var repository=request.params.repository
           , document=request.params.document
+          , Repository=request.user.repositories.find(function(_repository){
+                return _repository.name==repository;
+            })
 
-        redis.hget('monitor:repositorydb',repository,function(err,dbserverid){
-            if(err){
-                console.log(err);
-            }
-            if(dbserverid){
-                redis.hget('monitor:dbservers',dbserverid,function(err,_db){
-                    if(err){
-                        console.log(err);
-                    }
-                    if(_db){
-                        var db=JSON.parse(_db)
-                          , name=db.prefix+request.reply.id+'_'+repository
+        if(Repository){
+            dbauth(Repository.dbserver,function(dbserver){
+                if(dbserver){
+                    var name=dbserver.db.prefix+request.user.id+'_'+repository
 
-                        cookie(dbserverid,function(cookie){
-                            _request.put({
-                                url:db.host+':'+db.port+'/'+name+'/'+document
-                              , headers:{
-                                    'Cookie':cookie
-                                  , 'X-CouchDB-WWW-Authenticate':'Cookie'
-                                }
-                            },function(error,reply){
-                                response.status(reply.statusCode)
-                                    .json(reply.body);
-                            });
-                        });
-                    }else{
-                        response.status(404).json(_error.notfound);
-                    }
-                });
-            }else{*/
-                response.status(404).json(_error.notfound);
-/*            }
-        });*/
+                    _request.put({
+                        url:dbserver.db.host+':'+dbserver.db.port
+                            +'/'+name+'/'+document
+                      , headers:{
+                            'Cookie':dbserver.auth.cookie
+                          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+                        }
+                      , json:request.body
+                    },function(error,reply){
+                        response.status(reply.statusCode)
+                            .json(reply.body);
+                    });
+                }else{
+                    response.status(404).json({
+                        ok:false
+                    });
+                }
+            });
+        }else{
+            response.status(404).json({
+                ok:false
+            });
+        }
     });
 
     app.put('/dbserver/:repository/_design/:document',authed,
     function(request,response){
-        response.status(400).json(_error.json);
+        var repository=request.params.repository
+          , document=request.params.document
+          , Repository=request.user.repositories.find(function(_repository){
+                return _repository.name==repository;
+            })
+
+        if(Repository){
+            dbauth(Repository.dbserver,function(dbserver){
+                if(dbserver){
+                    var name=dbserver.db.prefix+request.user.id+'_'+repository
+
+                    _request.put({
+                        url:dbserver.db.host+':'+dbserver.db.port
+                            +'/'+name+'/_design/'+document
+                      , headers:{
+                            'Cookie':dbserver.auth.cookie
+                          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+                        }
+                      , json:request.body
+                    },function(error,reply){
+                        response.status(reply.statusCode)
+                            .json(reply.body);
+                    });
+                }else{
+                    response.status(404).json({
+                        ok:false
+                    });
+                }
+            });
+        }else{
+            response.status(404).json({
+                ok:false
+            });
+        }
     });
 };
 

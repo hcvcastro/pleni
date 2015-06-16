@@ -67,21 +67,19 @@ describe('testing task site/create',function(){
             }
         },repeat,stop,function(params){
             params.should.have.an.Object;
-            console.log('test params',params);
-            /*params.should.have.property('action')
+            params.should.have.property('action')
                 .and.be.eql('task');
             params.should.have.property('task')
             params.task.should.have.property('id')
                 .and.be.eql('site/create');
             params.task.should.have.property('msg')
                 .and.be.eql('site repository created ('
-                    +config.db.prefix+db_name+')');*/
+                    +config.db.prefix+db_name+')');
             done();
         });
     });
 
     after(function(done){
-        console.log('1');
         remove({
             db:{
                 host:config.monitor.url+':'+config.monitor.port+'/dbserver'
@@ -90,18 +88,15 @@ describe('testing task site/create',function(){
               , pass:apikey
             }
         },repeat,stop,function(){
-        console.log('2');
             done();
         });
     });
 
     after(function(done){
-        console.log('3');
         request(app)
             .delete('/resources/apps/test')
             .set('cookie',cookie[1])
             .end(function(err,res){
-        console.log('4');
                 done();
             });
     });
