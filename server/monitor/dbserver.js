@@ -306,9 +306,8 @@ module.exports=function(app,config){
         }
     });
 
-    app.put('/dbserver/:repository/:document',authed,function(request,response){
+    var generic1=function(request,response,method){
         var repository=request.params.repository
-          , document=request.params.document
           , Repository=request.user.repositories.find(function(_repository){
                 return _repository.name==repository;
             })
@@ -317,68 +316,77 @@ module.exports=function(app,config){
             dbauth(Repository.dbserver,function(dbserver){
                 if(dbserver){
                     var name=dbserver.db.prefix+request.user.id+'_'+repository
+                      , params=request.url.split('/')
 
-                    _request.put({
-                        url:dbserver.db.host+':'+dbserver.db.port
-                            +'/'+name+'/'+document
-                      , headers:{
-                            'Cookie':dbserver.auth.cookie
-                          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+                    params[0]=dbserver.db.host+':'+dbserver.db.port;
+                    params[2]=name;
+                    params.splice(1,1);
+
+                    var packet={
+                            url:params.join('/')
+                          , headers:{
+                                'Cookie':dbserver.auth.cookie
+                              , 'X-CouchDB-WWW-Authenticate':'Cookie'
+                            }
                         }
-                      , json:request.body
-                    },function(error,reply){
-                        response.status(reply.statusCode)
-                            .json(reply.body);
+                    if(method!='head'){
+                        packet.json=request.body;
+                    }
+
+                    _request[method](packet,function(error,reply){
+                        response.status(reply.statusCode);
+                        if(method!='head'){
+                            response.json(reply.body);
+                        }else{
+                            response.send();
+                        }
                     });
                 }else{
-                    response.status(404).json({
-                        ok:false
-                    });
+                    response.status(404);
+                    if(method!='head'){
+                        response.json({
+                            ok:false
+                        });
+                    }else{
+                        response.send();
+                    }
                 }
             });
         }else{
-            response.status(404).json({
-                ok:false
-            });
+            response.status(404);
+            if(method!='head'){
+                response.json({
+                    ok:false
+                });
+            }else{
+                response.send();
+            }
         }
+    };
+
+    app.put('/dbserver/:repository/:document',authed,
+    function(request,response){
+        return generic1(request,response,'put');
+    });
+
+    app.get('/dbserver/:repository/:document',authed,
+    function(request,response){
+        return generic1(request,response,'get');
+    });
+
+    app.head('/dbserver/:repository/_design/:document',authed,
+    function(request,response){
+        return generic1(request,response,'head');
     });
 
     app.put('/dbserver/:repository/_design/:document',authed,
     function(request,response){
-        var repository=request.params.repository
-          , document=request.params.document
-          , Repository=request.user.repositories.find(function(_repository){
-                return _repository.name==repository;
-            })
+        return generic1(request,response,'put');
+    });
 
-        if(Repository){
-            dbauth(Repository.dbserver,function(dbserver){
-                if(dbserver){
-                    var name=dbserver.db.prefix+request.user.id+'_'+repository
-
-                    _request.put({
-                        url:dbserver.db.host+':'+dbserver.db.port
-                            +'/'+name+'/_design/'+document
-                      , headers:{
-                            'Cookie':dbserver.auth.cookie
-                          , 'X-CouchDB-WWW-Authenticate':'Cookie'
-                        }
-                      , json:request.body
-                    },function(error,reply){
-                        response.status(reply.statusCode)
-                            .json(reply.body);
-                    });
-                }else{
-                    response.status(404).json({
-                        ok:false
-                    });
-                }
-            });
-        }else{
-            response.status(404).json({
-                ok:false
-            });
-        }
+    app.get('/dbserver/:repository/_design/:view/_view/:funct',authed,
+    function(request,response){
+        return generic1(request,response,'get');
     });
 };
 
