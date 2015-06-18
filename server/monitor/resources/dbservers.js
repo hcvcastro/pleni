@@ -5,11 +5,11 @@ var validate=require('../../../core/validators')
   , _error=require('../../../core/json-response').error
   , schema=require('../../../core/schema')
   , DBServer=require('../models/dbserver')
+  , sort=require('../../../core/utils').sort
   , test=require('../../../core/functions/databases/test')
   , auth=require('../../../core/functions/databases/auth')
   , list=require('../../../core/functions/databases/list')
   , infodbs=require('../../../core/functions/databases/infodbs')
-  , sort=require('../../../core/utils').sort
 
 module.exports=function(app){
     var authed=app.get('auth')

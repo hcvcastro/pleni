@@ -5,10 +5,12 @@ var App=require('./models/app')
   , Planner=require('./models/planner')
   , User=require('./models/user')
   , Q=require('q')
-  , test=require('../../core/functions/databases/test')
-  , auth=require('../../core/functions/databases/auth')
-  , list=require('../../core/functions/databases/list')
-  , infodbs=require('../../core/functions/databases/infodbs')
+  , db_test=require('../../core/functions/databases/test')
+  , db_auth=require('../../core/functions/databases/auth')
+  , db_list=require('../../core/functions/databases/list')
+  , db_infodbs=require('../../core/functions/databases/infodbs')
+  , planner_test=require('../../core/functions/planners/test')
+  , planner_set=require('../../core/functions/planners/set')
 
 module.exports=function(app,config){
     var redis=app.get('redis')
@@ -39,17 +41,18 @@ module.exports=function(app,config){
         });
 
         Q.all(dbservers.map(function(dbserver){
-            return test({
-                id:dbserver.id
-              , db:{
-                    host:dbserver.db.host+':'+dbserver.db.port
-                  , user:dbserver.db.user
-                  , pass:dbserver.db.pass
-                  , prefix:dbserver.db.prefix
-                }})
-                .then(auth)
-                .then(list)
-                .then(infodbs);
+            return db_test({
+                    id:dbserver.id
+                  , db:{
+                        host:dbserver.db.host+':'+dbserver.db.port
+                      , user:dbserver.db.user
+                      , pass:dbserver.db.pass
+                      , prefix:dbserver.db.prefix
+                    }
+                })
+                .then(db_auth)
+                .then(db_list)
+                .then(db_infodbs);
         }))
         .spread(function(){
             var params2={}
@@ -77,6 +80,46 @@ module.exports=function(app,config){
                 if(Object.keys(params2).length){
                     redis.hmset('monitor:repositories',params2);
                 }
+            }
+        });
+    });
+
+    Planner.find({},function(err,planners){
+        var params1={}
+
+        planners.forEach(function(planner){
+            params1[planner.id]=JSON.stringify({
+                planner:planner.planner
+            });
+        });
+
+        Q.all(planners.map(function(planner){
+            return planner_test({
+                    id:planner.id
+                  , planner:{
+                        host:planner.planner.host+':'+planner.planner.port
+                    }
+                  , task:{
+                        name:'exclusive'
+                      , count:1
+                      , interval:1000
+                    }
+                })
+                .then(planner_set);
+        }))
+        .spread(function(){
+            var params2={}
+
+            for(var arg in arguments){
+                var id=arguments[arg].id
+                  , json=JSON.parse(params1[id])
+
+                json.planner.tid=arguments[arg].planner.tid;
+                params1[id]=JSON.stringify(json);
+            }
+
+            if(Object.keys(params1).length){
+                redis.hmset('monitor:planners',params1);
             }
         });
     });

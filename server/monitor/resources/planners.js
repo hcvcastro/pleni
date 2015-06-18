@@ -5,6 +5,7 @@ var validate=require('../../../core/validators')
   , _error=require('../../../core/json-response').error
   , schema=require('../../../core/schema')
   , Planner=require('../models/planner')
+  , sort=require('../../../core/utils').sort
   , test=require('../../../core/functions/planners/test')
   , status=require('../../../core/functions/planners/status')
   , api=require('../../../core/functions/planners/api')
@@ -15,7 +16,8 @@ var validate=require('../../../core/validators')
   , stop=require('../../../core/functions/planners/stop')
 
 module.exports=function(app){
-    var authed=app.get('auth');
+    var authed=app.get('auth')
+      , redis=app.get('redis')
 
     app.get('/resources/planners',authed,function(request,response){
         Planner.find({},function(err,planners){
