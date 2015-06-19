@@ -9,8 +9,6 @@ var App=require('./models/app')
   , db_auth=require('../../core/functions/databases/auth')
   , db_list=require('../../core/functions/databases/list')
   , db_infodbs=require('../../core/functions/databases/infodbs')
-  , planner_test=require('../../core/functions/planners/test')
-  , planner_set=require('../../core/functions/planners/set')
 
 module.exports=function(app,config){
     var redis=app.get('redis')
@@ -93,35 +91,9 @@ module.exports=function(app,config){
             });
         });
 
-        Q.all(planners.map(function(planner){
-            return planner_test({
-                    id:planner.id
-                  , planner:{
-                        host:planner.planner.host+':'+planner.planner.port
-                    }
-                  , task:{
-                        name:'exclusive'
-                      , count:1
-                      , interval:1000
-                    }
-                })
-                .then(planner_set);
-        }))
-        .spread(function(){
-            var params2={}
-
-            for(var arg in arguments){
-                var id=arguments[arg].id
-                  , json=JSON.parse(params1[id])
-
-                json.planner.tid=arguments[arg].planner.tid;
-                params1[id]=JSON.stringify(json);
-            }
-
-            if(Object.keys(params1).length){
-                redis.hmset('monitor:planners',params1);
-            }
-        });
+        if(Object.keys(params1).length){
+            redis.hmset('monitor:planners',params1);
+        }
     });
 };
 

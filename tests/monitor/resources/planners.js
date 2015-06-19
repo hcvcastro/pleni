@@ -5,16 +5,19 @@ var request=require('supertest')
   , cheerio=require('cheerio')
   , app=require('../../../server/monitor')
   , config=require('../../../config/tests')
-  , Planner=require('../../../server/monitor/models/planner').RPlanner
+  , Planner=require('../../../server/monitor/models/planner')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
 
 describe('planners controller functions',function(){
-    var cookie='';
+    var cookie=''
 
     before(function(done){
         require('../../../server/planner.io');
+        done();
+    });
 
+    before(function(done){
         request(app)
             .get('/home')
             .end(function(err,res){
