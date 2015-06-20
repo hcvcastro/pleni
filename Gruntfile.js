@@ -39,7 +39,10 @@ module.exports=function(grunt){
             }
 /* -------- monitor watching ------------------------------------------------ */
           , monitor:{
-                files:['server/monitor.js']
+                files:[
+                    'server/monitor.js'
+                  , 'server/monitor/**/*.js'
+                ]
               , tasks:['develop:monitor']
             }
 /* -------- sites watching -------------------------------------------------- */
@@ -221,7 +224,11 @@ module.exports=function(grunt){
               , 'copy:notifier'
             ]
           , monitor:[
-                'copy:monitor'
+                'jade:monitor'
+              , 'less:monitor'
+              , 'uglify:monitor'
+              , 'copy:monitor'
+              , 'svgmin:monitor'
             ]
           , sites:[
                 'jade:sites'
@@ -243,6 +250,12 @@ module.exports=function(grunt){
                   : 'client/views/master/404.jade'
                   , 'dist/master/client/home.html'
                   : 'client/views/master/pages/home.jade'
+                  , 'dist/master/client/resources.html'
+                  : 'client/views/master/pages/resources.jade'
+                  , 'dist/master/client/projects.html'
+                  : 'client/views/master/pages/projects.jade'
+                  , 'dist/master/client/workspace.html'
+                  : 'client/views/master/pages/workspace.jade'
                   , 'dist/master/client/static/api.html'
                   : 'client/views/master/static/api.jade'
                   , 'dist/master/client/static/contact.html'
@@ -257,12 +270,6 @@ module.exports=function(grunt){
                   : 'client/views/master/static/support.jade'
                   , 'dist/master/client/static/terms.html'
                   : 'client/views/master/static/terms.jade'
-                  , 'dist/master/client/resources.html'
-                  : 'client/views/master/pages/resources.jade'
-                  , 'dist/master/client/projects.html'
-                  : 'client/views/master/pages/projects.jade'
-                  , 'dist/master/client/workspace.html'
-                  : 'client/views/master/pages/workspace.jade'
                 }
             }
           , planner:{
@@ -281,6 +288,21 @@ module.exports=function(grunt){
               , files:{
                     'dist/notifier/client/index.html'
                   : 'client/views/notifier/prod.jade'
+                }
+            }
+          , monitor:{
+                options:{
+                    pretty:false
+                }
+              , files:{
+                    'dist/monitor/client/index.html'
+                  : 'client/views/monitor/prod.jade'
+                  , 'dist/monitor/client/404.html'
+                  : 'client/views/monitor/404.jade'
+                  , 'dist/monitor/client/home.html'
+                  : 'client/views/monitor/pages/home.jade'
+                  , 'dist/monitor/client/signin.html'
+                  : 'client/views/monitor/pages/signin.jade'
                 }
             }
           , sites:{
@@ -334,6 +356,16 @@ module.exports=function(grunt){
                   : 'client/less/planner.less'
                 }
             }
+          , monitor:{
+                options:{
+                    cleancss:true
+                  , paths:['bower_components']
+                }
+              , files:{
+                    'dist/monitor/client/style.css'
+                  : 'client/less/monitor.less'
+                }
+            }
           , sites:{
                 options:{
                     cleancss:true
@@ -351,10 +383,6 @@ module.exports=function(grunt){
                     'dist/master/client/js/angular-no-captcha.min.js':[
                         'bower_components/angular-no-captcha/src/'
                             +'angular-no-captcha.js'
-                    ]
-                },{
-                    'dist/master/client/js/socket.io.min.js':[
-                        'bower_components/socket.io-client/socket.io.js'
                     ]
                 },{
                     'dist/master/client/js/socket.io.min.js':[
@@ -425,6 +453,26 @@ module.exports=function(grunt){
                 },{
                     'dist/notifier/client/js/notifier.min.js':[
                         'client/js/planner.js'
+                    ]
+                }]
+            }
+          , monitor:{
+                files:[{
+                    'dist/monitor/client/js/socket.io.min.js':[
+                        'bower_components/socket.io-client/socket.io.js'
+                    ]
+                },{
+                    'dist/monitor/client/js/monitor.min.js':[
+                        'client/js/utils.js'
+                      , 'client/js/monitor.js'
+                      , 'client/js/filters.js'
+                      , 'client/js/factories/resources/apps.js'
+                      , 'client/js/factories/resources/dbservers.js'
+                      , 'client/js/factories/resources/planners.js'
+                      , 'client/js/factories/resources-monitor.js'
+                      , 'client/js/factories/auth.js'
+                      , 'client/js/controllers/monitor/home.js'
+                      , 'client/js/controllers/monitor/header.js'
                     ]
                 }]
             }
@@ -589,12 +637,61 @@ module.exports=function(grunt){
             }
           , monitor:{
                 files:[{
+                    src:'client/favicon.ico'
+                  , dest:'dist/monitor/client/favicon.ico'
+                },{
+                    src:'client/svg/arrow_clean.svg'
+                  , dest:'dist/monitor/client/svg/arrow.svg'
+                },{
                     expand:true
-                  , src:['core/*.js']
+                  , flatten:true
+                  , cwd:'bower_components/font-awesome/'
+                  , src:'fonts/fontawesome-webfont.*'
+                  , dest:'dist/monitor/client/fonts/'
+                },{
+                    src:'bower_components/jquery/dist/jquery.min.js'
+                  , dest:'dist/monitor/client/js/jquery.min.js'
+                },{
+                    src:'bower_components/angular/angular.min.js'
+                  , dest:'dist/monitor/client/js/angular.min.js'
+                },{
+                    src:'bower_components/angular-route/angular-route.min.js'
+                  , dest:'dist/monitor/client/js/angular-route.min.js'
+                },{
+                    src:'bower_components/angular-resource/'
+                        +'angular-resource.min.js'
+                  , dest:'dist/monitor/client/js/angular-resource.min.js'
+                },{
+                    src:'bower_components/angular-animate/'
+                        +'angular-animate.min.js'
+                  , dest:'dist/monitor/client/js/angular-animate.min.js'
+                },{
+                    src:'bower_components/angular-socket-io/socket.min.js'
+                  , dest:'dist/monitor/client/js/angular-socket-io.min.js'
+                },{
+                    src:'bower_components/angular-cookies/'
+                        +'angular-cookies.min.js'
+                  , dest:'dist/monitor/client/js/angular-cookies.min.js'
+                },{
+                    src:'bower_components/ngstorage/ngStorage.min.js'
+                  , dest:'dist/monitor/client/js/angular-storage.min.js'
+                },{
+                    expand:true
+                  , cwd:'client/views/monitor'
+                  , src:['**']
+                  , dest:'dist/monitor/views/'
+                },{
+                    expand:true
+                  , src:['core/**']
                   , dest:'dist/monitor/'
                 },{
                     src:'server/monitor.js'
                   , dest:'dist/monitor/server/monitor.js'
+                },{
+                    expand:true
+                  , cwd:'server/'
+                  , src:['monitor/**']
+                  , dest:'dist/monitor/server/'
                 },{
                     src:'config/monitor.js'
                   , dest:'dist/monitor/config/monitor.js'
@@ -657,6 +754,12 @@ module.exports=function(grunt){
                 },{
                     src:'client/svg/tile.svg'
                   , dest:'dist/master/client/svg/tile.svg'
+                }]
+            }
+          , monitor:{
+                files:[{
+                    src:'client/svg/hiperborea.svg'
+                  , dest:'dist/monitor/client/svg/hiperborea.svg'
                 }]
             }
           , sites:{
