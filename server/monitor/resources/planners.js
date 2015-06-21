@@ -202,5 +202,102 @@ module.exports=function(app){
             }
         });
     });
+
+    var generic_action=function(request,response,json,sequence,next){
+        var id=validate.toString(request.params.planner)
+          , body=request.body
+
+        delete body.server;
+        if(json){
+            if(schema.js.validate(body,json).length!=0){
+                response.status(403).json(_error.validation);
+                return;
+            }
+        }
+
+        Planner.findOne({
+            id:validate.toString(request.params.planner)
+        },function(err,planner){
+            if(planner){
+                var args={
+                    planner:{
+                        host:planner.planner.host+':'+
+                             planner.planner.port
+                    }
+                };
+                if(planner.planner.tid){
+                    args.planner.tid=planner.planner.tid;
+                }
+                if(json){
+                    args=extend(body,args);
+                }
+                sequence.reduce(function(previous,current){
+                    return previous.then(current);
+                },test(args))
+                .then(function(args){
+                    next(planner,args);
+                })
+                .fail(function(error){
+                    if(error.code=='ECONNREFUSED'){
+                        response.status(404).json(_error.network);
+                    }else if(error.error=='unauthorized'){
+                        response.status(401).json(_error.auth);
+                    }else if(error.error=='response_malformed'){
+                        response.status(400).json(_error.json);
+                    }else if(error.error=='not tid provided'){
+                        response.status(401).json(_error.auth);
+                    }else if(error.error=='not override'){
+                        response.status(403).json(_error.notoverride);
+                    }else if(error.error=='not found'){
+                        response.status(404).json(_error.notfound);
+                    }else{
+                        response.status(403).json(_error.badrequest);
+                    }
+                })
+                .done();
+            }else{
+                response.status(404).json(_error.notfound)
+            }
+        });
+    };
+
+    app.post('/resources/planners/:planner/_check',authed,
+        function(request,response){
+        return generic_action(request,response,null,[],
+            function(planner,args){
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , type:args.planner.type
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_status',authed,
+        function(request,response){
+        return generic_action(request,response,null,[status],
+            function(planner,args){
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , status:args.planner.status
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_isset',authed,
+        function(request,response){
+        return generic_action(request,response,null,[],
+            function(planner,args){
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , result:'tid' in args.planner
+                    }
+                });
+        });
+    });
 };
 

@@ -1,9 +1,23 @@
 'use strict';
 
-module.exports=function(config){
+module.exports=function(config,user){
     return {
         resources:{
-            dbservers:[]
+            dbservers:[{
+                id:'pleni'
+              , attrs:{
+                    virtual:true
+                  , readable:true
+                  , writable:false
+                }
+              , db:{
+                    host:config.monitor.url
+                  , port:config.monitor.port
+                  , user:user
+                  , pass:config.monitor.apikey
+                  , prefix:''
+                }
+            }]
           , repositories:[]
           , planners:[]
           , notifiers:[{

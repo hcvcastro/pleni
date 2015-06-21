@@ -33,6 +33,11 @@ module.exports={
       , password:'asdf'
       , mongo:'mongodb://localhost/pleni'
     }
+  , monitor:{
+        url:'http://localhost'
+      , port:3003
+      , apikey:'be40dd19-00e1-4119-856d-a73d793a44b4'
+    }
   , recaptcha:{
         public:'6LcKSQYTAAAAAOuUrljCf8ReCzohwRr9kdHrbouu'
       , private:'6LcKSQYTAAAAAKmZZetWs5LQLIQey0mLNT5J09EQ'
