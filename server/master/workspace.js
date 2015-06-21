@@ -55,7 +55,7 @@ module.exports=function(app,config){
             return;
         }
 
-        test({
+        var packet={
             db:{
                 host:dbserver[1].db.host+':'+
                      dbserver[1].db.port
@@ -63,7 +63,13 @@ module.exports=function(app,config){
               , pass:dbserver[1].db.pass
               , name:repository[1].db.name
             }
-        })
+        }
+
+        if(dbserver[1].attrs.virtual){
+            packet.db.host+='/dbserver';
+        }
+
+        test(packet)
         .then(auth)
         .then(func)
         .then(done)

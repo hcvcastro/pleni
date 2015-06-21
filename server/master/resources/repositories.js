@@ -94,7 +94,7 @@ module.exports=function(app){
                 request.body._dbserver,request.user.resources.dbservers);
 
             if(dbserver){
-                test({
+                var packet={
                     db:{
                         host:validate.toValidHost(dbserver[1].db.host)+':'+
                              validate.toInt(dbserver[1].db.port)
@@ -102,7 +102,13 @@ module.exports=function(app){
                       , pass:validate.toString(dbserver[1].db.pass)
                       , name:validate.toString(request.body.db.name)
                     }
-                })
+                }
+
+                if(dbserver[1].attrs.virtual){
+                    packet.db.host+='/dbserver';
+                }
+
+                test(packet)
                 .then(auth)
                 .then(infodb)
                 .then(function(args){
@@ -115,6 +121,8 @@ module.exports=function(app){
                         response.status(404).json(_error.network);
                     }else if(error.error=='unauthorized'){
                         response.status(401).json(_error.auth);
+                    }else{
+                        response.status(404).json(_error.notfound);
                     }
                 })
                 .done();
@@ -206,7 +214,7 @@ module.exports=function(app){
                 repository[1]._dbserver,resources.dbservers);
 
             if(dbserver){
-                test({
+                var packet={
                     db:{
                         host:dbserver[1].db.host+':'+
                              dbserver[1].db.port
@@ -214,7 +222,13 @@ module.exports=function(app){
                       , pass:dbserver[1].db.pass
                       , name:repository[1].db.name
                     }
-                })
+                }
+
+                if(dbserver[1].attrs.virtual){
+                    packet.db.host+='/dbserver';
+                }
+
+                test(packet)
                 .then(auth)
                 .then(infodb)
                 .then(function(args){
@@ -227,6 +241,8 @@ module.exports=function(app){
                         response.status(404).json(_error.network);
                     }else if(error.error=='unauthorized'){
                         response.status(401).json(_error.auth);
+                    }else{
+                        response.status(404).json(_error.notfound);
                     }
                 })
                 .done();
