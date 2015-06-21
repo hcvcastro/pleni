@@ -40,6 +40,7 @@ module.exports=function(args){
                     if(!args.auth){
                         args.auth={}
                     }
+
                     args.auth.cookie=exec[1];
                     args.auth.ts=Date.now()
                     deferred.resolve(args);

@@ -19,7 +19,18 @@ module.exports=function(config,user){
                 }
             }]
           , repositories:[]
-          , planners:[]
+          , planners:[{
+                id:'pleni'
+              , attrs:{
+                    virtual:true
+                  , readable:true
+                  , writable:false
+                }
+              , planner:{
+                    host:config.monitor.url
+                  , port:config.monitor.port
+                }
+            }]
           , notifiers:[{
                 id:'master'
               , attrs:{

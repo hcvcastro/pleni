@@ -240,6 +240,44 @@ module.exports=function(app,config){
         }
     });
 
+    app.get('/dbserver/:repository',authed,function(request,response){
+        var repository=request.params.repository
+          , Repository=request.user.repositories.find(function(_repository){
+                return _repository.name==repository;
+            })
+
+        if(Repository){
+            dbauth(Repository.dbserver,function(dbserver){
+                if(dbserver){
+                    var name=dbserver.db.prefix+request.user.id
+                            +'_'+repository
+
+                    _request.get({
+                        url:dbserver.db.host+':'+dbserver.db.port
+                            +'/'+name
+                      , headers:{
+                            'Cookie':dbserver.auth.cookie
+                          , 'X-CouchDB-WWW-Authenticate':'Cookie'
+                        }
+                    },function(error,reply){
+                        var r=JSON.parse(reply.body);
+                        r.db_name=repository;
+
+                        response.status(reply.statusCode).json(r);
+                    });
+                }else{
+                    response.status(404).json({
+                        ok:false
+                    });
+                }
+            });
+        }else{
+            response.status(404).json({
+                ok:false
+            });
+        }
+    });
+
     app.delete('/dbserver/:repository',authed,function(request,response){
         var auth=cookie(request.headers.cookie)
           , repository=request.params.repository

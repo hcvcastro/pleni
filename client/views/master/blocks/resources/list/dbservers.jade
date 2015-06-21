@@ -30,6 +30,6 @@ article.list
                     span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
                 td.options
                     a.fa.fa-refresh(title='Check connection',ng-click='dbservers.check($index)',ng-class='{\'fa-spin\':dbserver.check==\'checking\'}')
-                    a.fa.fa-edit(title='Edit properties',ng-click='dbservers.edit($index)')
-                    a.fa.fa-trash(title='Remove element',ng-click='dbservers.remove($index)')
+                    a.fa.fa-edit(title='Edit properties',ng-hide='dbserver.readonly',ng-click='dbservers.edit($index)')
+                    a.fa.fa-trash(title='Remove element',ng-hide='dbserver.readonly',ng-click='dbservers.remove($index)')
 

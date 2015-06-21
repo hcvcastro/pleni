@@ -85,22 +85,27 @@ module.exports=function(app,config){
                     if(!user&&
                         !(config.master.admin&&
                             config.master.email==request.body.email)){
-                        var key=generator()
-                          , skel=require('./models/skel')(config)
+                        var email=request.body.email
+                          , key=generator()
 
                         User.create({
-                            email:request.body.email
+                            email:email
                           , password:request.body.password
                           , status:{
                                 type:'confirm'
                               , key:key
                             }
-                          , resources:skel.resources
-                          , notifier:skel.notifier
-                          , projects:skel.projects
                         },function(err,user){
                             if(!err){
                                 response.status(200).json(_success.ok);
+
+                                var skel=require('./models/skel')
+                                    (config,user._id)
+
+                                user.resources=skel.resources;
+                                user.notifier=skel.notifier;
+                                user.projects=skel.projects;
+                                user.save();
 
                                 if(config.env!=='test'){
                                     mail(key);

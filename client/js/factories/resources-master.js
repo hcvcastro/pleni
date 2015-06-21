@@ -29,6 +29,7 @@ pleni.factory('Resources',['$sessionStorage',
                             $sessionStorage.dbservers.push({
                                 id:data[i].id
                               , type:data[i].type
+                              , readonly:data[i].readonly
                               , db:{
                                     host:data[i].db.host
                                   , port:data[i].db.port
