@@ -145,6 +145,9 @@ var dbserver={
             }
           , 'required':['host','port','user','pass','prefix']
         }
+      , 'check':{
+            'type':'string'
+        }
     }
   , 'required':['id','type','db']
 };

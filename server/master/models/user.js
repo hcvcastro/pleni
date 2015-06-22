@@ -69,12 +69,6 @@ var user=new Schema({
                     type:String
                   , required:false
                 }
-              , status:{
-                    type:String
-                  , required:false
-                  , default:'stopped'
-                  , enum:['running','stopped']
-                }
             }
         }]
       , notifiers:[{

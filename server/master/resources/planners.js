@@ -26,25 +26,41 @@ module.exports=function(app){
     var authed=app.get('auth')
 
     app.get('/resources/planners',authed,function(request,response){
-        response.json(request.user.resources.planners.map(
-            function(planner){
-                return {
-                    id:planner.id
-                  , planner:{
-                        host:planner.planner.host
-                      , port:planner.planner.port
-                    }
-                };
-            }));
+        response.json(request.user.resources.planners
+        .filters(function(planner){
+            return Boolean(planner.attrs.readable)
+        })
+        .map(function(planner){
+            return {
+                id:planner.id
+              , type:(planner.attrs.virtual?'virtual':'real')
+              , readonly:!Boolean(planner.attrs.writeable)
+              , planner:{
+                    host:planner.planner.host
+                  , port:planner.planner.port
+                }
+            };
+        }));
     });
 
     app.put('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
             var resources=request.user.resources;
 
-            resources.planners=request.body.map(function(planner){
+            resources.planners=request.body.filter(function(planner){
+                return !(Boolean(planner.attrs.readable))||
+                       !(Boolean(planner.attrs.writable));
+            })
+            
+            resources.planners=resources.planners.concat(request.body.map(
+            function(planner){
                 return {
                     id:validate.toString(planner.id)
+                  , attrs:{
+                        virtual:(planner.type=='virtual')
+                      , readable:true
+                      , writable:true
+                    }
                   , planner:{
                         host:validate.toValidHost(planner.planner.host)
                       , port:validate.toInt(planner.planner.port)

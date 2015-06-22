@@ -3,6 +3,7 @@
 var request=require('supertest')
   , should=require('should')
   , cheerio=require('cheerio')
+  , redis=require('redis')
   , app=require('../../../server/monitor')
   , config=require('../../../config/tests')
   , Planner=require('../../../server/monitor/models/planner')
@@ -11,6 +12,19 @@ var request=require('supertest')
 
 describe('planners controller functions',function(){
     var cookie=''
+      , redisclient=redis.createClient(
+        config.redis.port,config.redis.host,config.redis.options)
+    redisclient.on('error',console.error.bind(console,'redis connection error:'));
+    redisclient.on('ready',function(){
+        console.log('connection to redis db:',
+            config.redis.host,':',config.redis.port);
+    });
+
+    before(function(done){
+        redisclient.flushall(function(err,reply){
+            done();
+        });
+    });
 
     before(function(done){
         require('../../../server/planner.io');
@@ -85,7 +99,7 @@ describe('planners controller functions',function(){
         });
     });
 
-    [
+/*    [
         {test:'',expected:_error.validation,status:403}
       , {test:{},expected:_error.validation,status:403}
       , {test:{id:1},expected:_error.validation,status:403}
@@ -393,7 +407,7 @@ describe('planners controller functions',function(){
                 done();
             });
     });
-
+*/
     after(function(done){
         Planner.remove({},function(err){
             if(!err){
@@ -403,17 +417,6 @@ describe('planners controller functions',function(){
     });
 });
 
-//  , redis=require('redis')
-//  , redisclient=redis.createClient(
-//        config.redis.port,config.redis.host,config.redis.options)
-//  , planner='http://localhost:3001'
-//  , task='http://localhost:3003/'
-
-/*    before(function(done){
-        redisclient.flushall(function(err,reply){
-            done();
-        })
-    });*/
 /*    it('PUT /planners',function(done){
         request(app)
             .put('/planners')
