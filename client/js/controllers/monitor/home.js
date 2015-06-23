@@ -415,163 +415,6 @@ pleni.controller('HomeController',
                     });
                 }
             }
-          , set:function(){
-                utils.clean();
-                if($scope.planners.env.type=='element'){
-                    utils.send('Send a set request ...');
-                    Resources.planners.set({
-                        server:$scope.planner.id
-                      , task:{
-                            name:$scope.planner.set.name
-                          , count:$scope.planner.set.count
-                          , interval:$scope.planner.set.interval
-                        }
-                    },function(data){
-                        utils.receive();
-                        $scope.planners.get();
-                    },function(error){
-                        utils.receive();
-                        utils.show('error',error.data.message);
-                    });
-                }
-            }
-          , tid:function(){
-                utils.clean();
-                if($scope.planners.env.type=='element'){
-                    utils.send('Send a tid request ...');
-                    Resources.planners.tid({
-                        server:$scope.planner.id
-                      , tid:$scope.planner.set.tid
-                    },function(data){
-                        utils.receive();
-                        $scope.planner.set.tid=0;
-                        $scope.planners.get();
-                    },function(error){
-                        utils.receive();
-                        utils.show('error',error.data.message);
-                    });
-                }
-            }
-          , get:function(){
-                if($scope.planners.env.type=='element'){
-                    Resources.planners.get({
-                        server:$scope.planner.id
-                    },function(data){
-                        $scope.planner.set.status='set';
-                        $scope.planner.set.name=data.planner.task.name;
-                        $scope.planner.set.count=data.planner.task.count;
-                        $scope.planner.set.interval=data.planner.task.interval;
-
-                        $scope.planners.api(function(){
-                            for(var i=0;i<$scope.planner.api.length;i++){
-                                if($scope.planner.set.name==
-                                    $scope.planner.api[i].name){
-                                    $scope.planner.set.schema=
-                                        $scope.planner.api[i].schema;
-                                    break;
-                                }
-                            }
-
-                            $scope.planners.editor();
-                        });
-                    },function(error){
-                        utils.show('error','Planner cannot get the task');
-                    });
-                }
-            }
-          , editor:function(){
-                Editor.create(
-                    $scope.planner.set.name+' ('
-                        +$scope.planner.set.count+':'
-                        +$scope.planner.set.interval+')',
-                    $scope.planner.set.schema);
-            }
-          , unset:function(){
-                utils.clean();
-                if($scope.planners.env.type=='element'){
-                    utils.send('Sending a remove request ...');
-                    Resources.planners.unset({
-                        server:$scope.planner.id
-                    },function(data){
-                        utils.receive();
-                        $scope.planner.set.status='unset';
-                        $scope.planner.set.name='';
-                        $scope.planner.set.count=undefined;
-                        $scope.planner.set.interval=undefined;
-                        $scope.planner.set.schema={};
-                    },function(error){
-                        utils.receive();
-                        utils.show('error',error);
-                    });
-                }
-            }
-          , run:function(){
-                utils.clean();
-                if($scope.planners.env.type=='element'){
-                    utils.send('Sending a run request ...');
-                    if(Editor.is_valid()){
-                        Resources.planners.run({
-                            server:$scope.planner.id
-                          , targs:Editor.values()
-                        },function(data){
-                            utils.receive();
-                            $scope.planner.status='running';
-                        },function(error){
-                            utils.receive();
-                            utils.show('error',error.data.message);
-                        });
-                    }else{
-                        utils.receive();
-                        utils.show('error',
-                            'Some parameters in the form are not valid');
-                    }
-                }
-            }
-          , stop:function(){
-                utils.clean();
-                if($scope.planners.env.type=='element'){
-                    utils.send('Sending a stop request ...');
-                    Resources.planners.stop({
-                        server:$scope.planner.id
-                    },function(data){
-                        utils.receive();
-                        $scope.planner.status='stopped';
-                    },function(error){
-                        utils.receive();
-                        utils.show('error',error);
-                    });
-                }
-            }
-          , follow:function(index){
-                var planner=$scope.storage.planners[index]
-                  , notifier='master'
-
-                if(planner.follow){
-                    utils.send('Send a remove request ...');
-                    Resources.notifiers.remove({
-                        server:notifier
-                      , planner:planner.id
-                    },function(data){
-                        utils.receive();
-                        $scope.storage.planners[index].follow=false;
-                        utils.show('success','Planner removed to the list');
-                    },function(error){
-                        utils.receive();
-                    });
-                }else{
-                    utils.send('Send add request ...');
-                    Resources.notifiers.add({
-                        server:notifier
-                      , planner:planner.id
-                    },function(data){
-                        utils.receive();
-                        $scope.storage.planners[index].follow=true;
-                        utils.show('success','Planner added to the list');
-                    },function(error){
-                        utils.receive();
-                    });
-                }
-            }
           , clean:function(index){
                 var planner=$scope.storage.planners[index];
 
@@ -585,7 +428,21 @@ pleni.controller('HomeController',
                     utils.receive();
                     utils.show('error',error);
                 });
-          }
+            }
+          , exclusive:function(index){
+                var planner=$scope.storage.planners[index];
+
+                utils.send('Send a set request ...');
+                Resources.planners.exclusive({
+                    server:planner.id
+                },function(data){
+                    utils.receive();
+                    utils.show('success','Planner taken');
+                },function(error){
+                    utils.receive();
+                    utils.show('error',error);
+                });
+            }
           , edit:function(index){
                 $scope.planners.env.view='form';
                 $scope.planners.env.type='element';

@@ -79,6 +79,7 @@ describe('planners controller functions',function(){
         }],expected:_error.json,status:400}
       , {test:[{
             id:'localhost'
+          , type:'real'
           , planner:{
                 host:'http://127.0.0.1'
               , port:8080
@@ -113,6 +114,7 @@ describe('planners controller functions',function(){
       , {test:{repository:'...'},expected:_error.validation,status:403}
       , {test:{
             id:'localhost'
+          , type:'real'
           , planner:{
                 host:'http://127.0.0.1'
               , port:8080
@@ -140,6 +142,7 @@ describe('planners controller functions',function(){
     [
         {test:{
             id:'test'
+          , type:'real'
           , planner:{
                 host:'http://127.0.0.1'
               , port:8081
@@ -147,6 +150,7 @@ describe('planners controller functions',function(){
         },expected:_success.ok,status:201}
       , {test:{
             id:'test2'
+          , type:'real'
           , planner:{
                 host:'http://127.0.0.1'
               , port:8082
@@ -229,6 +233,7 @@ describe('planners controller functions',function(){
       , {test:{repository:'...'},expected:_error.validation,status:403}
       , {test:{
             id:'test'
+          , type:'real'
           , planner:{
                 host:'http://localhost'
               , port:3009
@@ -236,6 +241,7 @@ describe('planners controller functions',function(){
         },expected:_error.network,status:404}
       , {test :{
             id:'test'
+          , type:'real'
           , planner:{
                 host:'http://localhost'
               , port:3001
@@ -265,6 +271,7 @@ describe('planners controller functions',function(){
             .set('cookie',cookie[1])
             .send({
                 id:'test'
+              , type:'real'
               , planner:{
                     host:'http://127.0.0.1'
                   , port:3001
@@ -324,6 +331,7 @@ describe('planners controller functions',function(){
           expected:_error.validation,status:403}
       , {test:{
             id:'test2'
+          , type:'real'
           , planner:{
                 host:'http://127.0.0.1'
               , port:3001
@@ -331,6 +339,7 @@ describe('planners controller functions',function(){
         },id:'test2',status:201}
       , {test:{
             id:'test2'
+          , type:'real'
           , planner:{
                 host:'http://127.0.0.1'
               , port:3001

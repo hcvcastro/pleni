@@ -9,6 +9,9 @@ var App=require('./models/app')
   , db_auth=require('../../core/functions/databases/auth')
   , db_list=require('../../core/functions/databases/list')
   , db_infodbs=require('../../core/functions/databases/infodbs')
+  , planner_test=require('../../core/functions/planners/test')
+  , planner_api=require('../../core/functions/planners/api')
+  , planner_get=require('../../core/functions/planners/get')
 
 module.exports=function(app,config){
     var redis=app.get('redis')
@@ -40,17 +43,17 @@ module.exports=function(app,config){
 
         Q.all(dbservers.map(function(dbserver){
             return db_test({
-                    id:dbserver.id
-                  , db:{
-                        host:dbserver.db.host+':'+dbserver.db.port
-                      , user:dbserver.db.user
-                      , pass:dbserver.db.pass
-                      , prefix:dbserver.db.prefix
-                    }
-                })
-                .then(db_auth)
-                .then(db_list)
-                .then(db_infodbs);
+                id:dbserver.id
+              , db:{
+                    host:dbserver.db.host+':'+dbserver.db.port
+                  , user:dbserver.db.user
+                  , pass:dbserver.db.pass
+                  , prefix:dbserver.db.prefix
+                }
+            })
+            .then(db_auth)
+            .then(db_list)
+            .then(db_infodbs);
         }))
         .spread(function(){
             var params2={}
@@ -91,9 +94,34 @@ module.exports=function(app,config){
             });
         });
 
-        if(Object.keys(params1).length){
-            redis.hmset('monitor:planners',params1);
-        }
+        Q.all(planners.map(function(planner){
+            return planner_test({
+                id:planner.id
+              , planner:{
+                    host:planner.planner.host+':'+planner.planner.port
+                }
+            })
+            .then(planner_api)
+            .fail(function(error){})
+        }))
+        .spread(function(){
+            for(var arg in arguments){
+                if(arguments[arg]){
+                    var id=arguments[arg].id
+                      , json=JSON.parse(params1[id])
+
+                    json.api=arguments[arg].planner.tasks.map(function(task){
+                        return task.name;
+                    });
+
+                    params1[id]=JSON.stringify(json);
+                }
+            }
+
+            if(Object.keys(params1).length){
+                redis.hmset('monitor:planners',params1);
+            }
+        });
     });
 };
 

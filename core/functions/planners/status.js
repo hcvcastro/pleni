@@ -7,6 +7,8 @@ var request=require('request')
 /*
  * Function for getting status from planner
  * args input
+ *      auth (*)
+ *          cookie
  *      planner
  *          host
  *
@@ -17,11 +19,17 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.planner.host+'/_status'
+      , headers={}
 
     if(args.debug){
         console.log('request for status ... '+args.planner.host);
     }
-    request.get({url:url},function(error,response){
+    
+    if(args.auth&&args.auth.cookie){
+        headers['Cookie']=args.auth.cookie;
+    }
+
+    request.get({url:url,headers:headers},function(error,response){
         if(!error){
             if(validator.isJSON(response.body)){
                 if(response.statusCode==200){

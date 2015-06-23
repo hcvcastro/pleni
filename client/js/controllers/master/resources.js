@@ -119,6 +119,7 @@ pleni.controller('ResourcesController',
                 $scope.dbservers.env.view='view';
                 $scope.dbservers.env.type='element';
                 $scope.dbserver=$scope.storage.dbservers[index];
+                $scope.dbserver.check(index);
             }
           , scan:function(){
                 utils.clean();
@@ -322,6 +323,7 @@ pleni.controller('ResourcesController',
 
         $scope.planner={
             id:''
+          , type:''
           , planner:{
                 host:''
               , port:0
@@ -425,7 +427,8 @@ pleni.controller('ResourcesController',
           , list:function(){
                 $scope.planners.env.view='list';
             }
-          , add:function(){
+          , add:function(flag){
+                $scope.planners.type=(flag==0?'real':'virtual');
                 $scope.planners.env.view='form';
                 $scope.planners.env.type='collection';
             }

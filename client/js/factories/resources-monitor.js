@@ -140,26 +140,11 @@ pleni.factory('Resources',['$sessionStorage',
               , api:function(planner,success,failure){
                     bind(Planners.api,planner,success,failure);
                 }
-              , set:function(planner,success,failure){
-                    bind(Planners.set,planner,success,failure);
-                }
               , tid:function(planner,success,failure){
                     bind(Planners.tid,planner,success,failure);
                 }
-              , get:function(planner,success,failure){
-                    bind(Planners.get,planner,success,failure);
-                }
-              , unset:function(planner,success,failure){
-                    bind(Planners.unset,planner,success,failure);
-                }
               , clean:function(planner,success,failure){
                     bind(Planners.clean,planner,success,failure);
-                }
-              , run:function(planner,success,failure){
-                    bind(Planners.run,planner,success,failure);
-                }
-              , stop:function(planner,success,failure){
-                    bind(Planners.stop,planner,success,failure);
                 }
               , delete:function(planner,success,failure){
                     bind(Planners.delete,planner,success,failure);

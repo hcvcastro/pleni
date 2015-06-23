@@ -27,14 +27,14 @@ module.exports=function(app){
 
     app.get('/resources/planners',authed,function(request,response){
         response.json(request.user.resources.planners
-        .filters(function(planner){
+        .filter(function(planner){
             return Boolean(planner.attrs.readable)
         })
         .map(function(planner){
             return {
                 id:planner.id
               , type:(planner.attrs.virtual?'virtual':'real')
-              , readonly:!Boolean(planner.attrs.writeable)
+              , readonly:!Boolean(planner.attrs.writable)
               , planner:{
                     host:planner.planner.host
                   , port:planner.planner.port
@@ -47,10 +47,10 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.planners).length==0){
             var resources=request.user.resources;
 
-            resources.planners=request.body.filter(function(planner){
+            resources.planners=resources.dbservers.filter(function(planner){
                 return !(Boolean(planner.attrs.readable))||
                        !(Boolean(planner.attrs.writable));
-            })
+            });
             
             resources.planners=resources.planners.concat(request.body.map(
             function(planner){
@@ -66,7 +66,7 @@ module.exports=function(app){
                       , port:validate.toInt(planner.planner.port)
                     }
                 };
-            });
+            }));
 
             request.user.save();
             response.status(201).json(_success.ok);
@@ -84,6 +84,11 @@ module.exports=function(app){
             if(!planner){
                 var new_planner={
                     id:validate.toString(request.body.id)
+                  , attrs:{
+                        virtual:(request.body.type=='virtual')
+                      , readable:true
+                      , writable:true
+                    }
                   , planner:{
                         host:validate.toValidHost(request.body.planner.host)
                       , port:validate.toInt(request.body.planner.port)
@@ -91,9 +96,17 @@ module.exports=function(app){
                 };
 
                 planners.push(new_planner);
-                request.user.save();
 
-                response.status(201).json(new_planner);
+                request.user.save();
+                response.status(201).json({
+                    id:new_planner.id
+                  , type:(new_planner.attrs.virtual?'virtual':'real')
+                  , readonly:!Boolean(new_planner.attrs.writable)
+                  , planner:{
+                        host:new_planner.planner.host
+                      , port:new_planner.planner.port
+                    }
+                });
             }else{
                 response.status(403).json(_error.notoverride);
             }
@@ -105,19 +118,29 @@ module.exports=function(app){
     app.delete('/resources/planners',authed,function(request,response){
         var resources=request.user.resources
 
-        resources.planners=[];
+        resources.planners=resources.planners.filter(function(planner){
+            return !(Boolean(planner.attrs.readable))||
+                   !(Boolean(planner.attrs.writable));
+        });
+
         request.user.save();
         response.status(200).json(_success.ok);
     });
 
     app.post('/resources/planners/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
-            test({
-                planner:{
-                    host:validate.toValidHost(request.body.planner.host)+':'+
-                         validate.toInt(request.body.planner.port)
+            var packet={
+                    planner:{
+                        host:validate.toValidHost(request.body.planner.host)+
+                            ':'+validate.toInt(request.body.planner.port)
+                    }
                 }
-            })
+
+            if(request.body.type=='virtual'){
+                packet.planner.host+='/planner';
+            }
+            
+            test(packet)
             .then(function(args){
                 response.status(200).json(_success.ok);
             })
@@ -126,7 +149,7 @@ module.exports=function(app){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
-                }else if(error.error=='response_malformed'){
+                }else{
                     response.status(400).json(_error.json);
                 }
             })
@@ -145,6 +168,8 @@ module.exports=function(app){
         if(planner){
             response.status(200).json({
                 id:planner[1].id
+              , type:(planner[1].attrs.virtual?'virtual':'real')
+              , readonly:!Boolean(planner[1].attrs.writable)
               , planner:{
                     host:planner[1].planner.host
                   , port:planner[1].planner.port
@@ -164,6 +189,11 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.planner).length==0){
             var new_planner={
                 id:id
+              , attrs:{
+                    virtual:(request.body.type=='virtual')
+                  , readable:true
+                  , writable:true
+                }
               , planner:{
                     host:validate.toValidHost(request.body.planner.host)
                   , port:validate.toInt(request.body.planner.port)
@@ -171,18 +201,26 @@ module.exports=function(app){
             };
 
             if(planner){
-                planners[planner[0]]=new_planner;
-                response.status(200).json({
-                    id:new_planner.id
-                  , planner:{
-                        host:new_planner.planner.host
-                      , port:new_planner.planner.port
-                    }
-                });
+                if(planner[1].attrs.readable&&planner[1].attrs.writable){
+                    planners[planner[0]]=new_planner;
+                    response.status(200).json({
+                        id:new_planner.id
+                      , type:(new_planner.attrs.virtual?'virtual':'real')
+                      , readonly:!Boolean(new_planner.attrs.writable)
+                      , planner:{
+                            host:new_planner.planner.host
+                          , port:new_planner.planner.port
+                        }
+                    });
+                }else{
+                    response.status(403).json(_error.notoverride);
+                }
             }else{
                 planners.push(new_planner);
                 response.status(201).json({
                     id:new_planner.id
+                  , type:(new_planner.attrs.virtual?'virtual':'real')
+                  , readonly:!Boolean(new_planner.attrs.writable)
                   , planner:{
                         host:new_planner.planner.host
                       , port:new_planner.planner.port
@@ -204,11 +242,15 @@ module.exports=function(app){
           , planner=get_element(id,planners)
 
         if(planner){
-            planners.splice(planner[0],1);
-            resources.planners=planners;
-            request.user.save();
+            if(planner[1].attrs.readable&&planner[1].attrs.writable){
+                planners.splice(planner[0],1);
+                resources.planners=planners;
+                request.user.save();
 
-            response.status(200).json(_success.ok);
+                response.status(200).json(_success.ok);
+            }else{
+                response.status(403).json(_error.notoverride);
+            }
         }else{
             response.status(404).json(_error.notfound);
         }
@@ -263,6 +305,11 @@ module.exports=function(app){
                          planner[1].planner.port
                 }
             };
+
+            if(planner[1].attrs.virtual){
+                args.planner.host+='/planner';
+            }
+
             if(planner[1].planner.tid){
                 args.planner.tid=planner[1].planner.tid;
             }
@@ -276,6 +323,7 @@ module.exports=function(app){
                 next(resources,planners,planner,args);
             })
             .fail(function(error){
+                    console.log(error);
                 if(error.code=='ECONNREFUSED'){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){

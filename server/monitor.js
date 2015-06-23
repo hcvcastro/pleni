@@ -165,6 +165,7 @@ require('./monitor/resources/apps')(app,config);
 require('./monitor/resources/planners')(app,config);
 require('./monitor/resources/dbservers')(app,config);
 require('./monitor/dbserver')(app,config);
+require('./monitor/planner')(app,config);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

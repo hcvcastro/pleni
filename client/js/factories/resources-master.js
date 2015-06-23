@@ -100,6 +100,8 @@ pleni.factory('Resources',['$sessionStorage',
                         for(var i=0;i<data.length;i++){
                             $sessionStorage.planners.push({
                                 id:data[i].id
+                              , type:data[i].type
+                              , readonly:data[i].readonly
                               , planner:{
                                     host:data[i].planner.host
                                   , port:data[i].planner.port

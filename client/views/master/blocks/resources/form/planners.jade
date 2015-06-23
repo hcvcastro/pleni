@@ -1,6 +1,7 @@
 article.form.animate(ng-show='planners.env.view==\'form\'')
     .title
-        h2(ng-show='planners.env.type==\'collection\'') Add a Planner
+        h2(ng-show='planners.env.type==\'collection\'&&planner.type==\'real\'') Add a Planner
+        h2(ng-show='planners.env.type==\'collection\'&&planner.type==\'virtual\'') Add a Virtual Planner
         h2(ng-show='planners.env.type==\'element\'') Edit: {{planner.id}}
         .close
             a.fa.fa-close(ng-click='planners.list()')
