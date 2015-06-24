@@ -1,5 +1,7 @@
 'use strict';
 
+require('es6-shim');
+
 var http=require('http')
   , join=require('path').join
   , validate=require('../core/validators')

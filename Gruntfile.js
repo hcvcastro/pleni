@@ -405,7 +405,7 @@ module.exports=function(grunt){
                       , 'client/js/factories/resources/notifiers.js'
                       , 'client/js/factories/resources/projects.js'
                       , 'client/js/factories/resources/workspace.js'
-                      , 'client/js/factories/resources.js'
+                      , 'client/js/factories/resources-master.js'
                       , 'client/js/visual/site.js'
                       , 'client/js/factories/auth.js'
                       , 'client/js/factories/editor.js'

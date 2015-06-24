@@ -1,5 +1,7 @@
 'use strict';
 
+require('es6-shim');
+
 var http=require('http')
   , request=require('request')
   , join=require('path').join
@@ -152,12 +154,15 @@ var destroy=function(){
             });
         },function(){
             console.log('Bye bye!!');
-            process.exit(0);
+            process.exit();
         });
     });
 };
+
+process.on('exit',destroy);
 process.on('SIGINT',destroy);
-process.on('SIGTERM',destroy);
+process.on('uncaughtException',destroy);
+//process.on('SIGTERM',destroy);
 
 require('./monitor/init')(app,config);
 require('./monitor/home')(app,config);

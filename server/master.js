@@ -1,5 +1,7 @@
 'use strict';
 
+require('es6-shim');
+
 var http=require('http')
   , join=require('path').join
   , _error=require('../core/json-response').error
@@ -18,7 +20,7 @@ var http=require('http')
   , mongoose=require('mongoose')
   , User=require('./master/models/user')
   , app=express()
-  , server=http.Server(app)
+  , server=http.createServer(app)
   , ios=require('socket.io')(server)
   , sessionsocketio=require('session.socket.io')
   , config=require('../config/master');

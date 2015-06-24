@@ -1,5 +1,7 @@
 'use strict';
 
+require('es6-shim');
+
 var http=require('http')
   , express=require('express')
   , bodyparser=require('body-parser')

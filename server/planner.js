@@ -1,5 +1,7 @@
 'use strict';
 
+require('es6-shim');
+
 var planner=require('./planners/planner')
   , scheduler=require('./planners/scheduler')
   , server=require('./planners/server')

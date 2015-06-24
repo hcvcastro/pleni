@@ -146,10 +146,13 @@ module.exports=function(app){
                 response.status(200).json(_success.ok);
             })
             .fail(function(error){
+                console.log(error);
                 if(error.code=='ECONNREFUSED'){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else{
+                    response.status(404).json(_error.network);
                 }
             })
             .done();
