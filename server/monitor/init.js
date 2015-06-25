@@ -53,26 +53,29 @@ module.exports=function(app,config){
             })
             .then(db_auth)
             .then(db_list)
-            .then(db_infodbs);
+            .then(db_infodbs)
+            .fail(function(error){})
         }))
         .spread(function(){
             var params2={}
 
             for(var arg in arguments){
-                var id=arguments[arg].id
+                if(arguments[arg]){
+                    var id=arguments[arg].id
 
-                arguments[arg].db.explist.forEach(function(repository){
-                    params2[repository.db_name]=JSON.stringify({
-                        dbserver:id
-                      , dbinfo:repository
+                    arguments[arg].db.explist.forEach(function(repository){
+                        params2[repository.db_name]=JSON.stringify({
+                            dbserver:id
+                          , dbinfo:repository
+                        });
                     });
-                });
 
-                if(arguments[arg].auth){
-                    var json=JSON.parse(params1[id])
+                    if(arguments[arg].auth){
+                        var json=JSON.parse(params1[id])
 
-                    json.auth=arguments[arg].auth;
-                    params1[id]=JSON.stringify(json);
+                        json.auth=arguments[arg].auth;
+                        params1[id]=JSON.stringify(json);
+                    }
                 }
             }
 

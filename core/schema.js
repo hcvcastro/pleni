@@ -216,6 +216,9 @@ var planner={
             }
           , 'required':['host','port']
         }
+      , 'server':{
+            'type':'string'
+        }
     }
   , 'required':['id','planner']
 };

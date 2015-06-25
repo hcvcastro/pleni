@@ -161,7 +161,6 @@ var destroy=function(){
 
 process.on('exit',destroy);
 process.on('SIGINT',destroy);
-process.on('uncaughtException',destroy);
 //process.on('SIGTERM',destroy);
 
 require('./monitor/init')(app,config);

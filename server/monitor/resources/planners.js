@@ -20,35 +20,59 @@ module.exports=function(app){
       , redis=app.get('redis')
 
     app.get('/resources/planners',authed,function(request,response){
-        Planner.find({},function(err,planners){
-            return response.status(200).json(planners.map(function(planner){
-                return {
-                    id:planner.id
+        redis.hgetall('monitor:planners',function(err,reply){
+            var list=[]
+            
+            for(var r in reply){
+                var planner=JSON.parse(reply[r]);
+
+                list.push({
+                    id:r
                   , planner:{
                         host:planner.planner.host
                       , port:planner.planner.port
                     }
-                };
-            }));
+                });
+            }
+
+            list.sort(sort);
+            return response.status(200).json(list);
         });
     });
 
     app.put('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
             Planner.remove({},function(){
-                Planner.collection.insert(
-                    request.body.map(function(planner){
-                        return {
+                var obj1=request.body.map(function(planner){
+                    return {
                             id:validate.toString(planner.id)
                           , planner:{
                                 host:validate.toValidHost(planner.planner.host)
                               , port:validate.toInt(planner.planner.port)
                             }
                         };
-                    }),function(){
-                        response.status(201).json(_success.ok);
+                    })
+                  , obj2={}
+
+                obj1.forEach(function(el){
+                    obj2[el.id]=JSON.stringify({planner:el.planner});
+                });
+
+                Planner.collection.insert(obj1,function(){
+                    redis.del('monitor:planners',function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
+                        redis.hmset('monitor:planners',obj2,
+                        function(err,reply){
+                            if(err){
+                                console.log(err);
+                            }
+                            response.status(201).json(_success.ok);
+                        });
                     });
-            })
+                });
+            });
         }else{
             response.status(400).json(_error.json);
         }
@@ -58,24 +82,31 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.planner).length==0){
             Planner.findOne({id:request.body.id},function(err,planner){
                 if(!planner){
-                    Planner.create({
-                        id:validate.toString(request.body.id)
-                      , planner:{
+                    var id=validate.toString(request.body.id)
+                      , planner={
                             host:validate.toValidHost(request.body.planner.host)
                           , port:validate.toInt(request.body.planner.port)
                         }
-                    },function(err,planner){
-                        if(!err){
-                            response.status(201).json({
-                                id:planner.id
-                              , planner:{
-                                    host:planner.planner.host
-                                  , port:planner.planner.port
-                                }
-                            });
-                        }else{
-                            response.status(403).json(_error.validation);
-                        }
+
+                    redis.hset('monitor:planners',id,JSON.stringify({
+                        planner:planner}),
+                        function(err,reply){
+                            if(err){
+                                console.log(err);
+                            }
+
+                        Planner.create({
+                            id:id
+                          , planner:planner
+                        });
+
+                        response.status(201).json({
+                            id:id
+                          , planner:{
+                                host:planner.host
+                              , port:planner.port
+                            }
+                        });
                     });
                 }else{
                     response.status(403).json(_error.notoverride);
@@ -87,8 +118,13 @@ module.exports=function(app){
     });
 
     app.delete('/resources/planners',authed,function(request,response){
-        Planner.remove({},function(){
-            response.status(200).json(_success.ok);
+        redis.del('monitor:planners',function(err,reply){
+            if(err){
+                console.log(err);
+            }
+            Planner.remove({},function(){
+                response.status(200).json(_success.ok);
+            });
         });
     });
 
@@ -110,6 +146,8 @@ module.exports=function(app){
                     response.status(401).json(_error.auth);
                 }else if(error.error=='response_malformed'){
                     response.status(400).json(_error.json);
+                }else{
+                    response.status(404).json(_error.network);
                 }
             })
             .done();
@@ -119,12 +157,14 @@ module.exports=function(app){
     });
 
     app.get('/resources/planners/:planner',authed,function(request,response){
-        Planner.findOne({
-            id:validate.toString(request.params.planner)
-        },function(err,planner){
+        var id=validate.toString(request.params.planner)
+
+        redis.hget('monitor:planners',id,function(err,reply){
+            var planner=JSON.parse(reply)
+
             if(planner){
                 response.status(200).json({
-                    id:planner.id
+                    id:id
                   , planner:{
                         host:planner.planner.host
                       , port:planner.planner.port
@@ -139,48 +179,47 @@ module.exports=function(app){
     app.put('/resources/planners/:planner',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planner).length==0){
             var id=validate.toString(request.params.planner)
-              , host=validate.toValidHost(request.body.planner.host)
-              , port=validate.toInt(request.body.planner.port)
+              , planner={
+                    host:validate.toValidHost(request.body.planner.host)
+                  , port:validate.toInt(request.body.planner.port)
+                }
 
-            Planner.findOne({id:id},function(err,planner){
-                if(planner){
-                    planner.planner={
-                        host:host
-                      , port:port
-                    };
+            Planner.findOne({id:id},function(err,_planner){
+                redis.hset('monitor:planners',id,JSON.stringify({
+                    planner:planner}));
 
-                    planner.save(function(err,planner){
-                        if(!err){
-                            response.status(200).json({
-                                id:planner.id
-                              , planner:{
-                                    host:planner.host
-                                  , port:planner.port
-                                }
-                            });
-                        }else{
-                            response.status(403).json(_error.json);
+                if(_planner){
+                    _planner.planner=planner;
+
+                    _planner.save(function(err,_planner){
+                        if(err){
+                            console.log(err);
                         }
+
+                        response.status(200).json({
+                            id:_planner.id
+                          , planner:{
+                                host:_planner.planner.host
+                              , port:_planner.planner.port
+                            }
+                        });
                     });
                 }else{
                     Planner.create({
                         id:id
-                      , planner:{
-                            host:host
-                          , port:port
+                      , planner:planner
+                    },function(err,_planner){
+                        if(err){
+                            console.log(err);
                         }
-                    },function(err,planner){
-                        if(!err){
-                            response.status(201).json({
-                                id:planner.id
-                              , planner:{
-                                    host:planner.host
-                                  , port:planner.port
-                                }
-                            });
-                        }else{
-                            response.status(403).json(_error.json);
-                        }
+
+                        response.status(201).json({
+                            id:_planner.id
+                          , planner:{
+                                host:_planner.planner.host
+                              , port:_planner.planner.port
+                            }
+                        });
                     });
                 }
             });
@@ -194,8 +233,12 @@ module.exports=function(app){
             id:validate.toString(request.params.planner)
         },function(err,planner){
             if(planner){
-                planner.remove(function(){
+                redis.hdel('monitor:planners',planner.id,function(err,reply){
+                    if(err){
+                        console.log(err);
+                    }
                     response.status(200).json(_success.ok);
+                    planner.remove();
                 });
             }else{
                 response.status(404).json(_error.notfound);
@@ -215,9 +258,13 @@ module.exports=function(app){
             }
         }
 
-        Planner.findOne({
-            id:validate.toString(request.params.planner)
-        },function(err,planner){
+        redis.hget('monitor:planners',id,function(err,reply){
+            if(err){
+                console.log(err);
+            }
+
+            var planner=JSON.parse(reply)
+
             if(planner){
                 var args={
                     planner:{

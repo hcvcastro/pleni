@@ -146,11 +146,12 @@ module.exports=function(app){
                 response.status(200).json(_success.ok);
             })
             .fail(function(error){
-                console.log(error);
                 if(error.code=='ECONNREFUSED'){
                     response.status(404).json(_error.network);
                 }else if(error.error=='unauthorized'){
                     response.status(401).json(_error.auth);
+                }else if(error.error=='response_malformed'){
+                    response.status(400).json(_error.json);
                 }else{
                     response.status(404).json(_error.network);
                 }
@@ -200,36 +201,36 @@ module.exports=function(app){
                     dbserver.db=db;
 
                     dbserver.save(function(err,dbserver){
-                        if(!err){
-                            response.status(200).json({
-                                id:dbserver.id
-                              , db:{
-                                    host:dbserver.db.host
-                                  , port:dbserver.db.port
-                                  , prefix:dbserver.db.prefix
-                                }
-                            });
-                        }else{
-                            response.status(403).json(_error.json);
+                        if(err){
+                            console.log(err);
                         }
+
+                        response.status(200).json({
+                            id:dbserver.id
+                          , db:{
+                                host:dbserver.db.host
+                              , port:dbserver.db.port
+                              , prefix:dbserver.db.prefix
+                            }
+                        });
                     });
                 }else{
                     DBServer.create({
                         id:id
                       , db:db
                     },function(err,dbserver){
-                        if(!err){
-                            response.status(201).json({
-                                id:dbserver.id
-                              , db:{
-                                    host:dbserver.db.host
-                                  , port:dbserver.db.port
-                                  , prefix:dbserver.db.prefix
-                                }
-                            });
-                        }else{
-                            response.status(403).json(_error.json);
+                        if(err){
+                            console.log(err);
                         }
+
+                        response.status(201).json({
+                            id:dbserver.id
+                          , db:{
+                                host:dbserver.db.host
+                              , port:dbserver.db.port
+                              , prefix:dbserver.db.prefix
+                            }
+                        });
                     });
                 }
             });
