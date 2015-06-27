@@ -437,7 +437,8 @@ module.exports=function(grunt){
                     ]
                 },{
                     'dist/planner/client/js/planner.min.js':[
-                        'client/js/planner.js'
+                        'bower_components/json-human/src/json.human.js'
+                      , 'client/js/planner.js'
                     ]
                 }]
             }

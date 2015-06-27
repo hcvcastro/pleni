@@ -21,9 +21,9 @@
         "url":"https://github.com/hiperborea/pleni/issues"
     }
   , "scripts":{
-        "start":"supervisor server/planner.io.js"
+        "start":"supervisor server/planner.ion.js"
     }
-  , "main":"server/planner.io.js"
+  , "main":"server/planner.ion.js"
   , "engines":{
         "node":">=0.6.0"
       , "npm":">=1.0.0"

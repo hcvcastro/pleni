@@ -50,9 +50,7 @@ server.listen(new planner(config.planner.port,notifier));
 
 io.on('connection',function(socket){
     socket.emit('notifier',{
-        planner:{
-            action:'connection'
-        }
+        action:'connection'
     });
 });
 
