@@ -137,6 +137,9 @@ pleni.factory('Resources',['$sessionStorage',
               , isset:function(planner,success,failure){
                     bind(Planners.isset,planner,success,failure);
                 }
+              , set:function(planner,success,failure){
+                    bind(Planners.set,planner,success,failure);
+                }
               , api:function(planner,success,failure){
                     bind(Planners.api,planner,success,failure);
                 }

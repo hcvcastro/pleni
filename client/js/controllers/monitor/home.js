@@ -430,11 +430,17 @@ pleni.controller('HomeController',
                 });
             }
           , exclusive:function(index){
+                console.log('set in');
                 var planner=$scope.storage.planners[index];
 
                 utils.send('Send a set request ...');
-                Resources.planners.exclusive({
+                Resources.planners.set({
                     server:planner.id
+                  , task:{
+                        name:'exclusive'
+                      , count:1
+                      , interval:500
+                    }
                 },function(data){
                     utils.receive();
                     utils.show('success','Planner taken');

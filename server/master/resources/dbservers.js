@@ -30,7 +30,7 @@ module.exports=function(app){
             return {
                 id:dbserver.id
               , type:(dbserver.attrs.virtual?'virtual':'real')
-              , readonly:!Boolean(dbserver.attrs.writeable)
+              , readonly:!Boolean(dbserver.attrs.writable)
               , db:{
                     host:dbserver.db.host
                   , port:dbserver.db.port
@@ -104,7 +104,7 @@ module.exports=function(app){
                 response.status(201).json({
                     id:new_dbserver.id
                   , type:(new_dbserver.attrs.virtual?'virtual':'real')
-                  , readonly:!Boolean(new_dbserver.attrs.writeable)
+                  , readonly:!Boolean(new_dbserver.attrs.writable)
                   , db:{
                         host:new_dbserver.db.host
                       , port:new_dbserver.db.port
@@ -174,7 +174,7 @@ module.exports=function(app){
             response.status(200).json({
                 id:dbserver[1].id
               , type:(dbserver[1].attrs.virtual?'virtual':'real')
-              , readonly:!Boolean(dbserver[1].attrs.writeable)
+              , readonly:!Boolean(dbserver[1].attrs.writable)
               , db:{
                     host:dbserver[1].db.host
                   , port:dbserver[1].db.port
@@ -215,7 +215,7 @@ module.exports=function(app){
                     response.status(200).json({
                         id:new_dbserver.id
                       , type:(new_dbserver.attrs.virtual?'virtual':'real')
-                      , readonly:!Boolean(new_dbserver.attrs.writeable)
+                      , readonly:!Boolean(new_dbserver.attrs.writable)
                       , db:{
                             host:new_dbserver.db.host
                           , port:new_dbserver.db.port
@@ -230,7 +230,7 @@ module.exports=function(app){
                 response.status(201).json({
                     id:new_dbserver.id
                   , type:(new_dbserver.attrs.virtual?'virtual':'real')
-                  , readonly:!Boolean(new_dbserver.attrs.writeable)
+                  , readonly:!Boolean(new_dbserver.attrs.writable)
                   , db:{
                         host:new_dbserver.db.host
                       , port:new_dbserver.db.port

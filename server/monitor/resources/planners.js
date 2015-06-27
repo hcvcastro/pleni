@@ -1,6 +1,7 @@
 'use strict';
 
-var validate=require('../../../core/validators')
+var extend=require('underscore').extend
+  , validate=require('../../../core/validators')
   , _success=require('../../../core/json-response').success
   , _error=require('../../../core/json-response').error
   , schema=require('../../../core/schema')
@@ -12,8 +13,6 @@ var validate=require('../../../core/validators')
   , set=require('../../../core/functions/planners/set')
   , get=require('../../../core/functions/planners/get')
   , unset=require('../../../core/functions/planners/unset')
-  , run=require('../../../core/functions/planners/run')
-  , stop=require('../../../core/functions/planners/stop')
 
 module.exports=function(app){
     var authed=app.get('auth')
@@ -278,6 +277,7 @@ module.exports=function(app){
                 if(json){
                     args=extend(body,args);
                 }
+
                 sequence.reduce(function(previous,current){
                     return previous.then(current);
                 },test(args))
@@ -298,6 +298,7 @@ module.exports=function(app){
                     }else if(error.error=='not found'){
                         response.status(404).json(_error.notfound);
                     }else{
+                        console.log('error',error);
                         response.status(403).json(_error.badrequest);
                     }
                 })
@@ -342,6 +343,31 @@ module.exports=function(app){
                     planner:{
                         host:args.planner.host
                       , result:'tid' in args.planner
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_set',authed,
+        function(request,response){
+        return generic_action(request,response,schema.task,[set],
+            function(planner,args){
+                console.log('args',args);
+                Planner.findOne({id:args.planner.id},function(err,_planner){
+                    if(err){
+                        console.log(err);
+                    }
+
+                    _planner.planner.tid=args.planner.tid;
+                    _planner.save();
+
+                    redis.hset('monitor:planners',id,JSON.stringify(_planner));
+                });
+
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , result:true
                     }
                 });
         });
