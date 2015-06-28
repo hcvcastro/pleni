@@ -39,8 +39,8 @@ module.exports=function(config,user){
                   , writable:false
                 }
               , notifier:{
-                    host:config.url
-                  , port:80
+                    host:config.base.url
+                  , port:config.base.port
                 }
             }]
         }

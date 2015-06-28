@@ -12,7 +12,12 @@ var _success=require('../../core/json-response').success
 
 module.exports=function(app,config){
     var passport=app.get('passport')
-      , captcha=new nocaptcha(config.recaptcha.public,config.recaptcha.private);
+      , captcha=new nocaptcha(config.recaptcha.public,config.recaptcha.private)
+      , site=config.base.url
+
+    if(config.base.port!=80){
+        site+=':'+config.base.port;
+    }
 
     app.get('/signin',csrf,function(request,response){
         response.render('pages/signin',{
@@ -123,7 +128,7 @@ module.exports=function(app,config){
             }
           , mail=function(key){
                 response.render('mail/confirm',{
-                    site:config.url
+                    site:site
                   , confirm:'/confirm/'+key
                 },function(err,html){
                     mailer({
@@ -229,7 +234,7 @@ module.exports=function(app,config){
           , mail=function(key){
                 response.render('mail/forgot',{
                     email:request.body.email
-                  , site:config.url
+                  , site:site
                   , reset:'/#/reset/'+key
                 },function(err,html){
                     mailer({

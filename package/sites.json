@@ -6,7 +6,7 @@
       , "email":"info@hiperborea.com.bo"
       , "url":"http://www.hiperborea.com.bo"
     }
-  , "license":"GPLv3"
+  , "license":"GPL-3.0"
   , "description":"Utility for generate sitemap in easy mode"
   , "keywords":[
         "Pleni"

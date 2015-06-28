@@ -23,31 +23,47 @@ module.exports=function(app){
     var authed=app.get('auth');
 
     app.get('/resources/notifiers',authed,function(request,response){
-        response.json(request.user.resources.notifiers.map(
-            function(notifier){
-                return {
-                    id:notifier.id
-                  , notifier:{
-                        host:notifier.notifier.host
-                      , port:notifier.notifier.port
-                    }
-                };
-            }));
+        response.json(request.user.resources.notifiers
+        .filter(function(notifier){
+            return Boolean(notifier.attrs.readable)
+        })
+        .map(function(notifier){
+            return {
+                id:notifier.id
+              , type:(notifier.attrs.virtual?'virtual':'real')
+              , readonly:!Boolean(notifier.attrs.writable)
+              , notifier:{
+                    host:notifier.notifier.host
+                  , port:notifier.notifier.port
+                }
+            };
+        }));
     });
 
     app.put('/resources/notifiers',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifiers).length==0){
-            var resources=request.user.resources;
+            var resources=request.user.resources
 
-            resources.notifiers=request.body.map(function(notifier){
+            resources.notifiers=resources.notifiers.filter(function(notifier){
+                return !(Boolean(notifier.attrs.readable))||
+                       !(Boolean(notifier.attrs.writable));
+            });
+
+            resources.notifiers=resources.notifiers.concat(request.body.map(
+            function(notifier){
                 return {
                     id:validate.toString(notifier.id)
+                  , attrs:{
+                        virtual:(notifier.type=='virtual')
+                      , readable:true
+                      , writable:true
+                    }
                   , notifier:{
                         host:validate.toValidHost(notifier.notifier.host)
                       , port:validate.toInt(notifier.notifier.port)
                     }
                 };
-            });
+            }));
 
             request.user.save();
             response.status(201).json(_success.ok);
@@ -65,6 +81,11 @@ module.exports=function(app){
             if(!notifier){
                 var new_notifier={
                     id:validate.toString(request.body.id)
+                  , attrs:{
+                        virtual:(request.body.type=='virtual')
+                      , readable:true
+                      , writable:true
+                    }
                   , notifier:{
                         host:validate.toValidHost(request.body.notifier.host)
                       , port:validate.toInt(request.body.notifier.port)
@@ -72,9 +93,17 @@ module.exports=function(app){
                 };
 
                 notifiers.push(new_notifier);
-                request.user.save();
 
-                response.status(201).json(new_notifier);
+                request.user.save();
+                response.status(201).json({
+                    id:new_notifier.id
+                  , type:(new_notifier.attrs.virtual?'virtual':'real')
+                  , readonly:!Boolean(new_notifier_attrs.writable)
+                  , db:{
+                        host:new_notifier.db.host
+                      , port:new_notifier.db.port
+                    }
+                });
             }else{
                 response.status(403).json(_error.notoverride);
             }
@@ -86,19 +115,29 @@ module.exports=function(app){
     app.delete('/resources/notifiers',authed,function(request,response){
         var resources=request.user.resources
 
-        resources.notifiers=[];
+        resources.notifiers=resources.notifiers.filter(function(notifier){
+            return !(Boolean(notifier.attrs.readable))||
+                   !(Boolean(notifier.attrs.writable));
+        });
+
         request.user.save();
         response.status(200).json(_success.ok);
     });
 
     app.post('/resources/notifiers/_check',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier).length==0){
-            test({
-                notifier:{
-                    host:validate.toValidHost(request.body.notifier.host)+':'+
-                         validate.toInt(request.body.notifier.port)
+            var packet={
+                    notifier:{
+                        host:validate.toValidHost(request.body.notifier.host)+
+                            ':'+validate.toInt(request.body.notifier.port)
+                    }
                 }
-            })
+
+            if(request.body.type=='virtual'){
+                packet.notifier.host+='/notifier';
+            }
+
+            test(packet)
             .then(function(args){
                 response.status(200).json(_success.ok);
             })
@@ -126,6 +165,8 @@ module.exports=function(app){
         if(notifier){
             response.status(200).json({
                 id:notifier[1].id
+              , type:(notifier[1].attrs.virtual?'virtual':'real')
+              , readonly:!Boolean(notifier[1].attrs.writable)
               , notifier:{
                     host:notifier[1].notifier.host
                   , port:notifier[1].notifier.port
@@ -145,6 +186,11 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.notifier).length==0){
             var new_notifier={
                 id:id
+              , attrs:{
+                    virtual:(request.body.type=='virtual')
+                  , readable:true
+                  , writable:true
+                }
               , notifier:{
                     host:validate.toValidHost(request.body.notifier.host)
                   , port:validate.toInt(request.body.notifier.port)
@@ -152,18 +198,26 @@ module.exports=function(app){
             };
 
             if(notifier){
-                notifiers[notifier[0]]=new_notifier;
-                response.status(200).json({
-                    id:new_notifier.id
-                  , notifier:{
-                        host:new_notifier.notifier.host
-                      , port:new_notifier.notifier.port
-                    }
-                });
+                if(notifier[1].attrs.readable&&notifier[1].attrs.writable){
+                    notifiers[notifier[0]]=new_notifier;
+                    response.status(200).json({
+                        id:new_notifier.id
+                      , type:(new_notifier.attrs.virtual?'virtual':'real')
+                      , readonly:!Boolean(new_notifier.attrs.writable)
+                      , notifier:{
+                            host:new_notifier.notifier.host
+                          , port:new_notifier.notifier.port
+                        }
+                    });
+                }else{
+                    response.status(403).json(_error.notoverride);
+                }
             }else{
                 notifiers.push(new_notifier);
                 response.status(201).json({
                     id:new_notifier.id
+                  , type:(new_notifier.attrs.virtual?'virtual':'real')
+                  , readonly:!Boolean(new_notifier.attrs.writable)
                   , notifier:{
                         host:new_notifier.notifier.host
                       , port:new_notifier.notifier.port
@@ -178,18 +232,23 @@ module.exports=function(app){
         }
     });
 
-    app.delete('/resources/notifiers/:notifier',authed,function(request,response){
+    app.delete('/resources/notifiers/:notifier',authed,
+        function(request,response){
         var id=validate.toString(request.params.notifier)
           , resources=request.user.resources
           , notifiers=resources.notifiers
           , notifier=get_element(id,notifiers)
 
         if(notifier){
-            notifiers.splice(notifier[0],1);
-            resources.notifiers=notifiers;
-            request.user.save();
+            if(notifier[1].attrs.readable&&notifier[1].attrs.writable){
+                notifiers.splice(notifier[0],1);
+                resources.notifiers=notifiers;
+                request.user.save();
 
-            response.status(200).json(_success.ok);
+                response.status(200).json(_success.ok);
+            }else{
+                response.status(403).json(_error.notoverride);
+            }
         }else{
             response.status(404).json(_error.notfound);
         }
@@ -218,6 +277,11 @@ module.exports=function(app){
                   , cookie:request.headers.cookie
                 }
             };
+
+            if(notifier[1].attrs.virtual){
+                args.notifier.host+='notifier';
+            }
+
             if(json){
                 args=extend(body,args);
             }

@@ -118,8 +118,8 @@ pleni.controller('ResourcesController',
           , view:function(index){
                 $scope.dbservers.env.view='view';
                 $scope.dbservers.env.type='element';
+                $scope.dbservers.check(index);
                 $scope.dbserver=$scope.storage.dbservers[index];
-                $scope.dbserver.check(index);
             }
           , scan:function(){
                 utils.clean();
