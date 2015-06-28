@@ -178,6 +178,7 @@ pleni.factory('Resources',['$sessionStorage',
                         for(var i=0;i<data.length;i++){
                             $sessionStorage.notifiers.push({
                                 id:data[i].id
+                              , readonly:data[i].readonly
                               , notifier:{
                                     host:data[i].notifier.host
                                   , port:data[i].notifier.port

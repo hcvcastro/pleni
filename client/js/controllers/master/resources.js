@@ -666,6 +666,7 @@ pleni.controller('ResourcesController',
 
         $scope.notifier={
             id:''
+          , type:'real'
           , notifier:{
                 host:''
               , port:0
