@@ -29,6 +29,8 @@ module.exports=function(config,user){
               , planner:{
                     host:config.monitor.url
                   , port:config.monitor.port
+                  , user:user
+                  , pass:config.monitor.apikey
                 }
             }]
           , notifiers:[{

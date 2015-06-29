@@ -9,6 +9,7 @@ var request=require('request')
  * args input
  *      auth (*)
  *          cookie
+ *          ts
  *      planner
  *          host
  *

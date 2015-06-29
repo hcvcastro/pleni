@@ -8,17 +8,88 @@ var _request=require('request')
   , User=require('./models/user')
   , generator=require('../../core/functions/utils/random').sync
   , test=require('../../core/functions/planners/test')
+  , auth=require('../../core/functions/planners/auth')
 
 module.exports=function(app,config){
+    var redis=app.get('redis')
+      , cookie=function(header){
+            var regex=/^AuthSession=(.+) *$/
+              , exec=regex.exec(header)
+
+            if(exec){
+                return exec[1];
+            }
+        }
+      , authed=function(request,response,next){
+            var auth=cookie(request.headers.cookie)
+
+            if(auth){
+                redis.get('user:'+auth,function(err,reply){
+                    if(err){
+                        console.log(err);
+                    }
+                    if(reply){
+                        request.user=JSON.parse(reply);
+                        return next();
+                    }else{
+                        response.status(401).json(_error.auth);
+                    }
+                });
+            }else{
+                response.status(401).json(_error.auth);
+            }
+        }
+
     app.get('/planner/id',function(request,response){
         response.status(200).json({
             planner:'ready for action'
-          , type:'io'
+          , type:'virtual'
         });
     });
 
-    app.get('/planner/_status',function(request,response){
+    app.post('/planner/_session',function(request,response){
+        if(schema.js.validate(request.body,schema.auth2).length==0){
+            var userid=validate.toString(request.body.name)
+              , apikey=validate.toString(request.body.password)
 
+            redis.hget('monitor:apps',apikey,function(err,appid){
+                if(err){
+                    console.log(err);
+                }
+
+                if(appid){
+                    User.findOne({id:userid,app:appid},function(err,user){
+                        var cookie=generator()
+                          , data={
+                                id:userid
+                              , app:appid
+                            }
+
+                        redis.setex('user:'+cookie,60*5,JSON.stringify(data),
+                        function(err,reply){
+                            response.cookie('AuthSession',cookie,{
+                                path:'/'
+                              , httponly:true
+                            }).status(200).json(_success.ok);
+                        });
+                    });
+                }else{
+                    response.cookie('AuthSession','',{
+                        path:'/'
+                      , httpOnly:true
+                    }).status(401).json(_error.auth);
+                }
+            });
+        }else{
+            response.status(400).json(_error.json);
+        }
+    });
+
+    app.get('/planner/_status',function(request,response){
+        console.log('headers',request.headers);
+        response.status(200).json({
+            status:'stopped'
+        });
     });
 };
 

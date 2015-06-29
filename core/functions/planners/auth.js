@@ -4,9 +4,9 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for get a cookie session in couchdb server
+ * Function for get a cookie session in planner server
  * args input
- *      db
+ *      planner
  *          host
  *          user
  *          pass
@@ -18,15 +18,16 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/_session'
+      , url=args.planner.host+'/_session'
       , body={
-            name:args.db.user
-          , password:args.db.pass
+            name:args.planner.user
+          , password:args.planner.pass
         }
 
     if(!args.auth || !args.auth.cookie){
         if(args.debug){
-            console.log('authentification in db server ... '+args.db.user);
+            console.log('authentification in planner server ...'+
+                args.planner.user);
         }
         request.post({url:url,json:body},function(error,response){
             if(!error){
@@ -56,5 +57,5 @@ module.exports=function(args){
     }
 
     return deferred.promise;
-};
+}
 

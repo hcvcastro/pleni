@@ -9,6 +9,7 @@ var _success=require('../../core/json-response').success
   , generator=require('../../core/functions/utils/random').sync
   , mailer=require('../../core/functions/mails/send')
   , User=require('./models/user')
+  , Skel=require('./models/skel')
 
 module.exports=function(app,config){
     var passport=app.get('passport')
@@ -104,8 +105,7 @@ module.exports=function(app,config){
                             if(!err){
                                 response.status(200).json(_success.ok);
 
-                                var skel=require('./models/skel')
-                                    (config,user._id)
+                                var skel=Skel(config,user._id)
 
                                 user.resources=skel.resources;
                                 user.notifier=skel.notifier;

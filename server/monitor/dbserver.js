@@ -9,7 +9,6 @@ var _request=require('request')
   , generator=require('../../core/functions/utils/random').sync
   , test=require('../../core/functions/databases/test')
   , auth=require('../../core/functions/databases/auth')
-  , create=require('../../core/functions/databases/create')
 
 module.exports=function(app,config){
     var redis=app.get('redis')
@@ -120,7 +119,7 @@ module.exports=function(app,config){
                         function(err,reply){
                             response.cookie('AuthSession',cookie,{
                                 path:'/'
-                              , httponly:true
+                              , httpOnly:true
                             }).status(200).json(_success.ok);
                         });
                     });

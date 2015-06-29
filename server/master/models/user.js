@@ -65,6 +65,8 @@ var user=new Schema({
           , planner:{
                 host:String
               , port:Number
+              , user:String
+              , pass:String
               , tid:{
                     type:String
                   , required:false

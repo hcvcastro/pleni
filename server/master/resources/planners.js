@@ -6,6 +6,7 @@ var extend=require('underscore').extend
   , _error=require('../../../core/json-response').error
   , schema=require('../../../core/schema')
   , test=require('../../../core/functions/planners/test')
+  , auth=require('../../../core/functions/planners/auth')
   , status=require('../../../core/functions/planners/status')
   , api=require('../../../core/functions/planners/api')
   , set=require('../../../core/functions/planners/set')
@@ -45,7 +46,7 @@ module.exports=function(app){
 
     app.put('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
-            var resources=request.user.resources;
+            var resources=request.user.resources
 
             resources.planners=resources.dbservers.filter(function(planner){
                 return !(Boolean(planner.attrs.readable))||
@@ -308,6 +309,10 @@ module.exports=function(app){
 
             if(planner[1].attrs.virtual){
                 args.planner.host+='/planner';
+                args.planner.user=planner[1].planner.user;
+                args.planner.pass=planner[1].planner.pass;
+
+                sequence.unshift(auth);
             }
 
             if(planner[1].planner.tid){

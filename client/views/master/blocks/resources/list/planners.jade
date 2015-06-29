@@ -29,7 +29,7 @@ article.list
                     a(ng-click='planners.view($index)') {{planner.id|truncate:16}}
                 td {{planner.planner.host}}:{{planner.planner.port}}
                 td.status
-                    span.fa(title='Planner type: {{planner.type}}',ng-class='{\'fa-bullhorn\':planner.type==\'io\',\'fa-headphones\':planner.type==\'ion\',\'fa-microphone-slash\':planner.type==\'none\'}')
+                    span.fa(title='Planner type: {{planner.type}}',ng-class='{\'fa-magic\':planner.type==\'virtual\',\'fa-bullhorn\':planner.type==\'io\',\'fa-headphones\':planner.type==\'ion\',\'fa-microphone-slash\':planner.type==\'none\'}')
                 td.status
                     span.fa(title='Planner connection: {{planner.check}}',ng-class='{\'fa-check\':planner.check==\'online\',\'fa-question\':planner.check==\'unknown\',\'fa-close\':planner.check==\'offline\'}')
                 td.status
@@ -37,7 +37,7 @@ article.list
                 td.status
                     span.fa(title='Planner setting status: {{planner.set.status}}',ng-class='{\'fa-circle\':planner.set.status==\'set\',\'fa-question\':planner.set.status==\'unknown\',\'fa-circle-o\':planner.set.status==\'unset\'}')
                 td.status
-                    a(title='Add/Remove planner to master notifier',ng-click='planners.follow($index)',ng-show='planner.type==\'io\'||planner.type==\'ion\'')
+                    a(title='Add/Remove planner to master notifier',ng-click='planners.follow($index)',ng-show='planner.type==\'virtual\'||planner.type==\'io\'||planner.type==\'ion\'')
                         span.fa(ng-class='{\'fa-bell-o\':planner.follow==true,\'fa-bell-slash-o\':planner.follow==false}')
                 td.status
                     a.fa.fa-recycle(title='Clean TID',ng-click='planners.clean($index)')
