@@ -43,7 +43,7 @@ module.exports=function(app){
         if(schema.js.validate(request.body,schema.planners).length==0){
             Planner.remove({},function(){
                 var obj1=request.body.map(function(planner){
-                    return {
+                        return {
                             id:validate.toString(planner.id)
                           , planner:{
                                 host:validate.toValidHost(planner.planner.host)

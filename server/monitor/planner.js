@@ -85,7 +85,7 @@ module.exports=function(app,config){
         }
     });
 
-    app.get('/planner/_status',function(request,response){
+    app.get('/planner/_status',authed,function(request,response){
         console.log('headers',request.headers);
         response.status(200).json({
             status:'stopped'

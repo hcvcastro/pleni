@@ -341,7 +341,7 @@ module.exports=function(app,config){
         }
     });
 
-    var generic1=function(request,response,method){
+    var generic=function(request,response,method){
         var repository=request.params.repository
           , Repository=request.user.repositories.find(function(_repository){
                 return _repository.name==repository;
@@ -401,27 +401,27 @@ module.exports=function(app,config){
 
     app.put('/dbserver/:repository/:document',authed,
     function(request,response){
-        return generic1(request,response,'put');
+        return generic(request,response,'put');
     });
 
     app.get('/dbserver/:repository/:document',authed,
     function(request,response){
-        return generic1(request,response,'get');
+        return generic(request,response,'get');
     });
 
     app.head('/dbserver/:repository/_design/:document',authed,
     function(request,response){
-        return generic1(request,response,'head');
+        return generic(request,response,'head');
     });
 
     app.put('/dbserver/:repository/_design/:document',authed,
     function(request,response){
-        return generic1(request,response,'put');
+        return generic(request,response,'put');
     });
 
     app.get('/dbserver/:repository/_design/:view/_view/:funct',authed,
     function(request,response){
-        return generic1(request,response,'get');
+        return generic(request,response,'get');
     });
 };
 
