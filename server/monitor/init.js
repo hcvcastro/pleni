@@ -98,14 +98,20 @@ module.exports=function(app,config){
         });
 
         Q.all(planners.map(function(planner){
-            return planner_test({
-                id:planner.id
-              , planner:{
-                    host:planner.planner.host+':'+planner.planner.port
+            var packet={
+                    id:planner.id
+                  , planner:{
+                        host:planner.planner.host+':'+planner.planner.port
+                    }
                 }
-            })
-            .then(planner_api)
-            .fail(function(error){})
+
+            if(planner.planner.tid){
+                packet.planner.tid=planner.planner.tid;
+            }
+
+            return planner_test(packet)
+                .then(planner_api)
+                .fail(function(error){});
         }))
         .spread(function(){
             for(var arg in arguments){

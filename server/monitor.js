@@ -159,9 +159,9 @@ var destroy=function(){
     });
 };
 
-process.on('exit',destroy);
-//process.on('SIGINT',destroy);
-//process.on('SIGTERM',destroy);
+//process.on('exit',destroy);
+process.on('SIGINT',destroy);
+process.on('SIGTERM',destroy);
 
 require('./monitor/init')(app,config);
 require('./monitor/home')(app,config);

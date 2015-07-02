@@ -266,7 +266,8 @@ module.exports=function(app){
 
             if(planner){
                 var args={
-                    planner:{
+                    id:id
+                  , planner:{
                         host:planner.planner.host+':'+
                              planner.planner.port
                     }
@@ -352,8 +353,7 @@ module.exports=function(app){
         function(request,response){
         return generic_action(request,response,schema.task,[set],
             function(planner,args){
-                console.log('args',args);
-                Planner.findOne({id:args.planner.id},function(err,_planner){
+                Planner.findOne({id:args.id},function(err,_planner){
                     if(err){
                         console.log(err);
                     }
@@ -361,7 +361,53 @@ module.exports=function(app){
                     _planner.planner.tid=args.planner.tid;
                     _planner.save();
 
-                    redis.hset('monitor:planners',id,JSON.stringify(_planner));
+                    redis.hget('monitor:planners',_planner.id,
+                        function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
+
+                        var __planner=JSON.parse(reply)
+                        __planner.planner.tid=args.planner.tid;
+                        
+                        redis.hset('monitor:planners',_planner.id,
+                            JSON.stringify(__planner));
+                    });
+                });
+
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , result:true
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_clean',authed,
+        function(request,response){
+        return generic_action(request,response,null,[],
+            function(planner,args){
+                Planner.findOne({id:args.id},function(err,_planner){
+                    if(err){
+                        console.log(err);
+                    }
+
+                    _planner.planner.tid=undefined;
+                    _planner.save();
+
+                    redis.hget('monitor:planners',_planner.id,
+                        function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
+
+                        var __planner=JSON.parse(reply)
+                        __planner.planner.tid=undefined;
+
+                        redis.hset('monitor:planners',_planner.id,
+                            JSON.stringify(__planner));
+                        });
                 });
 
                 response.status(200).json({

@@ -203,48 +203,6 @@ pleni.controller('HomeController',
                 $scope.dbservers.env.type='element';
                 $scope.dbserver=$scope.storage.dbservers[index];
             }
-          , scan:function(){
-                utils.clean();
-                if($scope.dbservers.env.type=='element'){
-                    utils.send('Scanning repositories ...');
-                    Resources.dbservers.scan({
-                        dbserver:$scope.dbserver.id
-                    },function(data){
-                        $scope.dbserver.check='online';
-                        $scope.dbserver.repositories=data;
-                        utils.receive();
-                        if(data.length==0){
-                            utils.show('warning','Repositories not found');
-                        }
-                    },function(error){
-                        $scope.dbserver.check='offline';
-                        utils.receive();
-                    });
-                }
-            }
-          , repositories:{
-                add:function(index){
-                    utils.clean();
-                    if($scope.dbservers.env.type=='element'){
-                        utils.send('Sending add repository request');
-                        var _repository=$scope.dbserver.repositories[index];
-                        Resources.repositories.create({
-                            id:_repository.name
-                          , _dbserver:$scope.dbserver.id
-                          , db:{
-                                name:_repository.params.db_name
-                            }
-                        },function(data){
-                            utils.receive();
-                            utils.show('success',
-                                'Repository added to the list');
-                        },function(error){
-                            utils.receive();
-                            utils.show('error',error.data.message);
-                        });
-                    }
-                }
-            }
           , edit:function(index){
                 $scope.dbservers.env.view='form';
                 $scope.dbservers.env.type='element';
@@ -389,32 +347,6 @@ pleni.controller('HomeController',
                 $scope.planner=$scope.storage.planners[index];
                 $scope.planners.check(index);
             }
-          , api:function(next){
-                $('.api').addClass('fa-spin');
-                utils.clean();
-                if($scope.planners.env.type=='element'){
-                    utils.send('Getting available tasks ...');
-                    Resources.planners.api({
-                        server:$scope.planner.id
-                    },function(data){
-                        $scope.planner.check='online';
-                        $scope.planner.api=data.planner.tasks;
-                        utils.receive();
-                        $('.api').removeClass('fa-spin');
-                        if(data.length==0){
-                            utils.show('warning','Planner has no Tasks!!');
-                        }
-                        if(next){
-                            next();
-                        }
-                    },function(error){
-                        $scope.planner.check='offline';
-                        $scope.planner.status='unknown';
-                        $scope.planner.set.status='unknown';
-                        utils.receive();
-                    });
-                }
-            }
           , clean:function(index){
                 var planner=$scope.storage.planners[index];
 
@@ -430,7 +362,6 @@ pleni.controller('HomeController',
                 });
             }
           , exclusive:function(index){
-                console.log('set in');
                 var planner=$scope.storage.planners[index];
 
                 utils.send('Send a set request ...');
