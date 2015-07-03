@@ -321,7 +321,7 @@ pleni.controller('HomeController',
                             server:planner.id
                         },function(data){
                             if(data.planner.result){
-                                $scope.planners.get();
+                                planner.set.status='set';
                             }else{
                                 planner.set.status='unset';
                             }
@@ -350,35 +350,48 @@ pleni.controller('HomeController',
           , clean:function(index){
                 var planner=$scope.storage.planners[index];
 
-                utils.send('Send a clean TID request ...');
                 Resources.planners.clean({
                     server:planner.id
                 },function(data){
-                    utils.receive();
                     utils.show('success','Cleaned the TID planner');
                 },function(error){
-                    utils.receive();
                     utils.show('error',error);
                 });
             }
           , exclusive:function(index){
                 var planner=$scope.storage.planners[index];
 
-                utils.send('Send a set request ...');
-                Resources.planners.set({
-                    server:planner.id
-                  , task:{
-                        name:'exclusive'
-                      , count:1
-                      , interval:500
-                    }
-                },function(data){
-                    utils.receive();
-                    utils.show('success','Planner taken');
-                },function(error){
-                    utils.receive();
-                    utils.show('error',error);
-                });
+                switch(planner.set.status){
+                    case 'unset':
+                        planner.set.status='setting';
+                        Resources.planners.set({
+                            server:planner.id
+                          , task:{
+                                name:'exclusive'
+                              , count:1
+                              , interval:500
+                            }
+                        },function(data){
+                            planner.set.status='set';
+                            utils.show('success','Planner taken');
+                        },function(error){
+                            planner.set.status='unset';
+                            utils.show('error',error);
+                        });
+                        break;
+                    case 'set':
+                        planner.set.status='setting';
+                        Resources.planners.unset({
+                            server:planner.id
+                        },function(data){
+                            planner.set.status='unset';
+                            utils.show('success','Planner released');
+                        },function(error){
+                            planner.set.status='set';
+                            utils.show('error',error);
+                        });
+                        break;
+                }
             }
           , edit:function(index){
                 $scope.planners.env.view='form';

@@ -21,7 +21,7 @@ article.list
                 th.status &nbsp;
                 th.options &nbsp;
         tbody
-            tr(ng-repeat='planner in storage.planners')
+            tr(ng-repeat='planner in storage.planners',ng-class='{\'lock\':planner.set.status==\'set\'}')
                 td {{planner.id|truncate:16}}
                 td {{planner.planner.host}}:{{planner.planner.port}}
                 td.status
@@ -33,9 +33,9 @@ article.list
                 td.status
                     span.fa(title='Planner setting status: {{planner.set.status}}',ng-class='{\'fa-circle\':planner.set.status==\'set\',\'fa-question\':planner.set.status==\'unknown\',\'fa-circle-o\':planner.set.status==\'unset\'}')
                 td.status
-                    a.fa.fa-recycle(title='Clean TID',ng-click='planners.clean($index)')
+                    a.fa.fa-recycle(title='Clean TID',ng-show='planner.check!=\'unknown\'',ng-click='planners.clean($index)')
                 td.status
-                    a.fa.fa-lock(title='Take control',ng-click='planners.exclusive($index)')
+                    a.fa(title='Set/Unset',ng-show='planner.check!=\'unknown\'',ng-class='{\'fa-lock\':planner.set.status==\'set\',\'fa-unlock\':planner.set.status==\'unset\',\'fa-spinner\':planner.set.status==\'setting\',\'fa-spin\':planner.set.status==\'setting\'}',ng-click='planners.exclusive($index)')
                 td.options
                     a.fa.fa-refresh(title='Check connection',ng-click='planners.check($index)',ng-class='{\'fa-spin\':planner.check==\'checking\'}')
                     a.fa.fa-edit(title='Edit properties',ng-click='planners.edit($index)')

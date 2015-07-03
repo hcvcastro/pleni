@@ -146,6 +146,9 @@ pleni.factory('Resources',['$sessionStorage',
               , tid:function(planner,success,failure){
                     bind(Planners.tid,planner,success,failure);
                 }
+              , unset:function(planner,success,failure){
+                    bind(Planners.unset,planner,success,failure);
+                }
               , clean:function(planner,success,failure){
                     bind(Planners.clean,planner,success,failure);
                 }

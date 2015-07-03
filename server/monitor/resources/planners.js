@@ -384,6 +384,41 @@ module.exports=function(app){
         });
     });
 
+    app.post('/resources/planners/:planner/_unset',authed,
+        function(request,response){
+        return generic_action(request,response,null,[unset],
+            function(planner,args){
+                Planner.findOne({id:args.id},function(err,_planner){
+                    if(err){
+                        console.log(err);
+                    }
+
+                    _planner.planner.tid=undefined;
+                    _planner.save();
+
+                    redis.hget('monitor:planners',_planner.id,
+                        function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
+
+                        var __planner=JSON.parse(reply)
+                        __planner.planner.tid=undefined;
+
+                        redis.hset('monitor:planners',_planner.id,
+                            JSON.stringify(__planner));
+                        });
+                });
+
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , result:true
+                    }
+                });
+        });
+    });
+
     app.post('/resources/planners/:planner/_clean',authed,
         function(request,response){
         return generic_action(request,response,null,[],
