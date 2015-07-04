@@ -13,7 +13,7 @@ var _request=require('request')
 module.exports=function(app,config){
     var redis=app.get('redis')
       , cookie=function(header){
-            var regex=/^AuthSession=(.+) *$/
+            var regex=/^AuthSession=([a-z0-9-]+).*$/
               , exec=regex.exec(header)
 
             if(exec){
@@ -21,10 +21,10 @@ module.exports=function(app,config){
             }
         }
       , authed=function(request,response,next){
-            var auth=cookie(request.headers.cookie)
+            var _auth=cookie(request.headers.cookie)
 
-            if(auth){
-                redis.get('user:'+auth,function(err,reply){
+            if(_auth){
+                redis.get('user:'+_auth,function(err,reply){
                     if(err){
                         console.log(err);
                     }
@@ -143,7 +143,7 @@ module.exports=function(app,config){
     });
 
     app.put('/dbserver/:repository',authed,function(request,response){
-        var auth=cookie(request.headers.cookie)
+        var _auth=cookie(request.headers.cookie)
           , repository=request.params.repository
 
         if(!request.user.repositories.some(function(_repository){
@@ -203,7 +203,7 @@ module.exports=function(app,config){
                                             if(err){
                                                 console.log(err);
                                             }
-                                            redis.setex('user:'+auth,60*5,
+                                            redis.setex('user:'+_auth,60*5,
                                                 JSON.stringify(request.user),
                                                 function(err){
                                                     if(err){
@@ -276,7 +276,7 @@ module.exports=function(app,config){
     });
 
     app.delete('/dbserver/:repository',authed,function(request,response){
-        var auth=cookie(request.headers.cookie)
+        var _auth=cookie(request.headers.cookie)
           , repository=request.params.repository
           , index=request.user.repositories.findIndex(function(_repository){
                 return _repository.name==repository;
@@ -305,7 +305,7 @@ module.exports=function(app,config){
 
                                 request.user.repositories.splice(index,1);
 
-                                redis.setex('user:'+auth,60*5,
+                                redis.setex('user:'+_auth,60*5,
                                     JSON.stringify(request.user),
                                     function(err){
                                     if(err){
