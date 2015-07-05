@@ -13,7 +13,7 @@ var _request=require('request')
 module.exports=function(app,config){
     var redis=app.get('redis')
       , cookie=function(header){
-            var regex=/^AuthSession=(.+) *$/
+            var regex=/^AuthSession=([a-z0-9-]+).*$/
               , exec=regex.exec(header)
 
             if(exec){
@@ -21,10 +21,10 @@ module.exports=function(app,config){
             }
         }
       , authed=function(request,response,next){
-            var auth=cookie(request.headers.cookie)
+            var _auth=cookie(request.headers.cookie)
 
-            if(auth){
-                redis.get('user:'+auth,function(err,reply){
+            if(_auth){
+                redis.get('user:'+_auth,function(err,reply){
                     if(err){
                         console.log(err);
                     }
@@ -85,8 +85,25 @@ module.exports=function(app,config){
         }
     });
 
+    app.get('/planner/_api',function(request,response){
+        redis.hgetall('monitor:apis',function(err,reply){
+            if(err){
+                console.log(err);
+            }
+
+            var result=[]
+
+            for(var i in reply){
+                result.push({
+                    name:i
+                  , reply:reply[i].schema
+                });
+            }
+            response.status(200).json(result);
+        });
+    });
+
     app.get('/planner/_status',authed,function(request,response){
-        console.log('headers',request.headers);
         response.status(200).json({
             status:'stopped'
         });

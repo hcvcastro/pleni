@@ -4,7 +4,7 @@ module.exports={
     env:process.env.ENV||'production'
   , cookie:{
         secret:'monitor'
-      , maxAge:3*60*60*1000
+      , maxAge:10*60*1000 // miliseconds
       , name:'pleni.monitor.sid'
     }
   , redis:{

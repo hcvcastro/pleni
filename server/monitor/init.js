@@ -114,21 +114,34 @@ module.exports=function(app,config){
                 .fail(function(error){});
         }))
         .spread(function(){
+            var params2={}
+
             for(var arg in arguments){
                 if(arguments[arg]){
                     var id=arguments[arg].id
-                      , json=JSON.parse(params1[id])
 
-                    json.api=arguments[arg].planner.tasks.map(function(task){
-                        return task.name;
+                    arguments[arg].planner.tasks.forEach(function(task){
+                        if(!params2[task.name]){
+                            params2[task.name]={
+                                schema:task.schema
+                              , planners:[]
+                            };
+                        }
+
+                        params2[task.name].planners.push(id);
                     });
-
-                    params1[id]=JSON.stringify(json);
                 }
+            }
+
+            for(var arg in params2){
+                params2[arg]=JSON.stringify(params2[arg]);
             }
 
             if(Object.keys(params1).length){
                 redis.hmset('monitor:planners',params1);
+                if(Object.keys(params2).length){
+                    redis.hmset('monitor:apis',params2);
+                }
             }
         });
     });

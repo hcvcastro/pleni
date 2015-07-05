@@ -87,7 +87,7 @@ module.exports=function(app,config){
 
     app.get('/dbserver',function(request,response){
         response.status(200).json({
-            "couchdb":"Welcome"
+            'couchdb':'Welcome'
         });
     });
 
