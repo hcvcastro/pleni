@@ -6,9 +6,6 @@ var http=require('http')
   , request=require('request')
   , join=require('path').join
   , async=require('async')
-  , validate=require('../core/validators')
-  , _success=require('../core/json-response').success
-  , _error=require('../core/json-response').error
   , express=require('express')
   , morgan=require('morgan')
   , lessmiddleware=require('less-middleware')
@@ -23,7 +20,13 @@ var http=require('http')
   , mongoose=require('mongoose')
   , app=express()
   , server=http.createServer(app)
+  , validate=require('../core/validators')
+  , _success=require('../core/json-response').success
+  , _error=require('../core/json-response').error
+  , schema=require('../core/schema')
   , config=require('../config/monitor')
+  , generator=require('../core/functions/utils/random').sync
+  , User=require('./monitor/models/user')
 
 if(process.env.ENV=='test'){
     config=require('../config/tests');
@@ -163,13 +166,88 @@ var destroy=function(){
 process.on('SIGINT',destroy);
 process.on('SIGTERM',destroy);
 
+var session=function(request,response){
+    if(schema.js.validate(request.body,schema.auth2).length==0){
+        var userid=validate.toString(request.body.name)
+          , apikey=validate.toString(request.body.password)
+
+        redisclient.hget('monitor:apps',apikey,function(err,appid){
+            if(err){
+                console.log(err);
+            }
+
+            if(appid){
+                redisclient.get('cookie:'+appid+':'+userid,
+                    function(err,_cookie){
+                    if(err){
+                        console.log(err);
+                    }
+
+                    if(!_cookie){
+                        User.findOne({id:userid,app:appid},function(err,_user){
+                            var cookie=generator()
+                              , data={
+                                    id:userid
+                                  , app:appid
+                                }
+
+                            if(_user){
+                                data.repositories=_user.repositories;
+                                data.tasks=_user.tasks;
+                            }else{
+                                data.repositories=[];
+                                data.tasks={
+                                    max:1
+                                };
+                            }
+
+                            redisclient.setex('cookie:'+appid+':'+userid,60*5,
+                                cookie,function(err){
+                                if(err){
+                                    console.log(err);
+                                }
+
+                                redisclient.setex('user:'+cookie,60*5,
+                                    JSON.stringify(data),
+                                    function(err,reply){
+                                    if(err){
+                                        console.log(err);
+                                    }
+
+                                    response.cookie('AuthSession',
+                                        cookie,{
+                                        path:'/'
+                                      , httpOnly:true
+                                    }).status(200).json(_success.ok);
+                                });
+                            });
+                        });
+                    }else{
+                        response.cookie('AuthSession',_cookie,{
+                            path:'/'
+                          , httpOnly:true
+                        }).status(200).json(_success.ok);
+                    }
+                });
+            }else{
+                response.cookie('AuthSession','',{
+                    path:'/'
+                  , httpOnly:true
+                }).status(401).json(_error.auth);
+            }
+        });
+    }else{
+        response.status(400).json(_error.json);
+    }
+}
+
 require('./monitor/init')(app,config);
 require('./monitor/home')(app,config);
 require('./monitor/resources/apps')(app,config);
 require('./monitor/resources/planners')(app,config);
 require('./monitor/resources/dbservers')(app,config);
-require('./monitor/dbserver')(app,config);
-require('./monitor/planner')(app,config);
+require('./monitor/dbserver')(app,config,session);
+require('./monitor/planner')(app,config,session);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

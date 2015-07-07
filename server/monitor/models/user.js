@@ -11,6 +11,9 @@ var user=new Schema({
         name:String
       , dbserver:String
     }]
+  , tasks:{
+        max:Number
+    }
 });
 
 module.exports=mongoose.model('User',user);

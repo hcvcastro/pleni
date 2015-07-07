@@ -11,7 +11,7 @@ var _request=require('request')
   , test=require('../../core/functions/planners/test')
   , auth=require('../../core/functions/planners/auth')
 
-module.exports=function(app,config){
+module.exports=function(app,config,session){
     var redis=app.get('redis')
       , cookie=function(header){
             var regex=/^AuthSession=([a-z0-9-]+).*$/
@@ -48,43 +48,7 @@ module.exports=function(app,config){
         });
     });
 
-    app.post('/planner/_session',function(request,response){
-        if(schema.js.validate(request.body,schema.auth2).length==0){
-            var userid=validate.toString(request.body.name)
-              , apikey=validate.toString(request.body.password)
-
-            redis.hget('monitor:apps',apikey,function(err,appid){
-                if(err){
-                    console.log(err);
-                }
-
-                if(appid){
-                    User.findOne({id:userid,app:appid},function(err,user){
-                        var cookie=generator()
-                          , data={
-                                id:userid
-                              , app:appid
-                            }
-
-                        redis.setex('user:'+cookie,60*5,JSON.stringify(data),
-                        function(err,reply){
-                            response.cookie('AuthSession',cookie,{
-                                path:'/'
-                              , httponly:true
-                            }).status(200).json(_success.ok);
-                        });
-                    });
-                }else{
-                    response.cookie('AuthSession','',{
-                        path:'/'
-                      , httpOnly:true
-                    }).status(401).json(_error.auth);
-                }
-            });
-        }else{
-            response.status(400).json(_error.json);
-        }
-    });
+    app.post('/planner/_session',session);
 
     app.get('/planner/_api',function(request,response){
         redis.hgetall('monitor:apis',function(err,reply){
