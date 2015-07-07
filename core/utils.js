@@ -10,3 +10,13 @@ exports.sort=function(a,b){
     return 0;
 };
 
+exports.sort2=function(a,b){
+    if(a.name>b.name){
+        return 1;
+    }
+    if(a.name<b.name){
+        return -1;
+    }
+    return 0;
+};
+

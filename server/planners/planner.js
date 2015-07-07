@@ -4,6 +4,7 @@ var validate=require('../../core/validators')
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
   , generator=require('../../core/functions/utils/random').sync
+  , sort=require('../../core/utils').sort2
   , jayschema=require('jayschema')
   , fs=require('fs')
   , join=require('path').join
@@ -23,6 +24,7 @@ module.exports=function(port,notifier){
               , schema:require('../../core/tasks/'+element).schema};
         })
 
+        map.sort(sort);
         response.status(200).json(map);
     }
 

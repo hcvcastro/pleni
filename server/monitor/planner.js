@@ -7,6 +7,7 @@ var _request=require('request')
   , schema=require('../../core/schema')
   , User=require('./models/user')
   , generator=require('../../core/functions/utils/random').sync
+  , sort=require('../../core/utils').sort2
   , test=require('../../core/functions/planners/test')
   , auth=require('../../core/functions/planners/auth')
 
@@ -99,8 +100,14 @@ module.exports=function(app,config){
                   , reply:reply[i].schema
                 });
             }
+
+            result.sort(sort);
             response.status(200).json(result);
         });
+    });
+
+    app.post('/planner',authed,function(request,response){
+        response.status(403).json(_error.validation);
     });
 
     app.get('/planner/_status',authed,function(request,response){
