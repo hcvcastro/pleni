@@ -20,7 +20,7 @@ module.exports=function(config,user){
             }]
           , repositories:[]
           , planners:[{
-                id:'pleni'
+                id:'pleni0'
               , attrs:{
                     virtual:true
                   , readable:true

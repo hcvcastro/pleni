@@ -150,6 +150,8 @@ module.exports=function(app,config,session){
                                       , dbserver:dbserverid
                                     });
 
+                                    delete request.user._id;
+                                    delete request.user.__v;
                                     User.findOneAndUpdate({
                                         id:request.user.id
                                     },request.user,{upsert:true},
@@ -267,6 +269,9 @@ module.exports=function(app,config,session){
                                     if(err){
                                         console.log(err);
                                     }
+
+                                    delete request.user._id;
+                                    delete request.user.__v;
                                     User.findOneAndUpdate({
                                         id:request.user.id
                                     },request.user,{upsert:true},

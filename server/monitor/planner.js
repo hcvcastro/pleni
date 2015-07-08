@@ -14,23 +14,27 @@ var _request=require('request')
 module.exports=function(app,config,session){
     var redis=app.get('redis')
       , cookie=function(header){
-            var regex=/^AuthSession=([a-z0-9-]+).*$/
-              , exec=regex.exec(header)
+            var regex1=/^AuthSession=([a-z0-9-]+).*$/
+              , regex2=/^.+seed=([a-z0-9-]+)$/
+              , exec1=regex1.exec(header)
+              , exec2=regex2.exec(header)
 
-            if(exec){
-                return exec[1];
-            }
+            return [
+                exec1?exec1[1]:null
+              , exec2?exec2[1]:null
+            ];
         }
       , authed=function(request,response,next){
             var _auth=cookie(request.headers.cookie)
 
-            if(_auth){
-                redis.get('user:'+_auth,function(err,reply){
+            if(_auth[0]){
+                redis.get('user:'+_auth[0],function(err,reply){
                     if(err){
                         console.log(err);
                     }
                     if(reply){
                         request.user=JSON.parse(reply);
+                        request.seed=_auth[1];
                         return next();
                     }else{
                         response.status(401).json(_error.auth);
@@ -71,7 +75,84 @@ module.exports=function(app,config,session){
     });
 
     app.post('/planner',authed,function(request,response){
-        response.status(403).json(_error.validation);
+        var _auth=cookie(request.headers.cookie)[0]
+
+        if(schema.js.validate(request.body,schema.task2).length==0){
+            redis.hkeys('monitor:apis',function(err,valid_tasks){
+                if(err){
+                    console.log(err);
+                }
+
+                if(!valid_tasks.some(function(element){
+                    return element===request.body.task})){
+                    response.status(404).json(_error.notfound);
+                    return;
+                }
+
+                var count=validate.toInt(request.body.count)
+                  , interval=validate.toInt(request.body.interval)
+                  , index=request.user.tasks.findIndex(function(_task){
+                    return _task.seed==request.seed;
+                });
+
+                if(isNaN(count)){
+                    count=1
+                }
+                if(count<0){
+                    count=-1;
+                }
+
+                if(isNaN(interval)||interval<0){
+                    interval=1000
+                }
+
+                if(index>=0&&
+                    request.user.tasks[index].tid!=request.body.tid){
+                    response.status(403).json(_error.notoverride);
+                    return;
+                }
+
+                if(index<0&&request.user.tasks.length>=
+                    +request.user.settings.max_tasks){
+                    response.status(403).json(_error.notquota);
+                    return;
+                }
+
+                var tid=generator()
+
+                request.user.tasks.push({
+                    seed:request.seed
+                  , tid:tid
+                  , name:request.body.task
+                  , count:count
+                  , interval:interval
+                });
+
+                delete request.user._id;
+                delete request.user.__v;
+                User.findOneAndUpdate({
+                    id:request.user.id
+                },request.user,{upsert:true},function(err,user){
+                    if(err){
+                        console.log(err);
+                    }
+
+                    redis.setex('user:'+_auth,60*5,
+                        JSON.stringify(request.user),
+                        function(err){
+                            if(err){
+                                console.log(err);
+                            }
+                        response.status(200).json({
+                            ok:true,
+                            tid:tid
+                        });
+                    });
+                });
+            });
+        }else{
+            response.status(403).json(_error.validation);
+        }
     });
 
     app.get('/planner/_status',authed,function(request,response){

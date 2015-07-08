@@ -6,6 +6,7 @@ exports.error={
   , connection:     {ok:false,message:'Connection error'}
   , notfound:       {ok:false,message:'Resource not found'}
   , notoverride:    {ok:false,message:'Resource cannot overridden'}
+  , notquota:       {ok:false,message:'You do not have more resources'}
   , auth:           {ok:false,message:'Authorization error'}
   , json:           {ok:false,message:'JSON error'}
   , badrequest:     {ok:false,message:'Bad request'}

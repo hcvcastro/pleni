@@ -11,8 +11,15 @@ var user=new Schema({
         name:String
       , dbserver:String
     }]
-  , tasks:{
-        max:Number
+  , tasks:[{
+        seed:String
+      , tid:String
+      , name:String
+      , count:Number
+      , interval:Number
+    }]
+  , settings:{
+        max_tasks:Number
     }
 });
 

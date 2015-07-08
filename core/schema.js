@@ -256,6 +256,27 @@ var task={
 };
 exports.task=task;
 
+var task2={
+    'type':'object'
+  , 'properties':{
+        'task':{
+            'type':'string'
+          , 'format':'id'
+        }
+      , 'count':{
+            'type':'integer'
+        }
+      , 'interval':{
+            'type':'integer'
+        }
+      , 'tid':{
+            'type':'string'
+        }
+    }
+  , 'required':['task','count','interval']
+};
+exports.task2=task2;
+
 var planner_set={
     'type':'object'
   , 'properties':{
@@ -264,7 +285,7 @@ var planner_set={
           , 'format':'id'
         }
       , 'tid':{
-            'type':'integer'
+            'type':'string'
         }
     }
   , 'required':['server','tid']

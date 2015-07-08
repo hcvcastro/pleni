@@ -311,6 +311,7 @@ module.exports=function(app){
                 args.planner.host+='/planner';
                 args.planner.user=planner[1].planner.user;
                 args.planner.pass=planner[1].planner.pass;
+                args.planner.seed=id;
 
                 sequence.unshift(auth);
             }

@@ -186,18 +186,16 @@ var session=function(request,response){
                     if(!_cookie){
                         User.findOne({id:userid,app:appid},function(err,_user){
                             var cookie=generator()
-                              , data={
+
+                            if(!_user){
+                                _user={
                                     id:userid
                                   , app:appid
-                                }
-
-                            if(_user){
-                                data.repositories=_user.repositories;
-                                data.tasks=_user.tasks;
-                            }else{
-                                data.repositories=[];
-                                data.tasks={
-                                    max:1
+                                  , repositories:[]
+                                  , tasks:[]
+                                  , settings:{
+                                        max_tasks:1
+                                    }
                                 };
                             }
 
@@ -208,7 +206,7 @@ var session=function(request,response){
                                 }
 
                                 redisclient.setex('user:'+cookie,60*5,
-                                    JSON.stringify(data),
+                                    JSON.stringify(_user),
                                     function(err,reply){
                                     if(err){
                                         console.log(err);

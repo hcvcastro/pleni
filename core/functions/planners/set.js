@@ -13,6 +13,7 @@ var request=require('request')
  *      planner
  *          host
  *          tid <-- optional for override
+ *          seed <-- optional parameter for concurrence
  *      task <-- the task for planner
  *          name
  *          count
@@ -41,8 +42,13 @@ module.exports=function(args){
     }
 
     if(args.auth&&args.auth.cookie){
-        headers['Cookie']=args.auth.cookie;
+        headers['Cookie']=[args.auth.cookie];
+
+        if(args.planner.seed){
+            headers['Cookie'].push('seed='+args.planner.seed);
+        }
     }
+
 
     request.post({url:url,headers:headers,json:body},function(error,response){
         if(!error){
