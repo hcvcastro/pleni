@@ -7,9 +7,13 @@ var request=require('request')
 /*
  * Function for set tasks to a planner
  * args input
+ *      auth (*)
+ *          cookie
+ *          ts
  *      planner
  *          host
  *          tid
+ *          seed <-- optional parameter for concurrence
  *
  * args output
  *      task
@@ -20,15 +24,24 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.planner.host+'/'+args.planner.tid
+      , headers={}
 
     if(args.debug){
         console.log('get a task for planner ... '+args.planner.host);
     }
 
+    if(args.auth&&args.auth.cookie){
+        headers['Cookie']=[args.auth.cookie];
+
+        if(args.planner.seed){
+            headers['Cookie'].push('seed='+args.planner.seed);
+        }
+    }
+
     if(!args.planner.tid){
         deferred.reject({error:'not tid provided'});
     }else{
-        request.get({url:url},function(error,response){
+        request.get({url:url,headers:headers},function(error,response){
             if(!error){
                 if(validator.isJSON(response.body)){
                     var parse=JSON.parse(response.body);

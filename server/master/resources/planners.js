@@ -450,6 +450,7 @@ module.exports=function(app){
 
     app.post('/resources/planners/:planner/_isset',authed,
         function(request,response){
+
         return generic_action(request,response,null,[],
             function(resources,planners,planner,args){
                 response.status(200).json({

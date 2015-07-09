@@ -155,6 +155,15 @@ module.exports=function(app,config,session){
         }
     });
 
+    app.post('/planner/:tid',authed,function(request,response){
+        console.log('tid-->',request.params);
+        response.status(200).json({
+            task:'exclusive'
+          , count:1
+          , interval:1000
+        });
+    });
+
     app.get('/planner/_status',authed,function(request,response){
         response.status(200).json({
             status:'stopped'
