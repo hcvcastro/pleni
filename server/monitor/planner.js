@@ -63,9 +63,11 @@ module.exports=function(app,config,session){
             var result=[]
 
             for(var i in reply){
+                var json=JSON.parse(reply[i])
+
                 result.push({
                     name:i
-                  , reply:reply[i].schema
+                  , schema:json.schema
                 });
             }
 
@@ -92,8 +94,8 @@ module.exports=function(app,config,session){
                 var count=validate.toInt(request.body.count)
                   , interval=validate.toInt(request.body.interval)
                   , index=request.user.tasks.findIndex(function(_task){
-                    return _task.seed==request.seed;
-                });
+                        return _task.seed==request.seed;
+                    })
 
                 if(isNaN(count)){
                     count=1
@@ -155,19 +157,58 @@ module.exports=function(app,config,session){
         }
     });
 
-    app.post('/planner/:tid',authed,function(request,response){
-        console.log('tid-->',request.params);
-        response.status(200).json({
-            task:'exclusive'
-          , count:1
-          , interval:1000
-        });
-    });
-
     app.get('/planner/_status',authed,function(request,response){
         response.status(200).json({
             status:'stopped'
         });
+    });
+
+    app.get('/planner/:tid',authed,function(request,response){
+        var task=request.user.tasks.find(function(_task){
+                return _task.seed==request.seed;
+            })
+
+        if(task){
+            response.status(200).json({
+                task:task.name
+              , count:task.count
+              , interval:task.interval
+            });
+        }else{
+            response.status(404).json(_error.notfound);
+        }
+    });
+
+    app.delete('/planner/:tid',authed,function(request,response){
+        var _auth=cookie(request.headers.cookie)[0]
+          , index=request.user.tasks.findIndex(function(_task){
+                return _task.seed==request.seed;
+            })
+
+        if(index>=0){
+            request.user.tasks.splice(index,1);
+
+            delete request.user._id;
+            delete request.user.__v;
+            User.findOneAndUpdate({
+                id:request.user.id
+            },request.user,{upsert:true},function(err,user){
+                if(err){
+                    console.log(err);
+                }
+
+                redis.setex('user:'+_auth,60*5,
+                    JSON.stringify(request.user),
+                    function(err){
+                        if(err){
+                            console.log(err);
+                        }
+                    response.status(200).json(_success.ok);
+                });
+            });
+        }else{
+            response.status(404).json(_error.notfound);
+        }
     });
 };
 
