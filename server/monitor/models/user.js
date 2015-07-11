@@ -14,6 +14,7 @@ var user=new Schema({
   , tasks:[{
         seed:String
       , tid:String
+      , status:String
       , name:String
       , count:Number
       , interval:Number

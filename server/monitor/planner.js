@@ -125,6 +125,7 @@ module.exports=function(app,config,session){
                 request.user.tasks.push({
                     seed:request.seed
                   , tid:tid
+                  , status:'stopped'
                   , name:request.body.task
                   , count:count
                   , interval:interval
@@ -158,9 +159,19 @@ module.exports=function(app,config,session){
     });
 
     app.get('/planner/_status',authed,function(request,response){
-        response.status(200).json({
-            status:'stopped'
-        });
+        var task=request.user.tasks.find(function(_task){
+                return _task.seed==request.seed;
+            })
+
+        if(task){
+            response.status(200).json({
+                status:task.status
+            });
+        }else{
+            response.status(200).json({
+                status:'stopped'
+            });
+        }
     });
 
     app.get('/planner/:tid',authed,function(request,response){
@@ -209,6 +220,14 @@ module.exports=function(app,config,session){
         }else{
             response.status(404).json(_error.notfound);
         }
+    });
+
+    app.post('/planner/:tid/_run',function(request,response){
+
+    });
+
+    app.post('/planner/:tid/_stop',function(request,response){
+
     });
 };
 
