@@ -223,24 +223,68 @@ module.exports=function(app,config,session){
     });
 
     app.post('/planner/:tid/_run',function(request,response){
-        var task=request.user.tasks.find(function(_task){
+        var _auth=cookie(request.headers.cookie)[0]
+          , index=request.user.tasks.findIndex(function(_task){
                 return _task.seed==request.seed&_task.tid==request.params.tid;
             })
 
-        if(task){
-            
+        if(index>=0){
+            request.user.tasks[index].status='running';
+
+            delete request.user._id;
+            delete request.user.__v;
+            User.findOneAndUpdate({
+                id:request.user.id
+            },request.user,{upsert:true},function(err,user){
+                if(err){
+                    console.log(err);
+                }
+
+                redis.setex('user:'+_auth,60*5,
+                    JSON.stringify(request.user),
+                    function(err){
+                        if(err){
+                            console.log(err);
+                        }
+                    response.status(200).json({
+                        status:'running';
+                    });
+                });
+            });
         }else{
             response.status(404).json(_error.notfound);
         }
     });
 
     app.post('/planner/:tid/_stop',function(request,response){
-        var task=request.user.tasks.find(function(_task){
+        var _auth=cookie(request.headers.cookie)[0]
+          , index=request.user.tasks.findIndex(function(_task){
                 return _task.seed==request.seed&_task.tid==request.params.tid;
             })
 
-        if(task){
+        if(index>=0){
+            request.user.tasks[index].status='stopped';
 
+            delete request.user._id;
+            delete request.user.__v;
+            User.findOneAndUpdate({
+                id:request.user.id
+            },request.user,{upsert:true},function(err,user){
+                if(err){
+                    console.log(err);
+                }
+
+                redis.setex('user:'+_auth,60*5,
+                    JSON.stringify(request.user),
+                    function(err){
+                        if(err){
+                            console.log(err);
+                        }
+                    response.status(200).json({
+                        status:'stopped';
+                    });
+                });
+            });
         }else{
             response.status(404).json(_error.notfound);
         }
