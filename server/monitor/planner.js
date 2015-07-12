@@ -10,6 +10,7 @@ var _request=require('request')
   , sort=require('../../core/utils').sort2
   , test=require('../../core/functions/planners/test')
   , auth=require('../../core/functions/planners/auth')
+  , set=require('../../core/functions/planners/set')
 
 module.exports=function(app,config,session){
     var redis=app.get('redis')
@@ -43,6 +44,69 @@ module.exports=function(app,config,session){
             }else{
                 response.status(401).json(_error.auth);
             }
+        }
+      , assign=function(task,targs){
+            redis.spop('monitor:free',function(err,planner){
+                if(err){
+                    console.log(err);
+                }
+
+                if(planner){
+                    redis.hget('monitor:planners',planner,function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
+
+                        var json=JSON.parse(reply);
+                        
+                        test({
+                            planner:{
+                                host:json.host+':'+json.port
+                              , tid:json.tid
+                            }
+                          , task:task
+                          , targs:targs
+                        })
+                        .then(set)
+                        .then(run)
+                        .then(function(args){
+                            Planner.findOne({id:planner},function(err,_planner){
+                                if(err){
+                                    console.log(err);
+                                }
+
+                                _planner.planner.tid=args.planner.tid;
+                                _planner.save();
+
+                                redis.hget('monitor:planners',_planner.id,
+                                    function(err,reply){
+                                    if(err){
+                                        console.log(err);
+                                    }
+
+                                    var __planner=JSON.parse(reply);
+                                    __planner.planner.tid=args.planner.tid;
+
+                                    redis.hset('monitor:planners',_planner.id,
+                                        JSON.stringify(__planner));
+                                });
+                            });
+                        })
+                        .done();
+                    });
+                }else{
+                    var packet=JSON.stringify({
+                            task:task
+                          , targs:targs
+                        })
+
+                    redis.rpush('monitor:queue',packet,function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
+                    });
+                }
+            });
         }
 
     app.get('/planner/id',function(request,response){
@@ -229,6 +293,12 @@ module.exports=function(app,config,session){
             })
 
         if(index>=0){
+            assign({
+                name:request.user.tasks[index].name
+              , count:request.user.tasks[index].count
+              , interval:request.user.tasks[index].interval
+            },request.body,targs);
+
             request.user.tasks[index].status='running';
 
             delete request.user._id;
@@ -247,7 +317,7 @@ module.exports=function(app,config,session){
                             console.log(err);
                         }
                     response.status(200).json({
-                        status:'running';
+                        status:'running'
                     });
                 });
             });
@@ -281,7 +351,7 @@ module.exports=function(app,config,session){
                             console.log(err);
                         }
                     response.status(200).json({
-                        status:'stopped';
+                        status:'stopped'
                     });
                 });
             });

@@ -54,7 +54,10 @@ module.exports=function(app){
                   , obj2={}
 
                 obj1.forEach(function(el){
-                    obj2[el.id]=JSON.stringify({planner:el.planner});
+                    obj2[el.id]=JSON.stringify({
+                        planner:el.planner
+                      , status:'stopped'
+                    });
                 });
 
                 Planner.collection.insert(obj1,function(){
@@ -88,11 +91,12 @@ module.exports=function(app){
                         }
 
                     redis.hset('monitor:planners',id,JSON.stringify({
-                        planner:planner}),
-                        function(err,reply){
-                            if(err){
-                                console.log(err);
-                            }
+                        planner:planner
+                      , status:'stopped'
+                    }),function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
 
                         Planner.create({
                             id:id
@@ -185,7 +189,9 @@ module.exports=function(app){
 
             Planner.findOne({id:id},function(err,_planner){
                 redis.hset('monitor:planners',id,JSON.stringify({
-                    planner:planner}));
+                    planner:planner
+                  , status:'stopped'
+                }));
 
                 if(_planner){
                     _planner.planner=planner;

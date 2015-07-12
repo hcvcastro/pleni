@@ -90,11 +90,14 @@ module.exports=function(app,config){
 
     Planner.find({},function(err,planners){
         var params1={}
+          , free=[]
 
         planners.forEach(function(planner){
             params1[planner.id]=JSON.stringify({
                 planner:planner.planner
+              , status:'stopped'
             });
+            free.push(planner.id);
         });
 
         Q.all(planners.map(function(planner){
@@ -139,6 +142,7 @@ module.exports=function(app,config){
 
             if(Object.keys(params1).length){
                 redis.hmset('monitor:planners',params1);
+                redis.sadd('monitor:free',free);
                 if(Object.keys(params2).length){
                     redis.hmset('monitor:apis',params2);
                 }
@@ -265,26 +269,6 @@ app.delete('/tasks',function(request,response){
                 });
             }
         })
-    }else{
-        response.status(403).json(_error.json);
-    }
-});
-
-app.delete('/planners',function(request,response){
-    if(validate.validHost(request.body.planner)){
-        var planner=validate.toValidHost(request.body.planner)
-
-        redisclient.sismember('monitor:free',planner,function(err,res){
-            if(res){
-                redisclient.srem('monitor:free',planner,function(){
-                    redisclient.srem('monitor:planners',planner,function(){
-                        response.status(200).json(_success.ok);
-                    });
-                });
-            }else{
-                response.status(403).json(_error.busy);
-            }
-        });
     }else{
         response.status(403).json(_error.json);
     }

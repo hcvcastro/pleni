@@ -147,10 +147,9 @@ var destroy=function(){
         async.each([
             'monitor:apps'
           , 'monitor:dbservers'
-          , 'monitor:repositorydb'
           , 'monitor:repositories'
-          , 'monitor:cookies'
           , 'monitor:planners'
+          , 'monitor:apis'
         ],function(element,done){
             redisclient.del(element,function(){
                 done();
