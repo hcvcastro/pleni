@@ -49,7 +49,10 @@
       , "redis":"^0.12.1"
       , "request":"^2.37.0"
       , "serve-favicon":"^2.0.1"
+      , "session.socket.io":"^0.1.6"
       , "sha1":"^1.1.0"
+      , "socket.io":"~1.1.0"
+      , "socket.io-client":"~1.1.0"
       , "underscore":"^1.7.0"
       , "validator":"^3.16.1"
     }

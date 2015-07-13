@@ -20,6 +20,9 @@ var http=require('http')
   , mongoose=require('mongoose')
   , app=express()
   , server=http.createServer(app)
+  , ios=require('socket.io')(server)
+  , ioc=require('socket.io-client')
+  , sessionsocketio=require('session.socket.io')
   , validate=require('../core/validators')
   , _success=require('../core/json-response').success
   , _error=require('../core/json-response').error
@@ -53,6 +56,29 @@ mongodb.once('open',function(){
     console.log('connection to mongo db:',config.monitor.mongo);
 });
 
+app.set('host',config.monitor.host);
+app.set('port',config.monitor.port);
+app.disable('x-powered-by');
+
+var parser=cookieparser(config.cookie.secret)
+
+app.use(favicon(join(__dirname,'..','client','favicon.ico')));
+app.use(parser);
+app.use(bodyparser.json());
+app.use(cookiesession({
+    cookie:{
+        path:'/'
+      , httpOnly:true
+      , secure:false
+      , maxAge:config.cookie.maxAge
+    }
+  , name:config.cookie.name
+  , resave:false
+  , saveUninitialized:false
+  , secret:config.cookie.secret
+  , store:store
+}));
+
 passport.serializeUser(function(user,done){
     done(null,user.id);
 });
@@ -82,26 +108,6 @@ passport.use(new localstrategy({
     });
 }));
 
-app.set('host',config.monitor.host);
-app.set('port',config.monitor.port);
-app.disable('x-powered-by');
-
-app.use(favicon(join(__dirname,'..','client','favicon.ico')));
-app.use(cookieparser(config.cookie.secret));
-app.use(bodyparser.json());
-app.use(cookiesession({
-    cookie:{
-        path:'/'
-      , httpOnly:true
-      , secure:false
-      , maxAge:config.cookie.maxAge
-    }
-  , name:config.cookie.name
-  , resave:false
-  , saveUninitialized:false
-  , secret:config.cookie.secret
-  , store:store
-}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -238,13 +244,66 @@ var session=function(request,response){
     }
 }
 
-require('./monitor/init')(app,config);
+var socketsdown={}
+//  , sockets={}
+//  , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
+
+/*sessionsockets.on('connection',function(err,socket,session){
+    var sid=socket.handshake.signedCookies[config.cookie.name];
+    if(!(sid in sockets)){
+        sockets[sid]={};
+        console.log('SOCKET.IO new connection',sid);
+    }
+
+    sockets[sid][socket.id]=socket;
+    console.log('SOCKET.IO new client',socket.id);
+
+    socket.on('disconnect',function(){
+        delete sockets[sid][socket.id];
+        console.log('SOCKET.IO remove client',socket.id);
+
+        if(Object.keys(sockets[sid]).length==0){
+            delete sockets[sid];
+            console.log('SOCKET.IO remove connection',sid);
+        }
+    });
+});*/
+
+//app.set('ios',ios);
+//app.set('ioc',ioc);
+
+var emit=function(){
+        console.log('emit');
+    }
+  , socket_connect=function(id,host,port){
+        var socket=ioc.connect(host+':'+port,{
+            reconnect:true
+          , 'forceNew':true
+        })
+
+        socket.on('notifier',function(msg){
+            emit(id,msg);
+        });
+
+        socketsdown[id]=socket;
+    }
+  , socket_disconnect=function(id){
+        socketdown[id].disconnect();
+    }
+  , socket_clean=function(){
+        for(var i in socketdown){
+            socketdown[i].disconnect();
+        }
+    }
+
+require('./monitor/init')(app,socket_connect);
 require('./monitor/home')(app,config);
-require('./monitor/resources/apps')(app,config);
-require('./monitor/resources/planners')(app,config);
-require('./monitor/resources/dbservers')(app,config);
-require('./monitor/dbserver')(app,config,session);
-require('./monitor/planner')(app,config,session);
+require('./monitor/resources/apps')(app);
+require('./monitor/resources/dbservers')(app);
+require('./monitor/resources/planners')(app,
+    socket_connect,socket_disconnect,socket_clean);
+require('./monitor/dbserver')(app,session);
+require('./monitor/planner')(app,session);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

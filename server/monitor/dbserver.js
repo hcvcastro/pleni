@@ -8,7 +8,7 @@ var _request=require('request')
   , test=require('../../core/functions/databases/test')
   , auth=require('../../core/functions/databases/auth')
 
-module.exports=function(app,config,session){
+module.exports=function(app,session){
     var redis=app.get('redis')
       , cookie=function(header){
             var regex=/^AuthSession=([a-z0-9-]+).*$/

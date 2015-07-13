@@ -14,7 +14,7 @@ var extend=require('underscore').extend
   , get=require('../../../core/functions/planners/get')
   , unset=require('../../../core/functions/planners/unset')
 
-module.exports=function(app){
+module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
     var authed=app.get('auth')
       , redis=app.get('redis')
 
@@ -41,6 +41,8 @@ module.exports=function(app){
 
     app.put('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
+            socket_clean();
+
             Planner.remove({},function(){
                 var obj1=request.body.map(function(planner){
                         return {
@@ -58,6 +60,8 @@ module.exports=function(app){
                         planner:el.planner
                       , status:'stopped'
                     });
+
+                    socket_connect(el.id,el.planner.host,el.planner.port);
                 });
 
                 Planner.collection.insert(obj1,function(){
@@ -89,6 +93,8 @@ module.exports=function(app){
                             host:validate.toValidHost(request.body.planner.host)
                           , port:validate.toInt(request.body.planner.port)
                         }
+
+                    socket_connect(id,planner.host,planner.port);
 
                     redis.hset('monitor:planners',id,JSON.stringify({
                         planner:planner
@@ -125,6 +131,9 @@ module.exports=function(app){
             if(err){
                 console.log(err);
             }
+
+            socket_clean();
+
             Planner.remove({},function(){
                 response.status(200).json(_success.ok);
             });
@@ -196,6 +205,9 @@ module.exports=function(app){
                 if(_planner){
                     _planner.planner=planner;
 
+                    socket_disconnect(_planner.id);
+                    socket_connect(_planner.id,planner.host,planner.port);
+
                     _planner.save(function(err,_planner){
                         if(err){
                             console.log(err);
@@ -210,6 +222,8 @@ module.exports=function(app){
                         });
                     });
                 }else{
+                    socket_connect(id,planner.host,planner.port);
+
                     Planner.create({
                         id:id
                       , planner:planner
@@ -238,6 +252,8 @@ module.exports=function(app){
             id:validate.toString(request.params.planner)
         },function(err,planner){
             if(planner){
+                socket_disconnect(planner.id);
+
                 redis.hdel('monitor:planners',planner.id,function(err,reply){
                     if(err){
                         console.log(err);
