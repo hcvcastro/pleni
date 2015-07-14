@@ -119,7 +119,11 @@ pleni.factory('Resources',['$sessionStorage',
                         }
                         if(success){success(data);}
                     },function(error){
-                        if(error){failure(error);}
+                        if(error){
+                            if(failure){
+                                failure(error);
+                            }
+                        }
                     });
                 }
               , create:function(planner,success,failure){
@@ -137,14 +141,17 @@ pleni.factory('Resources',['$sessionStorage',
               , isset:function(planner,success,failure){
                     bind(Planners.isset,planner,success,failure);
                 }
-              , set:function(planner,success,failure){
-                    bind(Planners.set,planner,success,failure);
-                }
               , api:function(planner,success,failure){
                     bind(Planners.api,planner,success,failure);
                 }
+              , set:function(planner,success,failure){
+                    bind(Planners.set,planner,success,failure);
+                }
               , tid:function(planner,success,failure){
                     bind(Planners.tid,planner,success,failure);
+                }
+              , get:function(planner,success,failure){
+                    bind(Planners.get,planner,success,failure);
                 }
               , unset:function(planner,success,failure){
                     bind(Planners.unset,planner,success,failure);

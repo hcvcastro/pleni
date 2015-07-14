@@ -321,7 +321,7 @@ pleni.controller('HomeController',
                             server:planner.id
                         },function(data){
                             if(data.planner.result){
-                                planner.set.status='set';
+                                $scope.planners.get(index);
                             }else{
                                 planner.set.status='unset';
                             }
@@ -346,6 +346,16 @@ pleni.controller('HomeController',
                 $scope.planners.env.type='element';
                 $scope.planner=$scope.storage.planners[index];
                 $scope.planners.check(index);
+            }
+          , get:function(index){
+                var planner=$scope.storage.planners[index];
+                Resources.planners.get({
+                    server:planner.id
+                },function(data){
+                    planner.set.status='set';
+                },function(error){
+                    utils.show('error','Planner cannot get the task');
+                });
             }
           , clean:function(index){
                 var planner=$scope.storage.planners[index];

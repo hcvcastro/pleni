@@ -245,11 +245,41 @@ var session=function(request,response){
 }
 
 var socketsdown={}
-//  , sockets={}
-//  , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
+  , emit=function(id,msg){
+        switch(msg.action){
+            case 'connection':
+                console.log('socket.io client connection on',id);
+                break;
+            default:
+                console.log('planners says:',id,msg);
+        }
+    }
+  , socket_connect=function(id,host,port){
+        var socket=ioc.connect(host+':'+port,{
+            reconnect:true
+          , 'forceNew':true
+        })
 
-/*sessionsockets.on('connection',function(err,socket,session){
-    var sid=socket.handshake.signedCookies[config.cookie.name];
+        socket.on('notifier',function(msg){
+            emit(id,msg);
+        });
+
+        socketsdown[id]=socket;
+    }
+  , socket_disconnect=function(id){
+        console.log('socket.io client disconnect on',id);
+        socketsdown[id].disconnect();
+    }
+  , socket_clean=function(){
+        for(var i in socketsdown){
+            socketsdown[i].disconnect();
+        }
+    }
+  , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
+
+sessionsockets.on('connection',function(err,socket,session){
+    console.log('socket.io server request');
+    /*var sid=socket.handshake.signedCookies[config.cookie.name];
     if(!(sid in sockets)){
         sockets[sid]={};
         console.log('SOCKET.IO new connection',sid);
@@ -266,36 +296,72 @@ var socketsdown={}
             delete sockets[sid];
             console.log('SOCKET.IO remove connection',sid);
         }
-    });
-});*/
+    });*/
+});
 
-//app.set('ios',ios);
-//app.set('ioc',ioc);
+      , assign=function(task,targs){
+            redis.spop('monitor:free',function(err,planner){
+                if(err){
+                    console.log(err);
+                }
 
-var emit=function(){
-        console.log('emit');
-    }
-  , socket_connect=function(id,host,port){
-        var socket=ioc.connect(host+':'+port,{
-            reconnect:true
-          , 'forceNew':true
-        })
+                if(planner){
+                    redis.hget('monitor:planners',planner,function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
 
-        socket.on('notifier',function(msg){
-            emit(id,msg);
-        });
+                        var json=JSON.parse(reply);
+                        
+                        test({
+                            planner:{
+                                host:json.planner.host+':'+json.planner.port
+                              , tid:json.planner.tid
+                            }
+                          , task:task
+                          , targs:targs
+                        })
+                        .then(set)
+                        .then(run)
+                        .then(function(args){
+                            Planner.findOne({id:planner},function(err,_planner){
+                                if(err){
+                                    console.log(err);
+                                }
 
-        socketsdown[id]=socket;
-    }
-  , socket_disconnect=function(id){
-        socketdown[id].disconnect();
-    }
-  , socket_clean=function(){
-        for(var i in socketdown){
-            socketdown[i].disconnect();
+                                _planner.planner.tid=args.planner.tid;
+                                _planner.save();
+
+                                redis.hget('monitor:planners',_planner.id,
+                                    function(err,reply){
+                                    if(err){
+                                        console.log(err);
+                                    }
+
+                                    var __planner=JSON.parse(reply);
+                                    __planner.planner.tid=args.planner.tid;
+
+                                    redis.hset('monitor:planners',_planner.id,
+                                        JSON.stringify(__planner));
+                                });
+                            });
+                        })
+                        .done();
+                    });
+                }else{
+                    var packet=JSON.stringify({
+                            task:task
+                          , targs:targs
+                        })
+
+                    redis.rpush('monitor:queue',packet,function(err,reply){
+                        if(err){
+                            console.log(err);
+                        }
+                    });
+                }
+            });
         }
-    }
-
 require('./monitor/init')(app,socket_connect);
 require('./monitor/home')(app,config);
 require('./monitor/resources/apps')(app);

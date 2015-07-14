@@ -358,19 +358,6 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
         });
     });
 
-    app.post('/resources/planners/:planner/_isset',authed,
-        function(request,response){
-        return generic_action(request,response,null,[],
-            function(planner,args){
-                response.status(200).json({
-                    planner:{
-                        host:args.planner.host
-                      , result:'tid' in args.planner
-                    }
-                });
-        });
-    });
-
     app.post('/resources/planners/:planner/_set',authed,
         function(request,response){
         return generic_action(request,response,schema.task,[set],
@@ -401,6 +388,36 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                     planner:{
                         host:args.planner.host
                       , result:true
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_get',authed,
+        function(request,response){
+        return generic_action(request,response,null,[get],
+            function(planner,args){
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , task:{
+                            name:args.planner.task.name
+                          , count:args.planner.task.count
+                          , interval:args.planner.task.interval
+                        }
+                    }
+                });
+        });
+    });
+
+    app.post('/resources/planners/:planner/_isset',authed,
+        function(request,response){
+        return generic_action(request,response,null,[],
+            function(planner,args){
+                response.status(200).json({
+                    planner:{
+                        host:args.planner.host
+                      , result:'tid' in args.planner
                     }
                 });
         });

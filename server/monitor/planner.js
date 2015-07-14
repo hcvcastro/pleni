@@ -6,13 +6,15 @@ var _request=require('request')
   , _error=require('../../core/json-response').error
   , schema=require('../../core/schema')
   , User=require('./models/user')
+  , Planner=require('./models/planner')
   , generator=require('../../core/functions/utils/random').sync
   , sort=require('../../core/utils').sort2
   , test=require('../../core/functions/planners/test')
   , auth=require('../../core/functions/planners/auth')
   , set=require('../../core/functions/planners/set')
+  , run=require('../../core/functions/planners/run')
 
-module.exports=function(app,session){
+module.exports=function(app,session,assign,free){
     var redis=app.get('redis')
       , cookie=function(header){
             var regex1=/^AuthSession=([a-z0-9-]+).*$/
@@ -44,69 +46,6 @@ module.exports=function(app,session){
             }else{
                 response.status(401).json(_error.auth);
             }
-        }
-      , assign=function(task,targs){
-            redis.spop('monitor:free',function(err,planner){
-                if(err){
-                    console.log(err);
-                }
-
-                if(planner){
-                    redis.hget('monitor:planners',planner,function(err,reply){
-                        if(err){
-                            console.log(err);
-                        }
-
-                        var json=JSON.parse(reply);
-                        
-                        test({
-                            planner:{
-                                host:json.host+':'+json.port
-                              , tid:json.tid
-                            }
-                          , task:task
-                          , targs:targs
-                        })
-                        .then(set)
-                        .then(run)
-                        .then(function(args){
-                            Planner.findOne({id:planner},function(err,_planner){
-                                if(err){
-                                    console.log(err);
-                                }
-
-                                _planner.planner.tid=args.planner.tid;
-                                _planner.save();
-
-                                redis.hget('monitor:planners',_planner.id,
-                                    function(err,reply){
-                                    if(err){
-                                        console.log(err);
-                                    }
-
-                                    var __planner=JSON.parse(reply);
-                                    __planner.planner.tid=args.planner.tid;
-
-                                    redis.hset('monitor:planners',_planner.id,
-                                        JSON.stringify(__planner));
-                                });
-                            });
-                        })
-                        .done();
-                    });
-                }else{
-                    var packet=JSON.stringify({
-                            task:task
-                          , targs:targs
-                        })
-
-                    redis.rpush('monitor:queue',packet,function(err,reply){
-                        if(err){
-                            console.log(err);
-                        }
-                    });
-                }
-            });
         }
 
     app.get('/planner/id',function(request,response){
@@ -286,7 +225,7 @@ module.exports=function(app,session){
         }
     });
 
-    app.post('/planner/:tid/_run',function(request,response){
+    app.post('/planner/:tid/_run',authed,function(request,response){
         var _auth=cookie(request.headers.cookie)[0]
           , index=request.user.tasks.findIndex(function(_task){
                 return _task.seed==request.seed&_task.tid==request.params.tid;
@@ -297,7 +236,7 @@ module.exports=function(app,session){
                 name:request.user.tasks[index].name
               , count:request.user.tasks[index].count
               , interval:request.user.tasks[index].interval
-            },request.body,targs);
+            },request.body.targs);
 
             request.user.tasks[index].status='running';
 
@@ -360,128 +299,4 @@ module.exports=function(app,session){
         }
     });
 };
-
-/*  , assign=function(planner,done){
-        redisclient.zrange('monitor:queue',0,0,function(err,task){
-            if(task.length!=0){
-        Planner.findOne({
-            id:validate.toString(request.params.planner)
-        },function(err,planner){
-                redisclient.zremrangebyrank('monitor:queue',0,0,function(){
-                    notify(task[0],planner,function(){
-                        redisclient.hset('monitor:tasks',task[0],planner,
-                        function(){
-                            done();
-                        });
-                    },function(){
-                        var penalty=Math.floor(Math.random()*8);
-                        redisclient.zadd('monitor:queue',Date.now()+penalty,
-                        task[0],function(){
-                            assign(planner,done);
-                        });
-                    });
-                });
-            }else{
-                redisclient.sadd('monitor:free',planner,function(){
-                    done();
-                });
-            }
-        });
-    }
-  , notify=function(task,planner,success,fail){
-        console.log('ASSIGN ',task,' -> ',planner);
-        if(config.env=='test'){
-            success();
-        }else{
-            request.post({
-                url:task
-              , json:{planner:planner}
-            },function(error,response){
-                if(!error){
-                    if(response.statusCode==200){
-                        console.log('SUCCESS');
-                        success();
-                    }else{
-                        console.log('FAIL',response.statusCode);
-                        fail();
-                    }
-                }else{
-                    console.log(error);
-                    fail();
-                }
-            });
-        }
-    }*/
-
-/*
-app.put('/planners',function(request,response){
-    if(validate.validHost(request.body.planner)){
-        var planner=validate.toValidHost(request.body.planner)
-
-        redisclient.sismember('monitor:planners',planner,function(err,res){
-            if(!res){
-                redisclient.sadd('monitor:planners',planner,function(err,reply){
-                    assign(planner,function(){
-                        response.status(200).json(_success.ok);
-                    });
-                });
-            }else{
-                response.status(403).json(_error.notoverride);
-            }
-        });
-    }else{
-        response.status(403).json(_error.json);
-    }
-});
-
-app.put('/tasks',function(request,response){
-    if(validate.validHost(request.body.task)){
-        var task=request.body.task;
-
-        redisclient.spop('monitor:free',function(err,planner){
-            redisclient.zadd('monitor:queue',Date.now(),task,
-            function(err,reply){
-                if(planner){
-                    assign(planner,function(){
-                        response.status(200).json({
-                            msg:'Available planner found'
-                          , queue:0
-                        });
-                    });
-                }else{
-                    redisclient.zcard('monitor:queue',function(err,reply){
-                        response.status(200).json({
-                            msg:'Waiting for an available planner'
-                          , queue:reply
-                        });
-                    });
-                }
-            });
-        });
-    }else{
-        response.status(403).json(_error.json);
-    }
-});
-
-app.delete('/tasks',function(request,response){
-    if(validate.validHost(request.body.task)){
-        var task=request.body.task;
-        redisclient.hget('monitor:tasks',task,function(err,planner){
-            if(planner){
-                redisclient.hdel('monitor:tasks',task,function(){
-                    assign(planner,function(){
-                        response.status(200).json(_success.ok);
-                    });
-                });
-            }else{
-                redisclient.zrem('monitor:queue',task,function(err,task){
-                    response.status(200).json(_success.ok);
-                });
-            }
-        })
-    }else{
-        response.status(403).json(_error.json);
-    }
-});
-*/
 
