@@ -29,7 +29,12 @@ var http=require('http')
   , schema=require('../core/schema')
   , config=require('../config/monitor')
   , generator=require('../core/functions/utils/random').sync
+  , test=require('../core/functions/planners/test')
+  , auth=require('../core/functions/planners/auth')
+  , set=require('../core/functions/planners/set')
+  , run=require('../core/functions/planners/run')
   , User=require('./monitor/models/user')
+  , Planner=require('./monitor/models/planner')
 
 if(process.env.ENV=='test'){
     config=require('../config/tests');
@@ -171,7 +176,7 @@ var destroy=function(){
 process.on('SIGINT',destroy);
 process.on('SIGTERM',destroy);
 
-var session=function(request,response){
+function session(request,response){
     if(schema.js.validate(request.body,schema.auth2).length==0){
         var userid=validate.toString(request.body.name)
           , apikey=validate.toString(request.body.password)
@@ -242,7 +247,29 @@ var session=function(request,response){
     }else{
         response.status(400).json(_error.json);
     }
-}
+};
+
+function save_session(cookie,user,done){
+    delete user._id;
+    delete user.__v;
+
+    User.findOneAndUpdate({
+        id:user.id
+    },user,{upsert:true},function(err,_user){
+        if(err){
+            console.log(err);
+        }
+
+        redisclient.setex('user:'+cookie,60*5,JSON.stringify(user),
+            function(err){
+            if(err){
+                console.log(err);
+            }
+
+            done();
+        });
+    });
+};
 
 var socketsdown={}
   , emit=function(id,msg){
@@ -250,6 +277,12 @@ var socketsdown={}
             case 'connection':
                 console.log('socket.io client connection on',id);
                 break;
+            case 'stop':
+                free_planner(id);
+                break;
+            case 'create':
+            case 'run':
+            case 'task':
             default:
                 console.log('planners says:',id,msg);
         }
@@ -299,77 +332,93 @@ sessionsockets.on('connection',function(err,socket,session){
     });*/
 });
 
-      , assign=function(task,targs){
-            redis.spop('monitor:free',function(err,planner){
+function assign_planner(task,targs){
+    redisclient.spop('monitor:free',function(err,id){
+        if(err){
+            console.log(err);
+        }
+
+        if(id){
+            redisclient.hget('monitor:planners',id,function(err,reply){
                 if(err){
                     console.log(err);
                 }
 
-                if(planner){
-                    redis.hget('monitor:planners',planner,function(err,reply){
+                var json=JSON.parse(reply)
+                
+                test({
+                    planner:{
+                        host:json.planner.host+':'+json.planner.port
+                      , tid:json.planner.tid
+                    }
+                  , task:task
+                  , targs:targs
+                })
+                .then(set)
+                .then(run)
+                .then(function(args){
+                    Planner.findOne({id:id},function(err,planner){
                         if(err){
                             console.log(err);
                         }
 
-                        var json=JSON.parse(reply);
-                        
-                        test({
-                            planner:{
-                                host:json.planner.host+':'+json.planner.port
-                              , tid:json.planner.tid
-                            }
-                          , task:task
-                          , targs:targs
-                        })
-                        .then(set)
-                        .then(run)
-                        .then(function(args){
-                            Planner.findOne({id:planner},function(err,_planner){
-                                if(err){
-                                    console.log(err);
-                                }
+                        planner.planner.tid=args.planner.tid;
+                        planner.save();
 
-                                _planner.planner.tid=args.planner.tid;
-                                _planner.save();
-
-                                redis.hget('monitor:planners',_planner.id,
-                                    function(err,reply){
-                                    if(err){
-                                        console.log(err);
-                                    }
-
-                                    var __planner=JSON.parse(reply);
-                                    __planner.planner.tid=args.planner.tid;
-
-                                    redis.hset('monitor:planners',_planner.id,
-                                        JSON.stringify(__planner));
-                                });
-                            });
-                        })
-                        .done();
+                        json.planner.tid=args.planner.tid;
+                        redisclient.hset('monitor:planners',id,
+                            JSON.stringify(json));
                     });
-                }else{
-                    var packet=JSON.stringify({
-                            task:task
-                          , targs:targs
-                        })
-
-                    redis.rpush('monitor:queue',packet,function(err,reply){
-                        if(err){
-                            console.log(err);
-                        }
-                    });
+                })
+                .done(function(){
+                    return 'running';
+                });
+            });
+        }else{
+            redisclient.rpush('monitor:queue',JSON.stringify({
+                task:task
+              , targs:targs
+            }),function(err,reply){
+                if(err){
+                    console.log(err);
                 }
+
+                return 'paused';
             });
         }
+    })
+};
+
+function free_planner(id){
+    redisclient.sadd('monitor:free',id,function(err){
+        if(err){
+            console.log(err);
+        }
+
+        redisclient.lpop('monitor:queue',function(err,item){
+            if(err){
+                console.log(err);
+            }
+
+            if(item){
+                var json=JSON.parse(item)
+
+                assign_planner(json.task,json.targs);
+            }
+        });
+    });
+}
+
 require('./monitor/init')(app,socket_connect);
 require('./monitor/home')(app,config);
 require('./monitor/resources/apps')(app);
 require('./monitor/resources/dbservers')(app);
 require('./monitor/resources/planners')(app,
     socket_connect,socket_disconnect,socket_clean);
-require('./monitor/dbserver')(app,session);
-require('./monitor/planner')(app,session);
+
+require('./monitor/dbserver')(app,session,save_session);
+require('./monitor/planner')(app,session,save_session,
+    assign_planner,free_planner);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

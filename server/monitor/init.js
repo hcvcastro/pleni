@@ -94,12 +94,14 @@ module.exports=function(app,connect){
           , free=[]
 
         planners.forEach(function(planner){
-            params1[planner.id]=JSON.stringify({
-                planner:planner.planner
-              , status:'stopped'
-            });
-            free.push(planner.id);
-            connect(planner.id,planner.planner.host,planner.planner.port);
+            if(planner.planner.tid){
+                params1[planner.id]=JSON.stringify({
+                    planner:planner.planner
+                  , status:'stopped'
+                });
+                free.push(planner.id);
+                connect(planner.id,planner.planner.host,planner.planner.port);
+            }
         });
 
         Q.all(planners.map(function(planner){

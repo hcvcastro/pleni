@@ -8,7 +8,7 @@ var _request=require('request')
   , test=require('../../core/functions/databases/test')
   , auth=require('../../core/functions/databases/auth')
 
-module.exports=function(app,session){
+module.exports=function(app,session,save_session){
     var redis=app.get('redis')
       , cookie=function(header){
             var regex=/^AuthSession=([a-z0-9-]+).*$/
@@ -150,27 +150,15 @@ module.exports=function(app,session){
                                       , dbserver:dbserverid
                                     });
 
-                                    delete request.user._id;
-                                    delete request.user.__v;
-                                    User.findOneAndUpdate({
-                                        id:request.user.id
-                                    },request.user,{upsert:true},
-                                        function(err,user){
+                                    save_session(_auth,request.user,function(){
                                         redis.hset('monitor:repositories',
                                             name,_repository,function(err){
                                             if(err){
                                                 console.log(err);
                                             }
-                                            redis.setex('user:'+_auth,60*5,
-                                                JSON.stringify(request.user),
-                                                function(err){
-                                                    if(err){
-                                                        console.log(err);
-                                                    }
-                                                response
-                                                    .status(reply.statusCode)
-                                                    .json(reply.body);
-                                            });
+
+                                            response.status(reply.statusCode)
+                                                .json(reply.body);
                                         });
                                     });
                                 }else{
@@ -263,25 +251,9 @@ module.exports=function(app,session){
 
                                 request.user.repositories.splice(index,1);
 
-                                redis.setex('user:'+_auth,60*5,
-                                    JSON.stringify(request.user),
-                                    function(err){
-                                    if(err){
-                                        console.log(err);
-                                    }
-
-                                    delete request.user._id;
-                                    delete request.user.__v;
-                                    User.findOneAndUpdate({
-                                        id:request.user.id
-                                    },request.user,{upsert:true},
-                                        function(err,user){
-                                        if(err){
-                                            console.log(err);
-                                        }
-                                        response.status(reply.statusCode)
-                                            .json(reply.body);
-                                    });
+                                save_session(_auth,request.user,function(){
+                                    response.status(reply.statusCode)
+                                        .json(reply.body);
                                 });
                             });
                         }else{

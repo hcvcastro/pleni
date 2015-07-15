@@ -5,16 +5,10 @@ var _request=require('request')
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
   , schema=require('../../core/schema')
-  , User=require('./models/user')
-  , Planner=require('./models/planner')
   , generator=require('../../core/functions/utils/random').sync
   , sort=require('../../core/utils').sort2
-  , test=require('../../core/functions/planners/test')
-  , auth=require('../../core/functions/planners/auth')
-  , set=require('../../core/functions/planners/set')
-  , run=require('../../core/functions/planners/run')
 
-module.exports=function(app,session,assign,free){
+module.exports=function(app,session,save_session,assign_planner,free_planner){
     var redis=app.get('redis')
       , cookie=function(header){
             var regex1=/^AuthSession=([a-z0-9-]+).*$/
@@ -134,25 +128,10 @@ module.exports=function(app,session,assign,free){
                   , interval:interval
                 });
 
-                delete request.user._id;
-                delete request.user.__v;
-                User.findOneAndUpdate({
-                    id:request.user.id
-                },request.user,{upsert:true},function(err,user){
-                    if(err){
-                        console.log(err);
-                    }
-
-                    redis.setex('user:'+_auth,60*5,
-                        JSON.stringify(request.user),
-                        function(err){
-                            if(err){
-                                console.log(err);
-                            }
-                        response.status(200).json({
-                            ok:true,
-                            tid:tid
-                        });
+                save_session(_auth,request.user,function(){
+                    response.status(200).json({
+                        ok:true,
+                        tid:tid
                     });
                 });
             });
@@ -202,23 +181,8 @@ module.exports=function(app,session,assign,free){
         if(index>=0){
             request.user.tasks.splice(index,1);
 
-            delete request.user._id;
-            delete request.user.__v;
-            User.findOneAndUpdate({
-                id:request.user.id
-            },request.user,{upsert:true},function(err,user){
-                if(err){
-                    console.log(err);
-                }
-
-                redis.setex('user:'+_auth,60*5,
-                    JSON.stringify(request.user),
-                    function(err){
-                        if(err){
-                            console.log(err);
-                        }
-                    response.status(200).json(_success.ok);
-                });
+            save_session(_auth,request.user,function(){
+                response.status(200).json(_success.ok);
             });
         }else{
             response.status(404).json(_error.notfound);
@@ -232,32 +196,17 @@ module.exports=function(app,session,assign,free){
             })
 
         if(index>=0){
-            assign({
+            var status=assign_planner({
                 name:request.user.tasks[index].name
               , count:request.user.tasks[index].count
               , interval:request.user.tasks[index].interval
             },request.body.targs);
 
-            request.user.tasks[index].status='running';
+            request.user.tasks[index].status=status;
 
-            delete request.user._id;
-            delete request.user.__v;
-            User.findOneAndUpdate({
-                id:request.user.id
-            },request.user,{upsert:true},function(err,user){
-                if(err){
-                    console.log(err);
-                }
-
-                redis.setex('user:'+_auth,60*5,
-                    JSON.stringify(request.user),
-                    function(err){
-                        if(err){
-                            console.log(err);
-                        }
-                    response.status(200).json({
-                        status:'running'
-                    });
+            save_session(_auth,request.user,function(){
+                response.status(200).json({
+                    status:status
                 });
             });
         }else{
@@ -274,24 +223,9 @@ module.exports=function(app,session,assign,free){
         if(index>=0){
             request.user.tasks[index].status='stopped';
 
-            delete request.user._id;
-            delete request.user.__v;
-            User.findOneAndUpdate({
-                id:request.user.id
-            },request.user,{upsert:true},function(err,user){
-                if(err){
-                    console.log(err);
-                }
-
-                redis.setex('user:'+_auth,60*5,
-                    JSON.stringify(request.user),
-                    function(err){
-                        if(err){
-                            console.log(err);
-                        }
-                    response.status(200).json({
-                        status:'stopped'
-                    });
+            save_session(_auth,request.user,function(){
+                response.status(200).json({
+                    status:'stopped'
                 });
             });
         }else{
