@@ -17,13 +17,73 @@ var extend=require('underscore').extend
 module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
     var authed=app.get('auth')
       , redis=app.get('redis')
+      , api_add:function(id,planner){
+            test({
+                id:id
+              , planner:planner
+            })
+            .then(api)
+            .then(function(args){
+                redis.hgetall('monitor:apis',function(err,reply){
+                    if(err){
+                        console.log(err);
+                    }
+
+                    args.planner.tasks.forEach(function(task){
+                        if(reply[task.name]){
+                            var json=JSON.parse(reply[task.name])
+
+                            json.planners.push(id);
+                            reply[task.name].JSON.stringify(json);
+                        }else{
+                            reply[task.name]=JSON.stringify({
+                                schema:task.schema
+                              , planners:[id]
+                            });
+                        }
+                    });
+
+                    redis.hmset('monitor:apis',reply);
+                });
+            });
+        }
+      , api_remove:function(id,done){
+            redis.hgetall('monitor:apis',function(err,reply){
+                if(err){
+                    console.log(err);
+                }
+
+                for(var r in reply){
+                    var json=JSON.parse(reply[r])
+                      , index=json.planners.findIndex(function(_planner){
+                            return _planner==id;
+                        })
+
+                    if(index>=0){
+                        json.planner.splice(index,1);
+                    }
+
+                    if(json.planners.length==0){
+                        delete reply[r];
+                    }else{
+                        reply[r]=JSON.stringify(json);
+                    }
+                }
+
+                redis.hmset('monitor:apis',reply,function(err){
+                    if(done){
+                        done();
+                    }
+                });
+            });
+        }
 
     app.get('/resources/planners',authed,function(request,response){
         redis.hgetall('monitor:planners',function(err,reply){
             var list=[]
             
             for(var r in reply){
-                var planner=JSON.parse(reply[r]);
+                var planner=JSON.parse(reply[r])
 
                 list.push({
                     id:r
@@ -42,6 +102,8 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
     app.put('/resources/planners',authed,function(request,response){
         if(schema.js.validate(request.body,schema.planners).length==0){
             socket_clean();
+            redis.del('monitor:free');
+            redis.del('monitor:apis');
 
             Planner.remove({},function(){
                 var obj1=request.body.map(function(planner){
@@ -133,6 +195,8 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
             }
 
             socket_clean();
+            redis.del('monitor:free');
+            redis.del('monitor:api');
 
             Planner.remove({},function(){
                 response.status(200).json(_success.ok);
@@ -253,6 +317,9 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
         },function(err,planner){
             if(planner){
                 socket_disconnect(planner.id);
+
+                redis.srem('monitor:free',planner.id);
+                api_remove(id);
 
                 redis.hdel('monitor:planners',planner.id,function(err,reply){
                     if(err){
@@ -381,6 +448,9 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                         
                         redis.hset('monitor:planners',_planner.id,
                             JSON.stringify(__planner));
+
+                        redis.sadd('monitor:free',_planner.id);
+                        api_add(_planner.id,_planner.planner);
                     });
                 });
 
@@ -447,6 +517,9 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                         redis.hset('monitor:planners',_planner.id,
                             JSON.stringify(__planner));
                         });
+
+                        redis.srem('monitor:free',_planner.id);
+                        api_remove(_planner.id);
                 });
 
                 response.status(200).json({

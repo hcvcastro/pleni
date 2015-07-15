@@ -94,13 +94,15 @@ module.exports=function(app,connect){
           , free=[]
 
         planners.forEach(function(planner){
+            params1[planner.id]=JSON.stringify({
+                planner:planner.planner
+              , status:'stopped'
+            });
+
+            connect(planner.id,planner.planner.host,planner.planner.port);
+
             if(planner.planner.tid){
-                params1[planner.id]=JSON.stringify({
-                    planner:planner.planner
-                  , status:'stopped'
-                });
                 free.push(planner.id);
-                connect(planner.id,planner.planner.host,planner.planner.port);
             }
         });
 
@@ -128,14 +130,16 @@ module.exports=function(app,connect){
                     var id=arguments[arg].id
 
                     arguments[arg].planner.tasks.forEach(function(task){
-                        if(!params2[task.name]){
-                            params2[task.name]={
-                                schema:task.schema
-                              , planners:[]
-                            };
-                        }
+                        if(params1[id].planner.tid){
+                            if(!params2[task.name]){
+                                params2[task.name]={
+                                    schema:task.schema
+                                  , planners:[]
+                                };
+                            }
 
-                        params2[task.name].planners.push(id);
+                            params2[task.name].planners.push(id);
+                        }
                     });
                 }
             }
