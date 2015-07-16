@@ -17,7 +17,7 @@ var extend=require('underscore').extend
 module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
     var authed=app.get('auth')
       , redis=app.get('redis')
-      , api_add:function(id,planner){
+      , api_add=function(id,planner){
             test({
                 id:id
               , planner:planner
@@ -34,7 +34,7 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                             var json=JSON.parse(reply[task.name])
 
                             json.planners.push(id);
-                            reply[task.name].JSON.stringify(json);
+                            reply[task.name]=JSON.stringify(json);
                         }else{
                             reply[task.name]=JSON.stringify({
                                 schema:task.schema
@@ -47,7 +47,7 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                 });
             });
         }
-      , api_remove:function(id,done){
+      , api_remove=function(id,done){
             redis.hgetall('monitor:apis',function(err,reply){
                 if(err){
                     console.log(err);
@@ -60,7 +60,7 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                         })
 
                     if(index>=0){
-                        json.planner.splice(index,1);
+                        json.planners.splice(index,1);
                     }
 
                     if(json.planners.length==0){
@@ -451,14 +451,14 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
 
                         redis.sadd('monitor:free',_planner.id);
                         api_add(_planner.id,_planner.planner);
-                    });
-                });
 
-                response.status(200).json({
-                    planner:{
-                        host:args.planner.host
-                      , result:true
-                    }
+                        response.status(200).json({
+                            planner:{
+                                host:args.planner.host
+                              , result:true
+                            }
+                        });
+                    });
                 });
         });
     });

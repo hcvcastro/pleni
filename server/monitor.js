@@ -160,6 +160,7 @@ var destroy=function(){
           , 'monitor:dbservers'
           , 'monitor:repositories'
           , 'monitor:planners'
+          , 'monitor:free'
           , 'monitor:apis'
         ],function(element,done){
             redisclient.del(element,function(){

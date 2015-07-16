@@ -94,10 +94,10 @@ module.exports=function(app,connect){
           , free=[]
 
         planners.forEach(function(planner){
-            params1[planner.id]=JSON.stringify({
+            params1[planner.id]={
                 planner:planner.planner
               , status:'stopped'
-            });
+            };
 
             connect(planner.id,planner.planner.host,planner.planner.port);
 
@@ -120,7 +120,9 @@ module.exports=function(app,connect){
 
             return planner_test(packet)
                 .then(planner_api)
-                .fail(function(error){});
+                .fail(function(err){
+                    console.log(err);
+                });
         }))
         .spread(function(){
             var params2={}
@@ -144,14 +146,18 @@ module.exports=function(app,connect){
                 }
             }
 
+            for(var arg in params1){
+                params1[arg]=JSON.stringify(params1[arg]);
+            }
+
             for(var arg in params2){
                 params2[arg]=JSON.stringify(params2[arg]);
             }
 
-            if(Object.keys(params1).length){
+            if(Object.keys(params1).length!=0){
                 redis.hmset('monitor:planners',params1);
                 redis.sadd('monitor:free',free);
-                if(Object.keys(params2).length){
+                if(Object.keys(params2).length!=0){
                     redis.hmset('monitor:apis',params2);
                 }
             }
