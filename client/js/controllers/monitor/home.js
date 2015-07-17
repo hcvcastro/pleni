@@ -365,7 +365,7 @@ pleni.controller('HomeController',
                 },function(data){
                     utils.show('success','Cleaned the TID planner');
                 },function(error){
-                    utils.show('error',error);
+                    utils.show('error',error.data.message);
                 });
             }
           , exclusive:function(index){
@@ -386,7 +386,7 @@ pleni.controller('HomeController',
                             utils.show('success','Planner taken');
                         },function(error){
                             planner.set.status='unset';
-                            utils.show('error',error);
+                            utils.show('error',error.data.message);
                         });
                         break;
                     case 'set':
@@ -398,7 +398,7 @@ pleni.controller('HomeController',
                             utils.show('success','Planner released');
                         },function(error){
                             planner.set.status='set';
-                            utils.show('error',error);
+                            utils.show('error',error.data.message);
                         });
                         break;
                 }

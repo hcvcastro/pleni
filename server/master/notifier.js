@@ -16,14 +16,9 @@ var validate=require('../../core/validators')
         return;
     }
   , get_planner=function(user,host,port){
-        var planners=user.resources.planners
-
-        for(var i=0;i<planners.length;i++){
-            if(planners[i].planner.host==host&&planners[i].planner.port==port){
-                return planners[i].id;
-            }
-        }
-        return;
+        return user.resources.planners.find(function(p){
+            return p.planner.host==host&&p.planner.port==port;
+        });
     }
 
 module.exports=function(app,config,notifier){
@@ -39,12 +34,17 @@ module.exports=function(app,config,notifier){
                 }
             });
         }
-      , socket_connect=function(id,host,port,notifier,sid){
-            var socket=ioc.connect(host+':'+port,{
-                reconnect:true
-              , 'forceNew':true
-            })
-
+      , socket_connect=function(id,user,host,port,virtual,notifier,sid){
+            var opts={
+                    reconnect:true
+                  , 'forceNew':true
+                }
+            
+            if(virtual){
+                opts.query='apikey='+config.monitor.apikey+'&id='+user;
+            }
+            
+            var socket=ioc.connect(host+':'+port,opts)
             socket.on('notifier',function(msg){
                 get_session(sid,function(session){
                     var params=[]
@@ -88,8 +88,7 @@ module.exports=function(app,config,notifier){
 
     app.put('/notifier',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planners).length==0){
-            var user=request.user
-              , id=request.user.id
+            var id=request.user.id
               , sid=request.sessionID
 
             if(sockets[id]){
@@ -102,14 +101,15 @@ module.exports=function(app,config,notifier){
             request.user.notifier=request.body.map(function(element){
                 var host=validate.toValidHost(element.planner.host)
                   , port=validate.toInt(element.planner.port)
-                  , plannerid=get_planner(user,host,port)
+                  , planner=get_planner(request.user,host,port)
 
-                if(plannerid){
+                if(planner){
                     sockets[id].push(socket_connect(
-                        plannerid,host,port,notifier,sid));
+                        planner.id,request.user._id,host,port,
+                        planner.attrs.virtual,notifier,sid));
 
                     return {
-                        id:plannerid
+                        id:planner.id
                       , planner:{
                             host:host
                           , port:port
@@ -127,7 +127,7 @@ module.exports=function(app,config,notifier){
                 action:'put'
               , msg:request.user.notifier.map(function(element){
                     return {
-                        id:get_planner(user,
+                        id:get_planner(request.user,
                             element.planner.host,element.planner.port)
                       , planner:{
                             host:element.planner.host
@@ -144,25 +144,25 @@ module.exports=function(app,config,notifier){
 
     app.post('/notifier',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
-            var planner=get_element(request.body,request.user.notifier)
+            var _planner=get_element(request.body,request.user.notifier)
 
-            if(!planner){
+            if(!_planner){
                 var host=validate.toValidHost(request.body.planner.host)
                   , port=validate.toInt(request.body.planner.port)
-                  , user=request.user
                   , id=request.user.id
                   , sid=request.sessionID
-                  , plannerid=get_planner(user,host,port)
+                  , planner=get_planner(request.user,host,port)
 
-                if(plannerid){
+                if(planner){
                     if(!sockets[id]){
                         sockets[id]=[];
                     }
                     sockets[id].push(socket_connect(
-                        plannerid,host,port,notifier,sid));
+                        planner.id,request.user._id,host,port,
+                        planner.attrs.virtual,notifier,sid));
 
                     request.user.notifier.push({
-                        id:plannerid
+                        id:planner.id
                       , planner:{
                             host:host
                           , port:port
@@ -173,7 +173,7 @@ module.exports=function(app,config,notifier){
                     notifier(sid,{
                         action:'post'
                       , msg:{
-                            id:plannerid
+                            id:planner.id
                           , planner:{
                                 host:host
                               , port:port
@@ -193,8 +193,7 @@ module.exports=function(app,config,notifier){
     });
 
     app.delete('/notifier',authed,function(request,response){
-        var user=request.user
-          , id=request.user.id
+        var id=request.user.id
           , sid=request.sessionID
 
         if(sockets[id]){
@@ -215,52 +214,57 @@ module.exports=function(app,config,notifier){
 
     app.post('/notifier/_add',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
-            var planner=get_element(request.body,request.user.notifier)
+            var _planner=get_element(request.body,request.user.notifier)
               , host=validate.toValidHost(request.body.planner.host)
               , port=validate.toInt(request.body.planner.port)
               , id=request.user.id
               , sid=request.sessionID
-              , plannerid=get_planner(request.user,host,port)
+              , planner=get_planner(request.user,host,port)
 
-            if(!planner){
-                if(!sockets[id]){
-                    sockets[id]=[];
+            if(planner){
+                if(!_planner){
+                    if(!sockets[id]){
+                        sockets[id]=[];
+                    }
+                    sockets[id].push(socket_connect(
+                        planner.id,request.user._id,host,port,
+                        planner.attrs.virtual,notifier,sid));
+
+                    request.user.notifier.push({
+                        id:planner.id
+                      , planner:{
+                            host:host
+                          , port:port
+                        }
+                    });
+                    request.user.save();
+
+                    notifier(sid,{
+                        action:'create'
+                      , msg:{
+                            id:planner.id
+                          , planner:{
+                                host:host
+                              , port:port
+                            }
+                        }
+                    });
+                    response.status(201).json(_success.ok);
+                }else{
+                    notifier(sid,{
+                        action:'update'
+                      , msg:{
+                            id:planner.id
+                          , planner:{
+                                host:host
+                              , port:port
+                            }
+                        }
+                    });
+                    response.status(200).json(_success.ok);
                 }
-                sockets[id].push(socket_connect(
-                    plannerid,host,port,notifier,sid));
-
-                request.user.notifier.push({
-                    id:plannerid
-                  , planner:{
-                        host:host
-                      , port:port
-                    }
-                });
-                request.user.save();
-
-                notifier(sid,{
-                    action:'create'
-                  , msg:{
-                        id:plannerid
-                      , planner:{
-                            host:host
-                          , port:port
-                        }
-                    }
-                });
-                response.status(201).json(_success.ok);
             }else{
-                notifier(sid,{
-                    action:'update'
-                  , msg:{
-                        id:plannerid
-                      , planner:{
-                            host:host
-                          , port:port
-                        }
-                    }
-                });
-                response.status(200).json(_success.ok);
+                response.status(404).json(_error.notfound);
             }
         }else{
             response.status(403).json(_error.validation);
@@ -269,27 +273,27 @@ module.exports=function(app,config,notifier){
 
     app.post('/notifier/_remove',authed,function(request,response){
         if(schema.js.validate(request.body,schema.notifier_planner).length==0){
-            var planner=get_element(request.body,request.user.notifier)
+            var _planner=get_element(request.body,request.user.notifier)
               , id=request.user.id
               , sid=request.sessionID
 
-            if(planner){
-                var host=planner[1].planner.host
-                  , port=planner[1].planner.port
-                  , plannerid=get_planner(request.user,host,port)
+            if(_planner){
+                var host=_planner[1].planner.host
+                  , port=_planner[1].planner.port
+                  , planner=get_planner(request.user,host,port)
 
                 if(sockets[id]){
-                    sockets[id][planner[0]].disconnect();
-                    sockets[id].splice(planner[0],1);
+                    sockets[id][_planner[0]].disconnect();
+                    sockets[id].splice(_planner[0],1);
                 }
 
-                request.user.notifier.splice(planner[0],1);
+                request.user.notifier.splice(_planner[0],1);
                 request.user.save();
 
                 notifier(sid,{
                     action:'remove'
                   , msg:{
-                        id:plannerid
+                        id:planner.id
                     }
                 });
                 response.status(200).json(_success.ok);

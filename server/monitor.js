@@ -173,7 +173,6 @@ var destroy=function(){
     });
 };
 
-//process.on('exit',destroy);
 process.on('SIGINT',destroy);
 process.on('SIGTERM',destroy);
 
@@ -313,6 +312,8 @@ var socketsdown={}
 
 sessionsockets.on('connection',function(err,socket,session){
     console.log('socket.io server request');
+    console.log(session);
+    console.log(socket);
     /*var sid=socket.handshake.signedCookies[config.cookie.name];
     if(!(sid in sockets)){
         sockets[sid]={};
