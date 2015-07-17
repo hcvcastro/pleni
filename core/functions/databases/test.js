@@ -15,6 +15,7 @@ var request=require('request')
  *          check
  */
 module.exports=function(args){
+console.log('args',args);
     var deferred=Q.defer()
       , url=args.db.host
 

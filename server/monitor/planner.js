@@ -200,7 +200,7 @@ module.exports=function(app,session,save_session,assign_planner,free_planner){
                 name:request.user.tasks[index].name
               , count:request.user.tasks[index].count
               , interval:request.user.tasks[index].interval
-            },request.body.targs);
+            },request.body);
 
             request.user.tasks[index].status=status;
 
