@@ -308,33 +308,46 @@ var socketsdown={}
             socketsdown[i].disconnect();
         }
     }
+  , socketsup={}
   , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
 
 sessionsockets.on('connection',function(err,socket,session){
-    console.log('socket.io server request');
-    console.log(session);
-    console.log(socket);
-    /*var sid=socket.handshake.signedCookies[config.cookie.name];
-    if(!(sid in sockets)){
-        sockets[sid]={};
-        console.log('SOCKET.IO new connection',sid);
-    }
-
-    sockets[sid][socket.id]=socket;
-    console.log('SOCKET.IO new client',socket.id);
-
-    socket.on('disconnect',function(){
-        delete sockets[sid][socket.id];
-        console.log('SOCKET.IO remove client',socket.id);
-
-        if(Object.keys(sockets[sid]).length==0){
-            delete sockets[sid];
-            console.log('SOCKET.IO remove connection',sid);
+    redisclient.hget('monitor:apps',socket.handshake.query.apikey,
+        function(err,appid){
+        if(err){
+            console.log(err);
         }
-    });*/
+
+        if(appid){
+            var userid=socket.handshake.query.id
+              , seed=socket.handshake.query.seed
+
+            if(!(userid in socketsup)){
+                socketsup[userid]={};
+                if(!(seed in socketsup)){
+                    socketsup[userid][seed]={};
+                }
+            }
+
+            console.log('socket.io server new connection',socket.id);
+            socketsup[userid][seed][socket.id]=socket;
+
+            socket.on('disconnect',function(){
+                delete socketsup[userid][seed][socket.id];
+
+                if(Object.keys(socketsup[userid][seed]).length==0){
+                    delete sockets[userid][seed];
+                }
+
+                if(Object.keys(socketsup[userid]).length==0){
+                    delete socketsup[userid];
+                }
+            });
+        }
+    });
 });
 
-function assign_planner(task,targs){
+function assign_planner(task,targs,appid,userid,seed){
     redisclient.spop('monitor:free',function(err,id){
         if(err){
             console.log(err);
@@ -370,6 +383,12 @@ function assign_planner(task,targs){
                         json.planner.tid=args.planner.tid;
                         redisclient.hset('monitor:planners',id,
                             JSON.stringify(json));
+
+                        redisclient.hset('monitor:tasks',id,JSON.stringify({
+                            appid:appid
+                          , userid:userid
+                          , seed:seed
+                        }));
                     });
                 })
                 .done(function(){
@@ -380,6 +399,9 @@ function assign_planner(task,targs){
             redisclient.rpush('monitor:queue',JSON.stringify({
                 task:task
               , targs:targs
+              , appid:appid
+              , userid:userid
+              , seed:seed
             }),function(err,reply){
                 if(err){
                     console.log(err);
@@ -391,22 +413,80 @@ function assign_planner(task,targs){
     })
 };
 
-function free_planner(id){
-    redisclient.sadd('monitor:free',id,function(err){
-        if(err){
-            console.log(err);
-        }
+function stop_planner(appid,userid,seed){
+    var planner=(function(appid,userid,seed){
+            redisclient.hgetall('monitor:tasks',function(err,reply){
+                if(err){
+                    console.log(err);
+                }
 
-        redisclient.lpop('monitor:queue',function(err,item){
+                for(var i in reply){
+                    var json=JSON.parse(reply[i])
+
+                    if(json.appid==appid&&json.userid==userid&&json.seed==seed){
+                        return i;
+                    }
+                }
+            });
+        })(appid,userid,seed)
+
+    if(planner){
+        redisclient.hget('monitor:planners',planner,function(err,reply){
             if(err){
                 console.log(err);
             }
 
-            if(item){
-                var json=JSON.parse(item)
+            var json=JSON.parse(reply)
 
-                assign_planner(json.task,json.targs);
+            test({
+                planner:{
+                    host:json.planner.host+':'+json.planner.port
+                  , tid:json.planner.tid
+                }
+            })
+            .then(stop)
+            .then(function(args){
+                free_planner(planner);
+            });
+        });
+    }else{
+        var queue=(function(appid,userid,seed){
+            redisclient.lrange('monitor:queue',0,-1,function(err,reply){
+                for(var i in reply){
+                    var json=JSON.parse(reply[i])
+
+                    if(json.appid==appid&&json.userid==userid&&json.seed==seed){
+                        return reply[i];
+                    }
+                }
+            });
+        })(appid,userid,seed)
+
+        if(queue){
+            redisclient.lrem('monitor:queue',1,queue);
+        }
+    }
+};
+
+function free_planner(id){
+    redisclient.hdel('monitor:tasks',id,function(err){
+        redisclient.sadd('monitor:free',id,function(err){
+            if(err){
+                console.log(err);
             }
+
+            redisclient.lpop('monitor:queue',function(err,item){
+                if(err){
+                    console.log(err);
+                }
+
+                if(item){
+                    var json=JSON.parse(item)
+
+                    assign_planner(json.task,json.targs,
+                        json.appid,json.userid,json.seed);
+                }
+            });
         });
     });
 }
@@ -420,7 +500,7 @@ require('./monitor/resources/planners')(app,
 
 require('./monitor/dbserver')(app,session,save_session);
 require('./monitor/planner')(app,session,save_session,
-    assign_planner,free_planner);
+    assign_planner,stop_planner);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

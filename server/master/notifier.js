@@ -34,14 +34,18 @@ module.exports=function(app,config,notifier){
                 }
             });
         }
-      , socket_connect=function(id,user,host,port,virtual,notifier,sid){
+      , socket_connect=function(id,host,port,virtual,user,seed,notifier,sid){
             var opts={
                     reconnect:true
                   , 'forceNew':true
                 }
             
             if(virtual){
-                opts.query='apikey='+config.monitor.apikey+'&id='+user;
+                opts.query=[
+                    'apikey='+config.monitor.apikey
+                  , 'id='+user
+                  , 'seed='+seed
+                ].join('&');
             }
             
             var socket=ioc.connect(host+':'+port,opts)
@@ -105,8 +109,8 @@ module.exports=function(app,config,notifier){
 
                 if(planner){
                     sockets[id].push(socket_connect(
-                        planner.id,request.user._id,host,port,
-                        planner.attrs.virtual,notifier,sid));
+                        planner.id,host,port,planner.attrs.virtual,
+                        request.user._id,planner.id,notifier,sid));
 
                     return {
                         id:planner.id
@@ -158,8 +162,8 @@ module.exports=function(app,config,notifier){
                         sockets[id]=[];
                     }
                     sockets[id].push(socket_connect(
-                        planner.id,request.user._id,host,port,
-                        planner.attrs.virtual,notifier,sid));
+                        planner.id,host,port,planner.attrs.virtual,
+                        request.user._id,planner.id,notifier,sid));
 
                     request.user.notifier.push({
                         id:planner.id
@@ -227,8 +231,8 @@ module.exports=function(app,config,notifier){
                         sockets[id]=[];
                     }
                     sockets[id].push(socket_connect(
-                        planner.id,request.user._id,host,port,
-                        planner.attrs.virtual,notifier,sid));
+                        planner.id,host,port,planner.attrs.virtual,
+                        request.user._id,planner.id,notifier,sid));
 
                     request.user.notifier.push({
                         id:planner.id

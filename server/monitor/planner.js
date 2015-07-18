@@ -8,7 +8,7 @@ var _request=require('request')
   , generator=require('../../core/functions/utils/random').sync
   , sort=require('../../core/utils').sort2
 
-module.exports=function(app,session,save_session,assign_planner,free_planner){
+module.exports=function(app,session,save_session,assign_planner,stop_planner){
     var redis=app.get('redis')
       , cookie=function(header){
             var regex1=/^AuthSession=([a-z0-9-]+).*$/
@@ -200,7 +200,7 @@ module.exports=function(app,session,save_session,assign_planner,free_planner){
                 name:request.user.tasks[index].name
               , count:request.user.tasks[index].count
               , interval:request.user.tasks[index].interval
-            },request.body);
+            },request.body,request.user.app,request.user.id,request.seed);
 
             request.user.tasks[index].status=status;
 
@@ -221,6 +221,8 @@ module.exports=function(app,session,save_session,assign_planner,free_planner){
             })
 
         if(index>=0){
+            stop_planner(request.user.app,request.user.id,request.seed);
+
             request.user.tasks[index].status='stopped';
 
             save_session(_auth,request.user,function(){
