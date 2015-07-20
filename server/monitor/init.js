@@ -156,7 +156,9 @@ module.exports=function(app,connect){
 
             if(Object.keys(params1).length!=0){
                 redis.hmset('monitor:planners',params1);
-                redis.sadd('monitor:free',free);
+                if(free.length!=0){
+                    redis.sadd('monitor:free',free);
+                }
                 if(Object.keys(params2).length!=0){
                     redis.hmset('monitor:apis',params2);
                 }
