@@ -27,7 +27,7 @@ article.list
                 td.status
                     span.fa(title='Notifier connection: {{notifier.check}}',ng-class='{\'fa-check\':notifier.check==\'online\',\'fa-question\':notifier.check==\'unknown\',\'fa-close\':notifier.check==\'offline\'}')
                 td.status
-                    a.fa.fa-recycle(title='Clean all connections',ng-click='notifiers.planners.clean($index)')
+                    a.fa.fa-recycle(title='Clean all connections',ng-show='notifier.type==\'io\'',ng-click='notifiers.planners.clean($index)')
                 td.options
                     a.fa.fa-refresh(title='Check connection',ng-click='notifiers.check($index)',ng-class='{\'fa-spin\':notifier.check==\'checking\'}')
                     a.fa.fa-edit(title='Edit properties',ng-hide='notifier.readonly',ng-click='notifiers.edit($index)')

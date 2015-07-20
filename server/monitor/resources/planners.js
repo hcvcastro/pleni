@@ -531,7 +531,8 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
         });
     });
 
-    app.post('/resources/planners/:planner/_clean',authed,
+    /* dangerous method
+     * app.post('/resources/planners/:planner/_clean',authed,
         function(request,response){
         return generic_action(request,response,null,[],
             function(planner,args){
@@ -565,5 +566,6 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                 });
         });
     });
+    */
 };
 
