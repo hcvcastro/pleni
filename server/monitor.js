@@ -33,6 +33,7 @@ var http=require('http')
   , auth=require('../core/functions/planners/auth')
   , set=require('../core/functions/planners/set')
   , run=require('../core/functions/planners/run')
+  , stop=require('../core/functions/planners/stop')
   , User=require('./monitor/models/user')
   , Planner=require('./monitor/models/planner')
 
@@ -272,19 +273,34 @@ function save_session(cookie,user,done){
 };
 
 var socketsdown={}
+  , socketsup={}
+  , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
   , emit=function(id,msg){
-        switch(msg.action){
-            case 'connection':
-                console.log('socket.io client connection on',id);
-                break;
-            case 'stop':
+        redisclient.hget('monitor:tasks',id,function(err,user){
+            if(err){
+                console.log(err);
+            }
+
+            if(user){
+                var json=JSON.parse(user)
+
+                notify(json.appid,json.userid,json.seed,msg);
+            }
+
+            if(msg.action=='stop'){
                 free_planner(id);
-                break;
-            case 'create':
-            case 'run':
-            case 'task':
-            default:
-                console.log('planners says:',id,msg);
+            }
+        });
+    }
+  , notify=function(appid,userid,seed,msg){
+        if(appid in socketsup){
+            if(userid in socketsup[appid]){
+                if(seed in socketsup[appid][userid]){
+                    for(var i in socketsup[appid][userid][seed]){
+                        socketsup[appid][userid][seed][i].emit('notifier',msg);
+                    }
+                }
+            }
         }
     }
   , socket_connect=function(id,host,port){
@@ -308,8 +324,6 @@ var socketsdown={}
             socketsdown[i].disconnect();
         }
     }
-  , socketsup={}
-  , sessionsockets=new sessionsocketio(ios,store,parser,config.cookie.name)
 
 sessionsockets.on('connection',function(err,socket,session){
     redisclient.hget('monitor:apps',socket.handshake.query.apikey,
@@ -322,25 +336,32 @@ sessionsockets.on('connection',function(err,socket,session){
             var userid=socket.handshake.query.id
               , seed=socket.handshake.query.seed
 
-            if(!(userid in socketsup)){
-                socketsup[userid]={};
-                if(!(seed in socketsup)){
-                    socketsup[userid][seed]={};
+            if(!(appid in socketsup)){
+                socketsup[appid]={};
+                if(!(userid in socketsup[appid])){
+                    socketsup[appid][userid]={};
+                    if(!(seed in socketsup[appid][userid])){
+                        socketsup[appid][userid][seed]={};
+                    }
                 }
             }
 
             console.log('socket.io server new connection',socket.id);
-            socketsup[userid][seed][socket.id]=socket;
+            socketsup[appid][userid][seed][socket.id]=socket;
 
             socket.on('disconnect',function(){
-                delete socketsup[userid][seed][socket.id];
+                delete socketsup[appid][userid][seed][socket.id];
 
-                if(Object.keys(socketsup[userid][seed]).length==0){
-                    delete sockets[userid][seed];
+                if(Object.keys(socketsup[appid][userid][seed]).length==0){
+                    delete socketsup[appid][userid][seed];
                 }
 
-                if(Object.keys(socketsup[userid]).length==0){
-                    delete socketsup[userid];
+                if(Object.keys(socketsup[appid][userid]).length==0){
+                    delete socketsup[appid][userid];
+                }
+
+                if(Object.keys(socketsup[appid]).length==0){
+                    delete socketsup[appid];
                 }
             });
         }
@@ -414,7 +435,7 @@ function assign_planner(task,targs,appid,userid,seed){
 };
 
 function stop_planner(appid,userid,seed){
-    var planner=(function(appid,userid,seed){
+    var findTask=function(){
             redisclient.hgetall('monitor:tasks',function(err,reply){
                 if(err){
                     console.log(err);
@@ -424,48 +445,48 @@ function stop_planner(appid,userid,seed){
                     var json=JSON.parse(reply[i])
 
                     if(json.appid==appid&&json.userid==userid&&json.seed==seed){
-                        return i;
+                        found(i);
+                        return;
                     }
                 }
+
+                queue();
+                return;
             });
-        })(appid,userid,seed)
-
-    if(planner){
-        redisclient.hget('monitor:planners',planner,function(err,reply){
-            if(err){
-                console.log(err);
-            }
-
-            var json=JSON.parse(reply)
-
-            test({
-                planner:{
-                    host:json.planner.host+':'+json.planner.port
-                  , tid:json.planner.tid
+        }
+      , found=function(planner){
+            redisclient.hget('monitor:planners',planner,function(err,reply){
+                if(err){
+                    console.log(err);
                 }
-            })
-            .then(stop)
-            .then(function(args){
-                free_planner(planner);
+
+                var json=JSON.parse(reply)
+
+                test({
+                    planner:{
+                        host:json.planner.host+':'+json.planner.port
+                      , tid:json.planner.tid
+                    }
+                })
+                .then(stop)
+                .then(function(args){
+                    free_planner(planner);
+                });
             });
-        });
-    }else{
-        var queue=(function(appid,userid,seed){
+        }
+      , queue=function(){
             redisclient.lrange('monitor:queue',0,-1,function(err,reply){
                 for(var i in reply){
                     var json=JSON.parse(reply[i])
 
                     if(json.appid==appid&&json.userid==userid&&json.seed==seed){
-                        return reply[i];
+                        redisclient.lrem('monitor:queue',1,queue);
                     }
                 }
             });
-        })(appid,userid,seed)
-
-        if(queue){
-            redisclient.lrem('monitor:queue',1,queue);
         }
-    }
+
+    findTask();
 };
 
 function free_planner(id){

@@ -214,7 +214,7 @@ module.exports=function(app,session,save_session,assign_planner,stop_planner){
         }
     });
 
-    app.post('/planner/:tid/_stop',function(request,response){
+    app.post('/planner/:tid/_stop',authed,function(request,response){
         var _auth=cookie(request.headers.cookie)[0]
           , index=request.user.tasks.findIndex(function(_task){
                 return _task.seed==request.seed&_task.tid==request.params.tid;
