@@ -35,7 +35,7 @@ module.exports=function(port,notifier){
                   , count=validate.toInt(request.body.count)
                   , interval=validate.toInt(request.body.interval)
                   , valid_task=this.valid_tasks.some(function(element){
-                        return element===name})
+                        return element===name||name=='exclusive'})
 
                 if(valid_task){
                     this.tid=generator();
