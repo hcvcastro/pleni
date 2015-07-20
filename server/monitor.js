@@ -521,7 +521,7 @@ require('./monitor/resources/planners')(app,
 
 require('./monitor/dbserver')(app,session,save_session);
 require('./monitor/planner')(app,session,save_session,
-    assign_planner,stop_planner);
+    assign_planner,stop_planner,notify);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

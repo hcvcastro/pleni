@@ -8,7 +8,8 @@ var _request=require('request')
   , generator=require('../../core/functions/utils/random').sync
   , sort=require('../../core/utils').sort2
 
-module.exports=function(app,session,save_session,assign_planner,stop_planner){
+module.exports=function(app,session,save_session,
+    assign_planner,stop_planner,notify){
     var redis=app.get('redis')
       , cookie=function(header){
             var regex1=/^AuthSession=([a-z0-9-]+).*$/
@@ -128,6 +129,15 @@ module.exports=function(app,session,save_session,assign_planner,stop_planner){
                   , interval:interval
                 });
 
+                notify(request.user.app,request.user.id,request.seed,{
+                    action:'create'
+                  , task:{
+                        id:request.body.task
+                      , count:count
+                      , interval:interval
+                    }
+                });
+
                 save_session(_auth,request.user,function(){
                     response.status(200).json({
                         ok:true,
@@ -180,6 +190,13 @@ module.exports=function(app,session,save_session,assign_planner,stop_planner){
 
         if(index>=0){
             request.user.tasks.splice(index,1);
+
+            notify(request.user.app,request.user.id,request.seed,{
+                action:'remove'
+              , task:{
+                    name:request.body.task
+                }
+            });
 
             save_session(_auth,request.user,function(){
                 response.status(200).json(_success.ok);
