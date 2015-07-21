@@ -84,7 +84,8 @@ module.exports=function(app,session,save_session,
                 }
 
                 if(!valid_tasks.some(function(element){
-                    return element===request.body.task})){
+                    return element===request.body.task||
+                        request.body.task=='exclusive'})){
                     response.status(404).json(_error.notfound);
                     return;
                 }
