@@ -81,7 +81,7 @@ pleni.controller('WorkspaceController',
                 $scope.workspace.env.panel='';
             }
           , icon_p:function(name){
-                return 'fa-pleni-'+name.replace('/','-');
+                return 'pleni-'+name.replace('/','-');
             }
           , icon_r:function(name){
                 return 'fa-pleni-repo-'+name;
