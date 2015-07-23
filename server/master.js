@@ -86,9 +86,7 @@ passport.use(new localstrategy({
                   , email:config.master.email
                 });
             }else{
-                return done(null,false,{
-                    message:'Invalid password'
-                });
+                return done(null,false,_error.invalidaccount);
             }
         }
     }
@@ -100,16 +98,11 @@ passport.use(new localstrategy({
             return done(err);
         }
         if(!user){
-            return done(null,false,{
-                message:'Unknown email: '+email
-            });
+            return done(null,false,_error.invalidaccount);
         }
         switch(user.status.type){
             case 'confirm':
-                return done(null,false,{
-                    message:'Your account has not been confirmed yet. Please '
-                        +'check your email or click in forgot your password'
-                });
+                return done(null,false,_error.notconfirmed);
                 break;
             case 'forgot':
             case 'active':
@@ -120,16 +113,12 @@ passport.use(new localstrategy({
                     if(match){
                         return done(null,user);
                     }else{
-                        return done(null,false,{
-                            message:'Invalid password'
-                        });
+                        return done(null,false,_error.invalidaccount);
                     }
                 });
                 break;
             default:
-                return done(null,false,{
-                    message:'Your account is inactive'
-                });
+                return done(null,false,_error.inactiveaccount);
         }
     });
 }));
@@ -221,6 +210,7 @@ app.set('auth',function(request,response,next){
 
 require('./master/home')(app,config);
 require('./master/auth')(app,config);
+require('./master/settings')(app,config);
 require('./master/resources')(app,config);
 require('./master/resources/dbservers')(app,config);
 require('./master/resources/repositories')(app,config);
@@ -229,7 +219,6 @@ require('./master/resources/notifiers')(app,config);
 require('./master/notifier')(app,config,notifier);
 require('./master/projects')(app,config);
 require('./master/workspace')(app,config);
-require('./master/settings')(app,config);
 
 app.use(function(error,request,response,next){
     if(error.code!=='EBADCSRFTOKEN'){

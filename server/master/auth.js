@@ -120,9 +120,7 @@ module.exports=function(app,config){
                             }
                         });
                     }else{
-                        response.status(403).json({
-                            message:'The email is already registered'
-                        });
+                        response.status(403).json(_error.emailregistered);
                     }
                 });
             }
@@ -225,9 +223,7 @@ module.exports=function(app,config){
                             mail(key);
                         }
                     }else{
-                        response.status(403).json({
-                            message:'The email is not registered'
-                        });
+                        response.status(403).json(_error.emailnotregistered);
                     }
                 });
             }
@@ -304,10 +300,7 @@ module.exports=function(app,config){
                         }
                     });
                 }else{
-                    response.status(404).json({
-                        message:'The reset key has expired, please '
-                            +'use the forgot my password again'
-                    });
+                    response.status(404).json(_error.resetexpired);
                 }
             };
 

@@ -68,7 +68,6 @@ module.exports=function(app,config,notifier){
             return socket;
         }
 
-
     app.get('/id',function(request,response){
         response.json({
             master:'ready for action'
@@ -78,16 +77,15 @@ module.exports=function(app,config,notifier){
     });
 
     app.get('/notifier',authed,function(request,response){
-        response.json(request.user.notifier.map(
-            function(notifier){
-                return {
-                    id:notifier.id
-                  , planner:{
-                        host:notifier.planner.host
-                      , port:notifier.planner.port
-                    }
-                };
-            }));
+        response.json(request.user.notifier.map(function(notifier){
+            return {
+                id:notifier.id
+              , planner:{
+                    host:notifier.planner.host
+                  , port:notifier.planner.port
+                }
+            };
+        }));
     });
 
     app.put('/notifier',authed,function(request,response){

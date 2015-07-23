@@ -34,21 +34,17 @@ module.exports=function(app){
                                 if(!err){
                                     response.status(200).json(_success.ok);
                                 }else{
-                                    response.status(400).json({
-                                        message:'Incorrect information provided'
-                                    });
+                                    response.status(400)
+                                        .json(_error.incorrectinformation);
                                 }
                             });
                         }else{
-                            response.status(400).json({
-                                message:'Incorrect information provided'
-                            });
+                            response.status(400)
+                                .json(_error.incorrectinformation);
                         }
                     });
                 }else{
-                    response.status(400).json({
-                        message:'User not found'
-                    });
+                    response.status(400).json(_error.invalidaccount);
                 }
             });
         }else{

@@ -8,6 +8,14 @@ pleni.factory('Editor',['$sessionStorage',function($sessionStorage){
             if(editor){
                 editor.destroy();
             }
+
+            if(!schema.type){
+                schema.type='object';
+            }
+            if(!schema.properties){
+                schema.properties={};
+            }
+
             if(schema.properties._dbserver){
                 schema.properties._dbserver.enum=
                     $sessionStorage.dbservers.map(function(dbserver){

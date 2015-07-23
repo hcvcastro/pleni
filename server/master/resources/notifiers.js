@@ -99,9 +99,9 @@ module.exports=function(app){
                     id:new_notifier.id
                   , type:(new_notifier.attrs.virtual?'virtual':'real')
                   , readonly:!Boolean(new_notifier_attrs.writable)
-                  , db:{
-                        host:new_notifier.db.host
-                      , port:new_notifier.db.port
+                  , notifier:{
+                        host:new_notifier.notifier.host
+                      , port:new_notifier.notifier.port
                     }
                 });
             }else{
