@@ -16,6 +16,7 @@ module.exports=function(app,config){
                 role:'user'
             }));
         }
+
         if(config.env=='production'){
             response.status(200)
                 .sendFile(join(__dirname,'..','..','client','index.html'));

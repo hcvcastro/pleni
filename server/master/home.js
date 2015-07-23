@@ -12,6 +12,7 @@ module.exports=function(app,config){
                 role:'user'
             }));
         }
+
         if(config.env=='production'){
             response.status(200)
                 .sendFile(join(__dirname,'..','..','client','index.html'));
@@ -21,6 +22,12 @@ module.exports=function(app,config){
     });
 
     app.get('/home',function(request,response){
+        if(request.user){
+            response.cookie('pleni.mastr.auth',JSON.stringify({
+                role:'user'
+            }));
+        }
+
         if(config.env=='production'){
             response.status(200)
                 .sendFile(join(__dirname,'..','..','client','home.html'));

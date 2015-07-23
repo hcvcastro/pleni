@@ -109,9 +109,7 @@ passport.use(new localstrategy({
             });
         }
     }
-    return done(null,false,{
-        message:'Invalid credentials'
-    });
+    return done(null,false,_error.invalidaccount);
 }));
 
 app.use(passport.initialize());
