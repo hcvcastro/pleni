@@ -66,13 +66,6 @@ if(config.env=='production'){
     app.use(morgan('dev'));
 }
 
-app.get('/id',function(request,response){
-    response.json({
-        notifier:'ready for action'
-      , signature:'io'
-    });
-});
-
 app.get('/',function(request,response){
     if(config.env=='production'){
         response.status(200)
@@ -80,6 +73,13 @@ app.get('/',function(request,response){
     }else{
         response.status(200).render('dev');
     }
+});
+
+app.get('/id',function(request,response){
+    response.json({
+        notifier:'ready for action'
+      , signature:'io'
+    });
 });
 
 app.get('/notifier',function(request,response){
