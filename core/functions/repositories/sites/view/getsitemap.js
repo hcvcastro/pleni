@@ -16,6 +16,10 @@ var request=require('request')
  * args output
  *      site
  *          sitemap
+ *              count
+ *              total
+ *              nodes
+ *              links
  */
 module.exports=function(args){
     var deferred=Q.defer()
