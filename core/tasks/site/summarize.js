@@ -3,7 +3,7 @@
 var base='../../functions'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
-  , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
+  , timestamp=require(base+'/repositories/sites/summarize/gettimestamp')
   , summary=require(base+'/repositories/sites/view/getsummary')
   , summarize=require(base+'/repositories/sites/summarize/summarize')
 

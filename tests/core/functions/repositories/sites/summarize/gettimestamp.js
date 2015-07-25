@@ -6,9 +6,9 @@ var should=require('should')
   , remove=require(base+'/../tasks/site/remove')
   , fetch=require(base+'/../tasks/site/fetch')
   , auth=require(base+'/databases/auth')
-  , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
+  , timestamp=require(base+'/repositories/sites/summarize/gettimestamp')
   , config=require('../../../../../../config/tests')
-  , db_name='summarize_gettimestampdocument'
+  , db_name='summarize_gettimestamp'
   , repeat=function(){}
   , stop=function(){}
 
@@ -48,7 +48,7 @@ describe('site fetcher pages functions',function(){
         });
     });
 
-    describe('testing for get timestatmp document for a site',function(){
+    describe('testing for get timestamp for a site',function(){
         it('timestamp site',function(done){
             timestamp(packet)
             .done(function(args){

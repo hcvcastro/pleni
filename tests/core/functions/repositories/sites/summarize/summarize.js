@@ -6,11 +6,11 @@ var should=require('should')
   , remove=require(base+'/../tasks/site/remove')
   , fetch=require(base+'/../tasks/site/fetch')
   , auth=require(base+'/databases/auth')
-  , timestamp=require(base+'/repositories/sites/summarize/gettimestampdocument')
+  , timestamp=require(base+'/repositories/sites/summarize/gettimestamp')
   , getsummary=require(base+'/repositories/sites/view/getsummary')
   , summarize=require(base+'/repositories/sites/summarize/summarize')
   , config=require('../../../../../../config/tests')
-  , db_name='summarize_gettimestampdocument'
+  , db_name='summarize_gettimestamp'
   , repeat=function(){}
   , stop=function(){}
 

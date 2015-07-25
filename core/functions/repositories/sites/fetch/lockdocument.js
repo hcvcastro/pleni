@@ -19,7 +19,7 @@ var request=require('request')
  *              ts_created
  *
  * args outputs
- *      tas
+ *      task
  *          lock
  *              id
  *              _rev
