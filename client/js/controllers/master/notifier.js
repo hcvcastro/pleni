@@ -61,6 +61,8 @@ pleni.controller('NotifierController',
         $scope.init=function(){
             $http.get('/notifier').success(function(data){
                 $scope.storage.threads=data.map(create_thread);
+                $scope.thread=undefined;
+                $scope.current=undefined;
             });
         };
 
@@ -150,7 +152,7 @@ pleni.controller('NotifierController',
         };
 
         Socket.on('notifier',function(pkg){
-            console.log(pkg);
+            //console.log(pkg);
             switch(pkg.action){
                 case 'put':
                 case 'delete':

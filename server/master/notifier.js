@@ -9,15 +9,16 @@ var validate=require('../../core/validators')
   , get_element=function(needle,haystack){
         for(var i=0;i<haystack.length;i++){
             if(haystack[i].planner.host==needle.planner.host
-                &&haystack[i].planner.port==needle.planner.port){
+                &&haystack[i].planner.port==needle.planner.port
+                &&haystack[i].id==needle.planner.seed){
                 return [i,haystack[i]];
             }
         }
         return;
     }
-  , get_planner=function(user,host,port){
+  , get_planner=function(user,host,port,seed){
         return user.resources.planners.find(function(p){
-            return p.planner.host==host&&p.planner.port==port;
+            return p.planner.host==host&&p.planner.port==port&&p.id==seed;
         });
     }
 
@@ -103,7 +104,8 @@ module.exports=function(app,config,notifier){
             request.user.notifier=request.body.map(function(element){
                 var host=validate.toValidHost(element.planner.host)
                   , port=validate.toInt(element.planner.port)
-                  , planner=get_planner(request.user,host,port)
+                  , seed=validate.toString(element.planner.seed)
+                  , planner=get_planner(request.user,host,port,seed)
 
                 if(planner){
                     sockets[id].push(socket_connect(
@@ -115,6 +117,7 @@ module.exports=function(app,config,notifier){
                       , planner:{
                             host:host
                           , port:port
+                          , seed:seed
                         }
                     };
                 }else{
@@ -130,7 +133,9 @@ module.exports=function(app,config,notifier){
               , msg:request.user.notifier.map(function(element){
                     return {
                         id:get_planner(request.user,
-                            element.planner.host,element.planner.port)
+                            element.planner.host,
+                            element.planner.port,
+                            element.planner.seed)
                       , planner:{
                             host:element.planner.host
                           , port:element.planner.port
@@ -151,9 +156,10 @@ module.exports=function(app,config,notifier){
             if(!_planner){
                 var host=validate.toValidHost(request.body.planner.host)
                   , port=validate.toInt(request.body.planner.port)
+                  , seed=validate.toString(request.body.planner.seed)
                   , id=request.user.id
                   , sid=request.sessionID
-                  , planner=get_planner(request.user,host,port)
+                  , planner=get_planner(request.user,host,port,seed)
 
                 if(planner){
                     if(!sockets[id]){
@@ -168,6 +174,7 @@ module.exports=function(app,config,notifier){
                       , planner:{
                             host:host
                           , port:port
+                          , seed:seed
                         }
                     });
                     request.user.save();
@@ -179,6 +186,7 @@ module.exports=function(app,config,notifier){
                           , planner:{
                                 host:host
                               , port:port
+                              , seed:seed
                             }
                         }
                     });
@@ -219,9 +227,10 @@ module.exports=function(app,config,notifier){
             var _planner=get_element(request.body,request.user.notifier)
               , host=validate.toValidHost(request.body.planner.host)
               , port=validate.toInt(request.body.planner.port)
+              , seed=validate.toString(request.body.planner.seed)
               , id=request.user.id
               , sid=request.sessionID
-              , planner=get_planner(request.user,host,port)
+              , planner=get_planner(request.user,host,port,seed)
 
             if(planner){
                 if(!_planner){
@@ -237,6 +246,7 @@ module.exports=function(app,config,notifier){
                       , planner:{
                             host:host
                           , port:port
+                          , seed:seed
                         }
                     });
                     request.user.save();
@@ -248,6 +258,7 @@ module.exports=function(app,config,notifier){
                           , planner:{
                                 host:host
                               , port:port
+                              , seed:seed
                             }
                         }
                     });
@@ -260,6 +271,7 @@ module.exports=function(app,config,notifier){
                           , planner:{
                                 host:host
                               , port:port
+                              , seed:seed
                             }
                         }
                     });
@@ -282,7 +294,8 @@ module.exports=function(app,config,notifier){
             if(_planner){
                 var host=_planner[1].planner.host
                   , port=_planner[1].planner.port
-                  , planner=get_planner(request.user,host,port)
+                  , seed=_planner[1].id
+                  , planner=get_planner(request.user,host,port,seed)
 
                 if(sockets[id]){
                     sockets[id][_planner[0]].disconnect();

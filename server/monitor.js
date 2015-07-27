@@ -336,12 +336,12 @@ sessionsockets.on('connection',function(err,socket,session){
 
             if(!(appid in socketsup)){
                 socketsup[appid]={};
-                if(!(userid in socketsup[appid])){
-                    socketsup[appid][userid]={};
-                    if(!(seed in socketsup[appid][userid])){
-                        socketsup[appid][userid][seed]={};
-                    }
-                }
+            }
+            if(!(userid in socketsup[appid])){
+                socketsup[appid][userid]={};
+            }
+            if(!(seed in socketsup[appid][userid])){
+                socketsup[appid][userid][seed]={};
             }
 
             console.log('socket.io server new connection',socket.id);

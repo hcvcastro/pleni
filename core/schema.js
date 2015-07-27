@@ -337,18 +337,6 @@ var notifiers={
 };
 exports.notifiers=notifiers;
 
-var notifier_planner2={
-    'type':'object'
-  , 'properties':{
-        'planner':{
-            'type':'string'
-          , 'format':'id'
-        }
-    }
-  , 'required':['planner']
-};
-exports.notifier_planner2=notifier_planner2;
-
 var notifier_planner={
     'type':'object'
   , 'properties':{
@@ -363,8 +351,11 @@ var notifier_planner={
                     'type':'integer'
                   , 'format':'port'
                 }
+              , 'seed':{
+                    'type':'string'
+                }
             }
-          , 'required':['host','port']
+          , 'required':['host','port','seed']
         }
     }
   , 'required':['planner']

@@ -279,7 +279,7 @@ module.exports=function(app){
             };
 
             if(notifier[1].attrs.virtual){
-                args.notifier.host+='notifier';
+                args.notifier.host+='/notifier';
             }
 
             if(json){
@@ -327,24 +327,16 @@ module.exports=function(app){
         function(request,response){
         return generic_action(request,response,null,[get],
             function(resources,notifiers,notifier,args){
-                //notifiers[notifier[0]].notifier.planners=
-                //args.notifier.planners;
-                //resources.notifiers=notifiers;
-                //request.user.save();
-
                 response.status(200).json({
                     notifier:{
                         host:args.notifier.host
-                      , _planners:args.notifier.planners.map(function(planner){
-                            for(var i in resources.planners){
-                                if(resources.planners[i].planner.host==
-                                        planner.planner.host&&
-                                    resources.planners[i].planner.port==
-                                        planner.planner.port){
-                                    return resources.planners[i].id;
-                                }
-                            }
-                            return '';
+                      , _planners:args.notifier.planners.filter(function(p1){
+                            var index=resources.planners.findIndex(function(p2){
+                                    return p1.id==p2.id;
+                                })
+                            return index>=0;
+                        }).map(function(p3){
+                            return p3.id;
                         })
                     }
                 });
@@ -359,7 +351,11 @@ module.exports=function(app){
           , planner=get_element(id,planners)
 
         if(planner){
-            request.body.planner=planner[1].planner;
+            request.body.planner={
+                host:planner[1].planner.host
+              , port:planner[1].planner.port
+              , seed:planner[1].id
+            };
         }else{
             response.status(404).json(_error.notfound);
             return;
@@ -384,7 +380,11 @@ module.exports=function(app){
           , planner=get_element(id,planners)
 
         if(planner){
-            request.body.planner=planner[1].planner;
+            request.body.planner={
+                host:planner[1].planner.host
+              , port:planner[1].planner.port
+              , seed:planner[1].id
+            }
         }else{
             response.status(404).json(_error.notfound);
             return;
