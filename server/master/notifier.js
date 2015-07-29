@@ -297,9 +297,11 @@ module.exports=function(app,config,notifier){
                   , seed=_planner[1].id
                   , planner=get_planner(request.user,host,port,seed)
 
-                if(sockets[id]){
-                    sockets[id][_planner[0]].disconnect();
-                    sockets[id].splice(_planner[0],1);
+                if(id in sockets){
+                    if(_planner[0] in sockets[id]){
+                        sockets[id][_planner[0]].disconnect();
+                        sockets[id].splice(_planner[0],1);
+                    }
                 }
 
                 request.user.notifier.splice(_planner[0],1);

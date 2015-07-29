@@ -22,7 +22,7 @@ pleni.controller('WorkspaceController',
           , apis:{}
 //          , visual:''
           , repository:''
-          , viewer:''
+          , viewer:'overview'
         };
 
         $scope.ui={
@@ -426,15 +426,15 @@ pleni.controller('WorkspaceController',
                     }
                 });
             }
-          , empty:function(){
+          , overview:function(){
                 $scope.storage.workspace.repository='';
-                $scope.storage.workspace.viewer='';
+                $scope.storage.workspace.viewer='overview';
                 //$scope.storage.workspace.visual='';
                 //Visual.clean();
             }
-          , general:function(index){
+          , summary:function(index){
                 if($scope.storage.workspace.repositories[index]){
-                    $scope.storage.workspace.viewer='general';
+                    $scope.storage.workspace.viewer='summary';
                     $scope.storage.workspace.repository=
                         $scope.storage.workspace.repositories[index].name;
                     //$scope.storage.workspace.repositories[index].loading=true;

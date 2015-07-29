@@ -1,20 +1,20 @@
 .fluid.full.last
     nav.menu
         ul.items
-            li.header(ng-click='repositories.empty()',ng-class='{\'active\':storage.workspace.repository==\'\'}')
+            li.header(ng-click='repositories.overview()',ng-class='{\'active\':storage.workspace.repository==\'\'}')
                 .title
                     a Project: {{storage.workspace.name}}
         ul.items
             li(ng-repeat='repository in storage.workspace.repositories',ng-class='{\'active\':storage.workspace.repository==storage.workspace.repositories[$index].name}')
-                .title(ng-click='repositories.general($index)')
+                .title(ng-click='repositories.summary($index)')
                     a {{repository.name|truncate:24}}
                     .right
                         a.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading==true')
                             a.fa(title='{{repository.summary.type}} repository',ng-show='storage.workspace.repositores[$index].loading==false',ng-class='workspace.icon_r(repository.summary.type)')
                 .options
                     ul
-                        li: a(ng-click='repositories.summary($index)') summary
-                        li: a(ng-click='repositories.report($index)') report
+                        li: a summary
+                        li: a report
         include ../blocks/footer/bottom
     .main.last
         .tools
@@ -37,8 +37,8 @@
             include ../blocks/workspace/settings
             include ../blocks/workspace/repositories
             include ../blocks/workspace/tasks
-            include ../blocks/workspace/viewers/general
-            //include ../blocks/workspace/viewers/summary
+            include ../blocks/workspace/viewers/overview
+            include ../blocks/workspace/viewers/summary
             //include ../blocks/workspace/viewers/report
             //#canvas
         include ../blocks/footer
