@@ -19,8 +19,9 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
       , redis=app.get('redis')
       , api_add=function(id,planner){
             test({
-                id:id
-              , planner:planner
+                planner:{
+                    host:planner.host+':'+planner.port
+                }
             })
             .then(api)
             .then(function(args){
@@ -29,8 +30,12 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                         console.log(err);
                     }
 
+                    if(!reply){
+                        reply={};
+                    }
+
                     args.planner.tasks.forEach(function(task){
-                        if(reply[task.name]){
+                        if(task.name in reply){
                             var json=JSON.parse(reply[task.name])
 
                             json.planners.push(id);
@@ -70,11 +75,27 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                     }
                 }
 
-                redis.hmset('monitor:apis',reply,function(err){
-                    if(done){
-                        done();
-                    }
-                });
+                if(Object.keys(reply).length!=0){
+                    redis.hmset('monitor:apis',reply,function(err){
+                        if(err){
+                            console.log(err);
+                        }
+
+                        if(done){
+                            done();
+                        }
+                    });
+                }else{
+                    redis.del('monitor:apis',function(err){
+                        if(err){
+                            console.log(err);
+                        }
+
+                        if(done){
+                            done();
+                        }
+                    });
+                }
             });
         }
 
