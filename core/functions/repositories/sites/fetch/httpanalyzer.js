@@ -5,7 +5,7 @@ var request=require('request')
   , cheerio=require('cheerio')
   , _url=require('url')
   , base='../../../../../core/functions/analyzers/'
-  , htmlanalyzer=require(base+'/html/linkanalyzer')
+  , linkanalyzer=require(base+'/html/linkanalyzer')
 
 /*
  * Function for links analysis in HTML BODY
@@ -14,17 +14,10 @@ var request=require('request')
  *          wait
  *              id
  *              url
- *          head
- *              status
- *              headers
- *              get
- *              location (*)
- *          get
+ *          response
  *              status
  *              headers
  *              body
- *              sha1
- *              md5
  *
  * args output
  *      task
@@ -34,19 +27,17 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
 
-    if(!args.task.head.get){
-        deferred.resolve(args);
-    }else{
-        if(args.debug){
-            console.log('analyzing the body for request');
-        }
+    if(args.debug){
+        console.log('analyzing the response for request');
+    }
 
-        // HTML analyzer
-        if(/text\/html/i.test(args.task.head.headers['content-type'])){
-            htmlanalyzer({
+    if(args.task.response.body){
+        // HTTP Body
+        if(/text\/html/i.test(args.task.response.headers['content-type'])){
+            linkanalyzer({
                 site:args.task.wait.url
               , url:_url.parse(args.task.wait.url+args.task.wait.id.substr(5))
-              , body:args.task.get.body
+              , body:args.task.response.body
             })
             .done(function(args2){
                 args.task.refs=args2.refs;
@@ -56,6 +47,8 @@ module.exports=function(args){
         }else{
             deferred.resolve(args);
         }
+    }else{
+        deferred.resolve(args);
     }
 
     return deferred.promise;

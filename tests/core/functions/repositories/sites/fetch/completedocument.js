@@ -7,9 +7,8 @@ var should=require('should')
   , auth=require(base+'/databases/auth')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , lock=require(base+'/repositories/sites/fetch/lockdocument')
-  , head=require(base+'/repositories/sites/fetch/headrequest')
-  , get=require(base+'/repositories/sites/fetch/getrequest')
-  , body=require(base+'/repositories/sites/fetch/bodyanalyzer')
+  , request=require(base+'/repositories/sites/fetch/httprequest')
+  , analyzer=require(base+'/repositories/sites/fetch/httpanalyzer')
   , complete=require(base+'/repositories/sites/fetch/completedocument')
   , config=require('../../../../../../config/tests')
   , db_name='fetch_lock'
@@ -41,9 +40,8 @@ describe('site fetcher pages functions',function(){
             auth(packet)
             .then(wait)
             .then(lock)
-            .then(head)
-            .then(get)
-            .then(body)
+            .then(request)
+            .then(analyzer)
             .then(function(args){
                 packet=args;
                 done();

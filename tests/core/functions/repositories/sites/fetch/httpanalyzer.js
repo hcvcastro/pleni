@@ -7,9 +7,8 @@ var should=require('should')
   , auth=require(base+'/databases/auth')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , lock=require(base+'/repositories/sites/fetch/lockdocument')
-  , head=require(base+'/repositories/sites/fetch/headrequest')
-  , get=require(base+'/repositories/sites/fetch/getrequest')
-  , body=require(base+'/repositories/sites/fetch/bodyanalyzer')
+  , request=require(base+'/repositories/sites/fetch/httprequest')
+  , analyzer=require(base+'/repositories/sites/fetch/httpanalyzer')
   , config=require('../../../../../../config/tests')
   , db_name='fetch_lock'
   , repeat=function(){}
@@ -40,8 +39,7 @@ describe('site fetcher pages functions',function(){
             auth(packet)
             .then(wait)
             .then(lock)
-            .then(head)
-            .then(get)
+            .then(request)
             .then(function(args){
                 packet=args;
                 done();
@@ -51,10 +49,13 @@ describe('site fetcher pages functions',function(){
 
     describe('testing body analyzer in a page',function(){
         it('body analyzer for links',function(done){
-            body(packet)
+            analyzer(packet)
             .done(function(args){
-                if(args.task.head.get){
+                args.should.have.property('task');
+                if(refs in args.task){
                     args.task.should.have.property('refs').and.be.Array;
+                }
+                if(rels in args.task){
                     args.task.should.have.property('rels').and.be.Array;
                 }
                 packet=args;

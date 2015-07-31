@@ -48,6 +48,8 @@ describe('site fetcher pages functions',function(){
             lock(packet)
             .done(function(args){
                 args.task.should.have.property('lock');
+                args.task.lock.should.have.property('id');
+                args.task.lock.should.have.property('_rev');
                 packet=args;
                 done();
             });

@@ -30,7 +30,6 @@ var http=require('http')
   , config=require('../config/monitor')
   , generator=require('../core/functions/utils/random').sync
   , test=require('../core/functions/planners/test')
-  , auth=require('../core/functions/planners/auth')
   , set=require('../core/functions/planners/set')
   , run=require('../core/functions/planners/run')
   , stop=require('../core/functions/planners/stop')

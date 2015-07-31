@@ -18,11 +18,7 @@ var request=require('request')
  *              ts_created
  *          lock
  *              _rev
- *          head
- *              status
- *              headers
- *              get
- *          get
+ *          response
  *              status
  *              headers
  *              body
@@ -51,18 +47,20 @@ module.exports=function(args){
           , status:'complete'
           , ts_created:args.task.wait.ts_created
           , ts_modified:Date.now()
-          , type:'page'
-          , url:args.task.wait.url
+          , request:{
+                url:args.task.wait.url
+            }
         }
 
+    body.request.headers={};
     if(args.headers){
         args.headers.forEach(function(header){
-            headers[header.name]=header.value;
+            body.request.headers[header.name]=header.value;
         });
     }
-    body.head=args.task.head;
-    if(args.task.head.get){
-        body.get=args.task.get;
+
+    if(args.task.response){
+        body.response=args.task.response;
     }
     if(args.task.refs){
         body.refs=args.task.refs;
@@ -74,6 +72,7 @@ module.exports=function(args){
     if(args.debug){
         console.log('save the complete document');
     }
+
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
             if(response.statusCode==201&&response.body.ok){

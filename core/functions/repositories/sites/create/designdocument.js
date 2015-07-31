@@ -28,8 +28,8 @@ module.exports=function(args){
             'language':'javascript'
           , 'views':{
                 'wait':{
-                    'map':'function(doc){if(doc.status&&doc.status=='
-                         +'\'wait\'){emit(doc.url,[doc._rev,doc.ts_created])}}'
+                    'map':'function(doc){if(doc.status&&doc.status==\'wait\'){'
+                        +'emit(doc.request.url,[doc._rev,doc.ts_created])}}'
                 }
               , 'timestamp':{
                     'map':'function(doc){if(doc.ts_modified){emit(null,'

@@ -37,8 +37,9 @@ module.exports=function(args){
           , status:'lock'
           , ts_created:args.task.wait.ts_created
           , ts_modified:Date.now()
-          , type:'page'
-          , url:args.task.wait.url
+          , request:{
+                url:args.task.wait.url
+            }
         }
 
     if(args.debug){

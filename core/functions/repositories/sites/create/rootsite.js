@@ -24,18 +24,21 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , parse=_url.parse(args.site.url)
-      , url=args.db.host+'/'+args.db.name+'/page_'
-            +encodeURIComponent(parse.pathname)
+      , ts=Date.now()
+      , page=encodeURIComponent(parse.pathname)
+      , document=['page',ts,'HEAD',page].join('::')
+      , url=args.db.host+'/'+args.db.name+'/'+document
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , body={
             status:'wait'
-          , type:'page'
-          , url:validator.toValidUrl(args.site.url)
-          , ts_created:Date.now()
-          , ts_modified:Date.now()
+          , ts_created:ts
+          , ts_modified:ts
+          , request:{
+                url:args.site.url
+            }
         }
 
     if(args.debug){

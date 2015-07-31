@@ -75,9 +75,6 @@ pleni.controller('ResourcesController',
                 }
             }
           , check:function(index){
-                if(index){
-                    $scope.dbservers.list();
-                }
                 if($scope.dbservers.env.view=='form'){
                     if(!$scope.dbserver.id){
                         $scope.dbserver.id='test';
@@ -248,9 +245,6 @@ pleni.controller('ResourcesController',
                 }
             }
           , check:function(index){
-                if(index){
-                    $scope.repositories.list();
-                }
                 if($scope.repositories.env.view=='form'){
                     if(!$scope.repository.id){
                         $scope.repository.id='test';
@@ -729,9 +723,6 @@ pleni.controller('ResourcesController',
                 }
             }
           , check:function(index){
-                if(index){
-                    $scope.notifiers.list();
-                }
                 if($scope.notifiers.env.view=='form'){
                     if(!$scope.notifier.id){
                         $scope.notifier.id='test';

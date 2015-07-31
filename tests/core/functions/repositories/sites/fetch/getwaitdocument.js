@@ -46,6 +46,10 @@ describe('site fetcher pages functions',function(){
             wait(packet)
             .done(function(args){
                 args.task.should.have.property('wait');
+                args.task.wait.should.have.property('id');
+                args.task.wait.should.have.property('_rev');
+                args.task.wait.should.have.property('url');
+                args.task.wait.should.have.property('ts_created');
                 done();
             });
         });
