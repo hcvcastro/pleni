@@ -27,11 +27,12 @@ module.exports=function(args){
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
+      , ts=Date.now()
       , body={
             type:'site'
-          , url:validator.toValidHost(args.site.url)
-          , ts_created:Date.now()
-          , ts_modified:Date.now()
+          , url:args.site.url
+          , ts_created:ts
+          , ts_modified:ts
         }
 
     if(args.debug){

@@ -7,9 +7,13 @@ var _url=require('url')
   , init=require(base+'/repositories/sites/fetch/init')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , lock=require(base+'/repositories/sites/fetch/lockdocument')
-  , request=require(base+'/repositories/sites/fetch/httprequest')
-  , analyzer=require(base+'/repositories/sites/fetch/httpanalyzer')
+  , headrequest=require(base+'/repositories/sites/fetch/headrequest')
+  , getrequest=require(base+'/repositories/sites/fetch/getrequest')
+  , createrequest=require(base+'/repositories/sites/fetch/createrequest')
+  , analyzer=require(base+'/repositories/sites/fetch/htmlanalyzer')
+  , createpage=require(base+'/repositories/sites/fetch/createpage')
   , spread=require(base+'/repositories/sites/fetch/spreadrels')
+  , createfile=require(base+'/repositories/sites/fetch/createfile')
   , complete=require(base+'/repositories/sites/fetch/completedocument')
 
 /*
@@ -38,7 +42,10 @@ var _url=require('url')
  *          lock
  *              id
  *              _rev
- *          response
+ *          head
+ *              status
+ *              headers
+ *          get
  *              status
  *              headers
  *              body
@@ -46,10 +53,16 @@ var _url=require('url')
  *              md5
  *          refs
  *          rels
+ *          page
+ *              id
+ *              _rev
  *          spread
+ *          file
+ *              id
+ *              _rev
  *          complete
  *              id
- *              rev
+ *              _rev
  */
 module.exports=function(params,repeat,stop,notifier){
     init(params)
@@ -57,16 +70,19 @@ module.exports=function(params,repeat,stop,notifier){
     .then(auth)
     .then(wait)
     .then(lock)
-    .then(request)
+    .then(headrequest)
+    .then(getrequest)
     .then(analyzer)
+    .then(createpage)
     .then(spread)
+    .then(createfile)
     .then(complete)
     .then(function(args){
         if(args.task.complete){
             var url=args.task.complete.id.substr(5)
               , spread=args.task.spread
               , count=0
-              , m=args.task.response.headers['content-type']
+              , m=args.task.get.headers['content-type']
                                 .match(/[a-z]+\/[a-z-]+/i)[0]
 
             if(spread){
@@ -80,7 +96,7 @@ module.exports=function(params,repeat,stop,notifier){
                   , msg:{
                         node:{
                             page:url
-                          , status:args.task.response.status
+                          , status:args.task.get.status
                           , mime:m
                           , get:true
                           , type:(function(x,y){

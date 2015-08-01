@@ -36,44 +36,37 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , doc='/'+encodeURIComponent(args.task.wait.id)
-      , url=args.db.host+'/'+args.db.name+doc
+      , ts=Date.now()
+      , page=encodeURIComponent(args.task.wait.id)
+      , url=args.db.host+'/'+args.db.name+'/'+page
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
-      , body={
-            _rev:args.task.lock._rev
-          , status:'complete'
-          , ts_created:args.task.wait.ts_created
-          , ts_modified:Date.now()
-          , request:{
-                url:args.task.wait.url
-            }
-        }
+      , headers2={}
 
-    body.request.headers={};
     if(args.headers){
         args.headers.forEach(function(header){
-            body.request.headers[header.name]=header.value;
+            headers2[header.name]=header.value;
         });
-    }
-
-    if(args.task.response){
-        body.response=args.task.response;
-    }
-    if(args.task.refs){
-        body.refs=args.task.refs;
-    }
-    if(args.task.rels){
-        body.rels=args.task.rels;
     }
 
     if(args.debug){
         console.log('save the complete document');
     }
 
-    request.put({url:url,headers:headers,json:body},function(error,response){
+    request.put({url:url,headers:headers
+      , json:{
+            _rev:args.task.lock._rev
+          , status:'complete'
+          , ts_created:args.task.wait.ts_created
+          , ts_modified:ts
+          , request:{
+                url:args.task.wait.url
+              , headers:headers2
+            }
+        }
+    },function(error,response){
         if(!error){
             if(response.statusCode==201&&response.body.ok){
                 args.task.complete={

@@ -4,6 +4,7 @@ var should=require('should')
   , base='../../../../../../core/functions'
   , create=require(base+'/../tasks/site/create')
   , remove=require(base+'/../tasks/site/remove')
+  , init=require(base+'/repositories/sites/fetch/init')
   , auth=require(base+'/databases/auth')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , config=require('../../../../../../config/tests')
@@ -33,7 +34,8 @@ describe('site fetcher pages functions',function(){
                 url:config.url
             }
         },repeat,stop,function(){
-            auth(packet)
+            init(packet)
+            .then(auth)
             .then(function(args){
                 packet=args;
                 done();

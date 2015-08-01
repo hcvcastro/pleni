@@ -26,109 +26,97 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/'
-      , document=args.task.wait.id.split('::')
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
-      , valid_headers=[
-            /text\/html/i
-          , /application\/javascript/i
-          , /text\/css/i
-        ]
-      , valid_contenttype=valid_headers.some(function(element){
-            return element.test(args.task.response.headers['content-type']);
-        });
+      , check=function(packet){
+            var deferred2=Q.defer()
+              , parse=_url.parse(packet.url)
+              , page=encodeURIComponent(parse.pathname)
+              , url=args.db.host+'/'+args.db.name+'/page::'+page
 
-    if(args.debug){
-        console.log('spreading site relations');
-    }
+            request.head({url:url,headers:headers},function(error,response){
+                if(!error&&response.statusCode==200){
+                    packet.check=true;
+                }else{
+                    packet.check=false;
+                }
 
-    switch(document[2]){
-        case 'HEAD':
-            if(valid_contenttype){
-                var ts=Date.now()
-                  , doc=['page',ts,'GET',encodeURIComponent(document[3])]
+                deferred2.resolve(packet);
+            });
 
+            return deferred2.promise;
+        }
+      , spread=function(packet){
+            var deferred2=Q.defer()
+              , parse=_url.parse(packet.url)
+              , ts=Date.now()
+              , page=encodeURIComponent(parse.pathname)
+              , document=['request',ts,'HEAD',page].join('::')
+              , url=args.db.host+'/'+args.db.name+'/'+document
+
+            if(!packet.check){
                 request.put({
-                    url:url+doc.join('::')
+                    url:url
                   , headers:headers
                   , json:{
                         status:'wait'
                       , ts_created:ts
                       , ts_modified:ts
                       , request:{
-                            url:args.task.wait.url
+                            url:packet.url
                         }
                     }
                 },function(error,response){
                     if(!error){
-                        args.task.spread=[];
-                        deferred.resolve(args);
+                        packet.create=true;
                     }else{
-                        deferred.reject(error);
+                        packet.create=false;
                     }
-                });
-            }
-            break;
-        case 'GET':
-            console.log('spreadrels');
-            if('location' in args.task.response.headers){
-                
-            }
-            if('refresh' in args.task.response.headers){
 
-            }
-
-            if(args.task.rels){
-                Q.all(args.task.rels.filter(function(item){
-                    return validator.validHost(item.url);
-                }).map(function(item){
-                    var deferred2=Q.defer()
-                      , parse=_url.parse(item.url)
-                      , ts=Date.now()
-                      , doc=['page',ts,'HEAD'
-                            ,encodeURIComponent(parse.pathname)]
-
-                    request.put({
-                        url:url+doc.join('::')
-                      , headers:headers
-                      , json:{
-                            status:'wait'
-                          , ts_created:ts
-                          , ts_modified:ts
-                          , request:{
-                                url:item.url
-                            }
-                        }
-                    },function(error,response){
-                        if(!error){
-                            deferred2.resolve(item.url);
-                        }else{
-                            deferred2.reject({});
-                        }
-                    });
-
-                    return deferred2.promise;
-                }))
-                .spread(function(){
-                    var spread=new Array();
-                    for(var i in arguments){
-                        spread.push(arguments[i]);
-                    }
-         
-                    if(args.debug){
-                        console.log('spread links found: '+spread.join(' '));
-                    }
-         
-                    args.task.spread=spread;
-                    deferred.resolve(args);
+                    deferred2.resolve(packet);
                 });
             }else{
-                deferred.resolve(args);
+                packet.create=false;
+                deferred2.resolve(packet);
             }
-            break;
+
+            return deferred2.promise;
+        }
+
+    if(args.debug){
+        console.log('spreading page relations');
+    }
+
+    if(args.task.rels){
+        Q.all(args.task.rels.filter(function(item){
+            return validator.validHost(item.url);
+        }).map(function(item){
+            return check({url:item.url}).then(spread);
+        }))
+        .spread(function(){
+            var list=[];
+
+            for(var i in arguments){
+                list.push(arguments[i]);
+            }
+
+            list=list.filter(function(item){
+                return item.create==true;
+            }).map(function(item){
+                return item.url;
+            });
+
+            if(args.debug){
+                console.log('spread links found: '+list.join(' '));
+            }
+ 
+            args.task.spread=list;
+            deferred.resolve(args);
+        });
+    }else{
+        deferred.resolve(args);
     }
 
     return deferred.promise;

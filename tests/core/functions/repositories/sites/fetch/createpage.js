@@ -4,13 +4,17 @@ var should=require('should')
   , base='../../../../../../core/functions'
   , create=require(base+'/../tasks/site/create')
   , remove=require(base+'/../tasks/site/remove')
+  , init=require(base+'/repositories/sites/fetch/init')
   , auth=require(base+'/databases/auth')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , lock=require(base+'/repositories/sites/fetch/lockdocument')
-  , request=require(base+'/repositories/sites/fetch/httprequest')
-  , analyzer=require(base+'/repositories/sites/fetch/httpanalyzer')
+  , head=require(base+'/repositories/sites/fetch/headrequest')
+  , get=require(base+'/repositories/sites/fetch/getrequest')
+  , createrequest=require(base+'/repositories/sites/fetch/createrequest')
+  , analyzer=require(base+'/repositories/sites/fetch/htmlanalyzer')
+  , createpage=require(base+'/repositories/sites/fetch/createpage')
   , config=require('../../../../../../config/tests')
-  , db_name='fetch_lock'
+  , db_name='fetch_htmlanalyzer'
   , repeat=function(){}
   , stop=function(){}
 
@@ -36,10 +40,14 @@ describe('site fetcher pages functions',function(){
                 url:config.url
             }
         },repeat,stop,function(){
-            auth(packet)
+            init(packet)
+            .then(auth)
             .then(wait)
             .then(lock)
-            .then(request)
+            .then(head)
+            .then(get)
+            .then(createrequest)
+            .then(analyzer)
             .then(function(args){
                 packet=args;
                 done();
@@ -49,15 +57,12 @@ describe('site fetcher pages functions',function(){
 
     describe('testing body analyzer in a page',function(){
         it('body analyzer for links',function(done){
-            analyzer(packet)
+            createpage(packet)
             .done(function(args){
                 args.should.have.property('task');
-                if(refs in args.task){
-                    args.task.should.have.property('refs').and.be.Array;
-                }
-                if(rels in args.task){
-                    args.task.should.have.property('rels').and.be.Array;
-                }
+                args.task.should.have.property('page');
+                args.task.page.should.have.property('id');
+                args.task.page.should.have.property('_rev');
                 packet=args;
                 done();
             });

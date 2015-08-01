@@ -3,7 +3,6 @@
 var request=require('request')
   , Q=require('q')
   , _url=require('url')
-  , validator=require('../../../../validators')
 
 /*
  * Function for creation of rootsite document for site fetching
@@ -26,7 +25,7 @@ module.exports=function(args){
       , parse=_url.parse(args.site.url)
       , ts=Date.now()
       , page=encodeURIComponent(parse.pathname)
-      , document=['page',ts,'HEAD',page].join('::')
+      , document=['request',ts,'HEAD',page].join('::')
       , url=args.db.host+'/'+args.db.name+'/'+document
       , headers={
             'Cookie':args.auth.cookie
@@ -44,6 +43,7 @@ module.exports=function(args){
     if(args.debug){
         console.log('create a root site for site repository');
     }
+
     request.put({url:url,headers:headers,json:body},function(error,response){
         if(!error){
             if(!args.site){

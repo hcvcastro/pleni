@@ -30,7 +30,7 @@ module.exports=function(args){
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
             if(response.statusCode==200){
-                args.db.info=response.body
+                args.db.info=response.body;
                 deferred.resolve(args);
             }else{
                 deferred.reject(JSON.parse(response.body));

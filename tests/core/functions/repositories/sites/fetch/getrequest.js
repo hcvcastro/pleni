@@ -8,8 +8,10 @@ var should=require('should')
   , auth=require(base+'/databases/auth')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , lock=require(base+'/repositories/sites/fetch/lockdocument')
+  , head=require(base+'/repositories/sites/fetch/headrequest')
+  , get=require(base+'/repositories/sites/fetch/getrequest')
   , config=require('../../../../../../config/tests')
-  , db_name='fetch_lock'
+  , db_name='fetch_get'
   , repeat=function(){}
   , stop=function(){}
 
@@ -21,6 +23,7 @@ describe('site fetcher pages functions',function(){
           , user:config.db.user
           , pass:config.db.pass
         }
+      , debug:true
     };
 
     before(function(done){
@@ -38,6 +41,8 @@ describe('site fetcher pages functions',function(){
             init(packet)
             .then(auth)
             .then(wait)
+            .then(lock)
+            .then(head)
             .then(function(args){
                 packet=args;
                 done();
@@ -45,13 +50,16 @@ describe('site fetcher pages functions',function(){
         });
     });
 
-    describe('testing look a page in repository',function(){
-        it('look a waiting page',function(done){
-            lock(packet)
+    describe('testing GET request in a page',function(){
+        it('GET request',function(done){
+            get(packet)
             .done(function(args){
-                args.task.should.have.property('lock');
-                args.task.lock.should.have.property('id');
-                args.task.lock.should.have.property('_rev');
+                args.task.should.have.property('get');
+                args.task.get.should.have.property('status');
+                args.task.get.should.have.property('headers');
+                args.task.get.should.have.property('body');
+                args.task.get.should.have.property('sha1');
+                args.task.get.should.have.property('md5');
                 packet=args;
                 done();
             });

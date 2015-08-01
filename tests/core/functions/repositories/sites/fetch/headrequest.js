@@ -4,12 +4,13 @@ var should=require('should')
   , base='../../../../../../core/functions'
   , create=require(base+'/../tasks/site/create')
   , remove=require(base+'/../tasks/site/remove')
+  , init=require(base+'/repositories/sites/fetch/init')
   , auth=require(base+'/databases/auth')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , lock=require(base+'/repositories/sites/fetch/lockdocument')
   , head=require(base+'/repositories/sites/fetch/headrequest')
   , config=require('../../../../../../config/tests')
-  , db_name='fetch_lock'
+  , db_name='fetch_head'
   , repeat=function(){}
   , stop=function(){}
 
@@ -21,6 +22,7 @@ describe('site fetcher pages functions',function(){
           , user:config.db.user
           , pass:config.db.pass
         }
+      , debug:true
     };
 
     before(function(done){
@@ -35,7 +37,8 @@ describe('site fetcher pages functions',function(){
                 url:config.url
             }
         },repeat,stop,function(){
-            auth(packet)
+            init(packet)
+            .then(auth)
             .then(wait)
             .then(lock)
             .then(function(args){
@@ -45,12 +48,13 @@ describe('site fetcher pages functions',function(){
         });
     });
 
-    describe('testing head request in a page',function(){
-        it('head request',function(done){
+    describe('testing HEAD request in a page',function(){
+        it('HEAD request',function(done){
             head(packet)
             .done(function(args){
-                console.log(args);
                 args.task.should.have.property('head');
+                args.task.head.should.have.property('status');
+                args.task.head.should.have.property('headers');
                 packet=args;
                 done();
             });

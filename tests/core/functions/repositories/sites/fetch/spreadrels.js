@@ -4,11 +4,15 @@ var should=require('should')
   , base='../../../../../../core/functions'
   , create=require(base+'/../tasks/site/create')
   , remove=require(base+'/../tasks/site/remove')
+  , init=require(base+'/repositories/sites/fetch/init')
   , auth=require(base+'/databases/auth')
   , wait=require(base+'/repositories/sites/fetch/getwaitdocument')
   , lock=require(base+'/repositories/sites/fetch/lockdocument')
-  , request=require(base+'/repositories/sites/fetch/httprequest')
-  , analyzer=require(base+'/repositories/sites/fetch/httpanalyzer')
+  , head=require(base+'/repositories/sites/fetch/headrequest')
+  , get=require(base+'/repositories/sites/fetch/getrequest')
+  , createrequest=require(base+'/repositories/sites/fetch/createrequest')
+  , analyzer=require(base+'/repositories/sites/fetch/htmlanalyzer')
+  , createpage=require(base+'/repositories/sites/fetch/createpage')
   , spread=require(base+'/repositories/sites/fetch/spreadrels')
   , config=require('../../../../../../config/tests')
   , db_name='fetch_spreadrels'
@@ -38,14 +42,16 @@ describe('site fetcher pages functions',function(){
                 url:config.url
             }
         },repeat,stop,function(){
-            console.log('created repository');
-            auth(packet)
+            init(packet)
+            .then(auth)
             .then(wait)
             .then(lock)
-            .then(request)
+            .then(head)
+            .then(get)
+            .then(createrequest)
             .then(analyzer)
+            .then(createpage)
             .then(function(args){
-                console.log('ready for spreading...');
                 packet=args;
                 done();
             });
@@ -57,6 +63,7 @@ describe('site fetcher pages functions',function(){
             spread(packet)
             .done(function(args){
                 args.task.should.have.property('spread').and.be.Array;
+                done();
             });
         });
     });
