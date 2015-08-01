@@ -30,7 +30,7 @@ module.exports={
           , pass:'e822a5c96a0f59b0f5fe16a6d72f2fae'
         }
     }
-  , url:'http://localhost'
+  , url:'http://galao.local'
   , email:'cijkb.j@gmail.com'
   , master:{
         host:'127.0.0.1'

@@ -28,6 +28,7 @@ module.exports=function(args){
     var deferred=Q.defer()
       , url=args.task.wait.url
       , headers={}
+      , contenttype=args.task.head.headers['content-type']
 
     if(args.headers){
         args.headers.forEach(function(header){
@@ -35,11 +36,15 @@ module.exports=function(args){
         });
     }
 
-    if(args.debug){
-        console.log('make a GET request ... '+url);
-    }
+    if(/text\/html/i.test(contenttype)||
+        /text\/css/i.test(contenttype)||
+        /application\/javascript/i.test(contenttype)||
+        /application\/x-javascript/i.test(contenttype)||
+        /text\/javascript/i.test(contenttype)){
+        if(args.debug){
+            console.log('make a GET request ... '+url);
+        }
 
-    if(/text\/html/i.test(args.task.head.headers['content-type'])){
         request({
             method:'GET'
           , url:url

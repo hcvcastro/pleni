@@ -38,7 +38,7 @@ module.exports=function(args){
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
-    if(args.task.get&&
+    if(args.task.get&&args.task.get.headers&&
         /text\/html/i.test(args.task.get.headers['content-type'])){
         if(args.debug){
             console.log('create a page document ...'+url);

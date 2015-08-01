@@ -9,7 +9,7 @@ var request=require('request')
  *      task
  *          wait
  *              url
- *          headers(*)
+ *      headers(*)
  *
  * args output
  *      task
@@ -29,7 +29,7 @@ module.exports=function(args){
     }
 
     if(args.debug){
-        console.log('make a HEAD request ...'+url);
+        console.log('make a HEAD request ... '+url);
     }
 
     request({

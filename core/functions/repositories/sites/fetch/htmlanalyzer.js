@@ -28,10 +28,6 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
 
-    if(args.debug){
-        console.log('analyzing the response for request');
-    }
-
     if(!args.task.rels){
         args.task.rels=[];
     }
@@ -60,10 +56,14 @@ module.exports=function(args){
     if(args.task.get&&args.task.get.body){
         // HTML Body
         if(/text\/html/i.test(args.task.get.headers['content-type'])){
+            if(args.debug){
+                console.log('analyzing the response for request');
+            }
+
             linkanalyzer({
                 site:args.task.wait.url
-              , url:_url.parse(
-                    args.task.wait.url+args.task.wait.id.substr(5))
+              , url:_url.resolve(args.task.wait.url,
+                    args.task.wait.id.split('::')[3])
               , body:args.task.get.body
             })
             .done(function(args2){

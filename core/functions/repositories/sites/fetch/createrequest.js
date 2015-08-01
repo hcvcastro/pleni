@@ -21,6 +21,7 @@ var request=require('request')
  *              body
  *              sha1
  *              md5
+ *      headers(*)
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -37,15 +38,15 @@ module.exports=function(args){
 
     if(args.headers){
         args.headers.forEach(function(header){
-            headers[header.name]=header.value;
+            headers2[header.name]=header.value;
         });
     }
 
-    if(args.debug){
-        console.log('create a request registry for site repository');
-    }
-
     if(args.task.get){
+        if(args.debug){
+            console.log('create a request registry for site repository');
+        }
+
         request.put({url:url,headers:headers
           , json:{
                 status:'complete'

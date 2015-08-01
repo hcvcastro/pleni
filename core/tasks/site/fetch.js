@@ -72,6 +72,7 @@ module.exports=function(params,repeat,stop,notifier){
     .then(lock)
     .then(headrequest)
     .then(getrequest)
+    .then(createrequest)
     .then(analyzer)
     .then(createpage)
     .then(spread)
@@ -79,7 +80,7 @@ module.exports=function(params,repeat,stop,notifier){
     .then(complete)
     .then(function(args){
         if(args.task.complete){
-            var url=args.task.complete.id.substr(5)
+/*            var url=args.task.complete.id.substr(5)
               , spread=args.task.spread
               , count=0
               , m=args.task.get.headers['content-type']
@@ -122,7 +123,7 @@ module.exports=function(params,repeat,stop,notifier){
                         }
                     }
                 }
-            });
+            });*/
         }
         repeat();
     })

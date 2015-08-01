@@ -109,7 +109,7 @@ module.exports=function(args){
             });
 
             if(args.debug){
-                console.log('spread links found: '+list.join(' '));
+                console.log('spread links found: '+list.length);
             }
  
             args.task.spread=list;
