@@ -10,9 +10,9 @@ article.form(ng-show='workspace.env.panel==\'tasks\'')
                     li: span.fa(title='Planner connection: {{planner.check}}',ng-class='{\'fa-check\':planner.check==\'online\',\'fa-question\':planner.check==\'unknown\',\'fa-close\':planner.check==\'offline\'}')
                     li: span.fa(title='Planner playing status: {{planner.status}}',ng-class='{\'fa-play\':planner.status==\'running\',\'fa-question\':planner.status==\'unknown\',\'fa-stop\':planner.status==\'stopped\'}')
                     li: span.fa(title='Planner setting status: {{planner.set.status}}',ng-class='{\'fa-circle\':planner.set.status==\'set\',\'fa-question\':planner.set.status==\'unknown\',\'fa-circle-o\':planner.set.status==\'unset\'}')
-                    li.link: a(title='Add/Remove planner to master notifier',ng-click='planners.follow($index)')
+                    li.link: a(title='Add/Remove planner to master notifier',ng-click='tasks.follow($index,planner)')
                         span.fa(ng-class='{\'fa-bell-o\':planner.follow==true,\'fa-bell-slash-o\':planner.follow==false}')
-                    li.link: a(title='Check connection',ng-click='planners.check($index)')
+                    li.link: a(title='Check connection',ng-click='tasks.check($index,planner)')
                         span.fa.fa-refresh(ng-class='{\'fa-spin\':planner.check==\'checking\'}')
                 .separator
                 ul.group

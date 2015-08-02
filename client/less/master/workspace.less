@@ -16,20 +16,18 @@
         z-index: 20;
     }
 
-    .overview {
+    .overview,
+    .summary,
+    .report {
         background-color: lighten(@color5,5%);
-        height: 100%;
-    }
-
-    .summary, .report {
         position: absolute;
         box-sizing: border-box;
-        top: 10px;
-        left: 10px;
-        right: 10px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
         z-index: 16;
-        background-color: @color5;
-        padding: 1.0rem 1.0rem;
+        padding: 0 1.0rem;
 
         h1 {
             .font3;

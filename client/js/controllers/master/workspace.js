@@ -309,6 +309,20 @@ pleni.controller('WorkspaceController',
                     Editor.create(task,$scope.storage.workspace.apis[task]);
                 }
             }
+          , follow:function(index,planner){
+                for(var i in $scope.storage.planners){
+                    if(planner.id==$scope.storage.planners[i].id){
+                        $scope.planners.follow(i);
+                    }
+                }
+            }
+          , check:function(index,planner){
+                for(var i in $scope.storage.planners){
+                    if(planner.id==$scope.storage.planners[i].id){
+                        $scope.planners.check(i);
+                    }
+                }
+            }
           , run:function(index,planner){
                 if(!planner.set.count||!planner.set.interval){
                     utils.show('error',
@@ -437,7 +451,18 @@ pleni.controller('WorkspaceController',
                     $scope.storage.workspace.viewer='summary';
                     $scope.storage.workspace.repository=
                         $scope.storage.workspace.repositories[index].name;
-                    //$scope.storage.workspace.repositories[index].loading=true;
+
+                    $scope.storage.workspace.repositories[index].loading=true;
+
+                    var project=$scope.storage.workspace.name
+                      , repository=$scope.storage.workspace.repositories[index].name
+                    Resources.workspace.summary(project,repository,function(data){
+                        $scope.storage.workspace.repositories[index].summary=data;
+                        $scope.viewers.summary=
+                            $scope.storage.workspace.repositories[index].summary;
+                    },function(error){
+                        $scope.storage.workspace.repositories[index]=undefined;
+                    });
                 }else{
                     utils.show('error','The repository is not valid');
                 }
@@ -469,18 +494,6 @@ pleni.controller('WorkspaceController',
                 for(var index in $scope.storage.workspace.repositories){
                     $scope.visual.summary(index);
                 }
-            }
-          , summary:function(index){
-                var project=$scope.storage.workspace.name
-                  , repository=$scope.storage.workspace.repositories[index].name
-
-                Resources.workspace.summary(project,repository,function(data){
-                    $scope.storage.workspace.repositories[index].summary=data;
-                    $scope.viewers.summary=
-                        $scope.storage.workspace.repositories[index].summary;
-                },function(error){
-                    $scope.storage.workspace.repositories[index]=undefined;
-                });
             }
           , report:function(index){
                 var project=$scope.storage.workspace.name
