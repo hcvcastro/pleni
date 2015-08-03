@@ -447,21 +447,21 @@ pleni.controller('WorkspaceController',
                 //Visual.clean();
             }
           , summary:function(index){
-                if($scope.storage.workspace.repositories[index]){
-                    $scope.storage.workspace.viewer='summary';
-                    $scope.storage.workspace.repository=
-                        $scope.storage.workspace.repositories[index].name;
+                var workspace=$scope.storage.workspace
 
-                    $scope.storage.workspace.repositories[index].loading=true;
+                if(workspace.repositories[index]){
+                    workspace.viewer='summary';
+                    workspace.repository=workspace.repositories[index].name;
+                    workspace.repositories[index].loading=true;
 
-                    var project=$scope.storage.workspace.name
-                      , repository=$scope.storage.workspace.repositories[index].name
-                    Resources.workspace.summary(project,repository,function(data){
-                        $scope.storage.workspace.repositories[index].summary=data;
-                        $scope.viewers.summary=
-                            $scope.storage.workspace.repositories[index].summary;
+                    Resources.workspace.summary(workspace.name,
+                        workspace.repository,function(data){
+                        workspace.repositories[index].loading=false;
+                        workspace.repositories[index].summary=data;
+                        $scope.viewers.summary=data;
                     },function(error){
-                        $scope.storage.workspace.repositories[index]=undefined;
+                        workspace.repositories[index].loading=false;
+                        workspace.repositories[index].summary=undefined;
                     });
                 }else{
                     utils.show('error','The repository is not valid');

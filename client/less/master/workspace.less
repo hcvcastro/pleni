@@ -27,15 +27,50 @@
         left: 0;
         right: 0;
         z-index: 16;
-        padding: 0 1.0rem;
+        margin: 0;
+        padding: 0;
+
+        .row {
+            float: left;
+            background-color: darken(@color5,5%);
+            width: 16.0rem;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
 
         h1 {
             .font3;
             text-transform: uppercase;
+            background-color: darken(@color5,10%);
+            color: @color1;
+            margin: 0;
+            padding: 10px 0 7px 16px;
         }
 
         h2 {
             .font4;
+        }
+
+        dl {
+            .font6;
+            margin: 0;
+            padding: 0.75rem;
+
+            dt {
+                float: left;
+                width: 100%;
+                box-sizing: border-box;
+                font-weight: bold;
+                color: @color1;
+            }
+            dd {
+                float: left;
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0 0 0.25rem 0;
+                padding: 0 0 0 1.5rem;
+            }
         }
 
         table {

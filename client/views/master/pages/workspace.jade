@@ -9,12 +9,14 @@
                 .title(ng-click='repositories.summary($index)')
                     a {{repository.name|truncate:24}}
                     .right
-                        a.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading==true')
-                            a.fa(title='{{repository.summary.type}} repository',ng-show='storage.workspace.repositores[$index].loading==false',ng-class='workspace.icon_r(repository.summary.type)')
+                        a.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading')
+                        a.fa(title='Repository type: {{repository.summary.type}}',ng-show='!storage.workspace.repositories[$index].loading',ng-class='workspace.icon_r(repository.summary.type)')
                 .options
                     ul
-                        li: a summary
-                        li: a report
+                        li: a Requests
+                        li: a Pages
+                        li: a Files
+                        li: a Mapsite
         include ../blocks/footer/bottom
     .main.last
         .tools
