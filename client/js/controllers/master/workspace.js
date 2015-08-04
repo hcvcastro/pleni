@@ -85,7 +85,7 @@ pleni.controller('WorkspaceController',
                 return 'pleni-'+name.replace('/','-');
             }
           , icon_r:function(name){
-                return 'fa-pleni-repo-'+name;
+                return 'pleni-'+name;
             }
           , planners:{
                 enter:function(index){

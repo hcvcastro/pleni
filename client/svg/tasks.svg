@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="cloud.svg">
+   sodipodi:docname="tasks.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.12322556"
-     inkscape:cx="3032.1847"
-     inkscape:cy="-549.3574"
+     inkscape:zoom="0.21420068"
+     inkscape:cx="2110.2919"
+     inkscape:cy="977.68779"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -127,7 +127,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -276,6 +276,26 @@
          id="path4246"
          d="m 1109.554,924.97883 35.6205,43.19869 53.9661,-34.77195 -26.0473,-3.61628"
          style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#658068;stroke-width:5.80256891;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <rect
+       y="-947.63782"
+       x="0"
+       height="1000"
+       width="5000"
+       id="rect3373"
+       style="opacity:1;fill:#658068;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <g
+       transform="matrix(4.8001232,0,0,4.8001232,-114.41576,-4884.6902)"
+       id="g3375">
+      <path
+         style="opacity:1;fill:#d9ddd9;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         d="m 104.58797,879.49745 c 0,0 -14.072615,-8.67631 -29.78312,3.36572 -15.181079,11.63625 -10.905783,25.82497 -10.905783,25.82497 0,0 -40.063077,0 -40.063062,40.06312 1.6e-5,40.06308 40.063062,40.06308 40.063062,40.06308 l 136.214463,0 c 0,0 32.05046,0 32.05046,-32.05046 0,-32.05051 -32.05046,-32.05051 -32.05046,-32.05051 0,0 15.21505,-36.43063 -29.70155,-57.45979 -46.83982,-21.92958 -65.82401,12.24387 -65.82401,12.24387 z"
+         id="path3377"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cscsccscsc" />
+      <g
+         id="g3379"
+         transform="matrix(0.74903187,0,0,0.74903187,128,175.94303)" />
     </g>
   </g>
 </svg>

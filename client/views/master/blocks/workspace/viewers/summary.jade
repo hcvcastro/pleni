@@ -1,6 +1,9 @@
 .summary(ng-show='storage.workspace.viewer==\'summary\'')
     .row
         h1 summary
+        .tools
+            ul
+                li: a.fa.fa-rotate-right(title='Update summary information')
         dl
             dt(ng-repeat-start='(key,value) in viewers.summary') {{key}}:
             dd(ng-repeat-end) {{value}}
