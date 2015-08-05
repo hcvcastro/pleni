@@ -9,8 +9,8 @@
                 .title(ng-click='repositories.summary($index)')
                     a {{repository.name|truncate:24}}
                     .right
-                        a.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading')
-                        a.frepos(title='Repository type: {{repository.summary.type}}',ng-show='!storage.workspace.repositories[$index].loading',ng-class='workspace.icon_r(repository.summary.type)')
+                        span.r3.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading')
+                        span.r4.frepos(title='Repository type: {{repository.summary.type}}',ng-show='!storage.workspace.repositories[$index].loading',ng-class='workspace.icon_r(repository.summary.type)')
                 .options
                     ul
                         li: a Requests
