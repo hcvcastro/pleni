@@ -5,6 +5,8 @@ pleni.factory('Workspace',['$resource',function($resource){
         project:'@project'
       , repository:'@repository'
       , document:'@document'
-    },{});
+    },{
+        summarize:{method:'POST',params:{document:'summarize'}}
+    });
 }]);
 

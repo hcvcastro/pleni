@@ -254,6 +254,12 @@ pleni.factory('Resources',['$sessionStorage',
                       , document:'summary'
                     },success,failure);
                 }
+              , summarize:function(project,repository,success,failure){
+                    bind(Workspace.summarize,{
+                        project:project
+                      , repository:repository
+                    },success,failure);
+                }
               , report:function(project,repository,success,failure){
                     bind(Workspace.get,{
                         project:project

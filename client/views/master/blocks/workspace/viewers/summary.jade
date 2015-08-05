@@ -3,7 +3,7 @@
         h1 summary
         .tools
             ul
-                li: a.fa.fa-rotate-right(title='Update summary information')
+                li: a.fa.fa-rotate-right(title='Update summary information',ng-click='repositories.summarize()')
         dl
             dt(ng-repeat-start='(key,value) in viewers.summary') {{key}}:
             dd(ng-repeat-end) {{value}}

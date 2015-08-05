@@ -6,10 +6,12 @@ var validate=require('../../core/validators')
   , _error=require('../../core/json-response').error
   , test=require('../../core/functions/databases/test')
   , auth=require('../../core/functions/databases/auth')
-  , viewers='../../core/functions/repositories/sites'
-  , getsummary=require(viewers+'/view/getsummary')
-  , getsitemap=require(viewers+'/view/getsitemap')
-  , getreport=require(viewers+'/view/getreport')
+  , sites='../../core/functions/repositories/sites'
+  , getsummary=require(sites+'/view/getsummary')
+  , getsitemap=require(sites+'/view/getsitemap')
+  , getreport=require(sites+'/view/getreport')
+  , gettimestamp=require(sites+'/summarize/gettimestamp')
+  , summarize=require(sites+'/summarize/summarize')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
@@ -69,11 +71,14 @@ module.exports=function(app,config){
             packet.db.host+='/dbserver';
         }
 
-        test(packet)
-        .then(auth)
-        .then(func)
+        func.unshift(auth);
+
+        func.reduce(function(previous,current){
+            return previous.then(current);
+        },test(packet))
         .then(done)
         .fail(function(error){
+            console.log('error',error);
             if(error.code=='ECONNREFUSED'){
                 response.status(404).json(_error.network);
             }else if(error.error=='not_found'){
@@ -89,21 +94,29 @@ module.exports=function(app,config){
 
     app.get('/workspace/:project/:repository/summary',authed,
     function(request,response){
-        return generic_document(request,response,getsummary,function(args){
+        return generic_document(request,response,[getsummary],function(args){
             response.status(200).json(args.site.summary);
+        });
+    });
+
+    app.post('/workspace/:project/:repository/summarize',authed,
+    function(request,response){
+        return generic_document(request,response,
+            [getsummary,gettimestamp,summarize],function(args){
+            response.status(200).json(_success.ok);
         });
     });
 
     app.get('/workspace/:project/:repository/report',authed,
     function(request,response){
-        return generic_document(request,response,getreport,function(args){
+        return generic_document(request,response,[getreport],function(args){
             response.status(200).json(args.site.report);
         });
     });
 
     app.get('/workspace/:project/:repository/sitemap',authed,
     function(request,response){
-        return generic_document(request,response,getsitemap,function(args){
+        return generic_document(request,response,[getsitemap],function(args){
             response.status(200).json(args.site.sitemap);
         });
     });

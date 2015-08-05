@@ -23,6 +23,7 @@ pleni.controller('WorkspaceController',
 //          , visual:''
           , repository:''
           , viewer:'overview'
+          , index:-1
         };
 
         $scope.ui={
@@ -453,6 +454,7 @@ pleni.controller('WorkspaceController',
                     workspace.viewer='summary';
                     workspace.repository=workspace.repositories[index].name;
                     workspace.repositories[index].loading=true;
+                    workspace.index=index;
 
                     Resources.workspace.summary(workspace.name,
                         workspace.repository,function(data){
@@ -466,6 +468,15 @@ pleni.controller('WorkspaceController',
                 }else{
                     utils.show('error','The repository is not valid');
                 }
+            }
+          , summarize:function(){
+                Resources.workspace.summarize(
+                    $scope.storage.workspace.name,
+                    $scope.storage.workspace.repository,function(data){
+                    $scope.repositories.summary($scope.storage.workspace.index);
+                },function(error){
+                    utils.show('error','The summarize fail');
+                });
             }
 /*          , open:function(index){
                 $scope.storage.workspace.viewer='none';
