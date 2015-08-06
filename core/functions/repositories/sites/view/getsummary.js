@@ -29,13 +29,17 @@ module.exports=function(args){
     }
     request.get({url:url,headers:headers},function(error,response){
         if(!error){
-            var parse=JSON.parse(response.body);
-            if(!parse.error){
-                if(!args.site){
-                    args.site={};
+            if(response.statusCode==200){
+                var parse=JSON.parse(response.body);
+                if(!parse.error){
+                    if(!args.site){
+                        args.site={};
+                    }
+                    args.site.summary=parse;
+                    deferred.resolve(args);
+                }else{
+                    deferred.reject(response);
                 }
-                args.site.summary=parse;
-                deferred.resolve(args);
             }else{
                 deferred.reject(response);
             }

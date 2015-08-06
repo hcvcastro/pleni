@@ -78,13 +78,14 @@ module.exports=function(app,config){
         },test(packet))
         .then(done)
         .fail(function(error){
-            console.log('error',error);
             if(error.code=='ECONNREFUSED'){
                 response.status(404).json(_error.network);
             }else if(error.error=='not_found'){
                 response.status(404).json(_error.network);
             }else if(error.error=='unauthorized'){
                 response.status(401).json(_error.auth);
+            }else if(error.statusCode==404){
+                response.status(404).json(_error.notfound);
             }else{
                 response.status(403).json(_error.json);
             }
@@ -95,7 +96,11 @@ module.exports=function(app,config){
     app.get('/workspace/:project/:repository/summary',authed,
     function(request,response){
         return generic_document(request,response,[getsummary],function(args){
-            response.status(200).json(args.site.summary);
+            if(args.site&&args.site.summary){
+                response.status(200).json(args.site.summary);
+            }else{
+                response.status(404).json(_error.notfound);
+            }
         });
     });
 

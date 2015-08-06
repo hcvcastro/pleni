@@ -399,20 +399,21 @@ pleni.controller('WorkspaceController',
             }
           , add:function(index1,index2){
                 var project=$scope.storage.workspace
-                  , repositories=$scope.storage.workspace.repositories
+                  , repositories=project.repositories
                   , dbserver=$scope.storage.dbservers[index1]
                   , repository=dbserver.repositories[index2]
-                  , add_workspace=function(){
-                        repositories.push({name:repository.name});
-                        Resources.projects.update({
-                            project:project.name
-                          , id:project.name
-                          , _repositories:project.repositories.map(
-                            function(r){return r.name;})
-                        },function(data){
-//                            $scope.visual.summary(repositories.length-1);
-                        },function(error){});
-                    }
+
+                function add_workspace(){
+                    repositories.push({name:repository.name});
+                    Resources.projects.update({
+                        project:project.name
+                      , id:project.name
+                      , _repositories:project.repositories.map(
+                        function(r){return r.name;})
+                    },function(data){
+//                        $scope.visual.summary(repositories.length-1);
+                    },function(error){});
+                }
 
                 if(repositories.some(function(r){
                         return repository.name==r.name;})){
@@ -440,6 +441,31 @@ pleni.controller('WorkspaceController',
                             break;
                     }
                 });
+            }
+          , remove:function(){
+                var project=$scope.storage.workspace
+                  , repositories=project.repositories
+                  , repository=project.repository
+                  , index=-1
+                
+                for(var i in repositories){
+                    if(repositories[i].name==repository){
+                        index=i;
+                    }
+                }
+
+                if(index>=0){
+                    repositories.splice(index,1);
+                }
+
+                Resources.projects.update({
+                    project:project.name
+                  , id:project.name
+                  , _repositories:repositories.map(
+                        function(r){return r.name;})
+                },function(data){
+
+                },function(error){});
             }
           , overview:function(){
                 $scope.storage.workspace.repository='';
