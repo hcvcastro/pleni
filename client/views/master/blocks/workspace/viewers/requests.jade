@@ -1,0 +1,11 @@
+.requests(ng-show='storage.workspace.viewer==\'requests\'')
+    .row
+        h1 Requests
+        .item(ng-repeat='item in viewers.requests',ng-class='item.status')
+            .date {{item.ts}}
+            .status {{item.response.status}}
+            .method {{item.method}}
+            .url {{item.request.url}}
+            .clearfix
+    .row
+

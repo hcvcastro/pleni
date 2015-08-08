@@ -18,12 +18,9 @@ var request=require('request')
  *              ts_created
  *          lock
  *              _rev
- *          response
+ *          head
  *              status
  *              headers
- *              body
- *              sha1
- *              md5
  *          refs
  *          rels
  *      headers(*)
@@ -65,6 +62,7 @@ module.exports=function(args){
                 url:args.task.wait.url
               , headers:headers2
             }
+          , response:args.task.head
         }
     },function(error,response){
         if(!error){

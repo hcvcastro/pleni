@@ -1,6 +1,7 @@
 'use strict';
 
-var validate=require('../../core/validators')
+var extend=require('underscore').extend
+  , validate=require('../../core/validators')
   , join=require('path').join
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
@@ -8,6 +9,7 @@ var validate=require('../../core/validators')
   , auth=require('../../core/functions/databases/auth')
   , sites='../../core/functions/repositories/sites'
   , getsummary=require(sites+'/view/getsummary')
+  , getlist=require(sites+'/view/getlist')
   , getsitemap=require(sites+'/view/getsitemap')
   , getreport=require(sites+'/view/getreport')
   , gettimestamp=require(sites+'/summarize/gettimestamp')
@@ -34,7 +36,7 @@ module.exports=function(app,config){
         }
     });
 
-    var generic_document=function(request,response,func,done){
+    var generic_document=function(request,response,init,func,done){
         var id_p=validate.toString(request.params.project)
           , id_r=validate.toString(request.params.repository)
           , resources=request.user.resources
@@ -71,6 +73,7 @@ module.exports=function(app,config){
             packet.db.host+='/dbserver';
         }
 
+        packet=extend(init,packet);
         func.unshift(auth);
 
         func.reduce(function(previous,current){
@@ -95,7 +98,8 @@ module.exports=function(app,config){
 
     app.get('/workspace/:project/:repository/summary',authed,
     function(request,response){
-        return generic_document(request,response,[getsummary],function(args){
+        return generic_document(request,response,{},
+            [getsummary],function(args){
             if(args.site&&args.site.summary){
                 response.status(200).json(args.site.summary);
             }else{
@@ -106,22 +110,30 @@ module.exports=function(app,config){
 
     app.post('/workspace/:project/:repository/summarize',authed,
     function(request,response){
-        return generic_document(request,response,
+        return generic_document(request,response,{},
             [getsummary,gettimestamp,summarize],function(args){
             response.status(200).json(_success.ok);
         });
     });
 
+    app.get('/workspace/:project/:repository/requests',authed,
+    function(request,response){
+        return generic_document(request,response,{site:{type:'request'}},
+            [getlist],function(args){
+            response.status(200).json(args.site.list);
+        });
+    });
+
     app.get('/workspace/:project/:repository/report',authed,
     function(request,response){
-        return generic_document(request,response,[getreport],function(args){
+        return generic_document(request,response,{},[getreport],function(args){
             response.status(200).json(args.site.report);
         });
     });
 
     app.get('/workspace/:project/:repository/sitemap',authed,
     function(request,response){
-        return generic_document(request,response,[getsitemap],function(args){
+        return generic_document(request,response,{},[getsitemap],function(args){
             response.status(200).json(args.site.sitemap);
         });
     });

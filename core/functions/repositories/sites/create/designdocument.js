@@ -26,6 +26,11 @@ module.exports=function(args){
         }
       , body={
             'language':'javascript'
+          , 'filters':{
+                'bytype':'function(doc,req){if(doc._id.substring(0,'
+                    +'req.query.type.length)==req.query.type){return true;'
+                    +'}else{return false;}}'
+             }
           , 'views':{
                 'wait':{
                     'map':'function(doc){if(doc._id.substring(0,7)==\'request\''

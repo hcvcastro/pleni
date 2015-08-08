@@ -10,10 +10,11 @@
                     a {{repository.name|truncate:24}}
                     .right
                         span.r3.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading')
-                        span.r4.frepos(title='Repository type: {{repository.summary.type}}',ng-show='!storage.workspace.repositories[$index].loading',ng-class='workspace.icon_r(repository.summary.type)')
+                        span.r4.frepos(title='Repository type: {{repository.summary.type}}',ng-show='!storage.workspace.repositories[$index].loading',ng-class='workspace.icon_r(storage.workspace.repositories[$index].type)')
                 .options
                     ul
-                        li: a Requests
+                        li(ng-class='{\'active\':storage.workspace.viewer==\'requests\'}')
+                            a(ng-click='repositories.requests()') Requests
                         li: a Pages
                         li: a Files
                         li: a Mapsite
@@ -41,6 +42,6 @@
             include ../blocks/workspace/tasks
             include ../blocks/workspace/viewers/overview
             include ../blocks/workspace/viewers/summary
-            //include ../blocks/workspace/viewers/report
+            include ../blocks/workspace/viewers/requests
             //#canvas
         include ../blocks/footer

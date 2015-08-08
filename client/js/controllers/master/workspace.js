@@ -52,6 +52,7 @@ pleni.controller('WorkspaceController',
                         return {
                             name:repository
                           , loading:false
+                          , type:''
                         };
                     });
 
@@ -485,11 +486,10 @@ pleni.controller('WorkspaceController',
                     Resources.workspace.summary(workspace.name,
                         workspace.repository,function(data){
                         workspace.repositories[index].loading=false;
-                        workspace.repositories[index].summary=data;
+                        workspace.repositories[index].type=data.type;
                         $scope.viewers.summary=data;
                     },function(error){
                         workspace.repositories[index].loading=false;
-                        workspace.repositories[index].summary=undefined;
                     });
                 }else{
                     utils.show('error','The repository is not valid');
@@ -504,6 +504,33 @@ pleni.controller('WorkspaceController',
                     utils.show('error','The summarize fail');
                 });
             }
+          , requests:function(){
+                var workspace=$scope.storage.workspace
+                  , index=workspace.index
+
+                workspace.viewer='requests';
+                workspace.repositories[index].loading=true;
+
+                Resources.workspace.requests(workspace.name,
+                    workspace.repository,function(data){
+                    workspace.repositories[index].loading=false;
+                    $scope.viewers.requests=data.results.map(function(r){
+                        var c=r.id.split('::')
+
+                        return {
+                            seq:r.seq
+                          , method:c[2]
+                          , page:c[3]
+                          , ts:utils.prettydate(r.doc.ts_created)
+                          , status:r.doc.status
+                          , request:r.doc.request
+                          , response:r.doc.response
+                        };
+                    });
+                },function(error){
+                    workspace.repositories[index].loading=false;
+                });
+            }
 /*          , open:function(index){
                 $scope.storage.workspace.viewer='none';
                 if($scope.storage.workspace.repositories[index]){
@@ -515,14 +542,6 @@ pleni.controller('WorkspaceController',
                     utils.show('error',
                         'The repository does not have a valid format');
                 }
-            }
-          , summary:function(index){
-                $scope.storage.workspace.viewer='summary';
-            }
-          , report:function(index){
-                $scope.storage.workspace.viewer='report';
-                $scope.storage.workspace.repositories[index].loading=true;
-                $scope.visual.report(index);
             }*/
         };
 

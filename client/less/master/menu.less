@@ -45,6 +45,15 @@ nav.menu {
                         list-style: none;
 
                         li {
+                            &.active {
+                                a {
+                                    font-weight: bold;
+                                }
+                                a:before {
+                                    content: '▸ ';
+                                }
+                            }
+
                             padding: 0.3rem 0 0.3rem 1.0rem;
                             .font6;
 

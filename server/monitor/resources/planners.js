@@ -340,7 +340,7 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                 socket_disconnect(planner.id);
 
                 redis.srem('monitor:free',planner.id);
-                api_remove(id);
+                api_remove(planner.id);
 
                 redis.hdel('monitor:planners',planner.id,function(err,reply){
                     if(err){

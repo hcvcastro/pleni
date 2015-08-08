@@ -1,7 +1,19 @@
 'use strict';
 
 var utils={
-    show:function(type,message){
+    lpad:function(number,pad){
+        return (pad+number).slice(-1*pad.length);
+    }
+  , prettydate:function(ts){
+        var date=new Date(ts)
+        return [date.getFullYear(),
+            this.lpad(((+date.getMonth())+1),'00'),
+            this.lpad(date.getDate(),'00')].join('-')+' '+[
+            this.lpad(date.getHours(),'00'),
+            this.lpad(date.getMinutes(),'00'),
+            this.lpad(date.getSeconds(),'00')].join(':');
+    }
+  , show:function(type,message){
         var message='<div class="'+type+'"><div class="close">'
             +'<a onclick=\'utils.hide(this)\' class="fa fa-close"></a>'
             +'</div><p>'+message+'</p></div>';
