@@ -33,7 +33,7 @@ pleni.controller('WorkspaceController',
 
         $scope.viewers={
             summary:{}
-          , report:{}
+          , request:[]
         }
 
         $scope.workspace={
@@ -482,6 +482,8 @@ pleni.controller('WorkspaceController',
                     workspace.repository=workspace.repositories[index].name;
                     workspace.repositories[index].loading=true;
                     workspace.index=index;
+
+                    $scope.viewers.requests=[];
 
                     Resources.workspace.summary(workspace.name,
                         workspace.repository,function(data){

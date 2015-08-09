@@ -1,6 +1,7 @@
 'use strict';
 
-var request=require('request')
+var uniq=require('underscore').uniq
+  , request=require('request')
   , Q=require('q')
   , _url=require('url')
   , validator=require('../../../../validators')
@@ -90,10 +91,11 @@ module.exports=function(args){
     }
 
     if(args.task.rels){
-        Q.all(args.task.rels.filter(function(item){
-            return validator.validHost(item.url);
-        }).map(function(item){
-            return check({url:item.url}).then(spread);
+        var rels=uniq(args.task.rels.map(function(i){return i.url;})
+            .filter(function(i){return validator.validHost(i);}))
+
+        Q.all(rels.map(function(item){
+            return check({url:item}).then(spread);
         }))
         .spread(function(){
             var list=[];

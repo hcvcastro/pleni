@@ -2,10 +2,11 @@
     .row
         h1 Requests
         .item(ng-repeat='item in viewers.requests',ng-class='item.status')
+            .expand: a.fa.fa-caret-square-o-right
             .date {{item.ts}}
-            .status {{item.response.status}}
             .method {{item.method}}
             .url {{item.request.url}}
+            .status {{item.response.status}}
             .clearfix
     .row
 
