@@ -49,21 +49,58 @@
             .item {
                 width: 100%;
                 float: left;
-                padding: 0.18rem 0;
+                padding: 0;
 
-                &:nth-child(odd){ background-color: lighten(@color5,10%); }
-                &:nth-child(even){ background-color: lighten(@color5,5%); }
+                &:nth-child(odd)  { background-color: lighten(@color5,10%); }
+                &:nth-child(even) { background-color: lighten(@color5,5%); }
 
                 &>* {
                     .font9;
                     float: left;
                 }
 
-                &>:nth-child(1){ padding: 0 0.30rem; }
-                &>:nth-child(2){ padding: 0 0.25rem; width: 160px; }
-                &>:nth-child(3){ padding: 0 0.25rem; width: 50px; }
-                &>:nth-child(4){ padding: 0 0.25rem; }
-                &>:nth-child(5){ padding: 0 0.25rem; float: right; }
+                &>:nth-child(1) { padding: 0.18rem 0.30rem; }
+                &>:nth-child(2) { padding: 0.18rem 0.25rem; width: 160px; }
+                &>:nth-child(3) { padding: 0.18rem 0.25rem; width: 50px; }
+                &>:nth-child(4) { padding: 0.18rem 0.25rem; }
+                &>:nth-child(5) { padding: 0.18rem 0.25rem; float: right; }
+
+                &.complete {
+                    &>:nth-child(1) {
+                        background-color: @success_frg;
+                        color: @success_bck;
+                    }
+                }
+
+                .details {
+                    float: left;
+                    background-color: @white;
+                    margin: 0;
+                    padding: 10px 10px 0 23px;
+                    box-sizing: border-box;
+                    overflow: auto;
+                    width: 100%;
+
+                    .request {
+                        margin-bottom: 1.0rem;
+                        p {
+                            margin: 0;
+                        }
+                        p:before {
+                            content: '> ';
+                        }
+                    }
+
+                    .response {
+                        margin-bottom: 1.0rem;
+                        p {
+                            margin: 0;
+                        }
+                        p:before {
+                            content: '< ';
+                        }
+                    }
+                }
             }
         }
 
