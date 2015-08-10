@@ -9,7 +9,7 @@ var extend=require('underscore').extend
   , auth=require('../../core/functions/databases/auth')
   , sites='../../core/functions/repositories/sites'
   , getsummary=require(sites+'/view/getsummary')
-  , getlist=require(sites+'/view/getlist')
+  , getrequests=require(sites+'/view/getrequests')
   , getsitemap=require(sites+'/view/getsitemap')
   , getreport=require(sites+'/view/getreport')
   , gettimestamp=require(sites+'/summarize/gettimestamp')
@@ -118,8 +118,8 @@ module.exports=function(app,config){
 
     app.get('/workspace/:project/:repository/requests',authed,
     function(request,response){
-        return generic_document(request,response,{site:{type:'request'}},
-            [getlist],function(args){
+        return generic_document(request,response,{},
+            [getrequests],function(args){
             response.status(200).json(args.site.list);
         });
     });

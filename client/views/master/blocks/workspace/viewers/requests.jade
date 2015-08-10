@@ -2,21 +2,11 @@
     .row
         h1 Requests
         .item(ng-repeat='item in viewers.requests',ng-class='item.status')
-            .expand: a.fa.fa-caret-square-o-right(ng-click='')
-            .date {{item.ts}}
-            .method {{item.method}}
+            a.expand(ng-click='repositories.request(item.id)') ▶
+            .date {{item.ts_created}}
+            .date {{item.ts_modified}}
+            .method {{item.request.method}}
             .url {{item.request.url}}
             .status {{item.response.status}}
             .clearfix
-            .details
-                .request
-                    p {{item.method}} {{item.request.url}}
-                    p(ng-repeat='(header,value) in item.request.headers') {{header}}: {{value}}
-                .response
-                    p {{item.response.status}}
-                    p(ng-repeat='(header,value) in item.response.headers') {{header}}: {{value}}
-                .body
-                    p {{item.response.body}}
-            .clearfix
-    .row
 

@@ -465,7 +465,7 @@ pleni.controller('WorkspaceController',
                   , _repositories:repositories.map(
                         function(r){return r.name;})
                 },function(data){
-
+                    $scope.repositories.overview();
                 },function(error){});
             }
           , overview:function(){
@@ -516,22 +516,29 @@ pleni.controller('WorkspaceController',
                 Resources.workspace.requests(workspace.name,
                     workspace.repository,function(data){
                     workspace.repositories[index].loading=false;
-                    $scope.viewers.requests=data.results.map(function(r){
-                        var c=r.id.split('::')
+                    $scope.viewers.requests=data.rows.map(function(r){
+                        var response=r.value.response
 
                         return {
-                            seq:r.seq
-                          , method:c[2]
-                          , page:c[3]
-                          , ts:utils.prettydate(r.doc.ts_created)
-                          , status:r.doc.status
-                          , request:r.doc.request
-                          , response:r.doc.response
+                            id:r.id
+                          , status:r.value.status
+                          , ts_created:utils.prettydate(r.value.ts_created)
+                          , ts_modified:utils.prettydate(r.value.ts_modified)
+                          , request:{
+                                method:r.value.request.method
+                              , url:r.value.request.url
+                            }
+                          , response:{
+                                status:response?response.status:''
+                            }
                         };
                     });
                 },function(error){
                     workspace.repositories[index].loading=false;
                 });
+            }
+          , request:function(id){
+                console.log(id);
             }
 /*          , open:function(index){
                 $scope.storage.workspace.viewer='none';

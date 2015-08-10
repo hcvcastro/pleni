@@ -26,29 +26,30 @@ module.exports=function(args){
         }
       , body={
             'language':'javascript'
-          , 'filters':{
-                'bytype':'function(doc,req){if(doc._id.substring(0,'
-                    +'req.query.type.length)==req.query.type){return true;'
-                    +'}else{return false;}}'
-             }
           , 'views':{
                 'wait':{
                     'map':'function(doc){if(doc._id.substring(0,7)==\'request\''
-                        +'&&doc.status&&doc.status==\'wait\'){'
-                        +'emit(doc.request.url,[doc._rev,doc.ts_created])}}'
+                        +'&&doc.status&&doc.status==\'wait\'){emit(doc.request.'
+                        +'url,[doc._rev,doc.ts_created])}}'
                 }
               , 'timestamp':{
-                    'map':'function(doc){if(doc.ts_modified){emit(null,'
-                         +'doc.ts_modified)}}',
-                    'reduce':'function(keys,values,rereduce){if(rereduce){'
-                            +'return{\'min\':values.reduce(function(a,b){'
-                            +'return Math.min(a,b.min)},Infinity),\'max\':'
-                            +'values.reduce(function(a,b){return Math.max(a,'
-                            +'b.max)},-Infinity),\'count\':values.reduce('
-                            +'function(a,b){return a+b.count},0)}}else{return{'
-                            +'\'min\':Math.min.apply(null,values),\'max\':'
-                            +'Math.max.apply(null,values),\'count\':'
-                            +'values.length}}}'
+                    'map':'function(doc){if(doc.ts_modified){emit(null,doc.ts_m'
+                        +'odified)}}',
+                    'reduce':'function(keys,values,rereduce){if(rereduce){retur'
+                        +'n{\'min\':values.reduce(function(a,b){return Math.min'
+                        +'(a,b.min)},Infinity),\'max\':values.reduce(function(a'
+                        +',b){return Math.max(a,b.max)},-Infinity),\'count\':va'
+                        +'lues.reduce(function(a,b){return a+b.count},0)}}else{'
+                        +'return{\'min\':Math.min.apply(null,values),\'max\':Ma'
+                        +'th.max.apply(null,values),\'count\':values.length}}}'
+                }
+              , 'requests':{
+                    'map':'function(doc){if(doc._id.substring(0,7)==\'request\''
+                        +'){var p={status:doc.status,ts_created:doc.ts_created,'
+                        +'ts_modified:doc.ts_modified,request:{method:doc._id.s'
+                        +'plit(\'::\')[2],url:doc.request.url}};if(doc.response'
+                        +'){p.response={status:doc.response.status};}emit(doc.t'
+                        +'s_modified,p);}}'
                 }
               , 'sitemap':{
                     'map':'function(doc){if(doc.type&&doc.type==\'page\'){if('

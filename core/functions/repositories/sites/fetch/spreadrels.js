@@ -31,11 +31,11 @@ module.exports=function(args){
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
-      , check=function(packet){
+      , check1=function(packet){
             var deferred2=Q.defer()
               , parse=_url.parse(packet.url)
               , page=encodeURIComponent(parse.pathname)
-              , url=args.db.host+'/'+args.db.name+'/page::'+page
+              , url=args.db.host+'/'+args.db.name+'/page%3A%3A'+page
 
             request.head({url:url,headers:headers},function(error,response){
                 if(!error&&response.statusCode==200){
@@ -49,15 +49,38 @@ module.exports=function(args){
 
             return deferred2.promise;
         }
+      , check2=function(packet){
+            var deferred2=Q.defer()
+
+            if(packet.check===false){
+                var parse=_url.parse(packet.url)
+                  , page=encodeURIComponent(parse.pathname)
+                  , url=args.db.host+'/'+args.db.name+'/file%3A%3A'+page
+
+                request.head({url:url,headers:headers},function(error,response){
+                    if(!error&&response.statusCode==200){
+                        packet.check=true;
+                    }else{
+                        packet.check=false;
+                    }
+
+                    deferred2.resolve(packet);
+                });
+            }else{
+                deferred2.resolve(packet);
+            }
+
+            return deferred2.promise;
+        }
       , spread=function(packet){
             var deferred2=Q.defer()
               , parse=_url.parse(packet.url)
               , ts=Date.now()
               , page=encodeURIComponent(parse.pathname)
-              , document=['request',ts,'HEAD',page].join('::')
+              , document=['request',ts,'HEAD',page].join('%3A%3A')
               , url=args.db.host+'/'+args.db.name+'/'+document
 
-            if(!packet.check){
+            if(packet.check===false){
                 request.put({
                     url:url
                   , headers:headers
@@ -70,6 +93,7 @@ module.exports=function(args){
                         }
                     }
                 },function(error,response){
+                    console.log('put',response.body);
                     if(!error){
                         packet.create=true;
                     }else{
@@ -95,10 +119,10 @@ module.exports=function(args){
             .filter(function(i){return validator.validHost(i);}))
 
         Q.all(rels.map(function(item){
-            return check({url:item}).then(spread);
+            return check1({url:item}).then(check2).then(spread);
         }))
         .spread(function(){
-            var list=[];
+            var list=[]
 
             for(var i in arguments){
                 list.push(arguments[i]);
