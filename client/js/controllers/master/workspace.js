@@ -34,7 +34,10 @@ pleni.controller('WorkspaceController',
         $scope.viewers={
             summary:{}
           , requests:[]
-          , request:null
+          , document:null
+          , classcodes:function(code){
+                return 'status'+(Math.floor(+code/100))+'xx';
+            }
         }
 
         $scope.workspace={
@@ -543,7 +546,7 @@ pleni.controller('WorkspaceController',
 
                 Resources.workspace.document(workspace.name,
                     workspace.repository,id,function(data){
-                    $scope.viewers.request=data;
+                    $scope.viewers.document=data;
                 },function(error){
                     utils.show('error','The document is not found');
                 });

@@ -54,6 +54,7 @@ module.exports=function(args){
               , ts_modified:ts
               , request:{
                     url:args.task.wait.url
+                  , method:'GET'
                   , headers:headers2
                 }
               , response:args.task.get

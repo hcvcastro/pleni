@@ -1,31 +1,21 @@
 .viewer(ng-show='storage.workspace.viewer==\'requests\'')
-    .list(ng-class='viewers.request==null? \'fully\':\'half\'')
-        h1 Requests
-        .item(ng-repeat='item in viewers.requests',ng-class='item.status')
-            a.expand(ng-click='repositories.request(item.id)') ▶
+    .list(ng-class='viewers.document==null? \'fully\':\'half\'')
+        .item(ng-repeat='item in viewers.requests',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
+            .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
             .date {{item.ts_created}}
             .date {{item.ts_modified}}
             .method {{item.request.method}}
             .url {{item.request.url}}
-            .status {{item.response.status}}
+            .status(ng-class='viewers.classcodes(item.response.status)',ng-bind='item.response.status')
             .clearfix
-    .details(ng-class='viewers.request==null? \'none\':\'half\'')
+    .details(ng-class='viewers.document==null? \'none\':\'half\'')
+        .separator
         .request
-            p {{viewers.request.url}} HTTP/1.1
-            p Host: galao.local
-            p User-Agent: curl/7.44.0
-            p Accept: */*
-        .response
-            p < HTTP/1.1 200 OK
-            p < Server: nginx/1.9.3
-            p < Date: Sun, 30 Aug 2015 00:36:44 GMT
-            p < Content-Type: text/html
-            p < Content-Length: 921
-            p < Last-Modified: Thu, 16 Oct 2014 12:48:03 GMT
-            p < Connection: keep-alive
-            p < Keep-Alive: timeout=20
-            p < ETag: "543fbe83-399"
-            p < Accept-Ranges: bytes
+            p {{viewers.document.request.method}} {{viewers.document.request.url}} HTTP/1.1
+            p(ng-repeat='(header,value) in viewers.document.request.headers') {{header}}: {{value}}
+        .response(ng-show='viewers.document.response')
+            p {{viewers.document.response.status}} {{viewers.document.response.status|statuscode}}
+            p(ng-repeat='(header,value) in viewers.document.response.headers') {{header}}: {{value}}
         .body
-            p body
+            p {{viewers.document.response.body}}
 

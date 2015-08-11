@@ -58,6 +58,12 @@
             .font4;
         }
 
+        .separator {
+            width: 100%;
+            height: 0.5rem;
+            background-color: @color5;
+        }
+
         dl {
             .font6;
             margin: 0;
@@ -120,9 +126,11 @@
                 width: 100%;
                 float: left;
                 padding: 0;
+                cursor: pointer;
 
                 &:nth-child(odd)  { background-color: lighten(@color5,10%); }
-                &:nth-child(even) { background-color: lighten(@color5,5%); }
+                &:nth-child(even) { background-color: lighten(@color5, 5%); }
+                &.selected {        background-color: lighten(@color2,20%); }
 
                 &>* {
                     .font10;
@@ -130,28 +138,30 @@
                 }
 
                 &>:nth-child(1) { padding: 0.18rem 0.18rem 0.18rem 0.30rem; }
-                &>:nth-child(2) { padding: 0.18rem 0.25rem; width: 160px; }
-                &>:nth-child(3) { padding: 0.18rem 0.25rem; width: 160px; }
-                &>:nth-child(4) { padding: 0.18rem 0.25rem; width: 50px; }
+                &>:nth-child(2) { padding: 0.18rem 0.25rem; width: 135px; }
+                &>:nth-child(3) { padding: 0.18rem 0.25rem; width: 135px; }
+                &>:nth-child(4) { padding: 0.18rem 0.25rem; width: 40px; }
                 &>:nth-child(5) { padding: 0.18rem 0.25rem; }
                 &>:nth-child(6) { padding: 0.18rem 0.25rem; float: right; }
 
-                &.complete {
-                    &>:nth-child(1) {
-                        background-color: @success_frg;
-                        color: @success_bck;
-                    }
-                }
+                .status2xx { background-color: fade(#008000,25%); }
+                .status3xx { background-color: fade(#ffff00,25%); }
+                .status4xx { background-color: fade(#ff0000,25%); }
+                .status5xx { background-color: fade(#000080,25%); }
             }
         }
 
         .details {
+            background-color: @white;
+
             &>* {
                 .font10;
             }
 
             .request {
-                margin-bottom: 1.0rem;
+                box-sizing: border-box;
+                padding: 0.25rem 0.5rem 0 0.5rem;
+
                 p {
                     margin: 0;
                 }
@@ -161,12 +171,23 @@
             }
 
             .response {
-                margin-bottom: 1.0rem;
+                box-sizing: border-box;
+                padding: 0.5rem 0.5rem 0 0.5rem;
+
                 p {
                     margin: 0;
                 }
                 p:before {
                     content: '< ';
+                }
+            }
+
+            .body {
+                box-sizing: border-box;
+                padding: 0.5rem 0.5rem 0.25rem 0.5rem;
+
+                p {
+                    margin: 0;
                 }
             }
         }

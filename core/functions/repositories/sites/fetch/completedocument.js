@@ -60,6 +60,7 @@ module.exports=function(args){
           , ts_modified:ts
           , request:{
                 url:args.task.wait.url
+              , method:'HEAD'
               , headers:headers2
             }
           , response:args.task.head

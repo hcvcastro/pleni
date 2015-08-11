@@ -90,6 +90,7 @@ module.exports=function(args){
                       , ts_modified:ts
                       , request:{
                             url:packet.url
+                          , method:'HEAD'
                         }
                     }
                 },function(error,response){

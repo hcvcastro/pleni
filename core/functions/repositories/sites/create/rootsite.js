@@ -37,6 +37,7 @@ module.exports=function(args){
           , ts_modified:ts
           , request:{
                 url:args.site.url
+              , method:'HEAD'
             }
         }
 
