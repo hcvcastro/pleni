@@ -10,6 +10,7 @@ var extend=require('underscore').extend
   , sites='../../core/functions/repositories/sites'
   , getsummary=require(sites+'/view/getsummary')
   , getrequests=require(sites+'/view/getrequests')
+  , getdocument=require(sites+'/view/getdocument')
   , getsitemap=require(sites+'/view/getsitemap')
   , getreport=require(sites+'/view/getreport')
   , gettimestamp=require(sites+'/summarize/gettimestamp')
@@ -121,6 +122,15 @@ module.exports=function(app,config){
         return generic_document(request,response,{},
             [getrequests],function(args){
             response.status(200).json(args.site.list);
+        });
+    });
+
+    app.get('/workspace/:project/:repository/:document',authed,
+    function(request,response){
+        return generic_document(request,response,{
+            site:{doc:{id:request.params.document}}},
+            [getdocument],function(args){
+            response.status(200).json(args.site.doc.content);
         });
     });
 

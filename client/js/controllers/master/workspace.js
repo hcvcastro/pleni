@@ -33,7 +33,8 @@ pleni.controller('WorkspaceController',
 
         $scope.viewers={
             summary:{}
-          , request:[]
+          , requests:[]
+          , request:null
         }
 
         $scope.workspace={
@@ -538,7 +539,14 @@ pleni.controller('WorkspaceController',
                 });
             }
           , request:function(id){
-                console.log(id);
+                var workspace=$scope.storage.workspace
+
+                Resources.workspace.document(workspace.name,
+                    workspace.repository,id,function(data){
+                    $scope.viewers.request=data;
+                },function(error){
+                    utils.show('error','The document is not found');
+                });
             }
 /*          , open:function(index){
                 $scope.storage.workspace.viewer='none';
