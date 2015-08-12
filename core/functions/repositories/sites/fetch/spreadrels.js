@@ -94,7 +94,6 @@ module.exports=function(args){
                         }
                     }
                 },function(error,response){
-                    console.log('put',response.body);
                     if(!error){
                         packet.create=true;
                     }else{
