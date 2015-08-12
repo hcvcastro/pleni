@@ -33,7 +33,7 @@ pleni.controller('WorkspaceController',
 
         $scope.viewers={
             summary:{}
-          , requests:[]
+          , collection:[]
           , document:null
           , classcodes:function(code){
                 return 'status'+(Math.floor(+code/100))+'xx';
@@ -487,7 +487,8 @@ pleni.controller('WorkspaceController',
                     workspace.repositories[index].loading=true;
                     workspace.index=index;
 
-                    $scope.viewers.requests=[];
+                    $scope.viewers.collection=[];
+                    $scope.viewers.document=null;
 
                     Resources.workspace.summary(workspace.name,
                         workspace.repository,function(data){
@@ -520,7 +521,7 @@ pleni.controller('WorkspaceController',
                 Resources.workspace.requests(workspace.name,
                     workspace.repository,function(data){
                     workspace.repositories[index].loading=false;
-                    $scope.viewers.requests=data.rows.map(function(r){
+                    $scope.viewers.collection=data.rows.map(function(r){
                         var response=r.value.response
 
                         return {
@@ -549,6 +550,23 @@ pleni.controller('WorkspaceController',
                     $scope.viewers.document=data;
                 },function(error){
                     utils.show('error','The document is not found');
+                });
+            }
+          , pages:function(){
+                var workspace=$scope.storage.workspace
+                  , index=workspace.index
+
+                workpsace.viewer='pages';
+                workspace.repositories[index].loading=true;
+
+                Resources.workspace.pages(workspace,name,
+                    workspace.repository,function(data){
+                    workspace.repositories[index].loading=false;
+                    $scope.viewers.collection=data.rows.map(function(r){
+                        return {};
+                    });
+                },function(error){
+                    workspace.repositories[index].loading=false;
                 });
             }
 /*          , open:function(index){

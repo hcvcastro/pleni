@@ -125,6 +125,14 @@ module.exports=function(app,config){
         });
     });
 
+    app.get('/workspace/:project/:repository/pages',authed,
+    function(request,response){
+        return generic_document(request,response,{},
+            [getpages],function(args){
+            response.status(200).json(args.site.list);
+        });
+    });
+
     app.get('/workspace/:project/:repository/:document',authed,
     function(request,response){
         return generic_document(request,response,{
