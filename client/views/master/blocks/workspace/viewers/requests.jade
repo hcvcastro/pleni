@@ -19,7 +19,7 @@
             ul.right
                 li: a.fa.fa-file-pdf-o
         .table
-            .item(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
+            .item.request(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
                 .date {{item.ts_modified}}
                 .method {{item.request.method}}

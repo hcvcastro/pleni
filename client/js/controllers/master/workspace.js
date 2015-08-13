@@ -515,6 +515,8 @@ pleni.controller('WorkspaceController',
                 var workspace=$scope.storage.workspace
                   , index=workspace.index
 
+                $scope.viewers.collection=[];
+                $scope.viewers.document=null;
                 workspace.viewer='requests';
                 workspace.repositories[index].loading=true;
 
@@ -556,6 +558,8 @@ pleni.controller('WorkspaceController',
                 var workspace=$scope.storage.workspace
                   , index=workspace.index
 
+                $scope.viewers.collection=[];
+                $scope.viewers.document=null;
                 workspace.viewer='pages';
                 workspace.repositories[index].loading=true;
 
@@ -563,16 +567,26 @@ pleni.controller('WorkspaceController',
                     workspace.repository,function(data){
                     workspace.repositories[index].loading=false;
                     $scope.viewers.collection=data.rows.map(function(r){
-                        return {};
+                        return {
+                            id:r.id
+                          , page:r.id.split('::')[1]
+                          , ts_created:utils.prettydate(r.value.ts_created)
+                          , ts_modified:utils.prettydate(r.value.ts_modified)
+                        };
                     });
                 },function(error){
                     workspace.repositories[index].loading=false;
                 });
             }
+          , page:function(id){
+                console.log('view page');
+            }
           , files:function(){
                 var workspace=$scope.storage.workspace
                   , index=workspace.index
 
+                $scope.viewers.collection=[];
+                $scope.viewers.document=null;
                 workspace.viewer='files';
                 workspace.repositories[index].loading=true;
 
@@ -580,11 +594,21 @@ pleni.controller('WorkspaceController',
                     workspace.repository,function(data){
                     workspace.repositories[index].loading=false;
                     $scope.viewers.collection=data.rows.map(function(r){
-                        return {};
+                        return {
+                            id:r.id
+                          , file:r.id.split('::')[1]
+                          , ts_created:utils.prettydate(r.value.ts_created)
+                          , ts_modified:utils.prettydate(r.value.ts_modified)
+                          , mimetype:r.value.mimetype
+                          , filesize:r.value.filesize
+                        };
                     });
                 },function(error){
                     workspace.repositories[index].loading=false;
                 });
+            }
+          , file:function(id){
+                console.log('view file');
             }
 /*          , open:function(index){
                 $scope.storage.workspace.viewer='none';
