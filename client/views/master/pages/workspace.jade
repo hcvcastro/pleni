@@ -15,8 +15,10 @@
                     ul
                         li(ng-class='{\'active\':storage.workspace.viewer==\'requests\'}')
                             a(ng-click='repositories.requests()') Requests
-                        li: a Pages
-                        li: a Files
+                        li(ng-class='{\'active\':storage.workspace.viewer==\'pages\'}')
+                            a(ng-click='repositories.pages()') Pages
+                        li(ng-class='{\'active\':storage.workspace.viewer==\'files\'}')
+                            a(ng-click='repositories.files()') Files
                         li: a Mapsite
         include ../blocks/footer/bottom
     .main.last
@@ -43,5 +45,8 @@
             include ../blocks/workspace/viewers/overview
             include ../blocks/workspace/viewers/summary
             include ../blocks/workspace/viewers/requests
+            include ../blocks/workspace/viewers/pages
+            include ../blocks/workspace/viewers/files
             //#canvas
         include ../blocks/footer
+

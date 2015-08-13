@@ -2,7 +2,6 @@
     .list(ng-class='viewers.document==null? \'fully\':\'half\'')
         .item(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
             .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
-            .date {{item.ts_created}}
             .date {{item.ts_modified}}
             .method {{item.request.method}}
             .url {{item.request.url}}

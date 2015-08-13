@@ -51,6 +51,17 @@ module.exports=function(args){
                         +'){p.response={status:doc.response.status};}emit(doc.t'
                         +'s_modified,p);}}'
                 }
+              , 'pages':{
+                    'map':'function(doc){if(doc._id.substring(0,4)==\'page\'){v'
+                        +'ar p={ts_created:doc.ts_created,ts_modified:doc.ts_mo'
+                        +'dified,};emit(doc.ts_modified,p);}}'
+                }
+              , 'files':{
+                    'map':'function(doc){if(doc._id.substring(0,4)==\'file\'){v'
+                        +'ar p={status:doc.status,ts_created:doc.ts_created,ts_'
+                        +'modified:doc.ts_modified,filesize:doc.filesize,mimety'
+                        +'pe:doc.mimetype};emit(doc.ts_modified,p);}}'
+                }
               , 'sitemap':{
                     'map':'function(doc){if(doc.type&&doc.type==\'page\'){if('
                          +'doc.status==\'complete\'){var m=doc.head.headers'

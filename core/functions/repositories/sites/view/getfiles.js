@@ -19,14 +19,14 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
-      , view='/_design/sites/_view/pages?descending=true'
+      , view='/_design/sites/_view/files?descending=true'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
     if(args.debug){
-        console.log('get a pages list');
+        console.log('get a files list');
     }
     request.get({url:url+view,headers:headers},function(error,response){
         if(!error){

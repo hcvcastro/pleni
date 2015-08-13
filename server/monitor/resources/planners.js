@@ -75,7 +75,7 @@ module.exports=function(app,socket_connect,socket_disconnect,socket_clean){
                     }
                 }
 
-                if(Object.keys(reply).length!=0){
+                if(Object.keys(reply)&&Object.keys(reply).length!=0){
                     redis.hmset('monitor:apis',reply,function(err){
                         if(err){
                             console.log(err);

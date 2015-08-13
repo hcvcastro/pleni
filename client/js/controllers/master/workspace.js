@@ -556,10 +556,27 @@ pleni.controller('WorkspaceController',
                 var workspace=$scope.storage.workspace
                   , index=workspace.index
 
-                workpsace.viewer='pages';
+                workspace.viewer='pages';
                 workspace.repositories[index].loading=true;
 
-                Resources.workspace.pages(workspace,name,
+                Resources.workspace.pages(workspace.name,
+                    workspace.repository,function(data){
+                    workspace.repositories[index].loading=false;
+                    $scope.viewers.collection=data.rows.map(function(r){
+                        return {};
+                    });
+                },function(error){
+                    workspace.repositories[index].loading=false;
+                });
+            }
+          , files:function(){
+                var workspace=$scope.storage.workspace
+                  , index=workspace.index
+
+                workspace.viewer='files';
+                workspace.repositories[index].loading=true;
+
+                Resources.workspace.files(workspace.name,
                     workspace.repository,function(data){
                     workspace.repositories[index].loading=false;
                     $scope.viewers.collection=data.rows.map(function(r){

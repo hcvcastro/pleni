@@ -1,0 +1,10 @@
+.viewer(ng-show='storage.workspace.viewer==\'pages\'')
+    .list(ng-class='viewers.document==null? \'fully\':\'half\'')
+        .item(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.page(item.id)')
+            .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
+            .date {{item.ts_modified}}
+            .url {{item.request.url}}
+            .clearfix
+    .details(ng-class='viewers.document==null? \'none\':\'half\'')
+        .separator
+

@@ -281,6 +281,13 @@ pleni.factory('Resources',['$sessionStorage',
                       , document:'pages'
                     },success,failure);
                 }
+              , files:function(project,repository,success,failure){
+                    bind(Workspace.get,{
+                        project:project
+                      , repository:repository
+                      , document:'files'
+                    },success,failure);
+                }
               , report:function(project,repository,success,failure){
                     bind(Workspace.get,{
                         project:project
