@@ -1,8 +1,8 @@
 .viewer(ng-show='storage.workspace.viewer==\'summary\'')
-    h1 summary
     .tools
-        ul
+        ul.left
             li: a.fa.fa-rotate-right(title='Update summary information',ng-click='repositories.summarize()')
+        ul.right
             li: a.fa.fa-trash(title='Remove from workspace',ng-click='repositories.remove()')
     dl
         dt(ng-repeat-start='(key,value) in viewers.summary') {{key|pretty}}:

@@ -1,14 +1,33 @@
 .viewer(ng-show='storage.workspace.viewer==\'requests\'')
     .list(ng-class='viewers.document==null? \'fully\':\'half\'')
-        .item(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
-            .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
-            .date {{item.ts_modified}}
-            .method {{item.request.method}}
-            .url {{item.request.url}}
-            .status(ng-class='viewers.classcodes(item.response.status)',ng-bind='item.response.status')
-            .clearfix
-    .details(ng-class='viewers.document==null? \'none\':\'half\'')
+        .tools
+            ul.left
+                li(title='GET'): a G
+                li(title='HEAD'): a H
+                li(title='POST'): a P
+                li(title='PUT'): a P
+                li(title='DELETE'): a D
+                li(title='TRACE'): a T
+                li(title='OPTIONS'): a O
+                li(title='CONNECT'): a C
+                li(title='PATCH'): a P
+            ul.left
+                li(title='2xx'): a 2
+                li(title='3xx'): a 3
+                li(title='4xx'): a 4
+                li(title='5xx'): a 5
+            ul.right
+                li: a.fa.fa-file-pdf-o
+        .table
+            .item(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
+                .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
+                .date {{item.ts_modified}}
+                .method {{item.request.method}}
+                .url {{item.request.url}}
+                .status(ng-class='viewers.classcodes(item.response.status)',ng-bind='item.response.status')
+                .clearfix
         .separator
+    .details(ng-class='viewers.document==null? \'none\':\'half\'')
         .request
             p {{viewers.document.request.method}} {{viewers.document.request.url}} HTTP/1.1
             p(ng-repeat='(header,value) in viewers.document.request.headers') {{header}}: {{value}}

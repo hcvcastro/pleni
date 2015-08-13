@@ -3,10 +3,6 @@
     margin-top: 5px;
     position: relative;
 
-    //background-color: #ffffff;
-    //background-image: url('/svg/canvas.svg');
-    overflow: auto;
-
     article.form {
         background-color: fade(@color5,75%);
     }
@@ -31,7 +27,6 @@
         z-index: 16;
         margin: 0;
         padding: 0;
-        overflow: auto;
 
         display: flex;
         flex-direction: column;
@@ -39,6 +34,26 @@
         justify-content: flex-start;
         align-items: stretch;
         align-content: stretch;
+
+        .list, .details {
+            order: 0;
+            flex: 1 1 auto;
+            align-self: auto;
+
+            margin: 0;
+            padding: 0;
+            position: relative;
+
+            &.fully {
+                height: 100%;
+            }
+            &.half {
+                height: 50%;
+            }
+            &.none {
+                display: none;
+            }
+        }
 
         .tools {
             background-color: @color4;
@@ -56,12 +71,6 @@
 
         h2 {
             .font4;
-        }
-
-        .separator {
-            width: 100%;
-            height: 0.5rem;
-            background-color: @color5;
         }
 
         dl {
@@ -98,66 +107,69 @@
             }
         }
 
-        .list,.details {
-            float: left;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-
-            overflow: auto;
-
-            order: 0
-            flex: 1 1 auto;
-            align-self: auto;
-
-            &.fully {
-                height: 100%;
-            }
-            &.half {
-                height: 50%;
-            }
-            &.none {
-                height: 0%;
-            }
-        }
-
         .list {
-            .item {
+            .tools {
+                position: absolute;
+                top: 0;
                 width: 100%;
-                float: left;
-                padding: 0;
-                cursor: pointer;
+            }
 
-                &:nth-child(odd)  { background-color: lighten(@color5,10%); }
-                &:nth-child(even) { background-color: lighten(@color5, 5%); }
-                &.selected {        background-color: lighten(@color2,20%); }
+            .separator {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                height: 10px;
+                background-color: @color5;
+            }
 
-                &>* {
-                    .font10;
+            .table {
+                position: absolute;
+                top: 40px;
+                bottom: 10px;
+                left: 0;
+                right: 0;
+                overflow: auto;
+
+                .item {
+                    width: 100%;
                     float: left;
+                    padding: 0;
+                    cursor: pointer;
+
+                    &:nth-child(odd)  { background-color: lighten(@color5,10%); }
+                    &:nth-child(even) { background-color: lighten(@color5, 5%); }
+                    &.selected {        background-color: lighten(@color2,20%); }
+
+                    &>* {
+                        .font10;
+                        float: left;
+                    }
+
+                    &>:nth-child(1) { padding: 0.24rem 0.18rem 0.06rem 0.30rem; }
+                    &>:nth-child(2) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 135px; }
+                    &>:nth-child(3) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 48px; }
+                    &>:nth-child(4) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; }
+                    &>:nth-child(5) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; float: right; }
+
+                    .status2xx { background-color: fade(#008000,25%); }
+                    .status3xx { background-color: fade(#ffff00,25%); }
+                    .status4xx { background-color: fade(#ff0000,25%); }
+                    .status5xx { background-color: fade(#000080,25%); }
                 }
-
-                &>:nth-child(1) { padding: 0.24rem 0.18rem 0.06rem 0.30rem; }
-                &>:nth-child(2) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 135px; }
-                &>:nth-child(3) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 40px; }
-                &>:nth-child(4) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; }
-                &>:nth-child(5) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; float: right; }
-
-                .status2xx { background-color: fade(#008000,25%); }
-                .status3xx { background-color: fade(#ffff00,25%); }
-                .status4xx { background-color: fade(#ff0000,25%); }
-                .status5xx { background-color: fade(#000080,25%); }
             }
         }
 
         .details {
             background-color: @white;
+            width: 100%;
+            overflow: auto;
 
             &>* {
                 .font10;
             }
 
             .request {
+                width: 100%;
                 box-sizing: border-box;
                 padding: 0.25rem 0.5rem 0 0.5rem;
 
@@ -170,6 +182,7 @@
             }
 
             .response {
+                width: 100%;
                 box-sizing: border-box;
                 padding: 0.5rem 0.5rem 0 0.5rem;
 
@@ -182,6 +195,7 @@
             }
 
             .body {
+                width: 100%;
                 box-sizing: border-box;
                 padding: 0.5rem 0.5rem 0.25rem 0.5rem;
 
