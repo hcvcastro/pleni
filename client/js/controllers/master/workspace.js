@@ -32,8 +32,7 @@ pleni.controller('WorkspaceController',
         }
 
         $scope.viewers={
-            summary:{}
-          , collection:[]
+            collection:[]
           , document:null
           , classcodes:function(code){
                 return 'status'+(Math.floor(+code/100))+'xx';
@@ -494,7 +493,7 @@ pleni.controller('WorkspaceController',
                         workspace.repository,function(data){
                         workspace.repositories[index].loading=false;
                         workspace.repositories[index].type=data.type;
-                        $scope.viewers.summary=data;
+                        $scope.viewers.document=data;
                     },function(error){
                         workspace.repositories[index].loading=false;
                     });
@@ -600,7 +599,7 @@ pleni.controller('WorkspaceController',
                           , ts_created:utils.prettydate(r.value.ts_created)
                           , ts_modified:utils.prettydate(r.value.ts_modified)
                           , mimetype:r.value.mimetype
-                          , filesize:r.value.filesize
+                          , filesize:utils.prettyfilesize(r.value.filesize,true)
                         };
                     });
                 },function(error){

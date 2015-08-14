@@ -1,10 +1,10 @@
 .viewer(ng-show='storage.workspace.viewer==\'summary\'')
     .tools
         ul.left
-            li: a.fa.fa-rotate-right(title='Update summary information',ng-click='repositories.summarize()')
+            li: a.ftasks.pleni-site-summarize(title='Update summary information',ng-click='repositories.summarize()')
         ul.right
             li: a.fa.fa-trash(title='Remove from workspace',ng-click='repositories.remove()')
     dl
-        dt(ng-repeat-start='(key,value) in viewers.summary') {{key|pretty}}:
+        dt(ng-repeat-start='(key,value) in viewers.document') {{key|pretty}}:
         dd(ng-repeat-end) {{value|render:key}}
 

@@ -2,22 +2,20 @@
     .list(ng-class='viewers.document==null? \'fully\':\'half\'')
         .tools
             ul.left
-                li(title='GET'): a G
-                li(title='HEAD'): a H
-                li(title='POST'): a P
-                li(title='PUT'): a P
-                li(title='DELETE'): a D
-                li(title='TRACE'): a T
-                li(title='OPTIONS'): a O
-                li(title='CONNECT'): a C
-                li(title='PATCH'): a P
+                li(title='Filter GET request'): a.fextra.pleni-extra-get
+                li(title='Filter HEAD request'): a.fextra.pleni-extra-head
+                li(title='Filter POST request'): a.fextra.pleni-extra-post
+                li(title='Filter PUT request'): a.fextra.pleni-extra-put
+                li(title='Filter DELETE request'): a.fextra.pleni-extra-delete
+                li(title='Filter TRACE request'): a.fextra.pleni-extra-trace
+                li(title='Filter OPTIONS request'): a.fextra.pleni-extra-options
+                li(title='Filter CONNECT request'): a.fextra.pleni-extra-connect
+                li(title='Filter PATCH request'): a.fextra.pleni-extra-patch
             ul.left
-                li(title='2xx'): a 2
-                li(title='3xx'): a 3
-                li(title='4xx'): a 4
-                li(title='5xx'): a 5
-            ul.right
-                li: a.fa.fa-file-pdf-o
+                li(title='Filter 2xx response'): a.fextra.pleni-extra-2xx
+                li(title='Filter 3xx response'): a.fextra.pleni-extra-3xx
+                li(title='Filter 4xx response'): a.fextra.pleni-extra-4xx
+                li(title='Filter 5xx response'): a.fextra.pleni-extra-5xx
         .table
             .item.request(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
