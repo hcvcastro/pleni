@@ -26,6 +26,30 @@ module.exports=function(args){
         }
       , body={
             'language':'javascript'
+          , 'filters':{
+                'requests':'function(doc,req){if(doc._id.substring(0,7)==\'requ'
+                        +'est\'){if(req.query.a==1&&doc.request.method!=\'GET\''
+                        +'){return false;}if(req.query.b==1&&doc.request.method'
+                        +'!=\'HEAD\'){return false;}if(req.query.c==1&&doc.requ'
+                        +'est.method!=\'POST\'){return false;}if(req.query.d==1'
+                        +'&&doc.request.method!=\'PUT\'){return false;}if(req.q'
+                        +'uery.e==1&&doc.request.method!=\'DELETE\'){return fal'
+                        +'se;}if(req.query.f==1&&doc.request.method!=\'TRACE\')'
+                        +'{return false;}if(req.query.g==1&&doc.request.method!'
+                        +'=\'OPTIONS\'){return false;}if(req.query.h==1&&doc.re'
+                        +'quest.method!=\'CONNECT\'){return false;}if(req.query'
+                        +'.i==1&&doc.request.method!=\'TRACE\'){return false;}i'
+                        +'f(req.query.j==1&&Math.floor(doc.response.status/100)'
+                        +'!=2){return false;}if(req.query.k==1&&Math.floor(doc.'
+                        +'response.status/100)!=3){return false;}if(req.query.l'
+                        +'==1&&Math.floor(doc.response.status/100)!=4){return f'
+                        +'alse;}if(req.query.m==1&&Math.floor(doc.response.stat'
+                        +'us/100)!=5){return false;}if(req.query.n==1&&doc.stat'
+                        +'us!=\'wait\'){return false;}if(req.query.o==1&&doc.st'
+                        +'atus!=\'lock\'){return false;}if(req.query.p==1&&doc.'
+                        +'status!=\'complete\'){return false;}return true;}else'
+                        +'{return false;}}'
+            }
           , 'views':{
                 'wait':{
                     'map':'function(doc){if(doc._id.substring(0,7)==\'request\''
