@@ -16,6 +16,10 @@
                 li(title='Filter 3xx response'): a.fextra.pleni-extra-3xx
                 li(title='Filter 4xx response'): a.fextra.pleni-extra-4xx
                 li(title='Filter 5xx response'): a.fextra.pleni-extra-5xx
+            ul.left
+                li(title='Filter wait request'): a.fextra.pleni-extra-wait
+                li(title='Filter lock request'): a.faextra.pleni-extra-lock
+                li(title='Filter complete request'): a.faextra.pleni-extra-complete
         .table
             .item.request(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')

@@ -11,19 +11,29 @@ var request=require('request')
  *          name
  *      auth
  *          cookie
+ *      site
+ *          filters
+ *          offset
+ *          limit
  *
  * args output
  *      site
+ *          total
  *          list
  */
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
-      , view='/_design/sites/_view/requests?descending=true'
+      , view='/_changes=filter=sites/requests&descending=true'
+      , filters=[]
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
+
+    for(var i=0;i<16;i++){
+        view+='&'+String.fromCharCode(97+i)+'='+args.site.filters[i];
+    }
 
     if(args.debug){
         console.log('get a requests list');
