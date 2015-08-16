@@ -260,11 +260,15 @@ pleni.factory('Resources',['$sessionStorage',
                       , repository:repository
                     },success,failure);
                 }
-              , requests:function(project,repository,success,failure){
+              , requests:function(project,repository,filters,limit,offset,
+                    success,failure){
                     bind(Workspace.get,{
                         project:project
                       , repository:repository
                       , document:'requests'
+                      , filters:filters
+                      , limit:limit
+                      , offset:offset
                     },success,failure);
                 }
               , document:function(project,repository,document,success,failure){

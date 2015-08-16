@@ -11,6 +11,7 @@ var extend=require('underscore').extend
   , getsummary=require(sites+'/view/getsummary')
   , getdocument=require(sites+'/view/getdocument')
   , getrequests1=require(sites+'/view/getrequests1')
+  , getrequests2=require(sites+'/view/getrequests2')
   , getpages=require(sites+'/view/getpages')
   , getfiles=require(sites+'/view/getfiles')
   , getsitemap=require(sites+'/view/getsitemap')
@@ -93,6 +94,7 @@ module.exports=function(app,config){
             }else if(error.statusCode==404){
                 response.status(404).json(_error.notfound);
             }else{
+                console.log(error);
                 response.status(403).json(_error.json);
             }
         })
@@ -123,11 +125,11 @@ module.exports=function(app,config){
     function(request,response){
         return generic_document(request,response,{
             site:{
-                filters:request.params.filters
-              , offset:request.params.offset
-              , limit:request.params.limit
+                filters:request.query.filters
+              , offset:request.query.offset
+              , limit:request.query.limit
             }},
-            [getrequests1],function(args){
+            [getrequests1,getrequests2],function(args){
             response.status(200).json(args.site.list);
         });
     });

@@ -15,38 +15,40 @@ var request=require('request')
  *          filters
  *          offset
  *          limit
+ *          list
  *
  * args output
  *      site
+ *          total
  *          list
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name
-      , view='/_changes?filter=sites/requests&descending=true'
-      , filters=[]
+      , url=args.db.host+'/'+args.db.name+'/_all_docs'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
-
-    for(var i=0;i<16;i++){
-        view+='&'+String.fromCharCode(97+i)+'='+args.site.filters[i];
-    }
+      , body={
+            keys:args.site.list.map(function(e){return e.id;})
+                .slice(args.site.offset,args.site.limit+args.site.offset)
+        }
 
     if(args.debug){
         console.log('get a requests list');
     }
-    request.get({url:url+view,headers:headers},function(error,response){
+    request.post({url:url,headers:headers,json:body},function(error,response){
         if(!error){
             if(response.statusCode==200){
-                var parse=JSON.parse(response.body);
+                console.log('body',response.body);
+                deferred.resolve(args);
+                /*var parse=JSON.parse(response.body);
                 if(!parse.error){
-                    args.site.list=parse.results;
+                    args.site.list=parse.rows;
                     deferred.resolve(args);
                 }else{
                     deferred.reject(response);
-                }
+                }*/
             }else{
                 deferred.reject(response);
             }

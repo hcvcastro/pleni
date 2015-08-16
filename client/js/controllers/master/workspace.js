@@ -37,6 +37,12 @@ pleni.controller('WorkspaceController',
           , classcodes:function(code){
                 return 'status'+(Math.floor(+code/100))+'xx';
             }
+          , filters:[
+                false,false,false,false,false,false,false,false
+              , false,false,false,false,false,false,false,false
+            ]
+          , limit:50
+          , offset:0
         }
 
         $scope.workspace={
@@ -512,15 +518,22 @@ pleni.controller('WorkspaceController',
             }
           , requests:function(){
                 var workspace=$scope.storage.workspace
+                  , viewers=$scope.viewers
                   , index=workspace.index
+                  , filters=''
 
-                $scope.viewers.collection=[];
-                $scope.viewers.document=null;
+                viewers.collection=[];
+                viewers.document=null;
                 workspace.viewer='requests';
                 workspace.repositories[index].loading=true;
 
+                viewers.filters.forEach(function(e){
+                    filters+=(e?'1':'0');
+                });
+
                 Resources.workspace.requests(workspace.name,
-                    workspace.repository,function(data){
+                    workspace.repository,filters,viewers.limit,viewers.offset,
+                    function(data){
                     workspace.repositories[index].loading=false;
                     $scope.viewers.collection=data.rows.map(function(r){
                         var response=r.value.response
@@ -552,6 +565,10 @@ pleni.controller('WorkspaceController',
                 },function(error){
                     utils.show('error','The document is not found');
                 });
+            }
+          , filter:function(index){
+                $scope.viewers.filters[index]=!$scope.viewers.filters[index];
+                $scope.repositories.requests();
             }
           , pages:function(){
                 var workspace=$scope.storage.workspace
