@@ -38,11 +38,12 @@ pleni.controller('WorkspaceController',
                 return 'status'+(Math.floor(+code/100))+'xx';
             }
           , filters:[
-                false,false,false,false,false,false,false,false
-              , false,false,false,false,false,false,false,false
+                true,true,true,true,true,true,true,true
+              , true,true,true,true,true,true,true,true
             ]
-          , limit:50
+          , limit:5
           , offset:0
+          , total:0
         }
 
         $scope.workspace={
@@ -535,20 +536,19 @@ pleni.controller('WorkspaceController',
                     workspace.repository,filters,viewers.limit,viewers.offset,
                     function(data){
                     workspace.repositories[index].loading=false;
-                    $scope.viewers.collection=data.rows.map(function(r){
-                        var response=r.value.response
-
+                    $scope.viewers.total=+data.total;
+                    $scope.viewers.collection=data.list.map(function(r){
                         return {
                             id:r.id
-                          , status:r.value.status
-                          , ts_created:utils.prettydate(r.value.ts_created)
-                          , ts_modified:utils.prettydate(r.value.ts_modified)
+                          , status:r.status
+                          , ts_created:utils.prettydate(r.ts_created)
+                          , ts_modified:utils.prettydate(r.ts_modified)
                           , request:{
-                                method:r.value.request.method
-                              , url:r.value.request.url
+                                method:r.request.method
+                              , url:r.request.url
                             }
                           , response:{
-                                status:response?response.status:''
+                                status:r.response?r.response.status:'--'
                             }
                         };
                     });
@@ -556,6 +556,10 @@ pleni.controller('WorkspaceController',
                     workspace.repositories[index].loading=false;
                 });
             }
+          , requests_first:function(){}
+          , requests_previous:function(){}
+          , requests_next:function(){}
+          , requests_last:function(){}
           , request:function(id){
                 var workspace=$scope.storage.workspace
 

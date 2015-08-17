@@ -20,6 +20,11 @@
                 li(ng-class='{\'selected\':viewers.filters[13]}',title='Filter wait request'): a.fextra.pleni-extra-wait(ng-click='repositories.filter(13)')
                 li(ng-class='{\'selected\':viewers.filters[14]}',title='Filter lock request'): a.fextra.pleni-extra-lock(ng-click='repositories.filter(14)')
                 li(ng-class='{\'selected\':viewers.filters[15]}',title='Filter complete request'): a.fextra.pleni-extra-complete(ng-click='repositories.filter(15)')
+            ul.right
+                li(ng-class='{\'disabled\':viewers.offset==0}',title='First page'): a.fa.fa-step-backward(ng-click='repositories.requests_first()')
+                li(ng-class='{\'disabled\':viewers.offset==0}',title='Previous page'): a.fa.fa-backward(ng-click='repositories.requests_previous()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>viewers.total}',title='Next page'): a.fa.fa-forward(ng-click='repositories.requests_next()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.requests_last()')
         .table
             .item.request(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
@@ -28,6 +33,7 @@
                 .url {{item.request.url}}
                 .status(ng-class='viewers.classcodes(item.response.status)',ng-bind='item.response.status')
                 .clearfix
+            .item.total(ng-bind='(+viewers.offset+1) +\'-\'+ (+viewers.offset+ +viewers.limit) +\' of \'+ viewers.total')
         .separator
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
         .request

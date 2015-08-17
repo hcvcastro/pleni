@@ -130,7 +130,10 @@ module.exports=function(app,config){
               , limit:request.query.limit
             }},
             [getrequests1,getrequests2],function(args){
-            response.status(200).json(args.site.list);
+            response.status(200).json({
+                total:args.site.total
+              , list:args.site.list
+            });
         });
     });
 

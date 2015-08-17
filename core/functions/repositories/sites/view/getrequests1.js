@@ -13,8 +13,6 @@ var request=require('request')
  *          cookie
  *      site
  *          filters
- *          offset
- *          limit
  *
  * args output
  *      site

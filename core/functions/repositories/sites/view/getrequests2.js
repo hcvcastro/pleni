@@ -24,14 +24,14 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/_all_docs'
+      , url=args.db.host+'/'+args.db.name+'/_all_docs?include_docs=true'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , body={
             keys:args.site.list.map(function(e){return e.id;})
-                .slice(args.site.offset,args.site.limit+args.site.offset)
+                .slice(+args.site.offset,+args.site.limit+ +args.site.offset)
         }
 
     if(args.debug){
@@ -40,15 +40,29 @@ module.exports=function(args){
     request.post({url:url,headers:headers,json:body},function(error,response){
         if(!error){
             if(response.statusCode==200){
-                console.log('body',response.body);
+                args.site.total=args.site.list.length
+                args.site.list=response.body.rows.map(function(e){
+                    var packet={
+                            id:e.id
+                          , status:e.doc.status
+                          , ts_created:e.doc.ts_created
+                          , ts_modified:e.doc.ts_modified
+                          , request:{
+                                method:e.doc.request.method
+                              , url:e.doc.request.url
+                            }
+                        }
+
+                    if(e.doc.response){
+                        packet.response={
+                            status:e.doc.response.status
+                        };
+                    }
+
+                    return packet;
+                });
+
                 deferred.resolve(args);
-                /*var parse=JSON.parse(response.body);
-                if(!parse.error){
-                    args.site.list=parse.rows;
-                    deferred.resolve(args);
-                }else{
-                    deferred.reject(response);
-                }*/
             }else{
                 deferred.reject(response);
             }

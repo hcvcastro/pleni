@@ -3,11 +3,11 @@
         ul.items
             li.header(ng-click='repositories.overview()',ng-class='{\'active\':storage.workspace.repository==\'\'}')
                 .title
-                    a Project: {{storage.workspace.name}}
+                    a(ng-bind='\'Project: \'+storage.workspace.name')
         ul.items
             li(ng-repeat='repository in storage.workspace.repositories',ng-class='{\'active\':storage.workspace.repository==storage.workspace.repositories[$index].name}')
                 .title(ng-click='repositories.summary($index)')
-                    a {{repository.name|truncate:24}}
+                    a(ng-bind='(repository.name|truncate:24)')
                     .right
                         span.r3.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading')
                         span.r4.frepos(title='Repository type: {{repository.summary.type}}',ng-show='!storage.workspace.repositories[$index].loading',ng-class='workspace.icon_r(storage.workspace.repositories[$index].type)')
@@ -33,7 +33,7 @@
             ul.left
                 li(ng-repeat='(task,planners) in storage.workspace.enabled',title='{{task}} in {{planners.length}} planners',ng-click='tasks.open(task,planners)')
                     a.ftasks(ng-class='workspace.icon_p(task)')
-                    small {{planners.length}}
+                    small(ng-bind='planners.length')
             ul.right
                 li(title='Close project workspace',ng-click='workspace.exit()')
                     a.fa.fa-close
