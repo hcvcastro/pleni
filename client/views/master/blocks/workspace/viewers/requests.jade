@@ -1,30 +1,34 @@
 .viewer(ng-show='storage.workspace.viewer==\'requests\'')
     .list(ng-class='viewers.document==null? \'fully\':\'half\'')
         .tools
-            ul.left
-                li(ng-class='{\'selected\':viewers.filters[0]}',title='Filter GET request'): a.fextra.pleni-extra-get(ng-click='repositories.filter(0)')
-                li(ng-class='{\'selected\':viewers.filters[1]}',title='Filter HEAD request'): a.fextra.pleni-extra-head(ng-click='repositories.filter(1)')
-                li(ng-class='{\'selected\':viewers.filters[2]}',title='Filter POST request'): a.fextra.pleni-extra-post(ng-click='repositories.filter(2)')
-                li(ng-class='{\'selected\':viewers.filters[3]}',title='Filter PUT request'): a.fextra.pleni-extra-put(ng-click='repositories.filter(3)')
-                li(ng-class='{\'selected\':viewers.filters[4]}',title='Filter DELETE request'): a.fextra.pleni-extra-delete(ng-click='repositories.filter(4)')
-                li(ng-class='{\'selected\':viewers.filters[5]}',title='Filter TRACE request'): a.fextra.pleni-extra-trace(ng-click='repositories.filter(5)')
-                li(ng-class='{\'selected\':viewers.filters[6]}',title='Filter OPTIONS request'): a.fextra.pleni-extra-options(ng-click='repositories.filter(6)')
-                li(ng-class='{\'selected\':viewers.filters[7]}',title='Filter CONNECT request'): a.fextra.pleni-extra-connect(ng-click='repositories.filter(7)')
-                li(ng-class='{\'selected\':viewers.filters[8]}',title='Filter PATCH request'): a.fextra.pleni-extra-patch(ng-click='repositories.filter(8)')
-            ul.left
-                li(ng-class='{\'selected\':viewers.filters[9]}',title='Filter 2xx response'): a.fextra.pleni-extra-2xx(ng-click='repositories.filter(9)')
-                li(ng-class='{\'selected\':viewers.filters[10]}',title='Filter 3xx response'): a.fextra.pleni-extra-3xx(ng-click='repositories.filter(10)')
-                li(ng-class='{\'selected\':viewers.filters[11]}',title='Filter 4xx response'): a.fextra.pleni-extra-4xx(ng-click='repositories.filter(11)')
-                li(ng-class='{\'selected\':viewers.filters[12]}',title='Filter 5xx response'): a.fextra.pleni-extra-5xx(ng-click='repositories.filter(12)')
-            ul.left
-                li(ng-class='{\'selected\':viewers.filters[13]}',title='Filter wait request'): a.fextra.pleni-extra-wait(ng-click='repositories.filter(13)')
-                li(ng-class='{\'selected\':viewers.filters[14]}',title='Filter lock request'): a.fextra.pleni-extra-lock(ng-click='repositories.filter(14)')
-                li(ng-class='{\'selected\':viewers.filters[15]}',title='Filter complete request'): a.fextra.pleni-extra-complete(ng-click='repositories.filter(15)')
+            .left
+                select(ng-model='viewers.filters[0]',ng-change='repositories.requests(true)')
+                    option(value='ALL') All requests
+                    option(value='GET') GET request
+                    option(value='HEAD') HEAD request
+                    option(value='POST') POST request
+                    option(value='PUT') PUT request
+                    option(value='DELETE') DELETE request
+                    option(value='TRACE') TRACE request
+                    option(value='OPTIONS') OPTIONS request
+                    option(value='CONNECT') CONNECT request
+                    option(value='PATCH') PATCH request
+                select(ng-model='viewers.filters[1]',ng-change='repositories.requests(true)')
+                    option(value='ALL') All responses
+                    option(value='2') 2xx response
+                    option(value='3') 3xx response
+                    option(value='4') 4xx response
+                    option(value='5') 5xx response
+                select(ng-model='viewers.filters[2]',ng-change='repositories.requests(true)')
+                    option(value='ALL') All types
+                    option(value='wait') wait request
+                    option(value='lock') lock request
+                    option(value='complete') complete request
             ul.right
                 li(ng-class='{\'disabled\':viewers.offset==0}',title='First page'): a.fa.fa-step-backward(ng-click='repositories.requests_first()')
                 li(ng-class='{\'disabled\':viewers.offset==0}',title='Previous page'): a.fa.fa-backward(ng-click='repositories.requests_previous()')
-                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>viewers.total}',title='Next page'): a.fa.fa-forward(ng-click='repositories.requests_next()')
-                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.requests_last()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Next page'): a.fa.fa-forward(ng-click='repositories.requests_next()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.requests_last()')
         .table
             .item.request(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
@@ -33,7 +37,7 @@
                 .url {{item.request.url}}
                 .status(ng-class='viewers.classcodes(item.response.status)',ng-bind='item.response.status')
                 .clearfix
-            .item.total(ng-bind='(+viewers.offset+1) +\'-\'+ (+viewers.offset+ +viewers.limit) +\' of \'+ viewers.total')
+            .item.total(ng-bind='(viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
         .separator
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
         .request

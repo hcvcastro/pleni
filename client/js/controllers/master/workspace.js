@@ -5,6 +5,8 @@ pleni.controller('WorkspaceController',
     'Resources','Editor','Visual',
     function($scope,$routeParams,$location,$sessionStorage,
         Resources,Editor,Visual){
+        $scope.Math = window.Math;
+
         utils.set_tab(0,3);
         utils.set_header(false);
 
@@ -37,11 +39,8 @@ pleni.controller('WorkspaceController',
           , classcodes:function(code){
                 return 'status'+(Math.floor(+code/100))+'xx';
             }
-          , filters:[
-                true,true,true,true,true,true,true,true
-              , true,true,true,true,true,true,true,true
-            ]
-          , limit:5
+          , filters:['ALL','ALL','ALL']
+          , limit:25
           , offset:0
           , total:0
         }
@@ -517,23 +516,23 @@ pleni.controller('WorkspaceController',
                     utils.show('error','The summarize fail');
                 });
             }
-          , requests:function(){
+          , requests:function(filter){
                 var workspace=$scope.storage.workspace
                   , viewers=$scope.viewers
                   , index=workspace.index
-                  , filters=''
 
                 viewers.collection=[];
                 viewers.document=null;
                 workspace.viewer='requests';
                 workspace.repositories[index].loading=true;
 
-                viewers.filters.forEach(function(e){
-                    filters+=(e?'1':'0');
-                });
+                if(filter){
+                    viewers.offset=0;
+                }
 
                 Resources.workspace.requests(workspace.name,
-                    workspace.repository,filters,viewers.limit,viewers.offset,
+                    workspace.repository,viewers.filters.join('-'),
+                    viewers.limit,viewers.offset,
                     function(data){
                     workspace.repositories[index].loading=false;
                     $scope.viewers.total=+data.total;
@@ -556,10 +555,34 @@ pleni.controller('WorkspaceController',
                     workspace.repositories[index].loading=false;
                 });
             }
-          , requests_first:function(){}
-          , requests_previous:function(){}
-          , requests_next:function(){}
-          , requests_last:function(){}
+          , requests_first:function(){
+                if($scope.viewers.offset!=0){
+                    $scope.viewers.offset=0;
+                    $scope.repositories.requests();
+                }
+            }
+          , requests_previous:function(){
+                if($scope.viewers.offset!=0){
+                    $scope.viewers.offset-=$scope.viewers.limit;
+                    $scope.repositories.requests();
+                }
+            }
+          , requests_next:function(){
+                if($scope.viewers.offset+$scope.viewers.limit
+                    <$scope.viewers.total){
+                    $scope.viewers.offset+=$scope.viewers.limit;
+                    $scope.repositories.requests();
+                }
+            }
+          , requests_last:function(){
+                if($scope.viewers.offset+$scope.viewers.limit
+                    <$scope.viewers.total){
+                    $scope.viewers.offset=($scope.viewers.limit*Math.floor(
+                        $scope.viewers.total/$scope.viewers.limit))+(
+                        $scope.viewers.total%$scope.viewers.limit)-1;
+                    $scope.repositories.requests();
+                }
+            }
           , request:function(id){
                 var workspace=$scope.storage.workspace
 
@@ -569,10 +592,6 @@ pleni.controller('WorkspaceController',
                 },function(error){
                     utils.show('error','The document is not found');
                 });
-            }
-          , filter:function(index){
-                $scope.viewers.filters[index]=!$scope.viewers.filters[index];
-                $scope.repositories.requests();
             }
           , pages:function(){
                 var workspace=$scope.storage.workspace

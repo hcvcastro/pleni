@@ -22,14 +22,15 @@ module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
       , view='/_changes?filter=sites/requests&descending=true'
-      , filters=[]
+      , filters1=['method','statuscode','status']
+      , filters2=args.site.filters.split('-')
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
-    for(var i=0;i<16;i++){
-        view+='&'+String.fromCharCode(97+i)+'='+args.site.filters[i];
+    for (var i=0;i<filters1.length;i++){
+        view+='&'+filters1[i]+'='+filters2[i];
     }
 
     if(args.debug){
