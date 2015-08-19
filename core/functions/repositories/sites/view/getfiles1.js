@@ -11,6 +11,8 @@ var request=require('request')
  *          name
  *      auth
  *          cookie
+ *      site
+ *          filters
  *
  * args output
  *      site
@@ -19,11 +21,17 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
-      , view='/_design/sites/_view/files?descending=true'
+      , view='/_changes?filter=sites/files&descending=true'
+      , filters1=['mimetype','status']
+      , filters2=args.site.filters.split('|')
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
+
+    for(var i=0;i<filters1.length;i++){
+        view+='&'+filters1[i]+'='+filters2[i];
+    }
 
     if(args.debug){
         console.log('get a files list');
@@ -33,10 +41,7 @@ module.exports=function(args){
             if(response.statusCode==200){
                 var parse=JSON.parse(response.body);
                 if(!parse.error){
-                    if(!args.site){
-                        args.site={};
-                    }
-                    args.site.list=parse;
+                    args.site.list=parse.results;
                     deferred.resolve(args);
                 }else{
                     deferred.reject(response);

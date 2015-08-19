@@ -21,8 +21,8 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
-      , view='/_changes?filter=sites/requests&descending=true'
-      , filters1=['method','statuscode','status']
+      , view='/_changes?filter=sites/pages&descending=true'
+      , filters1=['status']
       , filters2=args.site.filters.split('|')
       , headers={
             'Cookie':args.auth.cookie
@@ -34,7 +34,7 @@ module.exports=function(args){
     }
 
     if(args.debug){
-        console.log('get a requests list');
+        console.log('get a pages list');
     }
     request.get({url:url+view,headers:headers},function(error,response){
         if(!error){

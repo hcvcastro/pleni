@@ -27,7 +27,24 @@ module.exports=function(args){
       , body={
             'language':'javascript'
           , 'filters':{
-                'requests':'function(doc,req){if(doc._id.substring(0,7)==\'request\'){return (function(){if(req.query.method==\'ALL\'){return true;}else{return req.query.method==doc.request.method;}})()&&(function(){if(req.query.statuscode==\'ALL\'){return true;}else{return +req.query.statuscode==Math.floor(doc.response.status/100);}})()&&(function(){if(req.query.status==\'ALL\'){return true;}else{return req.query.status==doc.status;}})();}else{return false;}}'
+                'requests':'function(doc,req){if(doc._id.substring(0,7)==\'requ'
+                    +'est\'){return (function(){if(req.query.method==\'ALL\'){r'
+                    +'eturn true;}else{return req.query.method==doc.request.met'
+                    +'hod;}})()&&(function(){if(req.query.statuscode==\'ALL\'){'
+                    +'return true;}else{return +req.query.statuscode==Math.floo'
+                    +'r(doc.response.status/100);}})()&&(function(){if(req.quer'
+                    +'y.status==\'ALL\'){return true;}else{return req.query.sta'
+                    +'tus==doc.status;}})();}else{return false;}}'
+              , 'pages':'function(doc,req){if(doc._id.substring(0,4)==\'page\')'
+                    +'{return (function(){if(req.query.status==\'ALL\'){return '
+                    +'true;}else{return req.query.status==doc.status;}})();}els'
+                    +'e{return false;}}'
+              , 'files':'function(doc,req){if(doc._id.substring(0,4)==\'file\')'
+                    +'{return (function(){if(req.query.mimetype==\'ALL\'){retur'
+                    +'n true;}else{return req.query.mimetype==doc.mimetype;}})('
+                    +')&&(function(){if(req.query.status==\'ALL\'){return true;'
+                    +'}else{return req.query.status==doc.status;}})();}else{ret'
+                    +'urn false;}}'
             }
           , 'views':{
                 'wait':{
@@ -37,8 +54,8 @@ module.exports=function(args){
                 }
               , 'timestamp':{
                     'map':'function(doc){if(doc.ts_modified){emit(null,doc.ts_m'
-                        +'odified)}}',
-                    'reduce':'function(keys,values,rereduce){if(rereduce){retur'
+                        +'odified)}}'
+                  , 'reduce':'function(keys,values,rereduce){if(rereduce){retur'
                         +'n{\'min\':values.reduce(function(a,b){return Math.min'
                         +'(a,b.min)},Infinity),\'max\':values.reduce(function(a'
                         +',b){return Math.max(a,b.max)},-Infinity),\'count\':va'
@@ -46,24 +63,10 @@ module.exports=function(args){
                         +'return{\'min\':Math.min.apply(null,values),\'max\':Ma'
                         +'th.max.apply(null,values),\'count\':values.length}}}'
                 }
-              , 'requests':{
-                    'map':'function(doc){if(doc._id.substring(0,7)==\'request\''
-                        +'){var p={status:doc.status,ts_created:doc.ts_created,'
-                        +'ts_modified:doc.ts_modified,request:{method:doc._id.s'
-                        +'plit(\'::\')[2],url:doc.request.url}};if(doc.response'
-                        +'){p.response={status:doc.response.status};}emit(doc.t'
-                        +'s_modified,p);}}'
-                }
-              , 'pages':{
-                    'map':'function(doc){if(doc._id.substring(0,4)==\'page\'){v'
-                        +'ar p={ts_created:doc.ts_created,ts_modified:doc.ts_mo'
-                        +'dified,};emit(doc.ts_modified,p);}}'
-                }
-              , 'files':{
-                    'map':'function(doc){if(doc._id.substring(0,4)==\'file\'){v'
-                        +'ar p={status:doc.status,ts_created:doc.ts_created,ts_'
-                        +'modified:doc.ts_modified,filesize:doc.filesize,mimety'
-                        +'pe:doc.mimetype};emit(doc.ts_modified,p);}}'
+              , 'mimetype':{
+                    'map':'function(doc){if(doc._id.substring(0,4)==\'file\'){e'
+                        +'mit(doc.mimetype,null);}}'
+                  , 'reduce':'_count'
                 }
               , 'sitemap':{
                     'map':'function(doc){if(doc.type&&doc.type==\'page\'){if('

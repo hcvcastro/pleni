@@ -260,6 +260,13 @@ pleni.factory('Resources',['$sessionStorage',
                       , repository:repository
                     },success,failure);
                 }
+              , document:function(project,repository,document,success,failure){
+                    bind(Workspace.get,{
+                        project:project
+                      , repository:repository
+                      , document:document
+                    },success,failure);
+                }
               , requests:function(project,repository,filters,limit,offset,
                     success,failure){
                     bind(Workspace.get,{
@@ -271,25 +278,33 @@ pleni.factory('Resources',['$sessionStorage',
                       , offset:offset
                     },success,failure);
                 }
-              , document:function(project,repository,document,success,failure){
-                    bind(Workspace.get,{
-                        project:project
-                      , repository:repository
-                      , document:document
-                    },success,failure);
-                }
-              , pages:function(project,repository,success,failure){
+              , pages:function(project,repository,filters,limit,offset,
+                    success,failure){
                     bind(Workspace.get,{
                         project:project
                       , repository:repository
                       , document:'pages'
+                      , filters:filters
+                      , limit:limit
+                      , offset:offset
                     },success,failure);
                 }
-              , files:function(project,repository,success,failure){
+              , files:function(project,repository,filters,limit,offset,
+                    success,failure){
                     bind(Workspace.get,{
                         project:project
                       , repository:repository
                       , document:'files'
+                      , filters:filters
+                      , limit:limit
+                      , offset:offset
+                    },success,failure);
+                }
+              , mimetypes:function(project,repository,success,failure){
+                    bind(Workspace.get,{
+                        project:project
+                      , repository:repository
+                      , document:'mimetypes'
                     },success,failure);
                 }
               , report:function(project,repository,success,failure){

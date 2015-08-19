@@ -4,7 +4,7 @@ var request=require('request')
   , Q=require('q')
 
 /*
- * Function for getting a list of documents in a site repository
+ * Function for getting a list of mimetypes in a site repository
  * args input
  *      db
  *          host
@@ -19,14 +19,14 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name
-      , view='/_design/sites/_view/pages?descending=true'
+      , view='/_design/sites/_view/mimetype?descending=false&group=true'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
     if(args.debug){
-        console.log('get a pages list');
+        console.log('get a mimetypes list');
     }
     request.get({url:url+view,headers:headers},function(error,response){
         if(!error){
@@ -36,7 +36,12 @@ module.exports=function(args){
                     if(!args.site){
                         args.site={};
                     }
-                    args.site.list=parse;
+
+                    args.site.list={};
+                    for(var i=0;i<parse.rows.length;i++){
+                        args.site.list[parse.rows[i].key]=parse.rows[i].value;
+                    }
+
                     deferred.resolve(args);
                 }else{
                     deferred.reject(response);

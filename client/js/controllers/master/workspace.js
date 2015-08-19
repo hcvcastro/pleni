@@ -39,7 +39,12 @@ pleni.controller('WorkspaceController',
           , classcodes:function(code){
                 return 'status'+(Math.floor(+code/100))+'xx';
             }
-          , filters:['ALL','ALL','ALL']
+          , filters:[
+                ['ALL','ALL','ALL']
+              , ['ALL']
+              , ['ALL','ALL']
+            ]
+          , mimetypes:{}
           , limit:25
           , offset:0
           , total:0
@@ -516,6 +521,34 @@ pleni.controller('WorkspaceController',
                     utils.show('error','The summarize fail');
                 });
             }
+          , pagination_first:function(){
+                if($scope.viewers.offset!=0){
+                    $scope.viewers.offset=0;
+                    $scope.repositories[$scope.viewer]();
+                }
+            }
+          , pagination_previous:function(){
+                if($scope.viewers.offset!=0){
+                    $scope.viewers.offset-=$scope.viewers.limit;
+                    $scope.repositories[$scope.viewer]();
+                }
+            }
+          , pagination_next:function(){
+                if($scope.viewers.offset+$scope.viewers.limit
+                    <$scope.viewers.total){
+                    $scope.viewers.offset+=$scope.viewers.limit;
+                    $scope.repositories[$scope.viewer]();
+                }
+            }
+          , pagination_last:function(){
+                if($scope.viewers.offset+$scope.viewers.limit
+                    <$scope.viewers.total){
+                    $scope.viewers.offset=($scope.viewers.limit*Math.floor(
+                        $scope.viewers.total/$scope.viewers.limit))+(
+                        $scope.viewers.total%$scope.viewers.limit)-1;
+                    $scope.repositories[$scope.viewer]();
+                }
+            }
           , requests:function(filter){
                 var workspace=$scope.storage.workspace
                   , viewers=$scope.viewers
@@ -531,12 +564,11 @@ pleni.controller('WorkspaceController',
                 }
 
                 Resources.workspace.requests(workspace.name,
-                    workspace.repository,viewers.filters.join('-'),
-                    viewers.limit,viewers.offset,
-                    function(data){
+                    workspace.repository,viewers.filters[0].join('|'),
+                    viewers.limit,viewers.offset,function(data){
                     workspace.repositories[index].loading=false;
-                    $scope.viewers.total=+data.total;
-                    $scope.viewers.collection=data.list.map(function(r){
+                    viewers.total=+data.total;
+                    viewers.collection=data.list.map(function(r){
                         return {
                             id:r.id
                           , status:r.status
@@ -555,34 +587,6 @@ pleni.controller('WorkspaceController',
                     workspace.repositories[index].loading=false;
                 });
             }
-          , requests_first:function(){
-                if($scope.viewers.offset!=0){
-                    $scope.viewers.offset=0;
-                    $scope.repositories.requests();
-                }
-            }
-          , requests_previous:function(){
-                if($scope.viewers.offset!=0){
-                    $scope.viewers.offset-=$scope.viewers.limit;
-                    $scope.repositories.requests();
-                }
-            }
-          , requests_next:function(){
-                if($scope.viewers.offset+$scope.viewers.limit
-                    <$scope.viewers.total){
-                    $scope.viewers.offset+=$scope.viewers.limit;
-                    $scope.repositories.requests();
-                }
-            }
-          , requests_last:function(){
-                if($scope.viewers.offset+$scope.viewers.limit
-                    <$scope.viewers.total){
-                    $scope.viewers.offset=($scope.viewers.limit*Math.floor(
-                        $scope.viewers.total/$scope.viewers.limit))+(
-                        $scope.viewers.total%$scope.viewers.limit)-1;
-                    $scope.repositories.requests();
-                }
-            }
           , request:function(id){
                 var workspace=$scope.storage.workspace
 
@@ -593,24 +597,32 @@ pleni.controller('WorkspaceController',
                     utils.show('error','The document is not found');
                 });
             }
-          , pages:function(){
+          , pages:function(filter){
                 var workspace=$scope.storage.workspace
+                  , viewers=$scope.viewers
                   , index=workspace.index
 
-                $scope.viewers.collection=[];
-                $scope.viewers.document=null;
+                viewers.collection=[];
+                viewers.document=null;
                 workspace.viewer='pages';
                 workspace.repositories[index].loading=true;
 
+                if(filter){
+                    viewers.offset=0;
+                }
+
                 Resources.workspace.pages(workspace.name,
-                    workspace.repository,function(data){
+                    workspace.repository,viewers.filters[1].join('|'),
+                    viewers.limit,viewers.offset,function(data){
                     workspace.repositories[index].loading=false;
-                    $scope.viewers.collection=data.rows.map(function(r){
+                    viewers.total=+data.total;
+                    viewers.collection=data.list.map(function(r){
                         return {
                             id:r.id
+                          , status:r.status
+                          , ts_created:utils.prettydate(r.ts_created)
+                          , ts_modified:utils.prettydate(r.ts_modified)
                           , page:r.id.split('::')[1]
-                          , ts_created:utils.prettydate(r.value.ts_created)
-                          , ts_modified:utils.prettydate(r.value.ts_modified)
                         };
                     });
                 },function(error){
@@ -620,28 +632,42 @@ pleni.controller('WorkspaceController',
           , page:function(id){
                 console.log('view page');
             }
-          , files:function(){
+          , files:function(filter){
                 var workspace=$scope.storage.workspace
+                  , viewers=$scope.viewers
                   , index=workspace.index
 
-                $scope.viewers.collection=[];
-                $scope.viewers.document=null;
+                viewers.collection=[];
+                viewers.document=null;
                 workspace.viewer='files';
                 workspace.repositories[index].loading=true;
 
+                if(filter){
+                    viewers.offset=0;
+                }
+
                 Resources.workspace.files(workspace.name,
-                    workspace.repository,function(data){
+                    workspace.repository,viewers.filters[2].join('|'),
+                    viewers.limit,viewers.offset,function(data){
                     workspace.repositories[index].loading=false;
-                    $scope.viewers.collection=data.rows.map(function(r){
+                    viewers.total=+data.total;
+                    viewers.collection=data.list.map(function(r){
                         return {
                             id:r.id
+                          , status:r.status
+                          , ts_created:utils.prettydate(r.ts_created)
+                          , ts_modified:utils.prettydate(r.ts_modified)
                           , file:r.id.split('::')[1]
-                          , ts_created:utils.prettydate(r.value.ts_created)
-                          , ts_modified:utils.prettydate(r.value.ts_modified)
-                          , mimetype:r.value.mimetype
-                          , filesize:utils.prettyfilesize(r.value.filesize,true)
+                          , mimetype:r.mimetype
+                          , filesize:utils.prettyfilesize(r.filesize,true)
                         };
                     });
+
+                    Resources.workspace.mimetypes(workspace.name,
+                        workspace.repository,function(data){
+                        viewers.mimetypes=data;
+                    },function(error){});
+
                 },function(error){
                     workspace.repositories[index].loading=false;
                 });

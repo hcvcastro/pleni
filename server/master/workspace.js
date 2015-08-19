@@ -12,8 +12,11 @@ var extend=require('underscore').extend
   , getdocument=require(sites+'/view/getdocument')
   , getrequests1=require(sites+'/view/getrequests1')
   , getrequests2=require(sites+'/view/getrequests2')
-  , getpages=require(sites+'/view/getpages')
-  , getfiles=require(sites+'/view/getfiles')
+  , getpages1=require(sites+'/view/getpages1')
+  , getpages2=require(sites+'/view/getpages2')
+  , getfiles1=require(sites+'/view/getfiles1')
+  , getfiles2=require(sites+'/view/getfiles2')
+  , getmimetypes=require(sites+'/view/getmimetypes')
   , getsitemap=require(sites+'/view/getsitemap')
   , getreport=require(sites+'/view/getreport')
   , gettimestamp=require(sites+'/summarize/gettimestamp')
@@ -139,26 +142,41 @@ module.exports=function(app,config){
 
     app.get('/workspace/:project/:repository/pages',authed,
     function(request,response){
-        return generic_document(request,response,{},
-            [getpages],function(args){
-            response.status(200).json(args.site.list);
+        return generic_document(request,response,{
+            site:{
+                filters:request.query.filters
+              , offset:request.query.offset
+              , limit:request.query.limit
+            }},
+            [getpages1,getpages2],function(args){
+            response.status(200).json({
+                total:args.site.total
+              , list:args.site.list
+            });
         });
     });
 
     app.get('/workspace/:project/:repository/files',authed,
     function(request,response){
-        return generic_document(request,response,{},
-            [getfiles],function(args){
-            response.status(200).json(args.site.list);
+        return generic_document(request,response,{
+            site:{
+                filters:request.query.filters
+              , offset:request.query.offset
+              , limit:request.query.limit
+            }},
+            [getfiles1,getfiles2],function(args){
+            response.status(200).json({
+                total:args.site.total
+              , list:args.site.list
+            });
         });
     });
 
-    app.get('/workspace/:project/:repository/:document',authed,
+    app.get('/workspace/:project/:repository/mimetypes',authed,
     function(request,response){
-        return generic_document(request,response,{
-            site:{doc:{id:request.params.document}}},
-            [getdocument],function(args){
-            response.status(200).json(args.site.doc.content);
+        return generic_document(request,response,{},
+            [getmimetypes],function(args){
+            response.status(200).json(args.site.list);
         });
     });
 
@@ -173,6 +191,15 @@ module.exports=function(app,config){
     function(request,response){
         return generic_document(request,response,{},[getsitemap],function(args){
             response.status(200).json(args.site.sitemap);
+        });
+    });
+
+    app.get('/workspace/:project/:repository/:document',authed,
+    function(request,response){
+        return generic_document(request,response,{
+            site:{doc:{id:request.params.document}}},
+            [getdocument],function(args){
+            response.status(200).json(args.site.doc.content);
         });
     });
 };

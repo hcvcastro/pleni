@@ -46,7 +46,8 @@ module.exports=function(args){
 
         request.put({url:url,headers:headers
           , json:{
-                ts_created:ts
+                status:'complete'
+              , ts_created:ts
               , ts_modified:ts
               , refs:args.task.refs
               , rels:args.task.rels
