@@ -37,7 +37,7 @@
                 .url {{item.request.url}}
                 .status(ng-class='viewers.classcodes(item.response.status)',ng-bind='item.response.status')
                 .clearfix
-            .item.total(ng-bind='(viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
+            .item.total(ng-bind='(viewers.total==0?0:viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
         .separator
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
         .request

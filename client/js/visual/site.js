@@ -47,11 +47,11 @@ var visual={
             .size([
                 visual.canvas.clientWidth,
                 visual.canvas.clientHeight])
-            .linkDistance(100)
+            .linkDistance(160)
             .linkStrength(1)
             .friction(0.5)
             .charge(-2000)
-            .gravity(0.1)
+            .gravity(0.25)
             .on('tick',visual.tick);
 
         visual.drag=visual.force.drag()
@@ -145,6 +145,8 @@ var visual={
                             return 18;
                         case 'file':
                             return 8;
+                        case 'unknown':
+                            return 5;
                     }
                 })
                 .attr('class',function(d){

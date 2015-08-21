@@ -41,48 +41,54 @@ module.exports=function(args){
 
             var parse=JSON.parse(response.body)
               , dict={}
+              , count=0
               , nodes=new Array()
               , links=new Array()
-              , count=0
 
             if(parse.rows){
-                for(var i=0;i<parse.rows.length;i++){
-                    dict[parse.rows[i].key]=i;
-                }
+                parse.rows.forEach(function(item){
+                    var node={
+                            page:item.key
+                          , status:item.value.status
+                          , statuscode:item.value.statuscode
+                          , mimetype:item.value.mimetype
+                          , type:item.value.type
+                        }
 
-                nodes=parse.rows.map(function(node){
-                    if(!node.value||Object.keys(node.value).length==0){
-                        return {
-                            page:node.key
-                          , status:'unknown'
-                          , statuscode:'unknown'
-                          , mimetype:'unknown'
-                          , type:'unknown'
-                        };
+                    if(item.key in dict){
+                        nodes[dict[item.key]]=node;
                     }else{
-                        node.value.rels.forEach(function(link){
-                            var parse=_url.parse(link)
-                            if(dict[parse.pathname]){
-                                links.push({
-                                    source:dict[node.key]
-                                  , target:dict[parse.pathname]
-                                })
-                            }
-                        });
+                        dict[item.key]=count;
+                        nodes.push(node);
                         count++;
-                        return {
-                            page:node.key
-                          , status:node.value.status
-                          , statuscode:node.value.statuscode
-                          , mimetype:node.value.mimetype
-                          , type:node.value.type
-                        };
                     }
+
+                    item.value.rels.forEach(function(rel){
+                        var urlparse=_url.parse(rel)
+                          , page=urlparse.pathname
+
+                        if(!(page in dict)){
+                            dict[page]=count;
+                            nodes.push({
+                                page:page
+                              , status:'pending'
+                              , statuscode:'unknown'
+                              , mimetype:'unknown'
+                              , type:'unknown'
+                            });
+                            count++;
+                        }
+
+                        links.push({
+                            source:dict[item.key]
+                          , target:dict[page]
+                        });
+                    });
                 });
 
                 args.site.sitemap={
-                    count:count
-                  , total:parse.total_rows
+                    count:parse.total_rows
+                  , total:nodes.length
                   , nodes:nodes
                   , links:links
                 };
@@ -97,3 +103,4 @@ module.exports=function(args){
 
     return deferred.promise;
 };
+

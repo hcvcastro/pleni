@@ -14,11 +14,11 @@
                 .options
                     ul
                         li(ng-class='{\'active\':storage.workspace.viewer==\'requests\'}')
-                            a(ng-click='repositories.requests()') Requests
+                            a(ng-click='repositories.requests(true)') Requests
                         li(ng-class='{\'active\':storage.workspace.viewer==\'pages\'}')
-                            a(ng-click='repositories.pages()') Pages
+                            a(ng-click='repositories.pages(true)') Pages
                         li(ng-class='{\'active\':storage.workspace.viewer==\'files\'}')
-                            a(ng-click='repositories.files()') Files
+                            a(ng-click='repositories.files(true)') Files
                         li(ng-class='{\'active\':storage.workspace.viewer==\'sitemap\'}')
                             a(ng-click='repositories.sitemap()') Mapsite
         include ../blocks/footer/bottom

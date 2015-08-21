@@ -72,12 +72,13 @@ module.exports=function(args){
                     'map':'function(doc){switch(doc._id.substring(0,4)){case \''
                         +'page\':emit(doc._id.substring(6),{status:doc.status,s'
                         +'tatuscode:doc.statuscode,mimetype:\'text/html\',type:'
-                        +'\'page\',rels:(function(x){if(x.rels){return x.rels.m'
-                        +'ap(function(i){return /https?:\\/\\/[^\\/]+(\\/.*)/.e'
-                        +'xec(i.url)[1];});}else{return [];}})(doc)});break;cas'
-                        +'e \'file\':emit(doc._id.substring(6),{status:doc.stat'
-                        +'us,statuscode:doc.statuscode,mimetype:doc.mimetype,ty'
-                        +'pe:\'file\',rels:[]});break;}}'
+                        +'\'page\',rels:(function(x){if(x.rels){return x.rels.f'
+                        +'ilter(function(i){return /https?:\\/\\/[^\\/]+(\\/.*)'
+                        +'/.test(i.url);}).map(function(i){return /https?:\\/\\'
+                        +'/[^\\/]+(\\/.*)/.exec(i.url)[1];});}else{return [];}}'
+                        +')(doc)});break;case \'file\':emit(doc._id.substring(6'
+                        +'),{status:doc.status,statuscode:doc.statuscode,mimety'
+                        +'pe:doc.mimetype,type:\'file\',rels:[]});break;}}'
                 }
             }
         };

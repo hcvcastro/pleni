@@ -518,31 +518,44 @@ pleni.controller('WorkspaceController',
                 });
             }
           , pagination_first:function(){
-                if($scope.viewers.offset!=0){
+                var offset=$scope.viewers.offset
+                  , viewer=$scope.storage.workspace.viewer
+
+                if(offset!=0){
                     $scope.viewers.offset=0;
-                    $scope.repositories[$scope.viewer]();
+                    $scope.repositories[viewer]();
                 }
             }
           , pagination_previous:function(){
-                if($scope.viewers.offset!=0){
-                    $scope.viewers.offset-=$scope.viewers.limit;
-                    $scope.repositories[$scope.viewer]();
+                var offset=$scope.viewers.offset
+                  , limit=$scope.viewers.limit
+                  , viewer=$scope.storage.workspace.viewer
+
+                if(offset!=0){
+                    $scope.viewers.offset-=limit;
+                    $scope.repositories[viewer]();
                 }
             }
           , pagination_next:function(){
-                if($scope.viewers.offset+$scope.viewers.limit
-                    <$scope.viewers.total){
-                    $scope.viewers.offset+=$scope.viewers.limit;
-                    $scope.repositories[$scope.viewer]();
+                var offset=$scope.viewers.offset
+                  , limit=$scope.viewers.limit
+                  , total=$scope.viewers.total
+                  , viewer=$scope.storage.workspace.viewer
+
+                if(offset+limit<total){
+                    $scope.viewers.offset=offset+limit;
+                    $scope.repositories[viewer]();
                 }
             }
           , pagination_last:function(){
-                if($scope.viewers.offset+$scope.viewers.limit
-                    <$scope.viewers.total){
-                    $scope.viewers.offset=($scope.viewers.limit*Math.floor(
-                        $scope.viewers.total/$scope.viewers.limit))+(
-                        $scope.viewers.total%$scope.viewers.limit)-1;
-                    $scope.repositories[$scope.viewer]();
+                var offset=$scope.viewers.offset
+                  , limit=$scope.viewers.limit
+                  , total=$scope.viewers.total
+                  , viewer=$scope.storage.workspace.viewer
+
+                if(offset+limit<total){
+                    $scope.viewers.offset=total-(total%limit);
+                    $scope.repositories[viewer]();
                 }
             }
           , requests:function(filter){
