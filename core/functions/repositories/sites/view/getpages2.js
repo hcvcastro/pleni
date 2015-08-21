@@ -45,6 +45,7 @@ module.exports=function(args){
                     var packet={
                             id:e.id
                           , status:e.doc.status
+                          , statuscode:e.doc.statuscode
                           , ts_created:e.doc.ts_created
                           , ts_modified:e.doc.ts_modified
                         }

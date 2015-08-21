@@ -47,6 +47,7 @@ module.exports=function(args){
                           , status:e.doc.status
                           , ts_created:e.doc.ts_created
                           , ts_modified:e.doc.ts_modified
+                          , statuscode:e.doc.statuscode
                           , mimetype:e.doc.mimetype
                           , filesize:e.doc.filesize
                         }

@@ -19,7 +19,8 @@
                             a(ng-click='repositories.pages()') Pages
                         li(ng-class='{\'active\':storage.workspace.viewer==\'files\'}')
                             a(ng-click='repositories.files()') Files
-                        li: a Mapsite
+                        li(ng-class='{\'active\':storage.workspace.viewer==\'sitemap\'}')
+                            a(ng-click='repositories.sitemap()') Mapsite
         include ../blocks/footer/bottom
     .main.last
         .tools
@@ -47,6 +48,6 @@
             include ../blocks/workspace/viewers/requests
             include ../blocks/workspace/viewers/pages
             include ../blocks/workspace/viewers/files
-            //#canvas
+            include ../blocks/workspace/viewers/sitemap
         include ../blocks/footer
 

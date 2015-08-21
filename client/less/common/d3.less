@@ -1,4 +1,7 @@
 #canvas {
+    background-color: @white;
+    background-image: url('/svg/canvas.svg');
+
     .mime() {
         &.m-text-html { fill: #f1672c; }
         &.m-text-css { fill: #30a9dc; }
@@ -79,6 +82,7 @@
     border-radius: 5px;
     min-width: 200px;
     max-width: 500px;
+    z-index: 16;
 
     div {
         &.title {

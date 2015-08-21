@@ -16,6 +16,7 @@
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-eye\':item.status==\'monitoring\'}')
                 .date {{item.ts_modified}}
                 .url {{item.page}}
+                .status(ng-class='viewers.classcodes(item.statuscode)',ng-bind='item.statuscode')
                 .clearfix
             .item.total(ng-bind='(viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
         .separator

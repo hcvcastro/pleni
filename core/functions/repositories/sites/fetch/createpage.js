@@ -16,6 +16,7 @@ var request=require('request')
  *          wait
  *              url
  *          get
+ *              status
  *              headers
  *          refs
  *          rels
@@ -49,6 +50,7 @@ module.exports=function(args){
                 status:'complete'
               , ts_created:ts
               , ts_modified:ts
+              , statuscode:args.task.get.status
               , refs:args.task.refs
               , rels:args.task.rels
             }

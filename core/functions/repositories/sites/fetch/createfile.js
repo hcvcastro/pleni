@@ -16,6 +16,7 @@ var request=require('request')
  *          wait
  *              url
  *          head
+ *              status
  *              headers
  *          refs
  *          rels
@@ -48,6 +49,7 @@ module.exports=function(args){
                 status:'wait'
               , ts_created:ts
               , ts_modified:ts
+              , statuscode:args.task.head.status
               , mimetype:args.task.head.headers['content-type']
               , filesize:args.task.head.headers['content-length']
             }

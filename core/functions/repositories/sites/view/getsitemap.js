@@ -55,12 +55,12 @@ module.exports=function(args){
                         return {
                             page:node.key
                           , status:'unknown'
-                          , mime:'unknown'
-                          , get:false
+                          , statuscode:'unknown'
+                          , mimetype:'unknown'
                           , type:'unknown'
                         };
                     }else{
-                        node.value.rel.forEach(function(link){
+                        node.value.rels.forEach(function(link){
                             var parse=_url.parse(link)
                             if(dict[parse.pathname]){
                                 links.push({
@@ -73,8 +73,8 @@ module.exports=function(args){
                         return {
                             page:node.key
                           , status:node.value.status
-                          , mime:node.value.mime
-                          , get:node.value.get
+                          , statuscode:node.value.statuscode
+                          , mimetype:node.value.mimetype
                           , type:node.value.type
                         };
                     }

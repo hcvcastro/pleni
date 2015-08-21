@@ -22,7 +22,6 @@ pleni.controller('WorkspaceController',
           , available:{}
           , enabled:{}
           , apis:{}
-//          , visual:''
           , repository:''
           , viewer:'overview'
           , index:-1
@@ -58,6 +57,7 @@ pleni.controller('WorkspaceController',
           , init:function(){
                 $scope.workspace.env.panel='';
 
+                Resources.repositories.load();
                 Resources.projects.get({
                     project:$scope.storage.workspace.name
                 },function(data){
@@ -72,7 +72,6 @@ pleni.controller('WorkspaceController',
 
                     $scope.planners.load();
                     $scope.repositories.load();
-//                    $scope.visual.load();
                 },function(error){});
             }
           , exit:function(){
@@ -426,7 +425,6 @@ pleni.controller('WorkspaceController',
                       , _repositories:project.repositories.map(
                         function(r){return r.name;})
                     },function(data){
-//                        $scope.visual.summary(repositories.length-1);
                     },function(error){});
                 }
 
@@ -485,8 +483,6 @@ pleni.controller('WorkspaceController',
           , overview:function(){
                 $scope.storage.workspace.repository='';
                 $scope.storage.workspace.viewer='overview';
-                //$scope.storage.workspace.visual='';
-                //Visual.clean();
             }
           , summary:function(index){
                 var workspace=$scope.storage.workspace
@@ -620,6 +616,7 @@ pleni.controller('WorkspaceController',
                         return {
                             id:r.id
                           , status:r.status
+                          , statuscode:r.statuscode
                           , ts_created:utils.prettydate(r.ts_created)
                           , ts_modified:utils.prettydate(r.ts_modified)
                           , page:r.id.split('::')[1]
@@ -655,6 +652,7 @@ pleni.controller('WorkspaceController',
                         return {
                             id:r.id
                           , status:r.status
+                          , statuscode:r.statuscode
                           , ts_created:utils.prettydate(r.ts_created)
                           , ts_modified:utils.prettydate(r.ts_modified)
                           , file:r.id.split('::')[1]
@@ -675,44 +673,18 @@ pleni.controller('WorkspaceController',
           , file:function(id){
                 console.log('view file');
             }
-/*          , open:function(index){
-                $scope.storage.workspace.viewer='none';
-                if($scope.storage.workspace.repositories[index]){
-                    $scope.storage.workspace.repositories[index].loading=true;
-                    $scope.storage.workspace.visual=
-                        $scope.storage.workspace.repositories[index].name;
-                    $scope.visual.sitemap(index);
-                }else{
-                    utils.show('error',
-                        'The repository does not have a valid format');
-                }
-            }*/
-        };
+          , sitemap:function(){
+                var workspace=$scope.storage.workspace
+                  , viewers=$scope.viewers
+                  , index=workspace.index
 
-        /*$scope.visual={
-            load:function(){
-                for(var index in $scope.storage.workspace.repositories){
-                    $scope.visual.summary(index);
-                }
-            }
-          , report:function(index){
-                var project=$scope.storage.workspace.name
-                  , repository=$scope.storage.workspace.repositories[index].name
+                viewers.collection=[];
+                viewers.document=null;
+                workspace.viewer='sitemap';
+                workspace.repositories[index].loading=true;
 
-                Resources.workspace.report(project,repository,function(data){
-                    $scope.storage.workspace.repositories[index].report=data;
-                    $scope.viewers.report=
-                        $scope.storage.workspace.repositories[index].report;
-                    $scope.storage.workspace.repositories[index].loading=false;
-                },function(error){
-                    $scope.storage.workspace.repositories[index].loading=false;
-                });
-            }
-          , sitemap:function(index){
-                var project=$scope.storage.workspace.name
-                  , repository=$scope.storage.workspace.repositories[index].name
-
-                Resources.workspace.sitemap(project,repository,function(data){
+                Resources.workspace.sitemap(workspace.name,workspace.repository,
+                    function(data){
                     Visual.clean();
                     Visual.render(data);
                     $scope.storage.workspace.repositories[index].loading=false;
@@ -722,7 +694,7 @@ pleni.controller('WorkspaceController',
                     $scope.storage.workspace.repositories[index].loading=false;
                 });
             }
-        };*/
+        };
 
         $scope.workspace.init();
     }]

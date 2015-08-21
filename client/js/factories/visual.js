@@ -4,8 +4,8 @@ pleni.factory('Visual',[function(){
     var empty={
             page:'/'
           , status:'unknown'
-          , mime:'unknown'
-          , get:false
+          , statuscode:'unknown'
+          , mimetype:'unknown'
           , type:'unknown'
         }
       , force={

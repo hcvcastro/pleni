@@ -7,7 +7,7 @@ var visual={
             .html(function(d){
                 return '<div class="title">'+d.page+'</div>'+
                     '<div class="subtle">'+(d.get ? '✓':'✕')+'</div>'+
-                    '<div class="subtle">'+d.mime+'</div>';
+                    '<div class="subtle">'+d.mimetype+'</div>';
             })
             .direction('n');
     
@@ -47,7 +47,7 @@ var visual={
             .size([
                 visual.canvas.clientWidth,
                 visual.canvas.clientHeight])
-            .linkDistance(200)
+            .linkDistance(100)
             .linkStrength(1)
             .friction(0.5)
             .charge(-2000)
@@ -97,7 +97,7 @@ var visual={
 
         visual.hash1={};
         visual.hash2={};
-        visual.mimes=new Array();
+        visual.mimetypes=new Array();
 
         for(var i=0;i<nodes.length;i++){
             visual.hash1[nodes[i].page]=i;
@@ -105,11 +105,11 @@ var visual={
         };
     }
   , add_hash2:function(node){
-        if(!(node.mime in visual.hash2)){
-            visual.hash2[node.mime]=1;
-            visual.mimes.push(node.mime);
+        if(!(node.mimetype in visual.hash2)){
+            visual.hash2[node.mimetype]=1;
+            visual.mimetypes.push(node.mimetype);
         }else{
-            visual.hash2[node.mime]++;
+            visual.hash2[node.mimetype]++;
         }
     }
   , linked:function(e,r){
@@ -141,22 +141,19 @@ var visual={
             .append('circle')
                 .attr('r',function(d){
                     switch(d.type){
-                        case 'root':
-                            return 18;
                         case 'page':
-                            return 12;
-                        default:
-                            return 6;
+                            return 18;
+                        case 'file':
+                            return 8;
                     }
                 })
                 .attr('class',function(d){
                     return [
                         'node'
-                      , d.type
-                      , (function(status){
-                            return 's-'+~~(status/100);})(d.status)
-                      , (function(mime){
-                            return 'm-'+mime.replace('/','-');})(d.mime)
+                      , (function(statuscode){
+                            return 's-'+~~(statuscode/100);})(d.statuscode)
+                      , (function(mimetype){
+                            return 'm-'+mimetype.replace('/','-');})(d.mimetype)
                     ].join(' ');
                 })
                 .on('dblclick',function(d){
@@ -191,7 +188,7 @@ var visual={
         visual.legend.selectAll('.legend').remove();
 
         var i=visual.legend.selectAll('.legend')
-            .data(visual.mimes.sort())
+            .data(visual.mimetypes.sort())
           , j=i.enter().append('g')
             .attr('class','legend')
             .attr('transform',function(d,i){
@@ -221,7 +218,7 @@ var visual={
 
         i.exit().remove();
 
-        visual.legend.attr('height',(visual.mimes.length*22+4)+'px');
+        visual.legend.attr('height',(visual.mimetypes.length*22+4)+'px');
     }
   , load:function(url){
         d3.json(url,function(data){
@@ -238,15 +235,15 @@ var visual={
         if(node.page in visual.hash1){
             source=visual.hash1[node.page];
 
-            if(node.mime!=visual.nodes[source]){
-                visual.hash2[visual.nodes[source].mime]--;
+            if(node.mimetype!=visual.nodes[source]){
+                visual.hash2[visual.nodes[source].mimetype]--;
                 visual.add_hash2(node);
             }
 
             visual.nodes[source].page=node.page;
             visual.nodes[source].status=node.status;
-            visual.nodes[source].mime=node.mime;
-            visual.nodes[source].get=node.get;
+            visual.nodes[source].statuscode=node.statuscode;
+            visual.nodes[source].mimetype=node.mimetype;
             visual.nodes[source].type=node.type;
 
             d3.select('g.nodes>circle:nth-child('+(source+1)+')')
@@ -263,11 +260,10 @@ var visual={
                 .attr('class',function(d){
                     return [
                         'node'
-                      , d.type
-                      , (function(status){
-                            return 's-'+~~(status/100);})(d.status)
-                      , (function(mime){
-                            return 'm-'+mime.replace('/','-');})(d.mime)
+                      , (function(statuscode){
+                            return 's-'+~~(statuscode/100);})(d.statuscode)
+                      , (function(mimetype){
+                            return 'm-'+mimetype.replace('/','-');})(d.mimetype)
                     ].join(' ');
                 });
         }else{
@@ -285,8 +281,8 @@ var visual={
                 var node={
                     page:rel
                   , status:'unknown'
-                  , mime:'unknown'
-                  , get:false
+                  , statuscode:'unknown'
+                  , mimetype:'unknown'
                   , type:'unknown'
                 };
 

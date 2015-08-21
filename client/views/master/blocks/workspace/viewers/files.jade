@@ -22,6 +22,7 @@
                 .mimetype {{item.mimetype}}
                 .filesize {{item.filesize}}
                 .url {{item.file}}
+                .status(ng-class='viewers.classcodes(item.statuscode)',ng-bind='item.statuscode')
                 .clearfix
             .item.total(ng-bind='(viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
         .separator
