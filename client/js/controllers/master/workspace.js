@@ -698,9 +698,9 @@ pleni.controller('WorkspaceController',
 
                 Resources.workspace.sitemap(workspace.name,workspace.repository,
                     function(data){
+                    $scope.storage.workspace.repositories[index].loading=false;
                     Visual.clean();
                     Visual.render(data);
-                    $scope.storage.workspace.repositories[index].loading=false;
                 },function(error){
                     utils.show('error',
                         'The repository does not have a valid sitemap');

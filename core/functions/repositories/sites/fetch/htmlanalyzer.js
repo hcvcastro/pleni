@@ -37,18 +37,19 @@ module.exports=function(args){
     }
 
     if('location' in args.task.head.headers){
-        var url1=_url.resolve(args.task.wait.url)
-          , url2=_url.resolve(args.task.response.headers.location)
+        var url1=_url.parse(args.task.wait.url)
+          , url2=_url.parse(_url.resolve(args.task.wait.url,
+                args.task.head.headers.location))
 
-        if(_url1.host===_url2.host){
+        if(url1.host===url2.host){
             args.task.rels.push({
                 tag:'location'
-              , url:args.task.response.headers.location
+              , url:args.task.head.headers['location']
             });
         }else{
             args.task.refs.push({
                 tag:'location'
-              , url:args.task.response.headers.location
+              , url:args.task.head.headers['location']
             });
         }
     }

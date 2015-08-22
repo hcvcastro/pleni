@@ -8,7 +8,7 @@ var Q=require('q')
 module.exports=function(args){
     var deferred=Q.defer()
 
-    //args.debug=true;
+    args.debug=true;
     
     if(args.debug){
         console.log();
