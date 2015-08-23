@@ -44,12 +44,12 @@ module.exports=function(args){
         if(url1.host===url2.host){
             args.task.rels.push({
                 tag:'location'
-              , url:args.task.head.headers['location']
+              , url:_url.format(url2)
             });
         }else{
             args.task.refs.push({
                 tag:'location'
-              , url:args.task.head.headers['location']
+              , url:_url.format(url2)
             });
         }
     }

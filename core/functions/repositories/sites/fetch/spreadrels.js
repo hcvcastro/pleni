@@ -115,10 +115,26 @@ module.exports=function(args){
     }
 
     if(args.task.rels){
-        var rels=uniq(args.task.rels.map(function(i){return i.url;})
-            .filter(function(i){return validator.validHost(i);}))
+        var list={}
+          , _rels=[]
+          , rels=uniq(args.task.rels.map(function(i){
+                    return i.url;
+                }).filter(function(i){
+                    return validator.validHost(i);
+                }))
 
-        Q.all(rels.map(function(item){
+        rels.forEach(function(url){
+            var parse=_url.parse(url);
+            if(!(parse.pathname in list)){
+                list[parse.pathname]=url;
+            }
+        });
+
+        for(var i in list){
+            _rels.push(list[i]);
+        }
+
+        Q.all(_rels.map(function(item){
             return check1({url:item}).then(check2).then(spread);
         }))
         .spread(function(){

@@ -79,16 +79,13 @@ module.exports=function(params,repeat,stop,notifier){
     .then(createfile)
     .then(complete)
     .then(function(args){
-        if(args.task.complete){
-/*            var url=args.task.complete.id.substr(5)
-              , spread=args.task.spread
-              , count=0
-              , m=args.task.get.headers['content-type']
-                                .match(/[a-z]+\/[a-z-]+/i)[0]
-
-            if(spread){
-                count=spread.length
-            }
+        if(args.task.complete&&args.task.page.id){
+            var url=_url.parse(args.task.wait.url)
+              , page=args.task.complete.id.split('::')[3]
+              , type=args.task.page.id.split('::')[0]
+              , status=(type=='page')?'complete':'wait'
+              , mimetype=args.task.head.headers['content-type']
+                    .match(/[a-z]+\/[a-z-]+/i)[0]
 
             notifier({
                 action:'task'
@@ -96,34 +93,26 @@ module.exports=function(params,repeat,stop,notifier){
                     id:'site/fetch'
                   , msg:{
                         node:{
-                            page:url
-                          , status:args.task.get.status
-                          , mime:m
-                          , get:true
-                          , type:(function(x,y){
-                                if(x=='/'){
-                                    return 'root';
-                                }else{
-                                    if(y.indexOf('text/html')==0){
-                                        return 'page';
-                                    }else{
-                                        return 'extra';
-                                    }
-                                }
-                            })(url,m)
-                          , rel:(function(x){
-                                if(x.rels){
-                                    return x.rels.map(function(item){
-                                        return (_url.parse(item.url)).pathname;
+                            page:page
+                          , status:status
+                          , statuscode:args.task.head.status
+                          , mimetype:mimetype
+                          , type:type
+                          , rels:(function(rels){
+                                if(rels){
+                                    return rels.filter(function(i){
+                                        return _url.parse(i.url).host==url.host;
+                                    }).map(function(i){
+                                        return _url.parse(i.url).pathname;
                                     });
                                 }else{
                                     return [];
                                 }
-                            })(args.task)
+                            })(args.task.rels)
                         }
                     }
                 }
-            });*/
+            });
         }
         repeat();
     })

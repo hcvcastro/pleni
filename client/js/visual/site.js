@@ -235,8 +235,8 @@ var visual={
         });
     }
   , add:function(node,rels){
-        var source
-          , target
+        var source=undefined
+          , target=undefined
 
         if(node.page in visual.hash1){
             source=visual.hash1[node.page];
@@ -255,12 +255,12 @@ var visual={
             d3.select('g.nodes>circle:nth-child('+(source+1)+')')
                 .attr('r',function(d){
                     switch(d.type){
-                        case 'root':
-                            return 18;
                         case 'page':
-                            return 12;
-                        default:
-                            return 6;
+                            return 18;
+                        case 'file':
+                            return 8;
+                        case 'unknown':
+                            return 5;
                     }
                 })
                 .attr('class',function(d){
@@ -282,7 +282,6 @@ var visual={
         rels.forEach(function(rel){
             if(rel in visual.hash1){
                 target=visual.hash1[rel];
-
             }else{
                 var node={
                     page:rel

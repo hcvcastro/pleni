@@ -85,12 +85,13 @@ pleni.controller('NotifierController',
 
         var process_planner=function(thread,pkg){
             var i=thread[0]
+              , sel=$scope.storage.threads[i]
 
             switch(pkg.planner.action){
                 case 'connection':
                     break;
                 case 'create':
-                    $scope.storage.threads[i].set={
+                    sel.set={
                         status:'set'
                       , name:pkg.planner.task.id
                       , count:pkg.planner.task.count
@@ -98,7 +99,7 @@ pleni.controller('NotifierController',
                     };
                     break;
                 case 'remove':
-                    $scope.storage.threads[i].set={
+                    sel.set={
                         status:'unset'
                       , name:''
                       , count:undefined
@@ -106,46 +107,43 @@ pleni.controller('NotifierController',
                     };
                     break;
                 case 'run':
-                    $scope.storage.threads[i].status='running';
+                    sel.status='running';
                     $scope.storage.planners[get_element(
                         thread[1].id,$scope.storage.planners)[0]
                     ].status='running';
                     break;
                 case 'stop':
-                    $scope.storage.threads[i].status='stopped';
+                    sel.status='stopped';
                     $scope.storage.planners[get_element(
                         thread[1].id,$scope.storage.planners)[0]
                     ].status='stopped';
                     break;
                 case 'task':
-                    if($scope.storage.threads[i].set.count>0){
-                        $scope.storage.threads[i].set.count--;
+                    if(sel.set.count>0){
+                        sel.set.count--;
                     }
 
                     switch(pkg.planner.task.id){
                         case 'site/fetch':
-                            $scope.storage.threads[i].msg
-                                ='GET '
-                                +pkg.planner.task.msg.node.page+' '
-                                +pkg.planner.task.msg.node.status
-                                +'. links found: '
-                                +pkg.planner.task.msg.node.rel.length;
+                            var node=pkg.planner.task.msg.node
+                              , repository=$scope.storage.workspace.repository
 
-                            if($scope.storage.workspace.visual==
-                                pkg.params.repository){
+                            sel.msg='GET '+node.page+' '+node.statuscode+
+                                '. links found: '+node.rels.length;
+
+                            if(repository==pkg.params.repository){
                                 Visual.add({
-                                    page:pkg.planner.task.msg.node.page
-                                  , status:pkg.planner.task.msg.node.status
-                                  , mime:pkg.planner.task.msg.node.mime
-                                  , get:pkg.planner.task.msg.node.get
-                                  , type:pkg.planner.task.msg.node.type
-                                },pkg.planner.task.msg.node.rel);
+                                    page:node.page
+                                  , status:node.status
+                                  , statuscode:node.statuscode
+                                  , mimetype:node.mimetype
+                                  , type:node.type
+                                },node.rels);
                             }
 
                             break;
                         default:
-                            $scope.storage.threads[i].msg
-                                =pkg.planner.task.msg;
+                            sel.msg=pkg.planner.task.msg;
                     }
                     break;
             }
