@@ -625,7 +625,7 @@ pleni.controller('ResourcesController',
                 }
             }
           , clean:function(index){
-                var planner=$scope.storage.planners[index];
+                var planner=$scope.storage.planners[index]
 
                 utils.send('Send a clean TID request ...');
                 Resources.planners.clean({

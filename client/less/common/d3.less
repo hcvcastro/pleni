@@ -83,16 +83,24 @@
     min-width: 200px;
     max-width: 500px;
     z-index: 16;
+    padding-bottom: 10px;
 
     div {
         &.title {
-            margin: 5px 10px 0px 10px;
+            margin: 5px 10px 5px 10px;
             .font6;
         }
         &.subtle {
-            float: left;
-            margin: 0px 0px 5px 10px;
+            margin: 0px 0px 0px 20px;
             .font7;
+
+            strong {
+                font-weight: normal;
+                color: @color5;
+                float: left;
+                width: 100px;
+                .font7;
+            }
         }
     }
 

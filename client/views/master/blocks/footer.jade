@@ -2,15 +2,17 @@ footer(ng-controller='NotifierController')
     .control
         .bar(ng-show='thread')
             .fa(ng-class='{\'fa-circle\':thread.set.status==\'set\',\'fa-question\':thread.set.status==\'unknown\',\'fa-circle-o\':thread.set.status==\'unset\'}')
-            .set {{thread.set.name}}
-            .count {{thread.set.count}}
-            .interval {{thread.set.interval}}
+            .set(ng-bind='thread.set.name')
+            .count(ng-bind='thread.set.count')
+            .interval(ng-bind='thread.set.interval')
             .fa(ng-class='{\'fa-play\':thread.status==\'running\',\'fa-question\':thread.status==\'unknown\',\'fa-stop\':thread.status==\'stopped\'}')
-            .msg {{thread.msg}}
-            a.run.fa.fa-stop(ng-click='stop()')
+            .msg(ng-bind='thread.msg')
+            a.fa.fa-stop(title='Stop task',ng-click='stop()')
         .tabs
             .tab(ng-repeat='t in storage.threads',ng-class='{\'active\':t.id==thread.id}')
                 .fa(ng-class='{\'fa-circle\':t.set.status==\'set\',\'fa-question\':t.set.status==\'unknown\',\'fa-circle-o\':t.set.status==\'unset\'}')
                 .fa(ng-class='{\'fa-play\':t.status==\'running\',\'fa-question\':t.status==\'unknown\',\'fa-stop\':t.status==\'stopped\'}')
-                .text(ng-click='pick($index)') {{t.id}}
+                .text(ng-click='pick($index)',ng-bind='t.id')
+            .opt
+                a.fa.fa-recycle(title='Clean planners',ng-click='clean()')
 

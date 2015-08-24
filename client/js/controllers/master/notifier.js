@@ -1,8 +1,8 @@
 'use strict';
 
 pleni.controller('NotifierController',
-    ['$scope','$sessionStorage','$http','Planners','Socket','Visual',
-    function($scope,$sessionStorage,$http,Planners,Socket,Visual){
+    ['$scope','$sessionStorage','$http','Planners','Notifiers','Socket','Visual',
+    function($scope,$sessionStorage,$http,Planners,Notifiers,Socket,Visual){
         $scope.storage=$sessionStorage;
         $scope.storage.threads=[];
 
@@ -83,6 +83,13 @@ pleni.controller('NotifierController',
             });
         }
 
+        $scope.clean=function(){
+            Notifiers.clean({server:'master'},function(){
+            },function(error){
+                utils.show('error',error);
+            });
+        }
+
         var process_planner=function(thread,pkg){
             var i=thread[0]
               , sel=$scope.storage.threads[i]
@@ -150,7 +157,6 @@ pleni.controller('NotifierController',
         };
 
         Socket.on('notifier',function(pkg){
-            //console.log(pkg);
             switch(pkg.action){
                 case 'put':
                 case 'delete':

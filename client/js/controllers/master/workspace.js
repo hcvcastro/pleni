@@ -163,8 +163,15 @@ pleni.controller('WorkspaceController',
                     },function(error){});
                 }
             }
+          , clean:function(index){
+                var planner=$scope.storage.planners[index]
+
+                Resources.planners.clean({
+                    server:planner.id
+                },function(data){},function(error){});
+            }
           , check:function(index){
-                var planner=$scope.storage.planners[index];
+                var planner=$scope.storage.planners[index]
 
                 planner.check='checking';
                 Resources.planners.check({
@@ -188,7 +195,7 @@ pleni.controller('WorkspaceController',
                 });
             }
           , isset:function(index){
-                var planner=$scope.storage.planners[index];
+                var planner=$scope.storage.planners[index]
 
                 Resources.planners.isset({
                     server:planner.id

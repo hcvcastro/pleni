@@ -18,6 +18,9 @@ article.form(ng-show='workspace.env.panel==\'settings\'')
                         a(title='Add/Remove planner to master notifier',ng-click='planners.follow($index)')
                             span.fa(ng-class='{\'fa-bell-o\':planner.follow==true,\'fa-bell-slash-o\':planner.follow==false}')
                     li.link
+                        a(title='Clean TID',ng-show='planner.type==\'none\'||planner.type==\'io\'||planner.type==\'ion\'',ng-click='planners.clean($index)')
+                            span.fa.fa-recycle
+                    li.link
                         a(title='Check connection',ng-click='planners.check($index)')
                             span.fa.fa-refresh(ng-class='{\'fa-spin\':planner.check==\'checking\'}')
                 span.extra(ng-class='{\'pick\':ui.planner[$index]}') {{planner.api.length}} tasks 

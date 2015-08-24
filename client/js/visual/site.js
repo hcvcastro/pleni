@@ -6,8 +6,10 @@ var visual={
             .attr('class','tooltip')
             .html(function(d){
                 return '<div class="title">'+d.page+'</div>'+
-                    '<div class="subtle">'+(d.get ? '✓':'✕')+'</div>'+
-                    '<div class="subtle">'+d.mimetype+'</div>';
+'<div class="subtle"><strong>Node status</strong>'+d.status+'</div>'+
+'<div class="subtle"><strong>Node type</strong>'+d.type+'</div>'+
+'<div class="subtle"><strong>HTTP status code</strong>'+d.statuscode+'</div>'+
+'<div class="subtle"><strong>MIME type</strong>'+d.mimetype+'</div>';
             })
             .direction('n');
     

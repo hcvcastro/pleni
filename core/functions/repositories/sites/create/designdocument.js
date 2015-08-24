@@ -64,8 +64,9 @@ module.exports=function(args){
                         +'th.max.apply(null,values),\'count\':values.length}}}'
                 }
               , 'mimetype':{
-                    'map':'function(doc){if(doc._id.substring(0,4)==\'file\'){e'
-                        +'mit(doc.mimetype,null);}}'
+                    'map':'function(doc){if(doc._id.substring(0,4)==\'file\'){v'
+                        +'ar r=/([a-z]+\\/[a-z]+).*/.exec(doc.mimetype);if(r){e'
+                        +'mit(r[1],null);}}}'
                   , 'reduce':'_count'
                 }
               , 'sitemap':{
