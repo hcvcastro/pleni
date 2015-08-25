@@ -171,7 +171,7 @@ var destroy=function(){
     });
 };
 
-process.on('SIGINT',destroy);
+//process.on('SIGINT',destroy);
 process.on('SIGTERM',destroy);
 
 function session(request,response){

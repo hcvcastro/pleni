@@ -332,6 +332,11 @@ module.exports=function(app,session,save_session){
         }
     };
 
+    app.head('/dbserver/:repository/:document',authed,
+    function(request,response){
+        return generic(request,response,'head');
+    });
+
     app.put('/dbserver/:repository/:document',authed,
     function(request,response){
         return generic(request,response,'put');
@@ -340,6 +345,11 @@ module.exports=function(app,session,save_session){
     app.get('/dbserver/:repository/:document',authed,
     function(request,response){
         return generic(request,response,'get');
+    });
+
+    app.post('/dbserver/:repository/:document',authed,
+    function(request,response){
+        return generic(request,response,'post');
     });
 
     app.head('/dbserver/:repository/_design/:document',authed,
