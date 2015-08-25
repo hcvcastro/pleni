@@ -45,6 +45,10 @@ module.exports=function(args){
                     +')&&(function(){if(req.query.status==\'ALL\'){return true;'
                     +'}else{return req.query.status==doc.status;}})();}else{ret'
                     +'urn false;}}'
+              , 'requestslist':'function(doc,req){var match=/request::[0-9]+::('
+                    +'.+)::(.+)/.exec(doc._id);if(match){return (req.query.meth'
+                    +'od==\'ALL\'||req.query.method==match[1])&&(req.query.page'
+                    +'==match[2]);}else{return false;}}'
             }
           , 'views':{
                 'wait':{

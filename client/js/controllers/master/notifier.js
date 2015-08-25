@@ -85,6 +85,9 @@ pleni.controller('NotifierController',
 
         $scope.clean=function(){
             Notifiers.clean({server:'master'},function(){
+                $scope.storage.planners.forEach(function(planner){
+                    planner.follow=false;
+                });
             },function(error){
                 utils.show('error',error);
             });

@@ -240,6 +240,10 @@ var visual={
         var source=undefined
           , target=undefined
 
+        if(visual.vis==undefined){
+            return;
+        }
+
         if(node.page in visual.hash1){
             source=visual.hash1[node.page];
 
