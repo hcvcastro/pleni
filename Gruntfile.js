@@ -529,6 +529,9 @@ module.exports=function(grunt){
                   , src:'fonts/fontawesome-webfont.*'
                   , dest:'dist/master/client/fonts/'
                 },{
+                    src:'client/fonts/tasks.ttf'
+                  , dest:'dist/master/client/fonts/tasks.ttf'
+                },{
                     src:'bower_components/jquery/dist/jquery.min.js'
                   , dest:'dist/master/client/js/jquery.min.js'
                 },{

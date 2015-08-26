@@ -1,6 +1,7 @@
 'use strict';
 
 var _request=require('request')
+  , _url=require('url')
   , validate=require('../../core/validators')
   , _success=require('../../core/json-response').success
   , _error=require('../../core/json-response').error
@@ -274,8 +275,11 @@ module.exports=function(app,session,save_session){
         }
     });
 
-    var generic=function(request,response,method){
-        var repository=request.params.repository
+    app.all(/^\/dbserver\/([a-zA-Z0-9_-]+)\/(.*)$/,authed,
+    function(request,response){
+        var method=request.method.toLowerCase()
+          , parse=_url.parse(request.url)
+          , repository=request.params[0]
           , Repository=request.user.repositories.find(function(_repository){
                 return _repository.name==repository;
             })
@@ -283,20 +287,27 @@ module.exports=function(app,session,save_session){
         if(Repository){
             dbauth(Repository.dbserver,function(dbserver){
                 if(dbserver){
-                    var name=dbserver.db.prefix+request.user.id+'_'+repository
-                      , params=request.url.split('/')
-
-                    params[0]=dbserver.db.host+':'+dbserver.db.port;
-                    params[2]=name;
-                    params.splice(1,1);
-
-                    var packet={
-                            url:params.join('/')
-                          , headers:{
+                    var params=[
+                            dbserver.db.host+':'+dbserver.db.port
+                          , dbserver.db.prefix+request.user.id+'_'+repository
+                          , request.params[1]
+                        ]
+                      , packet={
+                            headers:{
                                 'Cookie':dbserver.auth.cookie
                               , 'X-CouchDB-WWW-Authenticate':'Cookie'
                             }
                         }
+
+                    if(/^[a-z]+::.*$/.test(params[2])){
+                        params[2]=params[2].replace(/\//g,'%2F');
+                    }
+
+                    packet.url=params.join('/');
+                    if(parse.search){
+                        packet.url+=parse.search;
+                    }
+
                     if(method!='head'){
                         packet.json=request.body;
                     }
@@ -330,41 +341,6 @@ module.exports=function(app,session,save_session){
                 response.send();
             }
         }
-    };
-
-    app.head('/dbserver/:repository/:document',authed,
-    function(request,response){
-        return generic(request,response,'head');
-    });
-
-    app.put('/dbserver/:repository/:document',authed,
-    function(request,response){
-        return generic(request,response,'put');
-    });
-
-    app.get('/dbserver/:repository/:document',authed,
-    function(request,response){
-        return generic(request,response,'get');
-    });
-
-    app.post('/dbserver/:repository/:document',authed,
-    function(request,response){
-        return generic(request,response,'post');
-    });
-
-    app.head('/dbserver/:repository/_design/:document',authed,
-    function(request,response){
-        return generic(request,response,'head');
-    });
-
-    app.put('/dbserver/:repository/_design/:document',authed,
-    function(request,response){
-        return generic(request,response,'put');
-    });
-
-    app.get('/dbserver/:repository/_design/:view/_view/:funct',authed,
-    function(request,response){
-        return generic(request,response,'get');
     });
 };
 

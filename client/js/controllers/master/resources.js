@@ -422,7 +422,7 @@ pleni.controller('ResourcesController',
                 $scope.planners.env.view='list';
             }
           , add:function(flag){
-                $scope.planners.type=(flag==0?'real':'virtual');
+                $scope.planner.type=(flag==0?'real':'virtual');
                 $scope.planners.env.view='form';
                 $scope.planners.env.type='collection';
             }

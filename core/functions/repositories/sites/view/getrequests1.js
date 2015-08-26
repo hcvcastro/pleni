@@ -36,6 +36,7 @@ module.exports=function(args){
     if(args.debug){
         console.log('get a requests list');
     }
+
     request.get({url:url+view,headers:headers},function(error,response){
         if(!error){
             if(response.statusCode==200){

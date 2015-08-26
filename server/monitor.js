@@ -152,6 +152,7 @@ app.set('auth',function(request,response,next){
 });
 
 var destroy=function(){
+    console.log('closing pleni monitor server ...');
     server.close(function(){
         async.each([
             'monitor:apps'
@@ -172,7 +173,7 @@ var destroy=function(){
 };
 
 //process.on('SIGINT',destroy);
-process.on('SIGTERM',destroy);
+//process.on('SIGTERM',destroy);
 
 function session(request,response){
     if(schema.js.validate(request.body,schema.auth2).length==0){

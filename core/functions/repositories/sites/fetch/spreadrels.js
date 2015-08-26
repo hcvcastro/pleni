@@ -34,8 +34,7 @@ module.exports=function(args){
       , check1=function(packet){
             var deferred2=Q.defer()
               , parse=_url.parse(packet.url)
-              , page=encodeURIComponent(parse.pathname)
-              , url=args.db.host+'/'+args.db.name+'/page%3A%3A'+page
+              , url=args.db.host+'/'+args.db.name+'/page::'+parse.pathname
 
             request.head({url:url,headers:headers},function(error,response){
                 if(!error&&response.statusCode==200){
@@ -54,8 +53,8 @@ module.exports=function(args){
 
             if(packet.check===false){
                 var parse=_url.parse(packet.url)
-                  , page=encodeURIComponent(parse.pathname)
-                  , url=args.db.host+'/'+args.db.name+'/file%3A%3A'+page
+                  , url=args.db.host+'/'+args.db.name+'/file::'
+                        +parse.pathname
 
                 request.head({url:url,headers:headers},function(error,response){
                     if(!error&&response.statusCode==200){
@@ -76,8 +75,8 @@ module.exports=function(args){
             var deferred2=Q.defer()
               , parse=_url.parse(packet.url)
               , ts=Date.now()
-              , page=encodeURIComponent(parse.pathname)
-              , document=['request',ts,'HEAD',page].join('%3A%3A')
+              , page=parse.pathname
+              , document=['request',ts,'HEAD',page].join('::')
               , url=args.db.host+'/'+args.db.name+'/'+document
 
             if(packet.check===false){
