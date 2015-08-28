@@ -484,8 +484,6 @@ module.exports=function(app){
         var targs=request.body.targs
           , buffer={}
 
-        targs.debug=true;
-
         if(targs._repository){
             var repository=get_element(
                 targs._repository,request.user.resources.repositories)
