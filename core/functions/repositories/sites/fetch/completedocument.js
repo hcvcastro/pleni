@@ -34,8 +34,8 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , ts=Date.now()
-      , page=encodeURIComponent(args.task.wait.id)
-      , url=args.db.host+'/'+args.db.name+'/'+page
+//      , page=encodeURIComponent(args.task.wait.id)
+      , url=args.db.host+'/'+args.db.name+'/'+args.task.wait.id
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'

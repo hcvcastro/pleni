@@ -27,8 +27,8 @@ module.exports=function(args){
     var deferred=Q.defer()
       , parse=_url.parse(args.task.wait.url)
       , ts=Date.now()
-      , page=encodeURIComponent(parse.pathname)
-      , document=['request',ts,'GET',page].join('::')
+//      , page=encodeURIComponent(parse.pathname)
+      , document=['request',ts,'GET',parse.pathname].join('::')
       , url=args.db.host+'/'+args.db.name+'/'+document
       , headers={
             'Cookie':args.auth.cookie
