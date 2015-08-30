@@ -23,7 +23,8 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/'
-      , doc=encodeURIComponent(args.site.doc.id)
+//      , doc=encodeURIComponent(args.site.doc.id)
+      , doc=args.site.doc.id
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
