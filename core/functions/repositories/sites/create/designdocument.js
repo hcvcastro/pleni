@@ -31,20 +31,21 @@ module.exports=function(args){
                     +'est\'){return (function(){if(req.query.method==\'ALL\'){r'
                     +'eturn true;}else{return req.query.method==doc.request.met'
                     +'hod;}})()&&(function(){if(req.query.statuscode==\'ALL\'){'
-                    +'return true;}else{return +req.query.statuscode==Math.floo'
-                    +'r(doc.response.status/100);}})()&&(function(){if(req.quer'
-                    +'y.status==\'ALL\'){return true;}else{return req.query.sta'
-                    +'tus==doc.status;}})();}else{return false;}}'
+                    +'return true;}else{if(doc.response){return +req.query.stat'
+                    +'uscode==Math.floor(doc.response.status/100);}else{return '
+                    +'false;}}})()&&(function(){if(req.query.status==\'ALL\'){r'
+                    +'eturn true;}else{return req.query.status==doc.status;}})('
+                    +');}else{return false;}}'
               , 'pages':'function(doc,req){if(doc._id.substring(0,4)==\'page\')'
                     +'{return (function(){if(req.query.status==\'ALL\'){return '
                     +'true;}else{return req.query.status==doc.status;}})();}els'
                     +'e{return false;}}'
               , 'files':'function(doc,req){if(doc._id.substring(0,4)==\'file\')'
                     +'{return (function(){if(req.query.mimetype==\'ALL\'){retur'
-                    +'n true;}else{return req.query.mimetype==doc.mimetype;}})('
-                    +')&&(function(){if(req.query.status==\'ALL\'){return true;'
-                    +'}else{return req.query.status==doc.status;}})();}else{ret'
-                    +'urn false;}}'
+                    +'n true;}else{return doc.mimetype.indexOf(req.query.mimety'
+                    +'pe)==0;}})()&&(function(){if(req.query.status==\'ALL\'){r'
+                    +'eturn true;}else{return req.query.status==doc.status;}})('
+                    +');}else{return false;}}'
               , 'requestslist':'function(doc,req){var match=/request::[0-9]+::('
                     +'.+)::(.+)/.exec(doc._id);if(match){return (req.query.meth'
                     +'od==\'ALL\'||req.query.method==match[1])&&(req.query.page'
@@ -69,8 +70,8 @@ module.exports=function(args){
                 }
               , 'mimetype':{
                     'map':'function(doc){if(doc._id.substring(0,4)==\'file\'){v'
-                        +'ar r=/([a-z]+\\/[a-z]+).*/.exec(doc.mimetype);if(r){e'
-                        +'mit(r[1],null);}}}'
+                        +'ar r=/([a-z]+\\/[a-z-]+).*/.exec(doc.mimetype);if(r){'
+                        +'emit(r[1],null);}}}'
                   , 'reduce':'_count'
                 }
               , 'sitemap':{
@@ -83,7 +84,8 @@ module.exports=function(args){
                         +'/[^\\/]+(\\/.*)/.exec(i.url)[1];});}else{return [];}}'
                         +')(doc)});break;case \'file\':emit(doc._id.substring(6'
                         +'),{status:doc.status,statuscode:doc.statuscode,mimety'
-                        +'pe:doc.mimetype,type:\'file\',rels:[]});break;}}'
+                        +'pe:/^([a-z]+\\/[a-z-]+).*$/.exec(doc.mimetype)[1],typ'
+                        +'e:\'file\',rels:[]});break;}}'
                 }
             }
         };
