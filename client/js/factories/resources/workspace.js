@@ -7,6 +7,7 @@ pleni.factory('Workspace',['$resource',function($resource){
       , document:'@document'
     },{
         summarize:{method:'POST',params:{document:'summarize'}}
+      , remove:{method:'POST',params:{document:'remove'}}
     });
 }]);
 

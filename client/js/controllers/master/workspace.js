@@ -462,7 +462,7 @@ pleni.controller('WorkspaceController',
                     }
                 });
             }
-          , remove:function(){
+          , close:function(){
                 var project=$scope.storage.workspace
                   , repositories=project.repositories
                   , repository=project.repository
@@ -522,6 +522,15 @@ pleni.controller('WorkspaceController',
                     $scope.repositories.summary($scope.storage.workspace.index);
                 },function(error){
                     utils.show('error','The summarize fail');
+                });
+            }
+          , remove:function(){
+                Resources.workspace.remove(
+                    $scope.storage.workspace.name,
+                    $scope.storage.workspace.repository,function(data){
+                    $scope.repositories.summary($scope.storage.workspace.index);
+                },function(error){
+                    utils.show('error','The remove fail');
                 });
             }
           , pagination_first:function(){

@@ -9,6 +9,7 @@ module.exports={
   , tasks:[
         'site/create'
       , 'site/fetch'
+      , 'site/summarize'
       , 'site/remove'
     ]
 };

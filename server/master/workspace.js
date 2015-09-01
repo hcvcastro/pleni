@@ -7,6 +7,7 @@ var extend=require('underscore').extend
   , _error=require('../../core/json-response').error
   , test=require('../../core/functions/databases/test')
   , auth=require('../../core/functions/databases/auth')
+  , remove=require('../../core/functions/databases/remove')
   , sites='../../core/functions/repositories/sites'
   , getsummary=require(sites+'/view/getsummary')
   , getdocument=require(sites+'/view/getdocument')
@@ -120,6 +121,14 @@ module.exports=function(app,config){
     function(request,response){
         return generic_document(request,response,{},
             [getsummary,gettimestamp,summarize],function(args){
+            response.status(200).json(_success.ok);
+        });
+    });
+
+    app.post('/workspace/:project/:repository/remove',authed,
+    function(request,response){
+        return generic_document(request,response,{},
+            [remove],function(args){
             response.status(200).json(_success.ok);
         });
     });

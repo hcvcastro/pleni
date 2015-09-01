@@ -260,6 +260,12 @@ pleni.factory('Resources',['$sessionStorage',
                       , repository:repository
                     },success,failure);
                 }
+              , remove:function(project,repository,success,failure){
+                    bind(Workspace.remove,{
+                        project:project
+                      , repository:repository
+                    },success,failure);
+                }
               , document:function(project,repository,document,success,failure){
                     bind(Workspace.get,{
                         project:project
