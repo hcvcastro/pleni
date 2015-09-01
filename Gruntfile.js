@@ -408,6 +408,7 @@ module.exports=function(grunt){
                       , 'client/js/factories/resources-master.js'
                       , 'client/js/visual/site.js'
                       , 'client/js/factories/auth.js'
+                      , 'client/js/factories/documents.js'
                       , 'client/js/factories/editor.js'
                       , 'client/js/factories/socket.js'
                       , 'client/js/factories/visual.js'

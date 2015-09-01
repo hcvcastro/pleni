@@ -13,7 +13,7 @@ exports.set=function(host,port,signature){
     app.set('host',host);
     app.set('port',port);
     app.disable('x-powered-by');
-    app.use(bodyparser.json());
+    app.use(bodyparser.json({limit:'5mb'}));
 
     if(config.env=='production'){
         app.use(morgan('combined'));

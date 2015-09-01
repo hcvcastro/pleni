@@ -194,8 +194,12 @@ module.exports=function(app,config){
         });
     });
 
-    app.get('/workspace/:project/:repository/:document',authed,
+    app.get(/^\/workspace\/(.+?)\/(.+?)\/(.+)$/,authed,
     function(request,response){
+        request.params.project=request.params[0];
+        request.params.repository=request.params[1];
+        request.params.document=request.params[2];
+
         return generic_document(request,response,{
             site:{doc:{id:request.params.document}}},
             [getdocument],function(args){

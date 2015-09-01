@@ -2,9 +2,9 @@
 
 pleni.controller('WorkspaceController',
     ['$scope','$routeParams','$location','$sessionStorage',
-    'Resources','Editor','Visual',
+    'Resources','Editor','Visual','Document',
     function($scope,$routeParams,$location,$sessionStorage,
-        Resources,Editor,Visual){
+        Resources,Editor,Visual,Document){
         $scope.Math = window.Math;
 
         utils.set_tab(0,3);
@@ -606,9 +606,9 @@ pleni.controller('WorkspaceController',
           , request:function(id){
                 var workspace=$scope.storage.workspace
 
-                Resources.workspace.document(workspace.name,
-                    workspace.repository,id,function(data){
-                    $scope.viewers.document=data;
+                Document.get(workspace.name,workspace.repository,id
+                ,function(data){
+                    $scope.viewers.document=data.data;
                 },function(error){
                     utils.show('error','The document is not found');
                 });

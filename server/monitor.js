@@ -69,7 +69,7 @@ var parser=cookieparser(config.cookie.secret)
 
 app.use(favicon(join(__dirname,'..','client','favicon.ico')));
 app.use(parser);
-app.use(bodyparser.json());
+app.use(bodyparser.json({limit:'5mb'}));
 app.use(cookiesession({
     cookie:{
         path:'/'
