@@ -12,6 +12,7 @@ var _url=require('url')
   , createrequest=require(base+'/repositories/sites/fetch/createrequest')
   , analyzer=require(base+'/repositories/sites/fetch/htmlanalyzer')
   , createpage=require(base+'/repositories/sites/fetch/createpage')
+  , getrequests1=require(base+'/repositories/sites/view/getrequests1')
   , spread=require(base+'/repositories/sites/fetch/spreadrels')
   , createfile=require(base+'/repositories/sites/fetch/createfile')
   , complete=require(base+'/repositories/sites/fetch/completedocument')
@@ -63,6 +64,9 @@ var _url=require('url')
  *          complete
  *              id
  *              _rev
+ *      site
+ *          filters
+ *          list
  */
 module.exports=function(params,repeat,stop,notifier){
     init(params)
@@ -75,6 +79,7 @@ module.exports=function(params,repeat,stop,notifier){
     .then(createrequest)
     .then(analyzer)
     .then(createpage)
+    .then(getrequests1)
     .then(spread)
     .then(createfile)
     .then(complete)

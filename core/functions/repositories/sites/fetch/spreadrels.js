@@ -16,10 +16,13 @@ var uniq=require('underscore').uniq
  *          cookie
  *      task
  *          wait
+ *              id
  *              url
  *          response
  *              headers
  *          rels
+ *      site
+ *          list
  *
  * args output
  *      task
@@ -31,46 +34,6 @@ module.exports=function(args){
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
-      , check1=function(packet){
-            var deferred2=Q.defer()
-              , parse=_url.parse(packet.url)
-              , url=args.db.host+'/'+args.db.name+'/page::'+parse.pathname
-
-            request.head({url:url,headers:headers},function(error,response){
-                if(!error&&response.statusCode==200){
-                    packet.check=true;
-                }else{
-                    packet.check=false;
-                }
-
-                deferred2.resolve(packet);
-            });
-
-            return deferred2.promise;
-        }
-      , check2=function(packet){
-            var deferred2=Q.defer()
-
-            if(packet.check===false){
-                var parse=_url.parse(packet.url)
-                  , url=args.db.host+'/'+args.db.name+'/file::'
-                        +parse.pathname
-
-                request.head({url:url,headers:headers},function(error,response){
-                    if(!error&&response.statusCode==200){
-                        packet.check=true;
-                    }else{
-                        packet.check=false;
-                    }
-
-                    deferred2.resolve(packet);
-                });
-            }else{
-                deferred2.resolve(packet);
-            }
-
-            return deferred2.promise;
-        }
       , spread=function(packet){
             var deferred2=Q.defer()
               , parse=_url.parse(packet.url)
@@ -79,7 +42,7 @@ module.exports=function(args){
               , document=['request',ts,'HEAD',page].join('::')
               , url=args.db.host+'/'+args.db.name+'/'+document
 
-            if(packet.check===false){
+            if(!(page in packet.dict)){
                 request.put({
                     url:url
                   , headers:headers
@@ -102,7 +65,6 @@ module.exports=function(args){
                     deferred2.resolve(packet);
                 });
             }else{
-                packet.create=false;
                 deferred2.resolve(packet);
             }
 
@@ -113,7 +75,7 @@ module.exports=function(args){
         console.log('spreading page relations');
     }
 
-    if(args.task.rels){
+    if(args.task.rels&&args.task.rels.length>0){
         var list={}
           , _rels=[]
           , rels=uniq(args.task.rels.map(function(i){
@@ -121,6 +83,10 @@ module.exports=function(args){
                 }).filter(function(i){
                     return validator.validHost(i);
                 }))
+          , exists=args.site.list.map(function(i){
+                    return i.id.split('::')[3];
+                })
+          , dict={}
 
         rels.forEach(function(url){
             var parse=_url.parse(url);
@@ -133,8 +99,13 @@ module.exports=function(args){
             _rels.push(list[i]);
         }
 
+        dict[args.task.wait.id.split('::')[3]]=true;
+        exists.forEach(function(i){
+            dict[i]=true;
+        });
+
         Q.all(_rels.map(function(item){
-            return check1({url:item}).then(check2).then(spread);
+            return spread({dict:dict,url:item});
         }))
         .spread(function(){
             var list=[]
@@ -157,6 +128,7 @@ module.exports=function(args){
             deferred.resolve(args);
         });
     }else{
+        args.task.spread=[];
         deferred.resolve(args);
     }
 

@@ -17,6 +17,10 @@ module.exports=function(args){
 
     delete args.task;
 
+    args.site={
+        filters:'HEAD|ALL|ALL'
+    };
+
     deferred.resolve(args);
     return deferred.promise;
 };
