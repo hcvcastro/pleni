@@ -25,14 +25,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.8259844"
-     inkscape:cx="486.36238"
-     inkscape:cy="834.36564"
+     inkscape:zoom="1"
+     inkscape:cx="271.89107"
+     inkscape:cy="485.37495"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:window-width="1914"
-     inkscape:window-height="1055"
+     inkscape:window-height="1056"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -52,7 +52,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -320,5 +320,22 @@
          id="tspan4190"
          x="511.61194"
          y="311.90164">5xx</tspan></text>
+    <circle
+       r="16"
+       cy="780.36121"
+       cx="48"
+       id="circle4180"
+       style="opacity:1;fill:#cc00ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.20000005;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text4182"
+       y="789.73248"
+       x="95.708786"
+       style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:condensed;font-size:26.25px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com, Light Condensed';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="789.73248"
+         x="95.708786"
+         id="tspan4184"
+         sodipodi:role="line">text/plain</tspan></text>
   </g>
 </svg>

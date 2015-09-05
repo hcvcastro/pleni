@@ -222,6 +222,10 @@ module.exports=function(app,session,save_session,
 
             request.user.tasks[index].status=status;
 
+            notify(request.user.app,request.user.id,request.seed,{
+                action:'run'
+            });
+
             save_session(_auth,request.user,function(){
                 response.status(200).json({
                     status:status

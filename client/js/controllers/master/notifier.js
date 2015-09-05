@@ -115,6 +115,7 @@ pleni.controller('NotifierController',
                       , count:undefined
                       , interval:undefined
                     };
+                    sel.msg='';
                     break;
                 case 'run':
                     sel.status='running';
@@ -129,10 +130,6 @@ pleni.controller('NotifierController',
                     ].status='stopped';
                     break;
                 case 'task':
-                    if(sel.set.count>0){
-                        sel.set.count--;
-                    }
-
                     switch(pkg.planner.task.id){
                         case 'site/fetch':
                             var node=pkg.planner.task.msg.node
@@ -160,6 +157,7 @@ pleni.controller('NotifierController',
         };
 
         Socket.on('notifier',function(pkg){
+            //console.log('socket.io',JSON.stringify(pkg));
             switch(pkg.action){
                 case 'put':
                 case 'delete':
@@ -171,6 +169,7 @@ pleni.controller('NotifierController',
                         $scope.storage.threads.splice(thread[0],1);
                         $scope.current=undefined;
                         $scope.thread=undefined;
+                        $scope.message='';
                     }
                     break;
                 case 'create':

@@ -46,7 +46,26 @@ redisclient.on('error',console.error.bind(console,'redis connection error:'));
 redisclient.on('ready',function(){
     console.log('connection to redis db:',
         config.redis.host,':',config.redis.port);
+
+    console.log('cleaning pleni monitor structures ...');
+    async.each([
+        'monitor:apps'
+      , 'monitor:dbservers'
+      , 'monitor:repositories'
+      , 'monitor:planners'
+      , 'monitor:free'
+      , 'monitor:apis'
+      , 'monitor:tasks'
+      , 'monitor:queue'
+    ],function(element,done){
+        redisclient.del(element,function(){
+            done();
+        });
+    },function(){
+        console.log('ready!!');
+    });
 });
+
 var store=new redisstore({
     client:redisclient
   , host:config.redis.host
@@ -150,30 +169,6 @@ app.set('auth',function(request,response,next){
         .cookie('pleni.monitr.auth',JSON.stringify({role:'guest'}))
         .json(_error.auth);
 });
-
-var destroy=function(){
-    console.log('closing pleni monitor server ...');
-    server.close(function(){
-        async.each([
-            'monitor:apps'
-          , 'monitor:dbservers'
-          , 'monitor:repositories'
-          , 'monitor:planners'
-          , 'monitor:free'
-          , 'monitor:apis'
-        ],function(element,done){
-            redisclient.del(element,function(){
-                done();
-            });
-        },function(){
-            console.log('Bye bye!!');
-            process.exit();
-        });
-    });
-};
-
-//process.on('SIGINT',destroy);
-//process.on('SIGTERM',destroy);
 
 function session(request,response){
     if(schema.js.validate(request.body,schema.auth2).length==0){
@@ -281,7 +276,6 @@ var socketsdown={}
 
             if(user){
                 var json=JSON.parse(user)
-
                 notify(json.appid,json.userid,json.seed,msg);
             }
 
