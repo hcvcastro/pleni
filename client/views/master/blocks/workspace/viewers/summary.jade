@@ -6,6 +6,6 @@
         ul.right
             li: a.fa.fa-trash(title='Remove from workspace',ng-click='repositories.close()')
     dl
-        dt(ng-repeat-start='(key,value) in viewers.document') {{key|pretty}}:
-        dd(ng-repeat-end) {{value|render:key}}
+        dt(ng-repeat-start='(key,value) in viewers.document',ng-bind='(key|pretty)+\':\'')
+        dd(ng-repeat-end,ng-bind='(value|render:key)')
 

@@ -1,7 +1,7 @@
 article.form.animate(ng-show='repositories.env.view==\'form\'')
     .title
-        h2(ng-show='repositories.env.type==\'collection\'') Add a Repository
-        h2(ng-show='repositories.env.type==\'element\'') Edit: {{repository.id}}
+        h2(ng-show='repositories.env.type==\'collection\'',ng-bind='\'Add a Repository\'')
+        h2(ng-show='repositories.env.type==\'element\'',ng-bind='\'Edit: \'+repository.id')
         .close
             a.fa.fa-close(ng-click='repositories.list()')
     .body

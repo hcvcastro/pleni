@@ -18,8 +18,8 @@ article.list
         tbody
             tr(ng-repeat='project in storage.projects')
                 td
-                    a(title='Open workspace',href='/#/projects/{{project.id}}') {{project.id}}
-                td {{projects.implode(', ',project._repositories)}}
+                    a(title='Open workspace',href='/#/projects/{{project.id}}',ng-bind='project.id')
+                td(ng-bind='projects.implode(\', \',project._repositories)')
                 td.status
                     a.fa.fa-sign-in(title='Open workspace',href='/#/projects/{{project.id}}')
                 td.options

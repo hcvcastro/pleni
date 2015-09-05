@@ -32,20 +32,20 @@
         .table
             .item.request(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
-                .date {{item.ts_modified}}
-                .method {{item.request.method}}
-                .url {{item.request.url}}
+                .date(ng-bind='item.ts_modified')
+                .method(ng-bind='item.request.method')
+                .url(ng-bind='item.request.url')
                 .status(ng-class='viewers.classcodes(item.response.status)',ng-bind='item.response.status')
                 .clearfix
             .item.total(ng-bind='(viewers.total==0?0:viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
         .separator
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
         .request
-            p {{viewers.document.request.method}} {{viewers.document.request.url}} HTTP/1.1
-            p(ng-repeat='(header,value) in viewers.document.request.headers') {{header}}: {{value}}
+            p(ng-bind='viewers.document.request.method+\' \'+viewers.document.request.url+\' HTTP/1.1\'')
+            p(ng-repeat='(header,value) in viewers.document.request.headers',ng-bind='header+\': \'+value')
         .response(ng-show='viewers.document.response')
-            p {{viewers.document.response.status}} {{viewers.document.response.status|statuscode}}
-            p(ng-repeat='(header,value) in viewers.document.response.headers') {{header}}: {{value}}
+            p(ng-bind='viewers.document.response.status+\' \'+(viewers.document.response.status|statuscode)')
+            p(ng-repeat='(header,value) in viewers.document.response.headers',ng-bind='header+\': \'+value')
         .body
-            p {{viewers.document.response.body}}
+            p(ng-bind='viewers.document.response.body')
 

@@ -1,7 +1,7 @@
 article.form.animate(ng-show='notifiers.env.view==\'form\'')
     .title
-        h2(ng-show='notifiers.env.type==\'collection\'') Add a notifier
-        h2(ng-show='notifiers.env.type==\'element\'') Edit: {{notifier.id}}
+        h2(ng-show='notifiers.env.type==\'collection\'',ng-bind='\'Add a Notifier\'')
+        h2(ng-show='notifiers.env.type==\'element\'',ng-bind='\'Edit: \'+notifier.id')
         .close
             a.fa.fa-close(ng-click='notifiers.list()')
     .body

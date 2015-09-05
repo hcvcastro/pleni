@@ -1,6 +1,6 @@
 article.view.animate(ng-show='repositories.env.view==\'view\'')
     .title
-        h2 {{repository.id}} ({{repository.db.name}})
+        h2(ng-bind='repository.id+\' (\'+repository.db.name+\')\'')
         .close
             a.fa.fa-close(ng-click='repositories.list()')
     .body

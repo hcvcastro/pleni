@@ -1,20 +1,20 @@
 article.view.animate(ng-show='notifiers.env.view==\'view\'')
     .title
-        h2 {{notifier.id}} ({{notifier.notifier.host}}:{{notifier.notifier.port}})
+        h2(ng-bind='notifier.id+\' (\'+notifier.notifier.host+\':\'+notifier.notifier.port+\')\'')
         .close
             a.fa.fa-close(ng-click='notifiers.list()')
     .body
         .column1
             .title
                 h3 Connected Planners
-            .item(ng-repeat='planner in notifier.planners') {{planner}}
+            .item(ng-repeat='planner in notifier.planners',ng-bind='planner')
                 .close
                     a.fa.fa-trash(ng-click='notifiers.planners.remove($index)')
                 .clearfix
         .column2
             .title
                 h3 Available Planners
-            .item(ng-repeat='planner in storage.planners') {{planner.id}}
+            .item(ng-repeat='planner in storage.planners',ng-bind='planner.id')
                 .close
                     a.fa.fa-plus-circle(ng-click='notifiers.planners.add($index)')
                 .clearfix

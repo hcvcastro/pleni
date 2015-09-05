@@ -12,13 +12,13 @@ article.form(ng-show='workspace.env.panel==\'repositories\'')
                             a.fa.fa-refresh(ng-class='{\'fa-spin\':dbserver.check==\'scanning\'}')
                         li
                             span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-question\':dbserver.check==\'scanning\',\'fa-check\':dbserver.check==\'online\',\'fa-close\':dbserver.check==\'offline\'}')
-                    h3 {{dbserver.id}} ({{dbserver.db.prefix}})
+                    h3(ng-bind='dbserver.id+\' (\'+dbserver.db.prefix+\')\'')
                 .row(ng-repeat='repository in dbserver.repositories',ng-show='dbserver.toggle==\'show\'')
-                    label {{repository.name|truncate:20}}
+                    label(ng-bind='(repository.name|truncate:20)')
                     ul.group
                         li.link
                             a.fa.fa-plus-circle(title='Add repository to workspace',ng-click='repositories.add($parent.$index,$index)')
-                    span.extra {{repository.params.data_size}} / {{repository.params.doc_count}} docs
+                    span.extra(ng-bind='repository.params.data_size+\' / \'+repository.params.doc_count+\' docs\'')
             p.offset
                 button(type='button',ng-click='workspace.close()') Close
 

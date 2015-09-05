@@ -4,7 +4,7 @@
             .left
                 select(ng-model='viewers.filters[2][0]',ng-change='repositories.files(true)')
                     option(value='ALL') All mimetypes
-                    option(ng-repeat='(mimetype,count) in viewers.mimetypes',value='{{mimetype}}') {{mimetype}} ({{count}})
+                    option(ng-repeat='(mimetype,count) in viewers.mimetypes',value='{{mimetype}}',ng-bind='mimetype+\' (\'+count+\')\'')
                 select(ng-model='viewers.filters[2][1]',ng-change='repositories.files(true)')
                     option(value='ALL') All types
                     option(value='wait') Wait files
@@ -18,10 +18,10 @@
         .table
             .item.file(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.file(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-eye\':item.status==\'monitoring\'}')
-                .date {{item.ts_modified}}
-                .mimetype {{item.mimetype}}
-                .filesize {{item.filesize}}
-                .url {{item.file}}
+                .date(ng-bind='item.ts_modified')
+                .mimetype(ng-bind='item.mimetype')
+                .filesize(ng-bind='item.filesize')
+                .url(ng-bind='item.file')
                 .status(ng-class='viewers.classcodes(item.statuscode)',ng-bind='item.statuscode')
                 .clearfix
             .item.total(ng-bind='(viewers.total==0?0:viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')

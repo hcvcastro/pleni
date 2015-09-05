@@ -1,6 +1,6 @@
 article.view.animate(ng-show='planners.env.view==\'view\'')
     .title
-        h2 {{planner.id}} ({{planner.planner.host}}:{{planner.planner.port}})
+        h2(ng-bind='planner.id+\' (\'+planner.planner.host+\':\'+planner.planner.port+\')\'')
         .close
             a.fa.fa-close(ng-click='planners.list()')
     .body

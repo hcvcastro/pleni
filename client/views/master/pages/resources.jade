@@ -5,25 +5,25 @@
                 .title
                     a(ng-click='dbservers.show()') Database Servers
                     .right
-                        span.r1 {{storage.dbservers.length}}
+                        span.r1(ng-bind='storage.dbservers.length')
                         a.r2.fa.fa-refresh(ng-click='dbservers.refresh()')
             li
                 .title
                     a(ng-click='repositories.show()') Repositories
                     .right
-                        span.r1 {{storage.repositories.length}}
+                        span.r1(ng-bind='storage.repositories.length')
                         a.r2.fa.fa-refresh(ng-click='repositories.refresh()')
             li
                 .title
                     a(ng-click='planners.show()') Planners
                     .right
-                        span.r1 {{storage.planners.length}}
+                        span.r1(ng-bind='storage.planners.length')
                         a.r2.fa.fa-refresh(ng-click='planners.refresh()')
             li
                 .title
                     a(ng-click='notifiers.show()') Notifiers
                     .right
-                        span.r1 {{storage.notifiers.length}}
+                        span.r1(ng-bind='storage.notifiers.length')
                         a.r2.fa.fa-refresh(ng-click='notifiers.refresh()')
         include ../blocks/footer/bottom
     .main
@@ -53,3 +53,4 @@
             include ../blocks/resources/form/notifiers
             include ../blocks/resources/remove/notifiers
         include ../blocks/footer
+

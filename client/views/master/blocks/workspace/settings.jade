@@ -8,7 +8,7 @@ article.form(ng-show='workspace.env.panel==\'settings\'')
                 ul.group
                     li.link
                         a.fa(title='Take control of planner',ng-click='planners.exclusive($index)',ng-class='{\'fa-lock\':planner.set.status==\'set\',\'fa-unlock\':planner.set.status==\'unset\',\'fa-spinner\':planner.set.status==\'setting\',\'fa-spin\':planner.set.status==\'setting\'}')
-                label {{planner.id}}
+                label(ng-bind='planner.id')
                 ul.group
                     li: span.fa(title='Planner type: {{planner.type}}',ng-class='{\'fa-bullhorn\':planner.type==\'io\',\'fa-headphones\':planner.type==\'ion\',\'fa-microphone-slash\':planner.type==\'none\'}')
                     li: span.fa(title='Planner connection: {{planner.check}}',ng-class='{\'fa-check\':planner.check==\'online\',\'fa-question\':planner.check==\'unknown\',\'fa-close\':planner.check==\'offline\'}')
@@ -23,14 +23,14 @@ article.form(ng-show='workspace.env.panel==\'settings\'')
                     li.link
                         a(title='Check connection',ng-click='planners.check($index)')
                             span.fa.fa-refresh(ng-class='{\'fa-spin\':planner.check==\'checking\'}')
-                span.extra(ng-class='{\'pick\':ui.planner[$index]}') {{planner.api.length}} tasks 
+                span.extra(ng-class='{\'pick\':ui.planner[$index]}',ng-bind='planner.api.length+\' tasks\'')
             p.large Available Tasks in scanned planners:
             .expand
                 ul.group
                     li(ng-repeat='(name,planner) in storage.workspace.available',ng-mouseenter='workspace.tasks.enter(name)',ng-mouseleave='workspace.tasks.leave()')
                         .button(ng-class='{\'pick\':ui.task[name]}')
                             span.fa(ng-class='workspace.icon(name)')
-                            span {{name}}
+                            span(ng-bind='name')
                 .clearfix
             p.offset
                 button(type='button',ng-click='workspace.close()') Close

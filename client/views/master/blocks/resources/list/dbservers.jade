@@ -22,8 +22,8 @@ article.list
         tbody
             tr(ng-repeat='dbserver in storage.dbservers')
                 td
-                    a(ng-click='dbservers.view($index)') {{dbserver.id|truncate:16}}
-                td {{dbserver.db.host}}:{{dbserver.db.port}}
+                    a(ng-click='dbservers.view($index)',ng-bind='(dbserver.id|truncate:16)')
+                td(ng-bind='dbserver.db.host+\':\'+dbserver.db.port')
                 td.status
                     span.fa(title='DB connection type: {{dbserver.type}}',ng-class='{\'fa-database\':dbserver.type==\'real\',\'fa-magic\':dbserver.type==\'virtual\'}')
                 td.status

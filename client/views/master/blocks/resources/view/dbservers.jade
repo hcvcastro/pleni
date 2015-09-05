@@ -1,6 +1,6 @@
 article.view.animate(ng-show='dbservers.env.view==\'view\'')
     .title
-        h2 {{dbserver.id}} ({{dbserver.db.prefix}})
+        h2(ng-bind='dbserver.id+\' (\'+dbserver.db.prefix+\')\'')
         .close
             a.fa.fa-close(ng-click='dbservers.list()')
     .body
@@ -24,11 +24,11 @@ article.view.animate(ng-show='dbservers.env.view==\'view\'')
                     th.status &nbsp;
             tbody
                 tr(ng-repeat='repositories in dbserver.repositories')
-                    td {{repositories.name|truncate:18}}
-                    td.aright {{repositories.params.doc_count}}
-                    td.aright {{repositories.params.disk_size}}
-                    td.aright {{repositories.params.data_size}}
-                    td.aright {{repositories.params.update_seq}}
+                    td(ng-bind='(repositories.name|truncate:18)')
+                    td.aright(ng-bind='repositories.params.doc_count')
+                    td.aright(ng-bind='repositories.params.disk_size')
+                    td.aright(ng-bind='repositories.params.data_size')
+                    td.aright(ng-bind='repositories.params.update_seq')
                     td.status
                         a.fa.fa-plus-circle(title='Add database to repositories list',ng-click='dbservers.repositories.add($index)')
 

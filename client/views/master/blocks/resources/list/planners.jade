@@ -4,9 +4,6 @@ article.list
             li(ng-click='planners.add(0)')
                 span.fa.fa-plus
                 span Add Planner
-            //li(ng-click='planners.add(1)')
-            //    span.fa.fa-plus
-            //    span Add Virtual Planner
             li(ng-click='planners.refresh(1)')
                 span.fa.fa-refresh
                 span Refresh
@@ -26,8 +23,8 @@ article.list
         tbody
             tr(ng-repeat='planner in storage.planners')
                 td
-                    a(ng-click='planners.view($index)') {{planner.id|truncate:16}}
-                td {{planner.planner.host}}:{{planner.planner.port}}
+                    a(ng-click='planners.view($index)',ng-bind='(planner.id|truncate:16)')
+                td(ng-bind='planner.planner.host+\':\'+planner.planner.port')
                 td.status
                     span.fa(title='Planner type: {{planner.type}}',ng-class='{\'fa-magic\':planner.type==\'virtual\',\'fa-bullhorn\':planner.type==\'io\',\'fa-headphones\':planner.type==\'ion\',\'fa-microphone-slash\':planner.type==\'none\'}')
                 td.status
