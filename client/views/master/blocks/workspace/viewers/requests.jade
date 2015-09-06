@@ -24,12 +24,7 @@
                     option(value='wait') wait request
                     option(value='lock') lock request
                     option(value='complete') complete request
-            ul.right
-                li(ng-class='{\'disabled\':viewers.offset==0}',title='First page'): a.fa.fa-step-backward(ng-click='repositories.pagination_first()')
-                li(ng-class='{\'disabled\':viewers.offset==0}',title='Previous page'): a.fa.fa-backward(ng-click='repositories.pagination_previous()')
-                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Next page'): a.fa.fa-forward(ng-click='repositories.pagination_next()')
-                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.pagination_last()')
-        .table
+        #requestlist.table
             .item.request(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.request(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-circle-o\':item.status==\'wait\',\'fa-dot-circle-o\':item.status==\'lock\'}')
                 .date(ng-bind='item.ts_modified')
@@ -37,15 +32,23 @@
                 .url(ng-bind='item.request.url')
                 .status(ng-class='viewers.classcodes(item.response.status)',ng-bind='item.response.status')
                 .clearfix
-            .item.total(ng-bind='(viewers.total==0?0:viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
-        .separator
+        .foot
+            ul.left
+                li: span(ng-bind='(viewers.total==0?0:viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
+            ul.right
+                li(ng-class='{\'disabled\':viewers.offset==0}',title='First page'): a.fa.fa-step-backward(ng-click='repositories.pagination_first()')
+                li(ng-class='{\'disabled\':viewers.offset==0}',title='Previous page'): a.fa.fa-backward(ng-click='repositories.pagination_previous()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Next page'): a.fa.fa-forward(ng-click='repositories.pagination_next()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.pagination_last()')
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
-        .request
-            p(ng-bind='viewers.document.request.method+\' \'+viewers.document.request.url+\' HTTP/1.1\'')
-            p(ng-repeat='(header,value) in viewers.document.request.headers',ng-bind='header+\': \'+value')
-        .response(ng-show='viewers.document.response')
-            p(ng-bind='viewers.document.response.status+\' \'+(viewers.document.response.status|statuscode)')
-            p(ng-repeat='(header,value) in viewers.document.response.headers',ng-bind='header+\': \'+value')
-        .body
-            p(ng-bind='viewers.document.response.body')
+        .separator
+        .table
+            .request
+                p(ng-bind='viewers.document.request.method+\' \'+viewers.document.request.url+\' HTTP/1.1\'')
+                p(ng-repeat='(header,value) in viewers.document.request.headers',ng-bind='header+\': \'+value')
+            .response(ng-show='viewers.document.response')
+                p(ng-bind='viewers.document.response.status+\' \'+(viewers.document.response.status|statuscode)')
+                p(ng-repeat='(header,value) in viewers.document.response.headers',ng-bind='header+\': \'+value')
+            .body
+                p(ng-bind='viewers.document.response.body')
 

@@ -588,6 +588,9 @@ pleni.controller('WorkspaceController',
                     viewers.offset=0;
                 }
 
+                viewers.limit=Math.max(25,
+                    Math.floor((window.innerHeight-230)/20));
+
                 Resources.workspace.requests(workspace.name,
                     workspace.repository,viewers.filters[0].join('|'),
                     viewers.limit,viewers.offset,function(data){

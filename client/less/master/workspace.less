@@ -19,7 +19,6 @@
     .viewer {
         background-color: lighten(@color5,5%);
         position: absolute;
-        box-sizing: border-box;
         top: 0;
         bottom: 0;
         left: 0;
@@ -28,6 +27,8 @@
         margin: 0;
         padding: 0;
 
+        box-sizing: border-box;
+
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -35,29 +36,9 @@
         align-items: stretch;
         align-content: stretch;
 
-        .list, .details {
-            order: 0;
-            flex: 1 1 auto;
-            align-self: auto;
-
-            margin: 0;
-            padding: 0;
-            position: relative;
-
-            &.fully {
-                height: 100%;
-            }
-            &.half {
-                height: 50%;
-            }
-            &.none {
-                display: none;
-            }
-        }
-
-        .tools {
+        .tools, .foot {
             background-color: @color4;
-            margin-top: 2px;
+            margin-top: 0px;
 
             li.selected {
                 background-color: darken(@color4,10%);
@@ -90,6 +71,28 @@
                 option {
                     padding: 0.25rem 0.5rem;
                     .font8;
+                }
+            }
+        }
+
+        .foot {
+            height: 25px;
+
+            ul {
+                list-style: none;
+
+                li {
+                    float: left;
+
+                    span {
+                        margin: 0 10px;
+                        .font10;
+                    }
+
+                    a {
+                        padding: 5px 10px;
+                        font-size: 0.75rem;
+                    }
                 }
             }
         }
@@ -128,38 +131,51 @@
             }
         }
 
-        table {
+        .separator {
+            position: absolute;
+            top: 0;
             width: 100%;
-            th {
-                .font6;
-                text-align: left;
-            }
+            height: 10px;
+            background-color: @color5;
+        }
 
-            td:not(.monospaced) {
-                .font8;
-                padding: 0 0.25rem;
+        .list, .details {
+            margin: 0;
+            padding: 0;
+            position: relative;
+
+            &.fully {
+                height: 100%;
+            }
+            &.half {
+                height: 50%;
+            }
+            &.none {
+                height: 0%;
             }
         }
 
         .list {
+            order: 0;
+            flex: 1 1 auto;
+            align-self: auto;
+
             .tools {
                 position: absolute;
                 top: 0;
                 width: 100%;
             }
 
-            .separator {
+            .foot {
                 position: absolute;
                 bottom: 0;
                 width: 100%;
-                height: 10px;
-                background-color: @color5;
             }
 
             .table {
                 position: absolute;
                 top: 40px;
-                bottom: 10px;
+                bottom: 25px;
                 left: 0;
                 right: 0;
                 overflow: auto;
@@ -222,6 +238,11 @@
         }
 
         .details {
+            order: 0;
+            flex: 0 1 auto;
+            align-self: auto;
+
+            background-color: #00ccff;
             background-color: @white;
             width: 100%;
             overflow: auto;
@@ -233,6 +254,7 @@
             .request {
                 width: 100%;
                 box-sizing: border-box;
+                margin-top: 10px;
                 padding: 0.25rem 0.5rem 0 0.5rem;
 
                 p {

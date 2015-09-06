@@ -7,8 +7,7 @@ module.exports={
       , port:process.env.OPENSHIFT_NODEJS_PORT||process.env.PORT||3001
     }
   , tasks:[
-        'exclusive'
-      , 'site/create'
+        'site/create'
       , 'site/fetch'
       , 'site/summarize'
       , 'site/remove'
