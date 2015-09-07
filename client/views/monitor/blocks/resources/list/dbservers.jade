@@ -17,8 +17,8 @@ article.list
                 th.options &nbsp;
         tbody
             tr(ng-repeat='dbserver in storage.dbservers')
-                td {{dbserver.id|truncate:16}}
-                td {{dbserver.db.host}}:{{dbserver.db.port}}
+                td(ng-bind='(dbserver.id|truncate:16)')
+                td(ng-bind='dbserver.db.host+\':\'+dbserver.db.port')
                 td.status
                     span.fa(title='Server connection: {{dbserver.check}}',ng-class='{\'fa-check\':dbserver.check==\'online\',\'fa-question\':dbserver.check==\'unknown\',\'fa-close\':dbserver.check==\'offline\'}')
                 td.options

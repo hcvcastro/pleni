@@ -3,21 +3,21 @@
         ul.items
             li
                 .title
-                    a(ng-click='apps.show()') Apps
+                    a(ng-click='apps.show()',accesskey='1') Apps
                     .right
-                        span.r1 {{storage.apps.length}}
+                        span.r1(ng-bind='storage.apps.length')
                         a.r2.fa.fa-refresh(ng-click='apps.refresh()')
             li
                 .title
-                    a(ng-click='dbservers.show()') Database Servers
+                    a(ng-click='dbservers.show()',accesskey='2') Database Servers
                     .right
-                        span.r1 {{storage.dbservers.length}}
+                        span.r1(ng-bind='storage.dbservers.length')
                         a.r2.fa.fa-refresh(ng-click='dbservers.refresh()')
             li
                 .title
-                    a(ng-click='planners.show()') Planners
+                    a(ng-click='planners.show()',accesskey='3') Planners
                     .right
-                        span.r1 {{storage.planners.length}}
+                        span.r1(ng-bind='storage.planners.length')
                         a.r2.fa.fa-refresh(ng-click='planners.refresh()')
         include ../blocks/footer/bottom
     .main

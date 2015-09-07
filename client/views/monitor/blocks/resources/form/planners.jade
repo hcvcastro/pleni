@@ -1,7 +1,7 @@
 article.form.animate(ng-show='planners.env.view==\'form\'')
     .title
-        h2(ng-show='planners.env.type==\'collection\'') Add a Planner
-        h2(ng-show='planners.env.type==\'element\'') Edit: {{planner.id}}
+        h2(ng-show='planners.env.type==\'collection\'',ng-bind='\'Add a Planner\'')
+        h2(ng-show='planners.env.type==\'element\'',ng-bind='\'Edit: \'+planner.id')
         .close
             a.fa.fa-close(ng-click='planners.list()')
     .body

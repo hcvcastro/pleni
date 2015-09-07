@@ -1,7 +1,7 @@
 article.form.animate(ng-show='apps.env.view==\'form\'')
     .title
-        h2(ng-show='apps.env.type==\'collection\'') Add a App
-        h2(ng-show='apps.env.type==\'element\'') Edit: {{app.id}}
+        h2(ng-show='apps.env.type==\'collection\'',ng-bind='\'Add a App\'')
+        h2(ng-show='apps.env.type==\'element\'',ng-bind='\'Edit: \'+app.id')
         .close
             a.fa.fa-close(ng-click='apps.list()')
     .body

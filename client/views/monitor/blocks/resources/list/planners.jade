@@ -22,8 +22,8 @@ article.list
                 th.options &nbsp;
         tbody
             tr(ng-repeat='planner in storage.planners',ng-class='{\'lock\':planner.set.status==\'set\'}')
-                td {{planner.id|truncate:16}}
-                td {{planner.planner.host}}:{{planner.planner.port}}
+                td(ng-bind='(planner.id|truncate:16)')
+                td(ng-bind='planner.planner.host+\':\'+planner.planner.port')
                 td.status
                     span.fa(title='Planner type: {{planner.type}}',ng-class='{\'fa-bullhorn\':planner.type==\'io\',\'fa-headphones\':planner.type==\'ion\',\'fa-microphone-slash\':planner.type==\'none\'}')
                 td.status

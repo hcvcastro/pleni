@@ -1,7 +1,7 @@
 article.form.animate(ng-show='dbservers.env.view==\'form\'')
     .title
-        h2(ng-show='dbservers.env.type==\'collection\'') Add a Database Server
-        h2(ng-show='dbservers.env.type==\'element\'') Edit: {{dbserver.id}}
+        h2(ng-show='dbservers.env.type==\'collection\'',ng-bind='\'Add a Database Server\'')
+        h2(ng-show='dbservers.env.type==\'element\'',ng-bind='\'Edit: \'+dbserver.id')
         .close
             a.fa.fa-close(ng-click='dbservers.list()')
     .body

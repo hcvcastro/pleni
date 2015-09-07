@@ -3,25 +3,25 @@
         ul.items
             li
                 .title
-                    a(ng-click='dbservers.show()') Database Servers
+                    a(ng-click='dbservers.show()',accesskey='1') Database Servers
                     .right
                         span.r1(ng-bind='storage.dbservers.length')
                         a.r2.fa.fa-refresh(ng-click='dbservers.refresh()')
             li
                 .title
-                    a(ng-click='repositories.show()') Repositories
+                    a(ng-click='repositories.show()',accesskey='2') Repositories
                     .right
                         span.r1(ng-bind='storage.repositories.length')
                         a.r2.fa.fa-refresh(ng-click='repositories.refresh()')
             li
                 .title
-                    a(ng-click='planners.show()') Planners
+                    a(ng-click='planners.show()',accesskey='3') Planners
                     .right
                         span.r1(ng-bind='storage.planners.length')
                         a.r2.fa.fa-refresh(ng-click='planners.refresh()')
             li
                 .title
-                    a(ng-click='notifiers.show()') Notifiers
+                    a(ng-click='notifiers.show()',accesskey='4') Notifiers
                     .right
                         span.r1(ng-bind='storage.notifiers.length')
                         a.r2.fa.fa-refresh(ng-click='notifiers.refresh()')

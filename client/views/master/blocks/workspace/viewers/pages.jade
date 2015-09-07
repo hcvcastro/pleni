@@ -6,11 +6,6 @@
                     option(value='ALL') All types
                     option(value='complete') Complete pages
                     option(value='monitoring') Monitoring pages
-            ul.right
-                li(ng-class='{\'disabled\':viewers.offset==0}',title='First page'): a.fa.fa-step-backward(ng-click='repositories.pagination_first()')
-                li(ng-class='{\'disabled\':viewers.offset==0}',title='Previous page'): a.fa.fa-backward(ng-click='repositories.pagination_previous()')
-                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Next page'): a.fa.fa-forward(ng-click='repositories.pagination_next()')
-                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.pagination_last()')
         .table
             .item.page(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.page(item.id)')
                 .type.fa(ng-class='{\'fa-circle\':item.status==\'complete\',\'fa-eye\':item.status==\'monitoring\'}')
@@ -18,7 +13,14 @@
                 .url(ng-bind='item.page')
                 .status(ng-class='viewers.classcodes(item.statuscode)',ng-bind='item.statuscode')
                 .clearfix
-            .item.total(ng-bind='(viewers.total==0?0:viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
-        .separator
+        .foot
+            ul.left
+                li: span(ng-bind='(viewers.total==0?0:viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
+            ul.right
+                li(ng-class='{\'disabled\':viewers.offset==0}',title='First page'): a.fa.fa-step-backward(ng-click='repositories.pagination_first()')
+                li(ng-class='{\'disabled\':viewers.offset==0}',title='Previous page'): a.fa.fa-backward(ng-click='repositories.pagination_previous()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Next page'): a.fa.fa-forward(ng-click='repositories.pagination_next()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.pagination_last()')
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
+        .separator
 

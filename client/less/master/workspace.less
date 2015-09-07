@@ -131,14 +131,6 @@
             }
         }
 
-        .separator {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: 10px;
-            background-color: @color5;
-        }
-
         .list, .details {
             margin: 0;
             padding: 0;
@@ -223,16 +215,6 @@
                     .status3xx { background-color: fade(#ffff00,25%); }
                     .status4xx { background-color: fade(#ff0000,25%); }
                     .status5xx { background-color: fade(#000080,25%); }
-
-                    &.total {
-                        .font10;
-                        float: left;
-                        text-align: right;
-                        box-sizing: border-box;
-                        padding: 0.25rem;
-                        background-color: @color4;
-                        border-top: 1px solid @color5;
-                    }
                 }
             }
         }
@@ -245,10 +227,26 @@
             background-color: #00ccff;
             background-color: @white;
             width: 100%;
-            overflow: auto;
+            position: relative;
 
             &>* {
                 .font10;
+            }
+
+            .separator {
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 10px;
+                background-color: @color5;
+            }
+
+            .table {
+                position: absolute;
+                top: 10px;
+                bottom: 0;
+                width: 100%;
+                overflow: auto;
             }
 
             .request {

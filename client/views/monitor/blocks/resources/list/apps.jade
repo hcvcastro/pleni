@@ -16,8 +16,8 @@ article.list
                 th.options &nbsp;
         tbody
             tr(ng-repeat='app in storage.apps')
-                td {{app.id|truncate:16}}
-                td {{app.key}}
+                td(ng-bind='(app.id|truncate:16)')
+                td(ng-bind='app.key')
                 td.options
                     a.fa.fa-trash(title='Remove element',ng-click='apps.remove($index)')
 

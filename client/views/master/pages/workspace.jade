@@ -3,11 +3,11 @@
         ul.items
             li.header(ng-click='repositories.overview()',ng-class='{\'active\':storage.workspace.repository==\'\'}')
                 .title
-                    a(ng-bind='\'Project: \'+storage.workspace.name')
+                    a(ng-bind='\'Project: \'+storage.workspace.name',accesskey='0')
         ul.items
             li(ng-repeat='repository in storage.workspace.repositories',ng-class='{\'active\':storage.workspace.repository==storage.workspace.repositories[$index].name}')
                 .title(ng-click='repositories.summary($index)')
-                    a(ng-bind='(repository.name|truncate:24)')
+                    a(ng-bind='(repository.name|truncate:24)',accesskey='{{$index+1}}')
                     .right
                         span.r3.fa.fa-spinner.fa-spin(ng-show='storage.workspace.repositories[$index].loading')
                         span.r4.frepos(title='Repository type: {{repository.summary.type}}',ng-show='!storage.workspace.repositories[$index].loading',ng-class='workspace.icon_r(storage.workspace.repositories[$index].type)')
@@ -25,18 +25,18 @@
     .main.last
         .tools
             ul.left
-                li(title='Tasks/Planners configuration',ng-click='workspace.settings()')
+                li(title='Tasks/Planners configuration',ng-click='workspace.settings()',accesskey='t')
                     a.fa.fa-gear
-                li(title='Repository management',ng-click='workspace.repositories()')
+                li(title='Repository management',ng-click='workspace.repositories()',accesskey='y')
                     a.fa.fa-database
-                li(title='Refresh data from server',ng-click='workspace.init()')
+                li(title='Refresh data from server',ng-click='workspace.init()',accesskey='u')
                     a.fa.fa-refresh
             ul.left
                 li(ng-repeat='(task,planners) in storage.workspace.enabled',title='{{task}} in {{planners.length}} planners',ng-click='tasks.open(task,planners)')
                     a.ftasks(ng-class='workspace.icon_p(task)')
                     small(ng-bind='planners.length')
             ul.right
-                li(title='Close project workspace',ng-click='workspace.exit()')
+                li(title='Close project workspace',ng-click='workspace.exit()',accesskey='w')
                     a.fa.fa-close
         .messages
         .workspace.last

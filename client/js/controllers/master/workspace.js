@@ -639,6 +639,9 @@ pleni.controller('WorkspaceController',
                     viewers.offset=0;
                 }
 
+                viewers.limit=Math.max(25,
+                    Math.floor((window.innerHeight-230)/20));
+
                 Resources.workspace.pages(workspace.name,
                     workspace.repository,viewers.filters[1].join('|'),
                     viewers.limit,viewers.offset,function(data){
@@ -674,6 +677,9 @@ pleni.controller('WorkspaceController',
                 if(filter){
                     viewers.offset=0;
                 }
+
+                viewers.limit=Math.max(25,
+                    Math.floor((window.innerHeight-230)/20));
 
                 Resources.workspace.files(workspace.name,
                     workspace.repository,viewers.filters[2].join('|'),

@@ -1,13 +1,13 @@
 header(ng-controller='HeaderController')
     nav.grid
         ul.left
-            li(ng-class='status(1)'): a(href='/#/home') Home
-            li(ng-class='status(2)'): a(href='/#/resources') Resources
-            li(ng-class='status(3)'): a(href='/#/projects') Projects
+            li(ng-class='status(1)'): a(href='/#/home',accesskey='h') Home
+            li(ng-class='status(2)'): a(href='/#/resources',accesskey='r') Resources
+            li(ng-class='status(3)'): a(href='/#/projects',accesskey='p') Projects
         ul.right
-            li(ng-class='status(4)'): a(href='/#/settings') Settings
-            li(ng-class='status(5)'): a(ng-click='signout()') Sign out
-            li(ng-class='status(6)'): a(href='/#/signin') Sign in
-            li(ng-class='status(7)'): a(href='/#/signup') Sign up
+            li(ng-class='status(4)'): a(href='/#/settings',accesskey='s') Settings
+            li(ng-class='status(5)'): a(ng-click='signout()',accesskey='q') Sign out
+            li(ng-class='status(6)'): a(href='/#/signin',accesskey='l') Sign in
+            li(ng-class='status(7)'): a(href='/#/signup',accesskey='n') Sign up
         .clearfix
 
