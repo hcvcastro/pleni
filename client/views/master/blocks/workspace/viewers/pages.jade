@@ -23,4 +23,16 @@
                 li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.pagination_last()')
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
         .separator
+        .table
+            .page(ng-repeat='link in viewers.document.links')
+                .header
+                    p(ng-bind='(link.ts_created|prettydate)+\' \'+link.method+\' \'+link.url')
+                .rels
+                    .rel(ng-repeat='rel in link.rels')
+                        .row1(ng-bind='rel.tag')
+                        .row2(ng-bind='rel.url')
+                .refs
+                    .ref(ng-repeat='ref in link.refs')
+                        .row1(ng-bind='ref.tag')
+                        .row2(ng-bind='ref.url')
 

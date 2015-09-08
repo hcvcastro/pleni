@@ -38,6 +38,12 @@ pleni.filter('pretty',function(){
     };
 });
 
+pleni.filter('prettydate',function(){
+    return function(value){
+        return utils.prettydate(value);
+    };
+});
+
 pleni.filter('render',function(){
     return function(value,key){
         if(key.substring(0,3)=='ts_'){

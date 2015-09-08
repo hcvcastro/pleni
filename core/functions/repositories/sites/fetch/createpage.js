@@ -31,7 +31,6 @@ module.exports=function(args){
     var deferred=Q.defer()
       , parse=_url.parse(args.task.wait.url)
       , ts=Date.now()
-//      , page=encodeURIComponent(parse.pathname)
       , document=['page',parse.pathname].join('::')
       , url=args.db.host+'/'+args.db.name+'/'+document
       , headers={
@@ -51,8 +50,14 @@ module.exports=function(args){
               , ts_created:ts
               , ts_modified:ts
               , statuscode:args.task.get.status
-              , refs:args.task.refs
-              , rels:args.task.rels
+              , links:[{
+                    url:args.task.wait.url
+                  , method:'GET'
+                  , refs:args.task.refs
+                  , rels:args.task.rels
+                  , ts_created:ts
+                  , ts_modified:ts
+                }]
             }
         },function(error,response){
             if(!error){

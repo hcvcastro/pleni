@@ -618,8 +618,8 @@ pleni.controller('WorkspaceController',
           , request:function(id){
                 var workspace=$scope.storage.workspace
 
-                Document.get(workspace.name,workspace.repository,id
-                ,function(data){
+                Document.get(workspace.name,workspace.repository,id,
+                function(data){
                     $scope.viewers.document=data.data;
                 },function(error){
                     utils.show('error','The document is not found');
@@ -662,7 +662,14 @@ pleni.controller('WorkspaceController',
                 });
             }
           , page:function(id){
-                console.log('view page');
+                var workspace=$scope.storage.workspace
+
+                Document.get(workspace.name,workspace.repository,id,
+                function(data){
+                    $scope.viewers.document=data.data;
+                },function(error){
+                    utils.show('error','The document is not found');
+                });
             }
           , files:function(filter){
                 var workspace=$scope.storage.workspace

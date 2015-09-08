@@ -285,6 +285,42 @@
                     margin: 0;
                 }
             }
+
+            .header {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 0.25rem 0.35rem 0.2rem 0.3rem;
+                background-color: @color3;
+
+                p {
+                    margin: 0;
+                }
+            }
+
+            .rels, .refs {
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+
+                .rel, .ref {
+                    width: 100%;
+                    box-sizing: border-box;
+                    margin: 0.15rem 0;
+                    padding: 0;
+
+                    &:nth-child(odd)  { background-color: lighten(@color5,10%); }
+                    &:nth-child(even) { background-color: lighten(@color5, 5%); }
+
+                    .row1 {
+                        width: 4.0rem;
+                        float: left;
+                        margin: 0 0.25rem 0 0;
+                        text-align: center;
+                        background-color: lighten(@color3,10%);
+                    }
+                }
+            }
         }
     }
 }
