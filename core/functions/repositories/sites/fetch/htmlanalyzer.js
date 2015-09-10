@@ -16,7 +16,6 @@ var request=require('request')
  *          head
  *              headers
  *          get
- *              status
  *              headers
  *              body
  *

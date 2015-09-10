@@ -12,7 +12,6 @@ var request=require('request')
  *      auth
  *          cookie
  *      site
- *          filters
  *          offset
  *          limit
  *          list

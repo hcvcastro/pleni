@@ -18,8 +18,6 @@ var request=require('request')
  *          head
  *              status
  *              headers
- *          refs
- *          rels
  *
  * args output
  *      task
@@ -31,7 +29,6 @@ module.exports=function(args){
     var deferred=Q.defer()
       , parse=_url.parse(args.task.wait.url)
       , ts=Date.now()
-//      , page=encodeURIComponent(parse.pathname)
       , document=['file',parse.pathname].join('::')
       , url=args.db.host+'/'+args.db.name+'/'+document
       , headers={
@@ -55,7 +52,7 @@ module.exports=function(args){
             }
         },function(error,response){
             if(!error){
-                args.task.page={
+                args.task.file={
                     id:response.body.id
                   , _rev:response.body.rev
                 };

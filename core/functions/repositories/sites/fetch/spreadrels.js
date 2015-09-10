@@ -17,9 +17,6 @@ var uniq=require('underscore').uniq
  *      task
  *          wait
  *              id
- *              url
- *          response
- *              headers
  *          rels
  *      site
  *          list

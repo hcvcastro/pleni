@@ -15,6 +15,9 @@ var nodemailer=require('nodemailer')
  *          text
  *          html
  *          attachments (*)
+ *  args output
+ *      mail
+ *          result
  */
 module.exports=function(args){
     var deferred=Q.defer()

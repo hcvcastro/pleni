@@ -75,7 +75,10 @@ module.exports=function(args){
             });
         });
 
-        deferred.resolve({refs:refs,rels:rels});
+        args.refs=refs;
+        args.rels=rels;
+
+        deferred.resolve(args);
     }else{
         deferred.reject({});
     }

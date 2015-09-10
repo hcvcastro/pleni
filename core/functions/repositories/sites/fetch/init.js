@@ -3,6 +3,9 @@
 var Q=require('q')
 
 /* Function for reseting params in promises chain
+ * args output
+ *      site
+ *          filters
  *
  */
 module.exports=function(args){

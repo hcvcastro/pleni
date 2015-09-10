@@ -24,7 +24,7 @@ module.exports=function(args){
           , password:args.db.pass
         }
 
-    if(!args.auth || !args.auth.cookie){
+    if(!args.auth||!args.auth.cookie){
         if(args.debug){
             console.log('authentification in db server ... '+args.db.user);
         }

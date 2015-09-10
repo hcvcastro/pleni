@@ -24,11 +24,14 @@ var base='../../functions'
  *          check
  *      auth
  *          cookie
+ *          ts
  *      site
  *          summary
+ *              _rev
  *          root
+ *              _rev
  *          design
- *              sites
+ *              _rev
  */
 module.exports=function(params,repeat,stop,notifier){
     test(params)
