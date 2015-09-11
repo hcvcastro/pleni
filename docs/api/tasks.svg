@@ -27,19 +27,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.1308992"
-     inkscape:cx="597.4484"
-     inkscape:cy="570.38805"
+     inkscape:zoom="1.8208367"
+     inkscape:cx="994.20084"
+     inkscape:cy="476.85917"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
      inkscape:showpageshadow="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="962"
-     inkscape:window-height="859"
-     inkscape:window-x="952"
-     inkscape:window-y="197"
+     inkscape:window-width="954"
+     inkscape:window-height="1056"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      showborder="false"
      gridtolerance="10"
@@ -1378,7 +1378,7 @@
          id="tspan3988"
          y="722.33057"
          x="1079.3876"
-         sodipodi:role="line">site.report</tspan></text>
+         sodipodi:role="line">site.report._rev</tspan></text>
     <text
        sodipodi:linespacing="89.999998%"
        id="text3641"
@@ -1840,7 +1840,7 @@
          sodipodi:role="line"
          x="1079.1129"
          y="692.31659"
-         id="tspan5309">report.hashes</tspan></text>
+         id="tspan5309">report.body.hashes</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text5311"
@@ -1873,7 +1873,7 @@
          id="tspan5333"
          y="662.28754"
          x="1079.1129"
-         sodipodi:role="line">report.refs</tspan></text>
+         sodipodi:role="line">report.body.refs</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:125%;font-family:'Helvetica Neue LT Com';-inkscape-font-specification:'Helvetica Neue LT Com, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;display:inline;fill:#000080;fill-opacity:1;stroke:none"
@@ -1906,7 +1906,7 @@
          sodipodi:role="line"
          x="1079.1129"
          y="632.31885"
-         id="tspan5391">report.rels</tspan></text>
+         id="tspan5391">report.body.rels</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text6370"

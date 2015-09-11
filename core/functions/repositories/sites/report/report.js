@@ -12,24 +12,21 @@ var request=require('request')
  *          name
  *      auth
  *          cookie
- *      site
- *          design
- *              _rev
- *          report
- *              _rev
  *      report
  *          header
  *              server
  *              status
  *              contenttype
  *              poweredby
- *          rels
- *          refs
- *          hashes
+ *          body
+ *              rels
+ *              refs
+ *              hashes
  *
  * args output
  *      site
  *          report
+ *              _rev
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -44,9 +41,9 @@ module.exports=function(args){
           , header_status:args.report.header.status
           , header_contenttype:args.report.header.contenttype
           , header_poweredby:args.report.header.poweredby
-          , rels:args.report.rels
-          , refs:args.report.refs
-          , hashes:args.report.hashes
+          , rels:args.report.body.rels
+          , refs:args.report.body.refs
+          , hashes:args.report.body.hashes
         }
 
     if(args.debug){

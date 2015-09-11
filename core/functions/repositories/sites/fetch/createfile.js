@@ -21,7 +21,7 @@ var request=require('request')
  *
  * args output
  *      task
- *          page
+ *          file
  *              id
  *              _rev
  */
@@ -46,9 +46,14 @@ module.exports=function(args){
                 status:'wait'
               , ts_created:ts
               , ts_modified:ts
-              , statuscode:args.task.head.status
-              , mimetype:args.task.head.headers['content-type']
-              , filesize:args.task.head.headers['content-length']
+              , revs:[{
+                    url:args.task.wait.url
+                  , method:'GET'
+                  , status:args.task.head.status
+                  , headers:args.task.head.headers
+                  , ts_created:ts
+                  , ts_modified:ts
+                }]
             }
         },function(error,response){
             if(!error){

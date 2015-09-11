@@ -14,7 +14,8 @@ var request=require('request')
  *
  * args output
  *      report
- *          rels
+ *          body
+ *              rels
  */
 module.exports=function(args){
     var deferred=Q.defer()
@@ -35,6 +36,9 @@ module.exports=function(args){
                 var json=JSON.parse(response.body);
                 if(!args.report){
                     args.report={};
+                }
+                if(!args.report.body){
+                    args.report.body={};
                 }
                 args.report.rels=json.rows;
                 deferred.resolve(args);

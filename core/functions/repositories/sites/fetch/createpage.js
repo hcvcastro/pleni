@@ -18,6 +18,9 @@ var request=require('request')
  *          get
  *              status
  *              headers
+ *              body
+ *              md5
+ *              sha1
  *          refs
  *          rels
  *
@@ -49,10 +52,14 @@ module.exports=function(args){
                 status:'complete'
               , ts_created:ts
               , ts_modified:ts
-              , statuscode:args.task.get.status
-              , links:[{
+              , revs:[{
                     url:args.task.wait.url
                   , method:'GET'
+                  , status:args.task.get.status
+                  , headers:args.task.get.headers
+                  , body:args.task.get.body
+                  , md5:args.task.get.md5
+                  , sha1:args.task.get.sha1
                   , refs:args.task.refs
                   , rels:args.task.rels
                   , ts_created:ts

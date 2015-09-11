@@ -29,8 +29,12 @@ var base='../../functions'
  *          check
  *      auth
  *          cookie
+ *          ts
  *      site
  *          design
+ *              _rev
+ *          report
+ *              check
  *              _rev
  *      report
  *          header
@@ -38,9 +42,10 @@ var base='../../functions'
  *              status
  *              contenttype
  *              poweredby
- *          rels
- *          refs
- *          hashes
+ *          body
+ *              rels
+ *              refs
+ *              hashes
  */
 module.exports=function(params,repeat,stop,notifier){
     test(params)
