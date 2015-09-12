@@ -47,8 +47,8 @@ module.exports=function(args){
                           , ts_created:e.doc.ts_created
                           , ts_modified:e.doc.ts_modified
                           , statuscode:e.doc.statuscode
-                          , mimetype:e.doc.mimetype
-                          , filesize:e.doc.filesize
+                          , mimetype:e.doc.current.head.headers['content-type']
+                          , filesize:e.doc.current.head.headers['content-length']
                         }
 
                     if(e.doc.response){

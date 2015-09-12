@@ -24,15 +24,19 @@
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
         .separator
         .table
-            .page(ng-repeat='link in viewers.document.links')
+            .page(ng-repeat='rev in viewers.document.revs')
                 .header
-                    p(ng-bind='(link.ts_created|prettydate)+\' \'+link.method+\' \'+link.url')
+                    .row1(ng-bind='(rev.ts_created|prettydate)')
+                    .row2(ng-bind='rev.method')
+                    .row3(ng-bind='rev.url')
+                    .row4(ng-bind='rev.status')
+                    .clearfix
                 .rels
-                    .rel(ng-repeat='rel in link.rels')
+                    .rel(ng-repeat='rel in rev.rels')
                         .row1(ng-bind='rel.tag')
                         .row2(ng-bind='rel.url')
                 .refs
-                    .ref(ng-repeat='ref in link.refs')
+                    .ref(ng-repeat='ref in rev.refs')
                         .row1(ng-bind='ref.tag')
                         .row2(ng-bind='ref.url')
 

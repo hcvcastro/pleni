@@ -289,12 +289,13 @@
             .header {
                 width: 100%;
                 box-sizing: border-box;
-                padding: 0.25rem 0.35rem 0.2rem 0.3rem;
+                padding: 0.32rem 0.35rem 0.2rem 0.3rem;
                 background-color: @color3;
 
-                p {
-                    margin: 0;
-                }
+                &>:nth-child(1) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 135px; float: left; }
+                &>:nth-child(2) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 48px; float: left; }
+                &>:nth-child(3) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; float: left; }
+                &>:nth-child(4) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; float: right; }
             }
 
             .rels, .refs {

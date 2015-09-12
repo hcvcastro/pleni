@@ -84,10 +84,11 @@ module.exports=function(params,repeat,stop,notifier){
     .then(createfile)
     .then(complete)
     .then(function(args){
-        if(args.task.complete&&args.task.page.id){
+        if(args.task.complete&&(args.task.page||args.task.file)){
             var url=_url.parse(args.task.wait.url)
               , page=args.task.complete.id.split('::')[3]
-              , type=args.task.page.id.split('::')[0]
+              , _type=args.task.page||args.task.file
+              , type=_type.id.split('::')[0]
               , status=(type=='page')?'complete':'wait'
               , mimetype=args.task.head.headers['content-type']
                     .match(/[a-z]+\/[a-z-]+/i)[0]

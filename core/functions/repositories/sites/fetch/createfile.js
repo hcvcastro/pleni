@@ -41,14 +41,26 @@ module.exports=function(args){
             console.log('create a file document ...'+url);
         }
 
-        request.put({url:url,headers:headers
+        request.put({
+            url:url
+          , headers:headers
           , json:{
                 status:'wait'
               , ts_created:ts
               , ts_modified:ts
+              , current:{
+                    head:{
+                        url:args.task.wait.url
+                      , method:'HEAD'
+                      , status:args.task.head.status
+                      , headers:args.task.head.headers
+                      , ts_created:ts
+                      , ts_modified:ts
+                    }
+                }
               , revs:[{
                     url:args.task.wait.url
-                  , method:'GET'
+                  , method:'HEAD'
                   , status:args.task.head.status
                   , headers:args.task.head.headers
                   , ts_created:ts

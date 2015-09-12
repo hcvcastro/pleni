@@ -47,11 +47,28 @@ module.exports=function(args){
             console.log('create a page document ...'+url);
         }
 
-        request.put({url:url,headers:headers
+        request.put({
+            url:url
+          , headers:headers
           , json:{
                 status:'complete'
               , ts_created:ts
               , ts_modified:ts
+              , current:{
+                    get:{
+                        url:args.task.wait.url
+                      , method:'GET'
+                      , status:args.task.get.status
+                      , headers:args.task.get.headers
+                      , body:args.task.get.body
+                      , md5:args.task.get.md5
+                      , sha1:args.task.get.sha1
+                      , refs:args.task.refs
+                      , rels:args.task.rels
+                      , ts_created:ts
+                      , ts_modified:ts
+                    }
+                }
               , revs:[{
                     url:args.task.wait.url
                   , method:'GET'
