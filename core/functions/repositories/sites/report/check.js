@@ -19,7 +19,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/_design/report'
+      , url=args.db.host+'/'+args.db.name+'/_design/reports'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'

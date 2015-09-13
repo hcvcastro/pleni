@@ -30,20 +30,35 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/report'
+      , ts=Date.now()
+      , url=args.db.host+'/'+args.db.name+'/report::'+ts
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , body={
             ts_created:Date.now()
-          , header_server:args.report.header.server
-          , header_status:args.report.header.status
-          , header_contenttype:args.report.header.contenttype
-          , header_poweredby:args.report.header.poweredby
-          , rels:args.report.body.rels
-          , refs:args.report.body.refs
-          , hashes:args.report.body.hashes
+          , server:args.report.header.server.map(function(i){
+                return [i.key,i.value];
+            })
+          , statuscode:args.report.header.status.map(function(i){
+                return [i.key,i.value];
+            })
+          , contenttype:args.report.header.contenttype.map(function(i){
+                return [i.key,i.value];
+            })
+          , poweredby:args.report.header.poweredby.map(function(i){
+                return [i.key||'',i.value];
+            })
+          , rels:args.report.body.rels.map(function(i){
+                return [i.key[0],i.key[1],i.value];
+            })
+          , refs:args.report.body.refs.map(function(i){
+                return [i.key[0],i.key[1],i.value];
+            })
+          , hashes:args.report.body.hashes.map(function(i){
+                return [i.key,i.value[0],i.value[1]];
+            })
         }
 
     if(args.debug){

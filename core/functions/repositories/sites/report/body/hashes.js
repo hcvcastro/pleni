@@ -19,7 +19,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , view='/_design/report/_view/hashes'
+      , view='/_design/reports/_view/hashes'
       , url=args.db.host+'/'+args.db.name+view
       , params=''
       , headers={
@@ -28,7 +28,7 @@ module.exports=function(args){
         }
 
     if(args.debug){
-        console.log('get header status information ... ');
+        console.log('get hashes information ... ');
     }
     request.get({url:url+params,headers:headers},function(error,response){
         if(!error){

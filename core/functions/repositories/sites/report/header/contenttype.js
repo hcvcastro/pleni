@@ -19,7 +19,7 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , view='/_design/report/_view/header-contenttype'
+      , view='/_design/reports/_view/header-contenttype'
       , url=args.db.host+'/'+args.db.name+view
       , params='?reduce=true&group=true&group_level=1'
       , headers={
