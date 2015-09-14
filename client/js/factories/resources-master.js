@@ -306,6 +306,16 @@ pleni.factory('Resources',['$sessionStorage',
                       , offset:offset
                     },success,failure);
                 }
+              , reports:function(project,repository,limit,offset,
+                    success,failure){
+                    bind(Workspace.get,{
+                        project:project
+                      , repository:repository
+                      , document:'reports'
+                      , limit:limit
+                      , offset:offset
+                    },success,failure);
+                }
               , mimetypes:function(project,repository,success,failure){
                     bind(Workspace.get,{
                         project:project

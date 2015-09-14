@@ -189,10 +189,18 @@ module.exports=function(app,config){
         });
     });
 
-    app.get('/workspace/:project/:repository/report',authed,
+    app.get('/workspace/:project/:repository/reports',authed,
     function(request,response){
-        return generic_document(request,response,{},[getreport],function(args){
-            response.status(200).json(args.site.report);
+        return generic_document(request,response,{
+            site:{
+                offset:request.query.offset
+              , limit:request.query.limit
+            }},
+            [getreports1,getreports2],function(args){
+            response.status(200).json({
+                total:args.site.total
+              , list:args.site.list
+            });
         });
     });
 

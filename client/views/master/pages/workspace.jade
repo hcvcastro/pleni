@@ -19,6 +19,8 @@
                             a(ng-click='repositories.pages(true)') Pages
                         li(ng-class='{\'active\':storage.workspace.viewer==\'files\'}')
                             a(ng-click='repositories.files(true)') Files
+                        li(ng-class='{\'active\':storage.workspace.viewer==\'reports\'}')
+                            a(ng-click='repositories.reports()') Reports
                         li(ng-class='{\'active\':storage.workspace.viewer==\'sitemap\'}')
                             a(ng-click='repositories.sitemap()') Mapsite
         include ../blocks/footer/bottom

@@ -718,6 +718,34 @@ pleni.controller('WorkspaceController',
           , file:function(id){
                 console.log('view file');
             }
+          , reports:function(){
+                var workspace=$scope.storage.workspace
+                  , viewers=$scope.viewers
+                  , index=workspace.index
+
+                viewers.collection=[];
+                viewers.document=null;
+                workspace.viewer='reports';
+                workspace.repositories[index].loading=true;
+
+                viewers.offset=0;
+                viewers.limit=Math.max(25,
+                    Math.floor((window.innerHeight-230)/20));
+
+                Resources.workspace.reports(workspace.name,
+                    workspace.repository,
+                    viewers.limit,viewers.offset,function(data){
+                    workspace.repositories[index].loading=false;
+                    viewers.total=+data.total;
+                    viewers.collection=data.list.map(function(r){
+                        return {
+                            id:r.id
+                        };
+                    });
+                },function(error){
+                    workspace.repositories[index].loading=false;
+                });
+            }
           , sitemap:function(){
                 var workspace=$scope.storage.workspace
                   , viewers=$scope.viewers

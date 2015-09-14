@@ -35,6 +35,16 @@ function(doc,req){
     }
 }
 
+/* filter: requestslist */
+function(doc,req){
+    var match=/request::[0-9]+::(.+)::(.+)/.exec(doc._id);
+    if(match){
+        return (req.query.method=='ALL'||req.query.method==match[1])&&(req.query.page==match[2]);
+    }else{
+        return false;
+    }
+}
+
 /* filter: pages */
 function(doc,req){
     if(doc._id.substring(0,4)=='page'){
@@ -75,13 +85,10 @@ function(doc,req){
     }
 }
 
-/* filter: requestslist */
+/* filter: reports */
 function(doc,req){
-    var match=/request::[0-9]+::(.+)::(.+)/.exec(doc._id);
-    if(match){
-        return (req.query.method=='ALL'||req.query.method==match[1])&&(req.query.page==match[2]);
-    }else{
-        return false;
+    if(doc._id.substring(0,6)=='report'){
+        return true;
     }
 }
 

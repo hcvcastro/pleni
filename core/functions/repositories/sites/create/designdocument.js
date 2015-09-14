@@ -36,6 +36,10 @@ module.exports=function(args){
                     +'false;}}})()&&(function(){if(req.query.status==\'ALL\'){r'
                     +'eturn true;}else{return req.query.status==doc.status;}})('
                     +');}else{return false;}}'
+              , 'requestslist':'function(doc,req){var match=/request::[0-9]+::('
+                    +'.+)::(.+)/.exec(doc._id);if(match){return (req.query.meth'
+                    +'od==\'ALL\'||req.query.method==match[1])&&(req.query.page'
+                    +'==match[2]);}else{return false;}}'
               , 'pages':'function(doc,req){if(doc._id.substring(0,4)==\'page\')'
                     +'{return (function(){if(req.query.status==\'ALL\'){return '
                     +'true;}else{return req.query.status==doc.status;}})();}els'
@@ -46,10 +50,8 @@ module.exports=function(args){
                     +'\'].indexOf(req.query.mimetype)==0;}})()&&(function(){if('
                     +'req.query.status==\'ALL\'){return true;}else{return req.q'
                     +'uery.status==doc.status;}})();}else{return false;}}'
-              , 'requestslist':'function(doc,req){var match=/request::[0-9]+::('
-                    +'.+)::(.+)/.exec(doc._id);if(match){return (req.query.meth'
-                    +'od==\'ALL\'||req.query.method==match[1])&&(req.query.page'
-                    +'==match[2]);}else{return false;}}'
+              , 'reports':'function(doc,req){if(doc._id.substring(0,6)==\'repor'
+                    +'t\'){return true;}}'
             }
           , 'views':{
                 'wait':{
