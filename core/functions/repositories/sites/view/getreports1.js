@@ -14,28 +14,33 @@ var request=require('request')
  *
  * args output
  *      site
- *          report
+ *          list
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , url=args.db.host+'/'+args.db.name+'/report'
+      , url=args.db.host+'/'+args.db.name
+      , view='/_changes?filter=sites/reports&descending=true'
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
 
     if(args.debug){
-        console.log('get a report document');
+        console.log('get a reports list');
     }
-    request.get({url:url,headers:headers},function(error,response){
+    request.get({url:url+view,headers:headers},function(error,response){
         if(!error){
-            var parse=JSON.parse(response.body);
-            if(!parse.error){
-                if(!args.site){
-                    args.site={};
+            if(response.statusCode==200){
+                var parse=JSON.parse(response.body);
+                if(!parse.error){
+                    if(!args.site){
+                        args.site={};
+                    }
+                    args.site.list=parse.results;
+                    deferred.resolve(args);
+                }else{
+                    deferred.reject(response);
                 }
-                args.site.report=parse;
-                deferred.resolve(args);
             }else{
                 deferred.reject(response);
             }

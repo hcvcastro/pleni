@@ -740,6 +740,10 @@ pleni.controller('WorkspaceController',
                     viewers.collection=data.list.map(function(r){
                         return {
                             id:r.id
+                          , ts_created:utils.prettydate(r.ts_created)
+                          , pages:r.pages
+                          , files:r.files
+                          , total:r.total
                         };
                     });
                 },function(error){

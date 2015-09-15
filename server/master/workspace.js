@@ -19,7 +19,8 @@ var extend=require('underscore').extend
   , getfiles2=require(sites+'/view/getfiles2')
   , getmimetypes=require(sites+'/view/getmimetypes')
   , getsitemap=require(sites+'/view/getsitemap')
-  , getreport=require(sites+'/view/getreport')
+  , getreports1=require(sites+'/view/getreports1')
+  , getreports2=require(sites+'/view/getreports2')
   , gettimestamp=require(sites+'/summarize/gettimestamp')
   , summarize=require(sites+'/summarize/summarize')
   , get_element=function(needle,haystack){
@@ -195,8 +196,9 @@ module.exports=function(app,config){
             site:{
                 offset:request.query.offset
               , limit:request.query.limit
-            }},
-            [getreports1,getreports2],function(args){
+            }
+        },
+        [getreports1,getreports2],function(args){
             response.status(200).json({
                 total:args.site.total
               , list:args.site.list

@@ -1,0 +1,76 @@
+.viewer(ng-show='storage.workspace.viewer==\'reports\'')
+    .list(ng-class='viewers.document==null? \'fully\':\'half\'')
+        .table
+            .item.report(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.report(item.id)')
+                .date(ng-bind='item.ts_created')
+                .count(ng-bind='item.pages')
+                .count(ng-bind='item.files')
+                .count(ng-bind='item.total')
+                .clearfix
+        .foot
+            ul.left
+                li: span(ng-bind='(viewers.total==0?0:viewers.offset+1) +\'-\'+ (Math.min(viewers.total,viewers.offset+viewers.limit)) +\' of \'+ viewers.total')
+            ul.right
+                li(ng-class='{\'disabled\':viewers.offset==0}',title='First page'): a.fa.fa-step-backward(ng-click='repositories.pagination_first()')
+                li(ng-class='{\'disabled\':viewers.offset==0}',title='Previous page'): a.fa.fa-backward(ng-click='repositories.pagination_previous()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Next page'): a.fa.fa-forward(ng-click='repositories.pagination_next()')
+                li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.pagination_last()')
+    .details(ng-class='viewers.document==null? \'none\':\'half\'')
+        .separator
+
+
+
+//  .report(ng-show='storage.workspace.viewer==\'report\'')
+//      h1 basic report
+//      h2 Header Information
+//      table
+//          tr
+//              td(colspan='3')
+//                  h2 Server Header
+//          tr(ng-repeat='h1 in viewers.report.header_server')
+//              th(colspan='2',ng-bind='h1.key')
+//              td(ng-bind='h1.value')
+//          tr
+//              td(colspan='3')
+//                  Status Header
+//          tr(ng-repeat='h1 in viewers.report.header_status')
+//              th(colspan='2',ng-bind='h1.key')
+//              td(ng-bind='h1.value')
+//          tr
+//              td(colspan='3') Content-Type Header
+//          tr(ng-repeat='h1 in viewers.report.header_contenttype')
+//              th(colspan='2',ng-bind='h1.key')
+//              td(ng-bind='h1.value')
+//          tr
+//              td(colspan='3') Powered-By Header
+//          tr(ng-repeat='h1 in viewers.report.header_poweredby')
+//              th(colspan='2',ng-bind='h1.key')
+//              td(ng-bind='h1.value')
+//          thead
+//      h2 Link Relations
+//      table
+//          thead
+//              tr
+//                  th(colspan='3')
+//                      h3 Internal Links
+//          tbody
+//              tr(ng-repeat='h2 in viewers.report.refs')
+//                  th(ng-bind='h2.key[0]')
+//                  td(ng-bind='h2.key[1]')
+//                  td.right(ng-bind='h2.value')
+//          thead
+//              tr
+//                  th(colspan='3')
+//                      h3 External Links
+//          tbody
+//              tr(ng-repeat='h2 in viewers.report.rels')
+//                  th(ng-bind='h2.key[0]')
+//                  td(ng-bind='h2.key[1]')
+//                  td.right(ng-bind='h2.value')
+//      h2 Hash List
+//      table
+//          tr(ng-repeat='h3 in viewers.report.hashes')
+//              th(ng-bind='h3.key')
+//              td.monospaced(ng-bind='h3.value[0]')
+//              td.monospaced(ng-bind='h3.value[1]')
+
