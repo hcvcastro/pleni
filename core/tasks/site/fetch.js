@@ -90,8 +90,12 @@ module.exports=function(params,repeat,stop,notifier){
               , _type=args.task.page||args.task.file
               , type=_type.id.split('::')[0]
               , status=(type=='page')?'complete':'wait'
-              , mimetype=args.task.head.headers['content-type']
+              , mimetype=''
+            
+            if('content-type' in args.task.head.headers){
+              mimetype=args.task.head.headers['content-type']
                     .match(/[a-z]+\/[a-z-]+/i)[0]
+            }
 
             notifier({
                 action:'task'

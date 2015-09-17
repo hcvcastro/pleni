@@ -39,6 +39,10 @@ module.exports=function(args){
       , followRedirect:false
     },function(error,response){
         if(!error){
+            if(!('content-type' in response.headers)) {
+                response.headers['content-type']='text/html';
+            }
+
             args.task.head={
                 'status':response.statusCode
               , 'headers':response.headers

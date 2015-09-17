@@ -62,6 +62,7 @@ exports.listen=function(planner){
 };
 
 exports.run=function(){
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     return http.listen(app.get('port'),app.get('host'),function(){
         console.log('pleni ✯ planner '+type+': listening on '
             +app.get('host')+':'+app.get('port')+'\n');
