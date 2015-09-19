@@ -54,6 +54,13 @@ pleni.filter('render',function(){
     };
 });
 
+pleni.filter('statusclass',function(){
+    return function(value){
+        var s=Math.floor(+value/100);
+        return 'status'+s+'xx';
+    };
+});
+
 pleni.filter('statuscode',function(){
     var statuscodes={
         '100':'Continue'

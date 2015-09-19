@@ -1,15 +1,15 @@
 'use strict';
 
 var base='../../functions'
-  , base1=base+'/repositories/sites/report'
   , test=require(base+'/databases/test')
   , auth=require(base+'/databases/auth')
+  , base1=base+'/repositories/sites/report'
   , check=require(base1+'/check')
   , design=require(base1+'/designdocument')
-  , headerserver=require(base1+'/header/server')
-  , headerstatus=require(base1+'/header/status')
   , headercontenttype=require(base1+'/header/contenttype')
   , headerpoweredby=require(base1+'/header/poweredby')
+  , headerserver=require(base1+'/header/server')
+  , headerstatus=require(base1+'/header/status')
   , bodyrels=require(base1+'/body/rels')
   , bodyrefs=require(base1+'/body/refs')
   , bodyhashes=require(base1+'/body/hashes')
@@ -50,16 +50,16 @@ var base='../../functions'
 module.exports=function(params,repeat,stop,notifier){
     test(params)
     .then(auth)
-    .then(check)
-    .then(design)
-    .then(headercontenttype)
-    .then(headerpoweredby)
-    .then(headerserver)
-    .then(headerstatus)
-    .then(bodyrels)
-    .then(bodyrefs)
-    .then(bodyhashes)
-    .then(report)
+//  .then(check)
+//  .then(design)
+//  .then(headercontenttype)
+//  .then(headerpoweredby)
+//  .then(headerserver)
+//  .then(headerstatus)
+//  .then(bodyrels)
+//  .then(bodyrefs)
+//  .then(bodyhashes)
+//  .then(report)
     .then(function(args){
         notifier({
             action:'task'

@@ -12,14 +12,14 @@ article.form.animate(ng-show='projects.env.view==\'form\'')
             .column1
                 .title
                     h3 Included Repositories
-                .item(ng-repeat='repository in project._repositories',ng-bind='(repository|truncate:32)')
+                .item(ng-repeat='repository in project._repositories') {{repository|truncate:32}}
                     .close
                         a.fa.fa-trash(ng-click='projects.repositories.remove($index)')
                     .clearfix
             .column2
                 .title
                     h3 Available Repositories
-                .item(ng-repeat='repository in storage.repositories',ng-bind='(repository.id|truncate:32)')
+                .item(ng-repeat='repository in storage.repositories') {{repository.id|truncate:32}}
                     .close
                         a.fa.fa-plus-circle(ng-click='projects.repositories.add($index)')
                     .clearfix

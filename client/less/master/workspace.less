@@ -36,6 +36,11 @@
         align-items: stretch;
         align-content: stretch;
 
+        .status2xx { background-color: fade(#008000,25%); }
+        .status3xx { background-color: fade(#ffff00,25%); }
+        .status4xx { background-color: fade(#ff0000,25%); }
+        .status5xx { background-color: fade(#000080,25%); }
+
         .tools, .foot {
             background-color: @color4;
             margin-top: 0px;
@@ -217,11 +222,6 @@
                         &>:nth-child(3) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; }
                         &>:nth-child(4) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; float: right; }
                     }
-
-                    .status2xx { background-color: fade(#008000,25%); }
-                    .status3xx { background-color: fade(#ffff00,25%); }
-                    .status4xx { background-color: fade(#ff0000,25%); }
-                    .status5xx { background-color: fade(#000080,25%); }
                 }
             }
         }
@@ -297,7 +297,7 @@
                 width: 100%;
                 box-sizing: border-box;
                 padding: 0.32rem 0.35rem 0.2rem 0.3rem;
-                background-color: @color3;
+                /*background-color: @color3;*/
 
                 &>:nth-child(1) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 135px; float: left; }
                 &>:nth-child(2) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 48px; float: left; }

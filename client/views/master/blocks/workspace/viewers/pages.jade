@@ -25,7 +25,7 @@
         .separator
         .table
             .page(ng-repeat='rev in viewers.document.revs')
-                .header
+                .header(ng-class='(rev.status|statusclass)')
                     .row1(ng-bind='(rev.ts_created|prettydate)')
                     .row2(ng-bind='rev.method')
                     .row3(ng-bind='rev.url')
