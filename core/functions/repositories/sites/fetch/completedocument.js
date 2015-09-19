@@ -32,12 +32,19 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , ts=Date.now()
-      , url=args.db.host+'/'+args.db.name+'/'+args.task.wait.id
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , headers2={}
+      , pathname=args.task.wait.id
+      , escape=args.db.host.substr(-9)!='/dbserver'
+
+    if(escape){
+        pathname=pathname.replace(/\//g,'%2F');
+    }
+
+    var url=args.db.host+'/'+args.db.name+'/'+pathname
 
     if(args.headers){
         args.headers.forEach(function(header){

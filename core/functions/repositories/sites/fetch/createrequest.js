@@ -27,13 +27,20 @@ module.exports=function(args){
     var deferred=Q.defer()
       , parse=_url.parse(args.task.wait.url)
       , ts=Date.now()
-      , document=['request',ts,'GET',parse.pathname].join('::')
-      , url=args.db.host+'/'+args.db.name+'/'+document
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
       , headers2={}
+      , pathname=parse.pathname
+      , escape=args.db.host.substr(-9)!='/dbserver'
+
+    if(escape){
+        pathname=pathname.replace(/\//g,'%2F');
+    }
+
+    var document=['request',ts,'GET',pathname].join('::')
+      , url=args.db.host+'/'+args.db.name+'/'+document
 
     if(args.headers){
         args.headers.forEach(function(header){

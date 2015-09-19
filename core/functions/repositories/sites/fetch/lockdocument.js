@@ -26,8 +26,6 @@ var request=require('request')
  */
 module.exports=function(args){
     var deferred=Q.defer()
-      , doc='/'+args.task.wait.id
-      , url=args.db.host+'/'+args.db.name+doc
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -41,9 +39,17 @@ module.exports=function(args){
                 url:args.task.wait.url
             }
         }
+      , doc=args.task.wait.id
+      , escape=args.db.host.substr(-9)!='/dbserver'
+
+    if(escape){
+        doc=doc.replace(/\//g,'%2F');
+    }
+
+    var url=args.db.host+'/'+args.db.name+'/'+doc
 
     if(args.debug){
-        console.log('lock a wait document ... '+args.task.wait.id);
+        console.log('lock a wait document ...',args.task.wait.id);
     }
 
     request.put({url:url,headers:headers,json:body},function(error,response){

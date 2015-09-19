@@ -29,12 +29,19 @@ module.exports=function(args){
     var deferred=Q.defer()
       , parse=_url.parse(args.task.wait.url)
       , ts=Date.now()
-      , document=['file',parse.pathname].join('::')
-      , url=args.db.host+'/'+args.db.name+'/'+document
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
+      , pathname=parse.pathname
+      , escape=args.db.host.substr(-9)!='/dbserver'
+
+    if(escape){
+        pathname=pathname.replace(/\//g,'%2F');
+    }
+
+    var document=['file',pathname].join('::')
+      , url=args.db.host+'/'+args.db.name+'/'+document
 
     if(!/text\/html/i.test(args.task.head.headers['content-type'])){
         if(args.debug){

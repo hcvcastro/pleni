@@ -23,11 +23,16 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/'
-      , doc=args.site.doc.id
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
         }
+      , doc=args.site.doc.id
+      , escape=args.db.host.substr(-9)!='/dbserver'
+
+    if(escape){
+        doc=doc.replace(/\//g,'%2F');
+    }
 
     if(args.debug){
         console.log('get document:',args.site.doc.id);
