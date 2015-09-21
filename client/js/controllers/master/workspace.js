@@ -518,10 +518,22 @@ pleni.controller('WorkspaceController',
           , summarize:function(){
                 Resources.workspace.summarize(
                     $scope.storage.workspace.name,
-                    $scope.storage.workspace.repository,function(data){
+                    $scope.storage.workspace.repository
+                ,function(data){
+                    utils.show('success','The summary was updated');
                     $scope.repositories.summary($scope.storage.workspace.index);
                 },function(error){
                     utils.show('error','The summarize fail');
+                });
+            }
+          , reporter:function(){
+                Resources.workspace.reporter(
+                    $scope.storage.workspace.name,
+                    $scope.storage.workspace.repository
+                ,function(data){
+                    utils.show('success','The report was generated');
+                },function(error){
+                    utils.show('error','The report generator fail');
                 });
             }
           , remove:function(){

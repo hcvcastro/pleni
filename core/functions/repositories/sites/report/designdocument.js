@@ -23,7 +23,7 @@ var request=require('request')
 module.exports=function(args){
     var deferred=Q.defer()
       , url=args.db.host+'/'+args.db.name+'/_design/reports'
-      , flag=true
+      , flag=false
       , headers={
             'Cookie':args.auth.cookie
           , 'X-CouchDB-WWW-Authenticate':'Cookie'
@@ -89,7 +89,7 @@ module.exports=function(args){
         flag=args.site.report.check
     }
 
-    if(flag){
+    if(!flag){
         if(args.debug){
             console.log('create a design document for basic report');
         }

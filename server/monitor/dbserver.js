@@ -313,7 +313,10 @@ module.exports=function(app,session,save_session){
                     }
 
                     _request[method](packet,function(error,reply){
-                        response.status(reply.statusCode);
+                        if(!error){
+                            response.status(reply.statusCode);
+                        }
+
                         if(method!='head'){
                             response.json(reply.body);
                         }else{

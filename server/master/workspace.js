@@ -23,6 +23,16 @@ var extend=require('underscore').extend
   , getreports2=require(sites+'/view/getreports2')
   , gettimestamp=require(sites+'/summarize/gettimestamp')
   , summarize=require(sites+'/summarize/summarize')
+  , check=require(sites+'/report/check')
+  , design=require(sites+'/report/designdocument')
+  , headercontenttype=require(sites+'/report/header/contenttype')
+  , headerpoweredby=require(sites+'/report/header/poweredby')
+  , headerserver=require(sites+'/report/header/server')
+  , headerstatus=require(sites+'/report/header/status')
+  , bodyrels=require(sites+'/report/body/rels')
+  , bodyrefs=require(sites+'/report/body/refs')
+  , bodyhashes=require(sites+'/report/body/hashes')
+  , report=require(sites+'/report/report')
   , get_element=function(needle,haystack){
         for(var i in haystack){
             if(haystack[i].id==needle){
@@ -122,6 +132,17 @@ module.exports=function(app,config){
     function(request,response){
         return generic_document(request,response,{},
             [getsummary,gettimestamp,summarize],function(args){
+            response.status(200).json(_success.ok);
+        });
+    });
+
+    app.post('/workspace/:project/:repository/reporter',authed,
+    function(request,response){
+        return generic_document(request,response,{},[
+            check,design
+          , headercontenttype,headerpoweredby,headerserver,headerstatus
+          , bodyrels,bodyrefs,bodyhashes,report
+            ],function(args){
             response.status(200).json(_success.ok);
         });
     });

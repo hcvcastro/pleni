@@ -41,6 +41,7 @@ module.exports=function(args){
             }else{
                 args.site.report.check=false;
             }
+
             deferred.resolve(args);
         }else{
             deferred.reject(error);
