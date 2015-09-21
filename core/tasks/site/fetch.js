@@ -86,9 +86,8 @@ module.exports=function(params,repeat,stop,notifier){
     .then(function(args){
         if(args.task.complete&&(args.task.page||args.task.file)){
             var url=_url.parse(args.task.wait.url)
-              , page=args.task.complete.id.split('::')[3]
-              , _type=args.task.page||args.task.file
-              , type=_type.id.split('::')[0]
+              , id=args.task.complete.id.split('::')[3]
+              , type=(args.task.file)?'file':'page'
               , status=(type=='page')?'complete':'wait'
               , mimetype=''
             
@@ -103,7 +102,7 @@ module.exports=function(params,repeat,stop,notifier){
                     id:'site/fetch'
                   , msg:{
                         node:{
-                            page:page
+                            page:id
                           , status:status
                           , statuscode:args.task.head.status
                           , mimetype:mimetype

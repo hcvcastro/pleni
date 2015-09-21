@@ -50,16 +50,16 @@ var base='../../functions'
 module.exports=function(params,repeat,stop,notifier){
     test(params)
     .then(auth)
-//  .then(check)
-//  .then(design)
-//  .then(headercontenttype)
-//  .then(headerpoweredby)
-//  .then(headerserver)
-//  .then(headerstatus)
-//  .then(bodyrels)
-//  .then(bodyrefs)
-//  .then(bodyhashes)
-//  .then(report)
+    .then(check)
+    .then(design)
+    .then(headercontenttype)
+    .then(headerpoweredby)
+    .then(headerserver)
+    .then(headerstatus)
+    .then(bodyrels)
+    .then(bodyrefs)
+    .then(bodyhashes)
+    .then(report)
     .then(function(args){
         notifier({
             action:'task'

@@ -750,6 +750,16 @@ pleni.controller('WorkspaceController',
                     workspace.repositories[index].loading=false;
                 });
             }
+          , report:function(id){
+                var workspace=$scope.storage.workspace
+
+                Document.get(workspace.name,workspace.repository,id,
+                function(data){
+                    $scope.viewers.document=data.data;
+                },function(error){
+                    utils.show('error','The document is not found');
+                });
+            }
           , sitemap:function(){
                 var workspace=$scope.storage.workspace
                   , viewers=$scope.viewers

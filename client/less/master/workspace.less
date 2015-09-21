@@ -41,6 +41,10 @@
         .status4xx { background-color: fade(#ff0000,25%); }
         .status5xx { background-color: fade(#000080,25%); }
 
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+
         .tools, .foot {
             background-color: @color4;
             margin-top: 0px;
@@ -217,10 +221,10 @@
                     }
 
                     &.report {
-                        &>:nth-child(1) { padding: 0.24rem 0.18rem 0.06rem 0.30rem; }
+                        &>:nth-child(1) { padding: 0.24rem 0.18rem 0.06rem 0.30rem; width: 240px; }
                         &>:nth-child(2) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 135px; }
-                        &>:nth-child(3) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; }
-                        &>:nth-child(4) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; float: right; }
+                        &>:nth-child(3) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 135px; }
+                        &>:nth-child(4) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 135px; }
                     }
                 }
             }
@@ -297,7 +301,6 @@
                 width: 100%;
                 box-sizing: border-box;
                 padding: 0.32rem 0.35rem 0.2rem 0.3rem;
-                /*background-color: @color3;*/
 
                 &>:nth-child(1) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 135px; float: left; }
                 &>:nth-child(2) { padding: 0.18rem 0.25rem 0.12rem 0.25rem; width: 48px; float: left; }
@@ -326,6 +329,39 @@
                         margin: 0 0.25rem 0 0;
                         text-align: center;
                         background-color: lighten(@color3,10%);
+                    }
+                }
+            }
+
+            .report {
+                table {
+                    width: 100%;
+
+                    tr:nth-child(odd)  { background-color: lighten(@color5,10%); }
+                    tr:nth-child(even) { background-color: lighten(@color5, 5%); }
+
+                    tr {
+                        h2 {
+                            .font10;
+                            box-sizing: border-box;
+                            margin: 0;
+                            font-weight: bold;
+                            color: @color2;
+                        }
+
+                        th {
+                            .font10;
+                            padding: 0.25rem 0.5rem;
+                        }
+
+                        td:not(.monospaced) {
+                            .font8;
+                            padding: 0.25rem 0.5rem;
+                        }
+
+                        td.monospaced {
+                            font-size: 0.6rem;
+                        }
                     }
                 }
             }

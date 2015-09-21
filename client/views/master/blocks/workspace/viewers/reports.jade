@@ -1,11 +1,12 @@
 .viewer(ng-show='storage.workspace.viewer==\'reports\'')
     .list(ng-class='viewers.document==null? \'fully\':\'half\'')
+        .tools
         .table
             .item.report(ng-repeat='item in viewers.collection',ng-class='{\'selected\':item.id==viewers.document._id}',ng-click='repositories.report(item.id)')
                 .date(ng-bind='item.ts_created')
-                .count(ng-bind='item.pages')
-                .count(ng-bind='item.files')
-                .count(ng-bind='item.total')
+                .count(ng-bind='item.pages+\' pages\'')
+                .count(ng-bind='item.files+\' files\'')
+                .count(ng-bind='item.total+\' documents\'')
                 .clearfix
         .foot
             ul.left
@@ -17,58 +18,53 @@
                 li(ng-class='{\'disabled\':viewers.offset+viewers.limit>=viewers.total}',title='Last page'): a.fa.fa-step-forward(ng-click='repositories.pagination_last()')
     .details(ng-class='viewers.document==null? \'none\':\'half\'')
         .separator
-
-//  .report(ng-show='storage.workspace.viewer==\'report\'')
-//      h1 basic report
-//      h2 Header Information
-//      table
-//          tr
-//              td(colspan='3')
-//                  h2 Server Header
-//          tr(ng-repeat='h1 in viewers.report.header_server')
-//              th(colspan='2',ng-bind='h1.key')
-//              td(ng-bind='h1.value')
-//          tr
-//              td(colspan='3')
-//                  Status Header
-//          tr(ng-repeat='h1 in viewers.report.header_status')
-//              th(colspan='2',ng-bind='h1.key')
-//              td(ng-bind='h1.value')
-//          tr
-//              td(colspan='3') Content-Type Header
-//          tr(ng-repeat='h1 in viewers.report.header_contenttype')
-//              th(colspan='2',ng-bind='h1.key')
-//              td(ng-bind='h1.value')
-//          tr
-//              td(colspan='3') Powered-By Header
-//          tr(ng-repeat='h1 in viewers.report.header_poweredby')
-//              th(colspan='2',ng-bind='h1.key')
-//              td(ng-bind='h1.value')
-//          thead
-//      h2 Link Relations
-//      table
-//          thead
-//              tr
-//                  th(colspan='3')
-//                      h3 Internal Links
-//          tbody
-//              tr(ng-repeat='h2 in viewers.report.refs')
-//                  th(ng-bind='h2.key[0]')
-//                  td(ng-bind='h2.key[1]')
-//                  td.right(ng-bind='h2.value')
-//          thead
-//              tr
-//                  th(colspan='3')
-//                      h3 External Links
-//          tbody
-//              tr(ng-repeat='h2 in viewers.report.rels')
-//                  th(ng-bind='h2.key[0]')
-//                  td(ng-bind='h2.key[1]')
-//                  td.right(ng-bind='h2.value')
-//      h2 Hash List
-//      table
-//          tr(ng-repeat='h3 in viewers.report.hashes')
-//              th(ng-bind='h3.key')
-//              td.monospaced(ng-bind='h3.value[0]')
-//              td.monospaced(ng-bind='h3.value[1]')
+        .table.report
+            h1 Header Information
+            table
+                tr
+                    th.text-left(colspan='3')
+                        h2 Server Header
+                tr(ng-repeat='t in viewers.document.server')
+                    th.text-left(colspan='2',ng-bind='t[0]')
+                    td.text-center(ng-bind='t[1]')
+                tr
+                    th.text-left(colspan='3')
+                        h2 Status Header
+                tr(ng-repeat='t in viewers.document.statuscode')
+                    th.text-left(colspan='2',ng-bind='t[0]')
+                    td.text-center(ng-bind='t[1]')
+                tr
+                    th.text-left(colspan='3')
+                        h2 Content-Type Header
+                tr(ng-repeat='t in viewers.document.contenttype')
+                    th.text-left(colspan='2',ng-bind='t[0]')
+                    td.text-center(ng-bind='t[1]')
+                tr
+                    th.text-left(colspan='3')
+                        h2 Powered-By Header
+                tr(ng-repeat='t in viewers.document.poweredby')
+                    th.text-left(colspan='2',ng-bind='t[0]')
+                    td.text-center(ng-bind='t[1]')
+            h1 Link Relations
+            table
+                tr
+                    th.text-left(colspan='3')
+                        h2 Internal Links
+                tr(ng-repeat='t in viewers.document.rels')
+                    th.text-center(ng-bind='t[0]')
+                        td.text-left(ng-bind='(t[1]|truncate:128)')
+                    td.text-center(ng-bind='t[2]')
+                tr
+                    th.text-left(colspan='3')
+                        h2 External Links
+                tr(ng-repeat='t in viewers.document.refs')
+                    th.text-center(ng-bind='t[0]')
+                    td.text-left(ng-bind='(t[1]|truncate:128)')
+                    td.text-center(ng-bind='t[2]')
+            h1 Hash List
+            table
+                tr(ng-repeat='t in viewers.document.hashes')
+                    th.text-left(ng-bind='t[0]')
+                    td.text-center.monospaced(ng-bind='t[1]')
+                    td.text-center.monospaced(ng-bind='t[2]')
 
